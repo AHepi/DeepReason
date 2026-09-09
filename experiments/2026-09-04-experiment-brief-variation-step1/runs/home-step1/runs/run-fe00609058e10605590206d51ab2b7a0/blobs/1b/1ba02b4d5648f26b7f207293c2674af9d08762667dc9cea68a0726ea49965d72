@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a false dichotomy between 'inductive prediction' and 'risk minimization,' failing to address that Popper's own criterion for 'severe testing' implicitly requires an inductive assumption about the stability of experimental conditions. If the future behavior of the testing apparatus or the world is not assumed to resemble the past (an inductive premise), then a theory surviving past tests offers no rational basis for preference over an untested one, even for 'risk minimization.' The target claims the choice is merely avoiding known errors, but without assuming the test conditions remain valid, the 'known error' status does not transfer to the present moment of action, rendering the 'critical preference' arbitrary rather than defensible on Popper's strictly non-inductive terms.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Popper's concept of a 'severe test' logically presupposes the uniformity of nature regarding test conditions, which is an inductive assumption he explicitly rejected.",
+      "premise_evidence": null,
+      "successor_question": "Can a 'severe test' be defined without assuming that the causal relationships observed during the test will hold at the moment of practical application?"
+    }
+  ]
+}

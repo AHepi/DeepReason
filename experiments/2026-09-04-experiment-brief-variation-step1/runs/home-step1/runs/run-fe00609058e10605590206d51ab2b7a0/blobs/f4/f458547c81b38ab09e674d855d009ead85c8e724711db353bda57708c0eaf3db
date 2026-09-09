@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a non-inductive 'critical preference' grounded in verisimilitude and risk-avoidance, but accepting this defense costs the agent any rational assurance of future success, reducing scientific action to a bold gamble that avoids known falsehoods without promising truth.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'corroboration' (a logical report of past performance) and 'probability' (an inductive prediction). It posits that choosing the best-corroborated theory is not an inference that the theory will hold, but a methodological rule to minimize the risk of acting on a theory already known to be false. The mechanism relies on the concept of 'verisimilitude' (truth-likeness) to argue that while we cannot know a theory is true, a highly corroborated theory has withstood attempts to show it is less like the truth than its rivals. Thus, the preference is rational not because it predicts success, but because it systematically eliminates known errors, leaving the 'least bad' option for action.",
+    "counterconditions": [
+      "If the preference for the better-corroborated theory implicitly assigns a higher subjective probability of future success, it collapses into the induction Popper rejected.",
+      "If Popper's formal definition of verisimilitude is logically incoherent (as argued by Tichý and Miller), then it cannot serve as a rational basis for preference.",
+      "If acting on a theory inherently requires an expectation of regularity (that the future will resemble the past), then any 'risk-management' strategy is merely disguised pragmatism."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism claims the distinction collapses because preferring Theory A assumes past conditions will persist. This rebuttal argues that Popper's preference does not assume persistence; it assumes only that if a theory failed in the past, it is false now. Choosing the one that hasn't failed yet is not a prediction of future success, but an avoidance of known failure. The assumption is logical (non-falsified theories are possibly true; falsified ones are definitely false), not inductive."
+      },
+      {
+        "handle": "10d458d5ba5df5b51b41f157dbd7e3ca6a57c55a4ae84258055f2e20bab7b067",
+        "kind": "rebutted",
+        "note": "The claim of a false dichotomy between 'prediction of safety' and 'elimination of danger' is rejected. Popper's framework explicitly rejects 'prediction of safety' (induction). The choice is strictly based on 'elimination of danger' (rejecting falsified theories). The criticism mistakes the *hope* for safety with the *logical ground* for the choice. The ground is purely negative: we choose A over B because B is known to be wrong, not because A is known to be right or safe."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "revised",
+        "note": "Acknowledging the failure of Popper's formal logical definition of verisimilitude (Tichý/Miller), the candidate revises the mechanism to rely on 'methodological verisimilitude' rather than a formal logical metric. The defense shifts from claiming verisimilitude is a provable state to claiming it is a necessary regulative ideal for critical discussion. We act *as if* the better-corroborated theory is closer to the truth because no better alternative exists, even if we cannot formally prove the distance."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "The criticism states that preferring a theory for future action assumes it will continue to work. This rebuttal clarifies that Popperian action does not assume the theory *will* work, but that it is the *most rational bet* given current knowledge. The 'assumption' is not about the world's regularity, but about the rationality of avoiding known error. If the theory fails tomorrow, the preference was still rational today because it avoided a known falsehood (the rival theory)."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The claim that 'least error-prone known option' implicitly assigns higher subjective probability is denied. In Popper's view, all unfalsified theories have a probability of zero (due to infinite content). The preference is not based on a gradient of probability (which doesn't exist for universal laws) but on the binary status of falsification. We prefer the one that is not-yet-false over the one that is-false. This is a logical ordering, not a probabilistic one."
+      },
+      {
+        "handle": "350db731d51a09f1568348da67e40e50c3417a7e7bde9c041860ce74daf212ec",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate breaks with the requirement that rational action must guarantee or even probabilistically suggest success. It accepts Popper's radical conclusion that rational action is compatible with total ignorance of the future. The 'cost' mentioned in the claim is embraced: we act without 'rational assurance,' making the criticism's demand for such assurance a category error within the Popperian framework."
+      },
+      {
+        "handle": "38f75e15ef32982858ed94b505c7bbfe87ec9a0ebbd2867ed39855d8423771d8",
+        "kind": "rebutted",
+        "note": "The criticism ignores Popper's specific concept of 'critical preference.' The dichotomy is not between 'rational assurance' and 'non-rational gamble,' but between 'inductive rationality' (which Popper deems impossible) and 'critical rationality' (choosing the best-tested theory). The action is rational because it follows the method of error elimination, not because it offers a guarantee. The 'gamble' is inevitable; the 'rationality' lies in how we choose which side of the bet to take."
+      },
+      {
+        "handle": "46dcad061a396079ae006feb765ad05c214a8b686266e3ca68d45ddff6e5b102",
+        "kind": "rebutted",
+        "note": "The conflation of logical status with pragmatic rule is addressed by asserting that for Popper, the pragmatic rule *is* derived from the logical status. Because universal laws cannot be verified, the only logical guide for action is the absence of falsification. The 'pragmatic rule' to prefer the better-corroborated theory is not an extra-logical add-on; it is the direct practical application of the logic of falsifiability. To reject this is to demand an inductive bridge that Popper has demonstrated is unnecessary for rational choice."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["naval_navigation_chart"],
+      "shared_structure": [
+        "Both scenarios involve making high-stakes decisions with incomplete information about the future.",
+        "Both rely on eliminating known dangers (charted rocks vs. falsified theories) rather than guaranteeing a safe path.",
+        "Both accept that the chosen path may still fail due to unknown factors, but rejecting the known-safe path would be irrational."
+      ],
+      "disanalogies": [
+        "Navigation charts often rely on inductive stability of geography, whereas Popperian science explicitly denies the stability of natural laws.",
+        "A navigator seeks the highest probability of safety, while the Popperian scientist seeks the highest degree of corroboration without assigning probability."
+      ],
+      "transfer_claims": [
+        "Just as a captain prefers a chart with fewer known errors even without knowing the future weather, a scientist prefers a theory with fewer known falsifications even without knowing future test results.",
+        "The rationality of the choice lies in the quality of the map/theory relative to known errors, not in the certainty of the destination/outcome."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that avoiding known errors provides no advantage in survival/success over random choice in a chaotic environment.",
+        "If the concept of 'known error' is shown to be temporally unstable (i.e., a theory falsified yesterday is valid today)."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

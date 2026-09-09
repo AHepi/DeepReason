@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the core tension in Popper's philosophy regarding action and induction. It accurately represents Popper's rejection of the 'uniformity of nature' premise and logically deduces that acting on a corroborated theory for practical applications (like bridge building) implicitly relies on an inductive assumption that past success predicts future reliability. The counterconditions listed are appropriate challenges to this view, but the central claim stands as a strong interpretation of the problem's requirement to show where induction might be 'smuggled back in'. The argument is substantively sound within the context of the debate.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

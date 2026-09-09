@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a non-inductive 'critical preference' grounded in risk minimization rather than probability maximization; accepting this costs us the intuitive assurance that the future will resemble the past, forcing us to act on the best-unchallenged error-elimination strategy while acknowledging it may still fail catastrophically.",
+    "mechanism": "Reframe the choice between theories not as an inference to truth or probability (which requires induction) but as a decision-theoretic rule to minimize known falsity. Since all universal laws are unproven, the rational agent selects the theory that has withstood the most severe tests (highest content + survival) because it is the only one where specific errors have been actively eliminated, whereas preferring a less-tested theory retains known potential errors without compensation. This avoids induction by refusing to claim the successful theory is 'more likely true,' claiming only that it is the 'least obviously false' option currently available.",
+    "counterconditions": [
+      "If the preference for the better-corroborated theory implicitly assumes that past test survival predicts future performance, then it smuggles in induction.",
+      "If acting on a theory requires assigning it a higher subjective probability of success for practical purposes, then the distinction between corroboration and probability collapses in practice.",
+      "If Popper's formal attempt to define verisimilitude (truth-likeness) failed logically, then using 'closeness to truth' as a justification for action lacks a coherent foundation."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism claims any strategy based on past results assumes future continuity. This is rebutted by distinguishing 'expectation of success' (inductive) from 'avoidance of known failure' (deductive/critical). Preferring Theory A because B was falsified does not assume A will work; it only assumes B will not. If A fails next, the method remains valid as an error-elimination process."
+      },
+      {
+        "handle": "10d458d5ba5df5b51b41f157dbd7e3ca6a57c55a4ae84258055f2e20bab7b067",
+        "kind": "rebutted",
+        "note": "The dichotomy between 'prediction of safety' and 'elimination of danger' is not false but central to Popper. We do not predict safety (induction); we eliminate known dangers (falsification). Choosing the theory with fewer known dangers is a logical necessity for risk avoidance, not a probabilistic prediction of safety."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "departure_declared",
+        "note": "Departing from reliance on formal 'verisimilitude' definitions. The defense rests solely on the methodological rule of critical preference (choosing the best-tested), which remains viable even if the quantitative measure of truth-likeness is formally undefined."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "Preferring a theory for future action does not assume it will continue to succeed; it accepts it as the current best bet for error avoidance. The assumption criticized is exactly what Popper rejects; the alternative is acting on the theory that has not yet been shown to be wrong in relevant domains."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The criterion 'least error-prone known option' does not assign subjective probability. It ranks options by the severity of tests passed and errors eliminated. High corroboration signals high informational content survived, not high likelihood of recurrence."
+      },
+      {
+        "handle": "350db731d51a09f1568348da67e40e50c3417a7e7bde9c041860ce74daf212ec",
+        "kind": "rebutted",
+        "note": "Acting on a theory does not require assigning it a higher subjective probability of success. It requires only the recognition that it is the only option where specific, severe potential errors have been ruled out. This is a negative justification, not a positive probabilistic one."
+      },
+      {
+        "handle": "38f75e15ef32982858ed94b505c7bbfe87ec9a0ebbd2867ed39855d8423771d8",
+        "kind": "rebutted",
+        "note": "Popper's 'rational action' is explicitly defined as critical preference, not a gamble. It is rational because it utilizes the maximum amount of critical discussion and testing available, distinguishing it from irrational guessing or inductive habit."
+      },
+      {
+        "handle": "46dcad061a396079ae006feb765ad05c214a8b686266e3ca68d45ddff6e5b102",
+        "kind": "revised",
+        "note": "Revised to clarify that 'pragmatic rule of action' in Popper's sense is strictly negative: it prohibits choosing a falsified theory or a less-tested one when a better-tested one exists. It does not positively assert the chosen theory's reliability, thus avoiding the conflation with inductive expectation."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
