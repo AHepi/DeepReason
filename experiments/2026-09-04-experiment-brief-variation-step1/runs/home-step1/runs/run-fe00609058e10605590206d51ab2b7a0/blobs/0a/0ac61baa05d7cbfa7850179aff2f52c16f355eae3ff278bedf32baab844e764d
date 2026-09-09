@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target asserts that the preference for better-corroborated theories is 'indefensible on strict Popperian terms' and merely a 'psychological necessity.' This fails to engage with Popper's explicit defense: that preferring a well-corroborated theory is rational not because it is more likely to be true (induction), but because it has withstood the most severe attempts at falsification. To choose an untested or previously falsified theory would be irrational as it ignores available critical evidence. The target incorrectly frames the choice as requiring a bridge to 'expectation of success' (probability), whereas Popper argues the choice is based on the logical status of the theory regarding past tests, making the preference defensible without smuggling in induction.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": "Does the target's claim that Popper's preference is merely 'psychological' ignore his argument that acting on a falsified theory is logically inconsistent with the goal of finding truth?",
+      "block_id_ref": null
+    }
+  ]
+}

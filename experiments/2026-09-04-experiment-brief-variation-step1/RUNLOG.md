@@ -240,4 +240,45 @@ identifiers carrying distilled claims become four bare identifiers, because
 the template channel can see only what a plugin puts in `supplied` and the
 claim text is computed inside the plugin. §8 P2 predicts A3 scores LOWER.
 
+### A3 refused on its first launch, spent nothing, and the refusal was ours
+
+The chain's launch at 10:22:19Z exited before any provider call:
+
+    SEAT_SECTION_PLUGIN_CONFLICT: plugin 'op.neighbourhood.v1' version
+    '1.0.0' is already registered
+    -> ARM RIG REFUSED: ... An A3 that silently fell back to the shipped
+       neighbourhood would be A0 wearing A3's label.
+
+**Cause, reproduced offline before anything was changed.** `arm.sh` exports
+`DR_ARM`, so `sitecustomize` installs the arm at interpreter start; the script
+then verified the rig by calling `armrig.install()` AGAIN in that same
+process. `install()` is idempotent for the layout (an id check guards the
+registration) and NOT for A3's template load, so the second call asks the
+registry to register `op.neighbourhood.v1` twice and the registry correctly
+refuses. Reproduced in two lines: one `install(arm="A3")` in a clean process
+succeeds and returns `template_loaded: ['op.neighbourhood.v1']`; two in the
+same process raise the conflict.
+
+**Why the soak never caught it.** Nothing calls `install()` twice under
+`cycle_soak.py` -- sitecustomize installs the arm and that is the only call.
+So a green soak on A3 was compatible with a broken `arm.sh` A3, and this was
+the first time `arm.sh A3` had ever run: the tranche was sealed 2026-09-04 and
+never launched.
+
+**Fixed in `arm.sh` only.** The verification step now runs with `DR_ARM` unset
+and the arm passed explicitly, so `sitecustomize` is inert and `install()`
+runs exactly once. Nothing sealed was touched -- `armrig.py`,
+`sitecustomize.py`, `PREREG.md`, `PROVE_ARMS.txt` and the amendment all still
+verify against `SEALED.txt`. The real run never had the defect: `deepreason
+reason` installs the arm once, through sitecustomize, and nothing calls
+`install()` again.
+
+**Disclosed as a relaunch, and it is not the kind the launch rule rations.**
+That rule allows one relaunch for a transport death before cycle 1 completed.
+This was not that: the arm refused at its own guard BEFORE the first provider
+call, created no run root, and spent zero tokens -- there was no run to
+continue and `resume.sh` does not apply. Relaunched 10:30:00Z with receipt
+`{"arm": "A3", "installed": true, "layout_id":
+"seat-pack.conjecturer.step1-a3", "template_loaded": ["op.neighbourhood.v1"]}`.
+
 *(in flight)*
