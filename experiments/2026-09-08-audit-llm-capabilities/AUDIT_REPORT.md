@@ -385,6 +385,23 @@ Three arms make this the model's property and not the harness's:
 The plain-sampling arm has no harness in it. The behaviour survives its
 removal.
 
+**The sharpest instance in the record, from the rematch two days later.** The
+same problem was re-run with reasoning on in both arms
+(`2026-08-27-pc2b-symmetric-reasoning`). Its four scored candidates are in
+`arm_h_scores.json`, and every one reads:
+
+    "claim": 0.005,  "score": 0.0,  "score_exact": "0",  "code": "CLAIM_INFLATED"
+
+0.005 is the pre-registered acceptance floor. Four times, for configurations
+worth exactly nothing, the model stated **precisely the number that would let the
+candidate through** — not a plausible estimate, not a rounding error, the
+threshold itself. The same file records `accepted_count: 25` beside
+`best_artifact: null`.
+
+That is the whole of §1.4 in one line of JSON. Asked for a measurement of an
+object, the model produced the value that satisfies the criterion the
+measurement was going to be checked against.
+
 Two more instances of the same shape, from different tranches:
 
 - Told to cite only from a supplied 32-item legend, a seat produced **58**
@@ -911,7 +928,14 @@ H_rank REFUTED on both fresh problems: one at a margin of −0.372, the other
 +0.055 against a +0.15 bar, and pooled ranks all ≤ 0. Its control gates passed,
 so the instrument was discriminating.
 
-That makes **three** independent occasions, spread over fourteen months and
+A fourth: the reasoning-on rematch of the construction problem two days after
+P-C1 also lost, and the size of the loss is itself the finding — **4%**
+(0.013308 against 0.012778) where P-C1 had been 33×, at a budget match of
+1.0248, with the harness terminating `completed`/`converged` at cycle 17 of 24
+(`2026-08-27-pc2b-symmetric-reasoning/RESULTS.md`). Turning reasoning on in both
+arms shrank the gap by nearly two orders of magnitude and did not close it.
+
+That makes **four** independent occasions, spread over fourteen months and
 three different task families — informal prose, exact construction, and
 composition — on which this apparatus was measured against the plain model and
 did not win. Per §0.1, and this is the part that matters: those were three
@@ -924,7 +948,7 @@ the model.
 Neither of the 2026 tranches is a fair test of criticism's value and both say
 so. What can be said is narrower and still worth saying: **in this record there
 is no measured case of the harness making the model's output better than the
-model alone, and three cases of it not doing so.** Every other live tranche either has
+model alone, and four cases of it not doing so.** Every other live tranche either has
 no such arm or records its absence as a decision — the blind-critic tranche,
 the history-channel tranche and the conjecturer-interface tranche each state in
 their own residue sections that no baseline arm exists.
@@ -940,7 +964,7 @@ their own residue sections that no baseline arm exists.
 | the extra ideas are *good* | **NOT MEASURED**, registered out of scope in advance | — |
 | reaches outside its training distribution | **NOT MEASURED**, and the record says so in its own words | — |
 | originates something by its own construction | one suggestive instance, self-described as recombination; one clear instance of useful criticism | Tier 3 and Tier 1 respectively |
-| beats the same model without the harness | **NOT SHOWN**, twice, one of them by a factor of 33 in the wrong direction | Tier 1, single-run each |
+| beats the same model without the harness | **NOT SHOWN**, four times across three task families and four builds; margins from 33× to 4% against it | Tier 1, single-run each |
 
 The one-line answer, if only one line is wanted: **these models hold far more
 distinct ideas than the ordinary way of asking gets out of them, and this
