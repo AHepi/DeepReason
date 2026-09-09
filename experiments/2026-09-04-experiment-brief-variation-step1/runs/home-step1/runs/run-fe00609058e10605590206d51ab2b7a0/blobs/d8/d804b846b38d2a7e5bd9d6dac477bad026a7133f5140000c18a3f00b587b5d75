@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as the rational basis for preferring better-corroborated theories, but this concept was famously shown by Tichý and Miller to be formally incoherent within Popper's own logical framework unless one smuggles in probabilistic assumptions. Since the target explicitly accepts the cost that verisimilitude is 'formally impossible to measure,' it fails to provide the 'rational alignment' it claims; without a coherent definition of verisimilitude, the preference for the better-corroborated theory collapses into either an arbitrary choice or the very inductive assumption (that past survival indicates future reliability/truth-content) that Popper sought to reject.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "If 'verisimilitude' cannot be coherently defined without probabilistic assumptions (per Tichý/Miller), the rational basis for preference collapses.",
+      "premise_evidence": null,
+      "successor_question": "Can a non-probabilistic definition of verisimilitude be constructed that avoids the Tichý/Miller impossibility results while still supporting a rational preference for action?"
+    }
+  ]
+}

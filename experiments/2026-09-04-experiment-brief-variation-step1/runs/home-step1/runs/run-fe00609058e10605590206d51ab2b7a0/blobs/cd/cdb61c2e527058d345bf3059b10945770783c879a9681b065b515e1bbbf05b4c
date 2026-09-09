@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory for action is defensible on Popper's terms not as an inductive inference that the theory is true or probable, but as a critical preference for the theory with the highest 'verisimilitude' (truth-likeness) among surviving competitors, grounded in the methodological rule that we must act on the theory that has withstood the most severe tests because it offers the best available approximation to truth without claiming justification.",
+    "mechanism": "Critical Preference via Verisimilitude: The mechanism distinguishes between 'justification' (which requires induction and is rejected) and 'preference' (which is a rational, non-justificatory choice based on the logical status of having survived severe tests). By acting on the best-tested theory, we maximize our chance of approximating truth (verisimilitude) while acknowledging that this action carries no guarantee of success and implies no increase in logical probability.",
+    "counterconditions": [
+      "If verisimilitude cannot be defined without probabilistic assumptions (as argued by Tichý and Miller), then the preference collapses into hidden induction.",
+      "If the preference for action in novel domains relies on the assumption that the future will resemble the past, it violates Popper's rejection of the uniformity of nature.",
+      "If Popper's own advice to prefer better-corroborated theories implicitly assumes they are more likely to succeed, the distinction between corroboration and probability is merely verbal."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The criticism claims elimination doesn't address action in novel domains. Rebuttal: Popper's preference is not just elimination of the false, but selection of the 'best tested' as the most informative potential falsifier. Action is taken on this theory precisely because it is the one most likely to reveal its own falsity if false, thus advancing knowledge even in novel domains; the 'preference' is a commitment to learn, not a prediction of success."
+      },
+      {
+        "handle": "0baaf2a78ddc87e150a4bd9a2361836bc0158509dab5b8825decd20371ff9aa2",
+        "kind": "rebutted",
+        "note": "The criticism argues selecting for action implies induction. Rebuttal: The selection is based on the logical fact of survival of severe tests, not an inference that survival predicts future success. The 'act' is a volitional adoption of the best current conjecture, explicitly devoid of the belief that it is probable. It is a gamble on truth-likeness, not a calculation of odds."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "revised",
+        "note": "Revised to clarify that 'psychological expectation' is irrelevant; the defense rests entirely on the 'logical situation' of the agent who, aiming at truth, has no other rational option than the best-tested theory. The revision explicitly separates the psychological feeling of confidence from the logical mandate of critical rationalism."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "rebutted",
+        "note": "Rebuttal: While Tichý and Miller refuted Popper's *quantitative* definition of verisimilitude, Popper's *qualitative* argument remains: we prefer the theory that has survived more severe tests because it contains more content and has not yet been shown false. This preference does not require knowing the degree of verisimilitude, only that one theory is logically stronger and better tested than another."
+      },
+      {
+        "handle": "14b061678dda46e4dcf8f89237df4b4a56508f06d9d5b8c5b1275dfe729cd712",
+        "kind": "rebutted",
+        "note": "Rebuttal: Popper's requirement for rational action is not 'justification' in the traditional sense, but consistency with the aim of science (truth). Acting on the best-corroborated theory is rational because it is the only action consistent with the critical method; claiming 'no justification' is precisely what makes it rational on Popper's terms, avoiding the dogmatism of induction."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate accepts the Tichý/Miller refutation of formal verisimilitude but departs from the conclusion that this invalidates the preference. Instead, it posits a pragmatic, non-formal notion of 'truth-likeness' based on informational content and test severity, which suffices for action without requiring a formal metric."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "revised",
+        "note": "Revised to explicitly state that the preference is 'rational' in the specific Popperian sense of being aligned with the critical method and the goal of truth, distinct from 'justified' in the inductive sense. The revision clarifies that 'volitional' does not mean 'arbitrary' but 'committed without guarantee'."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "Rebuttal: Evolutionary selection explains the survival of the theory, but the 'preference for action' is the conscious application of this logic by the scientist. The justification for action is that the theory is the fittest survivor; while this doesn't guarantee future fitness, it is the only non-arbitrary basis for choice available to a critical rationalist."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_005"],
+      "shared_structure": [
+        "Selection of a tool based on past performance without assuming future reliability.",
+        "Preference driven by the elimination of inferior options rather than confirmation of the superior one.",
+        "Action taken under uncertainty where the goal is error detection rather than success assurance."
+      ],
+      "disanalogies": [
+        "Scientific theories aim at universal truth, whereas tools often have limited, context-specific utility.",
+        "Falsification in science is logical and decisive, while tool failure is often gradual or contextual.",
+        "The 'cost' of acting on a false theory in science can be paradigmatic collapse, unlike simple tool inefficiency."
+      ],
+      "transfer_claims": [
+        "Just as we use the best-tested bridge design without believing it is 'probable' to hold, we act on the best-tested theory.",
+        "The rationality of the choice lies in the rigor of the testing process, not the outcome's certainty.",
+        "Preference is a methodological stance, not an epistemic claim about the world's stability."
+      ],
+      "overturn_conditions": [
+        "If it is shown that acting on a theory necessarily entails a belief in its probability.",
+        "If the concept of 'severe testing' is proven to rely on inductive assumptions about test conditions.",
+        "If a non-inductive basis for preferring one unfalsified theory over another cannot be articulated."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

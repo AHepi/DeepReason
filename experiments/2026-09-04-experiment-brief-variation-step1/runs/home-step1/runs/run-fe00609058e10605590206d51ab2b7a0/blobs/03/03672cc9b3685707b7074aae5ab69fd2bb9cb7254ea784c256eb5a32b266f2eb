@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses because it conflates 'logical aim' with 'rational basis for action.' Popper explicitly rejects the principle of induction, yet the target admits the agent has 'no rational assurance' the theory will work. If there is no rational link between past severity and future performance, then preferring the better-corroborated theory over a worse one (or a random guess) for practical action (like building a bridge) becomes an arbitrary act of faith, not a defensible methodological rule. The target fails to explain why severity provides a *reason* to act if it provides no expectation of success, thereby smuggling in an implicit inductive assumption that 'what worked before is a better guide than what didn't,' which contradicts the core anti-inductive stance it claims to defend.",
+      "premise": "A methodological rule for action requires a rational connection between the selected option and the desired outcome; without any assurance of success, the preference for the 'better-corroborated' theory is indistinguishable from arbitrary choice.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "counterexample": null,
+      "successor_question": "If corroboration offers no probability of success, what specific rational criterion distinguishes choosing a well-tested theory from flipping a coin when lives are at stake?"
+    }
+  ]
+}

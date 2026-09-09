@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to resolve the problem's core tension regarding 'preference.' By redefining preference as a 'procedural mandate' where scientists act because they 'must' rather than because they expect success, the target renders the scientist's actual motivation (choosing the *better* theory over the *worse* one) irrational. If corroboration provides no grounds for expecting future success (as Popper and the target insist), then there is no rational basis within the system to prefer Theory A (highly corroborated) over Theory B (falsified or untested) for action, other than blind habit. The target claims this is 'logically consequent' to eliminating competitors, but eliminating a falsified theory only tells us what *not* to do; it does not logically authorize doing the *remaining* thing with any confidence. Thus, the target smuggles in induction by implicitly assuming that 'surviving tests' is a reliable marker for 'fitness for action,' which is an inductive leap it explicitly denies.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "If a decision procedure offers no epistemic reason to expect one option to succeed over another, preferring one over the other is arbitrary, not rationally mandated.",
+      "premise_evidence": null,
+      "successor_question": "If the 'critical selection rule' provides no expectation of success, how does it distinguish itself from random chance or psychological habit when choosing between two unfalsified theories?"
+    }
+  ]
+}
