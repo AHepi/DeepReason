@@ -125,7 +125,8 @@ def arm_config(arm: str, critic_endpoint: str | None = None) -> dict:
     raise SystemExit(f"unknown arm {arm!r}")
 
 
-def compile_arm(arm: str):
+def compile_arm(arm: str, run_input_digest: str | None = None,
+                config_path: pathlib.Path | None = None):
     """Compile one arm's committed configuration to a frozen manifest.
 
     `single_model` is deliberately None. Passing it collapses the role matrix
@@ -142,7 +143,12 @@ def compile_arm(arm: str):
         engaged_control_plane_policy_v3, engaged_inquiry_capability_policy,
         engaged_simulation_toolchain)
 
-    config = load_config(CONFIGS / f"config-{arm.lower()}.yaml")
+    # The soak hands its OWN config path: `_loopback_config` has rewritten
+    # every role's endpoint to the local stub, and compiling from the committed
+    # file instead would build a manifest pointing at the real provider --
+    # an offline instrument reaching the network, which is precisely what the
+    # soak's redirect exists to prevent.
+    config = load_config(config_path or CONFIGS / f"config-{arm.lower()}.yaml")
     return compile_run_manifest(
         config, schema_version=6, workload_profile="text",
         rubric_policy="forbid", single_model=None, concurrency=2,
@@ -151,7 +157,11 @@ def compile_arm(arm: str):
         toolchains=(engaged_simulation_toolchain(),),
         inquiry_capability_policy=engaged_inquiry_capability_policy(
             attached_evidence=False),
-        run_input_digest="0" * 64)
+        # The placeholder is only for comparisons (--route-identity), where
+        # every arm carries the same one so it cancels. A root BINDING needs
+        # the real digest: bind_run_manifest checks it and refuses a mismatch,
+        # which is how this was caught rather than shipped.
+        run_input_digest=run_input_digest or "0" * 64)
 
 
 def route_identity() -> dict:
@@ -265,6 +275,79 @@ def question() -> str:
     return payload["problem"]["description"]
 
 
+# The soak's builder contract (`cycle_soak.py::_case_symbols`) reads these
+# three as MODULE attributes. QUESTION is read from the frozen input at import
+# rather than restated as a literal here, for the reason that contract's own
+# docstring gives: two copies of a question cannot be kept in agreement, and
+# a soak is worthless the moment its shape drifts from the one that launches.
+QUESTION = question()
+# EMPTY, exactly as the frozen input carries them. The D8 standard lives in the
+# judging instrument; inventing criteria here would change the question the
+# arms answer.
+CRITERIA = ()
+
+
+def build(root: pathlib.Path, arm: str | None = None,
+          config_path: pathlib.Path | str | None = None) -> dict:
+    """Bind one arm's frozen input and manifest into `root` (the soak's
+    `delegates_to_builder` contract, and the shape a live ladder uses).
+
+    The arm is taken from the environment (`DR_D8_ARM`) when not passed, so
+    ONE builder serves all three soak cases without three near-identical
+    copies of this function — the same reason the configurations are generated
+    from one base table rather than hand-written.
+
+    The criteria are EMPTY, exactly as the frozen input D8 carries them: the
+    D8 standard lives in the judging instrument, not in the problem, and
+    inventing criteria here would change the question the arms answer.
+    """
+    import os  # noqa: PLC0415
+    from deepreason.evidence.state import bind_run_input  # noqa: PLC0415
+    from deepreason.evidence.models import (  # noqa: PLC0415
+        AttachedSourceProvenanceV1, EvidenceDossierV1, RunInputManifestV2,
+        RunInputProblemV2)
+    from deepreason.run_manifest import bind_run_manifest  # noqa: PLC0415
+
+    arm = (arm or os.environ.get("DR_D8_ARM") or "C").upper()
+    text = question()
+    problem_id = "question-corroboration-d8"
+    dossier = EvidenceDossierV1.create(
+        problem_ref=problem_id, sources=(), total_byte_count=0,
+        creation_provenance=AttachedSourceProvenanceV1(
+            supplied_by="d8-criticism-experiment tools/build_manifest.py",
+            acquisition_method="no attached evidence"))
+    run_input = RunInputManifestV2.create(
+        problem=RunInputProblemV2.from_commitments(
+            id=problem_id, description=text, criteria=()),
+        evidence_dossier_digest=dossier.dossier_digest)
+    bind_run_input(run_input, dossier, root)
+
+    manifest = compile_arm(arm, run_input.run_input_digest,
+                           pathlib.Path(config_path) if config_path else None)
+    bind_run_manifest(manifest, root)
+    (root / "problem.json").write_text(json.dumps({
+        "schema": "deepreason-text-workload-v1",
+        "problem": {"id": problem_id, "description": text},
+        "criteria": [], "sources": []}, indent=2, sort_keys=True) + "\n")
+    for notice in manifest.compile_notices or ():
+        print(f"NOTICE {notice.code}: {notice.message}", file=sys.stderr)
+    return {
+        "arm": arm,
+        "manifest_sha256": manifest.sha256,
+        "run_input_digest": run_input.run_input_digest,
+        "evidence_dossier_digest": dossier.dossier_digest,
+        "problem_id": problem_id,
+        # Keys the soak's own report renderer reads (`cycle_soak.py::_render`
+        # and `_case_symbols`). Supplied rather than guessed: `grep` for
+        # `report['case'][` over that file names exactly these.
+        "criteria": [],
+        "case": arm,
+        "attached_evidence_enabled": False,
+        "compile_notices": [{"code": n.code, "message": n.message}
+                            for n in (manifest.compile_notices or ())],
+    }
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--arm", choices=("C", "V", "A"))
@@ -279,7 +362,11 @@ def main() -> int:
         result = route_identity()
         print(json.dumps(result, indent=1, sort_keys=True))
         return 0 if result["generating_roles_identical"] else 1
-    ap.error("--emit-configs or --route-identity (compilation lands at step 26b)")
+    if args.arm and args.root:
+        print(json.dumps(build(pathlib.Path(args.root), args.arm),
+                         indent=2, sort_keys=True))
+        return 0
+    ap.error("--emit-configs, --route-identity, or --arm X --root DIR")
     return 2
 
 

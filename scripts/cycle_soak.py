@@ -64,6 +64,7 @@ from wheel_operational_smoke import (  # noqa: E402
 )
 
 REACH_RICH = REPO / "experiments" / "2026-08-22-live-reach-rich-run"
+D8_CRITICISM = REPO / "experiments" / "2026-09-09-change-d8-criticism-experiment"
 EPOCH3 = REPO / "experiments" / "2026-08-22-change-epoch3-second-lineage"
 POIETICS = REPO / "experiments" / "2026-08-25-poietics-program"
 FRONTIER = REPO / "experiments" / "2026-08-25-change-constructive-frontier"
@@ -331,6 +332,54 @@ CASES: dict[str, SoakCase] = {
         config_path=REACH_RICH / "run-config.yaml",
         builder="build_manifest",
         attached_evidence=False,
+    ),
+    # The D8 criticism experiment's three harness arms (tranche 1, offline).
+    # One builder serves all three and reads DR_D8_ARM, so the arms cannot
+    # drift apart in the way three near-identical builders would. ARM V's
+    # critic route already points at a loopback endpoint in its committed
+    # configuration; the soak's own `_loopback_config` redirects every role
+    # including that one, which is correct here -- the soak asks whether the
+    # SHAPE drives, not whether the vacuous bank is served.
+    "d8-armC": SoakCase(
+        id="d8-armC",
+        description=(
+            "D8 ARM C: the harness as it ships on the D8 question -- solo "
+            "qwen3.5:397b across all 11 canonical roles, ARGUMENTATIVE_AUTHORITY "
+            "observe_only, the discharge channel at its shipped default, no "
+            "attached evidence"
+        ),
+        config_path=D8_CRITICISM / "runs" / "config-c.yaml",
+        builder="build_manifest",
+        builder_dir=D8_CRITICISM / "tools",
+        attached_evidence=False,
+        delegates_to_builder=True,
+    ),
+    "d8-armV": SoakCase(
+        id="d8-armV",
+        description=(
+            "D8 ARM V: ARM C with the argumentative_critic role bound to a "
+            "local contentless endpoint; every other seat identical"
+        ),
+        config_path=D8_CRITICISM / "runs" / "config-v.yaml",
+        builder="build_manifest",
+        builder_dir=D8_CRITICISM / "tools",
+        attached_evidence=False,
+        delegates_to_builder=True,
+    ),
+    "d8-armA": SoakCase(
+        id="d8-armA",
+        description=(
+            "D8 ARM A: ARM C with authority GRANTED -- trial_required plus the "
+            "master adjudication gate and JUDGE_SEATS_ENABLED, and a two-seat "
+            "cross-family judge ensemble (qwen3.5:397b + glm-5.2). The only "
+            "arm whose seats are not all one model, and the deviation is "
+            "confined to the seats that adjudicate"
+        ),
+        config_path=D8_CRITICISM / "runs" / "config-a.yaml",
+        builder="build_manifest",
+        builder_dir=D8_CRITICISM / "tools",
+        attached_evidence=False,
+        delegates_to_builder=True,
     ),
     "pa1": SoakCase(
         id="pa1",

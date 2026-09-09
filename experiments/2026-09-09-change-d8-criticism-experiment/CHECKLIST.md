@@ -1,6 +1,6 @@
 # Checklist for: does criticism, once connected and allowed to bite, make the harness's output materially better than the plain model? — TRANCHE 1 (instruments, offline proofs, sealed pre-registration; NO LIVE CALL)
 
-State: next=30 blockers=none  (second budget stop RESOLVED by the operator: "raise." -- ceiling 8300, SPEC Amendment 5, itemized from a measured 6798 base with a larger margin because three of the last four misses were items no itemization contained)  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
+State: next=33 blockers=none  (PLAN CORRECTION at step 30: steps 30-31 read a stub root, and the soaks at 33-36 are what produce one, so 33-36 run FIRST and 30-32 follow. Order changed, nothing dropped; recorded rather than improvised, per dr-execute-step's rule for a step the tree contradicts.)  (second budget stop RESOLVED by the operator: "raise." -- ceiling 8300, SPEC Amendment 5, itemized from a measured 6798 base with a larger margin because three of the last four misses were items no itemization contained)  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
 Re-read REQUEST.md (with Amendment 1) + SPEC.md (with Amendment 1) before every
 step. Execute strictly in order. One step per dr-execute-step invocation.
 
@@ -525,14 +525,16 @@ nor `mini/`, so R36 is not touched.
        The spec's open question is therefore CLOSED, and closed by reading the
        gate rather than by assuming a default.
 
-- [ ] 30. (S3, R6) Prove the open-criticisms rendering on an OFFLINE stub root of
+- [ ] 30. (S3, R6) [RUNS AFTER 36 — see the plan correction in State] Prove the
+       open-criticisms rendering on an OFFLINE stub root of
        ARM C's shape: criticism reaches the seat that writes the next candidate.
        done-when: the section-plan receipts naming `dr.open-criticisms` are
        counted `n of m` (the `armR.sh:33-35` shape), n > 0, pasted to
        `proof/ARMC_RENDERS.txt`.
 
-- [ ] 31. (S4, R9) Prove ARM V's objections reach the next candidate EXACTLY as
-       ARM C's do: same section, same priority, same disposition.
+- [ ] 31. (S4, R9) [RUNS AFTER 36] Prove ARM V's objections reach the next
+       candidate EXACTLY as ARM C's do: same section, same priority, same
+       disposition.
        done-when: the two stub roots' section-plan receipts for that section
        differ only in the objection text, `diff` output pasted to
        `proof/ARMV_SAME_PATH.txt`.
@@ -543,6 +545,9 @@ nor `mini/`, so R36 is not touched.
 
 - [ ] 33. (S12, R25) Add three `CASES` rows to `scripts/cycle_soak.py` — data
        only, `config_path` pointing at this tranche's committed configurations.
+       Also add `build(root)` to `tools/build_manifest.py`, which step 26
+       deferred as "26b": a soak case delegating to a builder needs one, and
+       the soaks are what produce the roots steps 30-31 read.
        done-when: `python -u scripts/cycle_soak.py --list` shows the three new
        ids and every pre-existing id, unchanged.
 

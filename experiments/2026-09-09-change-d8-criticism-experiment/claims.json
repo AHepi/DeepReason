@@ -1,0 +1,113 @@
+{
+ "schema_version": "deepreason.record-claims.v1",
+ "title": "D8 criticism experiment — the predictions of PREREG.md §13, as universal statements one record can refute",
+ "claims": [
+  {
+   "claim_id": "D8-RENDER-01",
+   "statement": "No harness run reaches a terminal without ever rendering an open criticism to the seat that writes the next candidate: every terminal root carries at least one section plan naming dr.open-criticisms.",
+   "kind": "never",
+   "scope": {"states": ["completed", "failed"]},
+   "condition": {
+    "not": {
+     "object": {
+      "kind": "workflow-context-section-plan-v1",
+      "where": [["any:sections[].plugin_id", "eq", "dr.open-criticisms"]],
+      "min_count": 1
+     }
+    }
+   },
+   "note": "PREREG §13.1. This is the confound the 2026-09-08 audit named: 0 of 196 model-written attacks were ever exposed to a later conjecture dispatch, so every earlier statement about what criticism achieved was a statement about criticism that could not have achieved anything. A refutation here means the arm measured nothing about criticism and its comparison is uninterpretable, not that the harness is broken."
+  },
+  {
+   "claim_id": "D8-SCRUTINY-01",
+   "statement": "Every harness arm records at least one observe-only criticism as scrutiny — the Measure the discharge channel walks to find open criticisms.",
+   "kind": "never",
+   "scope": {"states": ["completed", "failed"]},
+   "condition": {"not": {"measure": {"code": "scrutiny", "min_count": 1}}},
+   "note": "PREREG §13.1's other half. An observe_only criticism mints no warrant and therefore produces no attack edge at all, so reading only state.att would miss the entire population this experiment is about (DR-CON-discharge-channel's first Trap). If this claim is refuted the channel has nothing to render, and D8-RENDER-01 cannot mean what it appears to."
+  },
+  {
+   "claim_id": "D8-CRIT-DISPATCHED-01",
+   "statement": "Every harness arm actually dispatches criticism: no terminal root carries zero Crit events.",
+   "kind": "never",
+   "scope": {"states": ["completed", "failed"]},
+   "condition": {"not": {"event": {"rule": "Crit", "min_count": 1}}},
+   "note": "The floor beneath every other criticism claim. An arm that dispatched no criticism at all is INCONCLUSIVE for every comparison it enters, and is not evidence that criticism does nothing."
+  },
+  {
+   "claim_id": "D8-TERMINAL-01",
+   "statement": "Every harness run reaches a CLEAN typed terminal: no root stops for a reason outside {max_cycles, budget_exhausted}.",
+   "kind": "never",
+   "scope": {"states": ["completed", "failed"]},
+   "condition": {
+    "all_of": [
+     {"status": {"field": "stop_reason", "present": true}},
+     {"status": {"field": "stop_reason", "not_in": ["max_cycles", "budget_exhausted"]}}
+    ]
+   },
+   "note": "PREREG §13.6. The operator's law of 2026-08-29: exhaustion is a clean stop. The organiser tranche's ARM R was typed operational_failure on a budget denial, which that law forbids and which its PARKED P8 records as a defect — so this claim can be refuted by a harness defect rather than by anything this experiment did, and a refutation must be read against P8 before it is read as an arm failure."
+  },
+  {
+   "claim_id": "D8-REPLAY-01",
+   "statement": "No harness run reaches a terminal over a record that fails its own replay validation.",
+   "kind": "never",
+   "scope": {"states": ["completed"]},
+   "condition": {"status": {"field": "replay_valid", "eq": false}},
+   "note": "PREREG §6's second refusal. The organiser tranche's ARM R reached completed over a record carrying three attempt-validity violations, composition succeeded on it regardless, and its verdict was INCONCLUSIVE for exactly that reason (its PREREG Amendment 9, and its PARKED P9). A refutation costs the arm its unit. STANDING WARNING, registered in advance: if run-status.json carries no replay_valid field, this claim survives having been unable to fail, and the standing line is the sentence to read — the judging instrument's own refusal is the load-bearing check, not this claim."
+  },
+  {
+   "claim_id": "D8-AUTHORITY-ARGUMENTATIVE-01",
+   "statement": "ARM A mints at least one ARGUMENTATIVE warrant — a status moved by something a critic seat wrote rather than by a mechanical verdict.",
+   "kind": "never",
+   "scope": {"root_names": ["armA-run1", "armA-run2"]},
+   "condition": {
+    "not": {
+     "object": {
+      "kind": "warrant",
+      "where": [["type", "eq", "argumentative"]],
+      "min_count": 1
+     }
+    }
+   },
+   "note": "PREREG §13.3, and REGISTERED AS THE PREDICTION MOST LIKELY TO BE REFUTED. Measured 2026-09-09 across the 20 most criticism-heavy committed roots in this repository: 1141 warrants, every one demonstrative, not one argumentative. If this is refuted, that is a FINDING about granted authority on this configuration — not a broken instrument and not a failed arm. The instrument's ability to report a non-zero argumentative count is proved separately on a fixture, with a mutation, because no committed root can prove it (proof/ARGUMENTATIVE_COLUMN_LIVE.txt)."
+  },
+  {
+   "claim_id": "D8-NO-AUTHORITY-ARGUMENTATIVE-01",
+   "statement": "No observe-only arm mints an argumentative warrant: ARM C and ARM V never move a status by a critic's prose.",
+   "kind": "never",
+   "scope": {"root_names": ["armC-run1", "armC-run2", "armV-run1", "armV-run2"]},
+   "condition": {
+    "object": {
+     "kind": "warrant",
+     "where": [["type", "eq", "argumentative"]],
+     "min_count": 1
+    }
+   },
+   "note": "The CONTROL for D8-AUTHORITY-ARGUMENTATIVE-01, and it points the opposite way. observe_only is defined as recording scrutiny and minting nothing, so a refutation here would mean the authority gate leaked — which would invalidate the A-vs-C comparison entirely, since the two arms would no longer differ in authority. This claim and the one above cannot both be refuted without the experiment being uninterpretable."
+  },
+  {
+   "claim_id": "D8-JUDGE-SILENT-01",
+   "statement": "No observe-only arm calls a judge: ARM C and ARM V never dispatch an adjudication.",
+   "kind": "never",
+   "scope": {"root_names": ["armC-run1", "armC-run2", "armV-run1", "armV-run2"]},
+   "condition": {"event": {"rule": "Adj", "min_count": 1}},
+   "note": "The second control on the authority difference, at the dispatch level rather than the warrant level. ARM C and ARM V leave JUDGE_SEATS_ENABLED at the shipped default false and cannot obtain a cross-family ensemble in any case (both are single-family; require_cross_family_judge_ensemble refuses them, measured at step 28). A refutation means judges fired where the configuration said they could not."
+  },
+  {
+   "claim_id": "D8-VACUOUS-ROUTE-01",
+   "statement": "ARM V's contentless objections travel the same route as ARM C's: every ARM V root records criticism as scrutiny exactly as ARM C does.",
+   "kind": "never",
+   "scope": {"root_names": ["armV-run1", "armV-run2"]},
+   "condition": {"not": {"measure": {"code": "scrutiny", "min_count": 1}}},
+   "note": "PREREG §13.2. ARM V exists to isolate the CONTENT of criticism, so its objections must differ from ARM C's in content and in nothing else. If ARM V's objections took a different path through the record, C-vs-V would measure the path and not the content, and the arm would answer a question nobody asked."
+  },
+  {
+   "claim_id": "D8-SPEND-01",
+   "statement": "No harness run exceeds the operator's 500000-token ceiling.",
+   "kind": "never",
+   "scope": {"states": ["completed", "failed"]},
+   "condition": {"status": {"field": "token_spend", "gt": 500000}},
+   "note": "The ceiling the operator set. A refutation means an arm was not measured at the stated spend and no equal-spend claim may be made from it — which is exactly the disclosure the organiser tranche's Amendment 8 had to make when a continuation raised its own ceiling."
+  }
+ ]
+}
