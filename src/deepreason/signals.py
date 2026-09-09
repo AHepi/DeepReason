@@ -237,6 +237,18 @@ _SIGNAL_MEANINGS: dict[str, str] = {
     "trial-declined": "trial_required criticism authority: the defended "
                       "trial over a precomputed case did not sustain "
                       "(inputs: [signal, target id, reason]); no warrant",
+    "trial-gate-switched": "the defended trial proceeded under a gate this "
+                           "run switched away from its default (inputs: "
+                           "[signal, target id, gate]); 'single-judge-seat' "
+                           "means ONE frozen judge seat ruled where two are "
+                           "the default, 'solo-road' means "
+                           "ARGUMENTATIVE_AUTHORITY=single_family_trial was "
+                           "compiled into the manifest's defended_trial. "
+                           "Recorded past every check the branch can decline "
+                           "on, so it means the trial RAN that way rather "
+                           "than that it was permitted to; the 2026-08-28 "
+                           "law requires the warning, and the amended judge "
+                           "law is what makes it one",
     "trial-observation": "advisory rubric trial completed without a warrant "
                          "or attack edge (inputs: [signal, target id, "
                          "observation artifact id, outcome]); the artifact "

@@ -86,6 +86,54 @@ criticism-authority tranche above to settle first -- its chosen road changes at
 least one row.
 ```
 
+## P3 — a map check names a run root that a later tranche retired by rename
+
+**What.** `docs/map/INV-frozen-surfaces.md`'s record-claims check runs
+`tools/record_claims.py --root experiments/2026-09-06-change-writers-room-
+organiser-testing/runs/home-r/runs/run-36d9a22c3e2045ae1b8c7bfb9d95d092`. That
+directory does not exist: the root was retired by rename to
+`failed-epoch1-run-36d9a22c3e2045ae1b8c7bfb9d95d092`, which is the correct
+handling of a failed root and leaves the check pointing at nothing. It fails
+with a JSON decode error, because `record_claims` writes its typed complaint
+("no run-status.json (not a run root)") to stderr and an empty stdout into the
+`python -c` on the other side of the pipe. Found while disposing of this
+tranche's docs_verify delta; it is NOT in `docs/AUDIT_BASELINES.md`'s expected
+list, so it is a finding, and it is not this tranche's doing — nothing here
+touches that path.
+
+**Ready-to-send prompt.**
+
+```
+Route through deepreason-orchestrator (dr-set-goal first). One goal: the
+record-claims check in docs/map/INV-frozen-surfaces.md points at a run root
+that exists, or the claim it backs is rewritten to one that does.
+
+Evidence, read-only:
+- python tools/docs_verify.py --failed  ->  the check fails with
+  json.decoder.JSONDecodeError, which is the SYMPTOM.
+- python tools/record_claims.py --claims experiments/2026-09-06-change-writers-
+  room-organiser-testing/claims.json --root <the path the check names> --json
+  -> "no run-status.json (not a run root)", which is the CAUSE.
+- ls experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/
+  -> failed-epoch1-run-36d9a22c3e2045ae1b8c7bfb9d95d092 and
+  run-c3f3bf10bc57d63e224a9f1c68bf1057. The root was retired by rename, which
+  is CON-run-identity's own prescribed handling; the check was not moved with it.
+- docs/AUDIT_BASELINES.md's expected-failure list does NOT carry this row, so
+  an audit comparing against that list will row it as a delta every time until
+  it is fixed or baselined.
+
+Decide which root the claim is actually about before repointing it: the
+retired epoch-1 root and run-c3f3bf10 are different runs, and the three claim
+ids the check asserts (RUN-STOP-01, CRIT-CAP-01, ARMH-STOP-01) may not hold on
+both. If neither root supports the claim as written, rewrite the claim rather
+than the path — a check repointed at a root that happens to pass is worse than
+a red one.
+
+Also worth one line in the same tranche: whether `record_claims` should exit
+non-zero AND print typed JSON on stdout, so a piped check fails with its own
+reason instead of a JSON decode error three layers away.
+```
+
 ## Not parked here, because another tranche already owns them
 
 - `tools/blast_radius.py` reporting comment and string-literal occurrences as
