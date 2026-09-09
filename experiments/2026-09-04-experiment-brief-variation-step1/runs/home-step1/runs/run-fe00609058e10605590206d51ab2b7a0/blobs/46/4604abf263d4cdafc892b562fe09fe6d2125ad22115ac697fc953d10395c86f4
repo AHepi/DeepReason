@@ -1,0 +1,35 @@
+## problem-context
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@01e39cf2c29a39e7d9e40fa3: program:reasoning_observation_pending
+- reason-counter@d87f733816d2999e67a11d6c: program:reasoning_observation_pending
+- reason-counter@59e6e79f1d5615ec4d441176: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 1cc757de7d755c213decb665865118f54ad52a4636c4ec03514f37f51f6314fe
+{"analogy":null,"claim":"The resolution lies in reinterpreting corroboration as an evolutionary selection mechanism where 'preference' is a survival trait of the methodology, not a logical inference about the theory's truth.","counterconditions":[{"case":"If evolutionary success is not correlated with truth-likeness (the argument from pessimistic meta-induction).","checker_spec":null,"eval":"observation"},{"case":"If the mechanism requires assuming that the environment (nature) is stable enough for selection to work.","checker_spec":null,"eval":"observation"},{"case":"If this view reduces scientific rationality to mere biological adaptation.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Drawing on evolutionary epistemology, the preference for corroborated theories is not a logical deduction about the world's structure but a methodological rule that has itself been 'corroborated' by the survival of science. We prefer well-tested theories because the *method* of preferring them has allowed our scientific frameworks to survive and expand. This shifts the locus of justification from the individual theory (which remains conjectural) to the meta-methodology. It costs Popper the idea that science converges on truth in a strong sense; instead, science merely eliminates the unfit, and our 'preference' is just the current state of the surviving ecosystem of ideas.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- 30be11905db881ea7a4e488a8e68f34e4f6b262380bb3b1a31ceb9763a9aea81 [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- 30be11905db881ea7a4e488a8e68f34e4f6b262380bb3b1a31ceb9763a9aea81: {"school_policy": {"school": "school-2", "stance": "unifier"}}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+DIRECTIVE: mount the strongest NEW specific case against TARGET 1cc757de7d755c213decb665865118f54ad52a4636c4ec03514f37f51f6314fe, or attack=false if you find no genuine fault.

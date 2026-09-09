@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates the 'decision' to act with the 'preference' that motivates it. Popper's problem explicitly asks if the *preference* for better-corroborated theories is defensible without induction. By reducing this preference to a mere arbitrary convention or 'decision postulate,' the target admits that there is no rational basis for preferring one theory over another other than a voluntary rule. This does not solve the dilemma; it surrenders to the charge of irrationalism. If the preference is just a convention, then acting on it is not 'defensible on Popper's own terms' as a rational stance, but is instead an act of faith disguised as procedure, which contradicts Popper's aim to save scientific rationality from skepticism.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Popper distinguishes between the logical status of corroboration (non-probabilistic) and the pragmatic decision to act, but maintains that the preference for highly corroborated theories is rational because they have withstood severe tests, not because of an arbitrary convention.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is merely a conventional decision without rational grounding in their test history, how does Popper's view differ from Feyerabend's epistemological anarchism?"
+    }
+  ]
+}
