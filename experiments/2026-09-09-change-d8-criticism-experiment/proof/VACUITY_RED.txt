@@ -1,0 +1,52 @@
+=== Step 22-24 proof: ARM V's vacuous critic ===
+
+--- the stub: the SHARED loopback fixture, one thing overridden ---
+$ grep -n 'import wheel_operational_smoke' critic_stub.py
+51:import wheel_operational_smoke as _smoke  # noqa: E402  (the ONE stub, reused)
+(the same import cycle_soak.py:58 uses -- 'the ONE stub, reused'.)
+
+critic contract: answered from the bank, 404 chars, and the reply VALIDATES against the shipped contract (attack=True)
+round robin covers all 12 entries, deterministically
+a non-critic contract falls through to the shared stub, byte-identical
+an empty bank REFUSES rather than serving no objection
+rc=0
+
+--- the bank generator ---
+deterministic: same seed -> same bank, digest 7fbd86af5cb103ca
+lengths: min 404, median 637, max 866 (target iqr 400-900)
+a different seed gives a different bank, so the seed is real
+every sentence in every entry comes from the 12 stems and 6 continuations, and from nowhere else
+rc=0
+
+--- the vacuity check, and the knob that was REMOVED rather than turned ---
+
+The first version of the check used a hand-written stop-list alone and
+reported 8 of 12 entries as naming their targets -- on the words 'rather'
+and 'made'. The obvious repair was to add those two words to the
+stop-list. That repair is the knob this check exists to avoid: a
+stop-list extended whenever the bank fails is a stop-list fitted to the
+bank, and it would eventually absorb a real word.
+
+So the baseline is not extended by hand. It is the bank generator's OWN
+committed vocabulary, read from make_vacuous_bank.py at run time. That
+set is fixed before any target exists and cannot be adjusted per target.
+What remains after subtracting it is the real question: a word an entry
+contains that the generator could not have produced.
+
+clean bank: VACUOUS (0 of 12 entries off-vocabulary, 0 naming their targets; generator vocabulary 100 words, 26 distinct target content words outside it were searched for)
+planted bank: NOT VACUOUS (1 entry off-vocabulary, 1 naming its target: ['corroboration', 'future', 'induction', 'reliability'])
+the check goes RED on a planted target-specific objection, so a pass above is a fact rather than an absence of testing
+rc=0
+
+Read the planted line: the check catches the planted entry BOTH ways --
+off-vocabulary (it is not one of the committed clauses) and by target
+overlap on four words the generator has no way to emit: corroboration,
+future, induction, reliability. A check that has never been shown to fail
+is indistinguishable from one that cannot.
+
+--- one design decision worth stating, because it is invisible in a diff ---
+ARM V's objections are filed with attack=True, exactly as ARM C's are.
+An objection filed as no-attack would take a different path through the
+record, and the two arms would then differ in their ROUTE as well as in
+their content -- which is the one difference ARM V may not have, since
+the whole arm exists to isolate content.

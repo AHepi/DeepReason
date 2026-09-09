@@ -1,6 +1,6 @@
 # Checklist for: does criticism, once connected and allowed to bite, make the harness's output materially better than the plain model? — TRANCHE 1 (instruments, offline proofs, sealed pre-registration; NO LIVE CALL)
 
-State: next=22 blockers=none  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
+State: next=26 blockers=none  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
 Re-read REQUEST.md (with Amendment 1) + SPEC.md (with Amendment 1) before every
 step. Execute strictly in order. One step per dr-execute-step invocation.
 
@@ -370,26 +370,76 @@ nor `mini/`, so R36 is not touched.
 - [x] 21. (S8 §6-§9) [COMMIT] the judging instrument and its three proofs.
        done-when: tree clean, head on origin.
 
-- [ ] 22. (S4, R8) Write `tools/critic_stub.py`: a loopback endpoint bound to
+- [x] 22. (S4, R8) Write `tools/critic_stub.py`: a loopback endpoint bound to
        `argumentative_critic` only, importing `scripts/wheel_operational_smoke.py`'s
        stub the way `cycle_soak.py:58` does, overriding ONLY the objection text.
        done-when: it starts, serves one argumentative-critic request, and the
        reply validates against the shipped critic contract; the import is the
        shared stub (no second stub is minted — `grep` proves the import).
+       PROOF (`proof/VACUITY_RED.txt`):
+       ```
+       critic contract: answered from the bank, 404 chars, and the reply
+         VALIDATES against the shipped contract (attack=True)
+       round robin covers all 12 entries, deterministically
+       a non-critic contract falls through to the shared stub, byte-identical
+       an empty bank REFUSES rather than serving no objection
+       ```
+       Two decisions worth stating because a diff hides them. (a) A non-critic
+       contract MUST still be answered: this endpoint is probed by the
+       production-contract doctor during qualification, and an unsatisfied
+       fixture is a 500 that trips the circuit breaker for the whole endpoint —
+       so everything but the critic contract falls through to the shared
+       synthesiser untouched. (b) ARM V's objections are filed with
+       `attack=True`, exactly as ARM C's are; filed as no-attack they would
+       take a different route through the record and the arms would differ in
+       route as well as content, which is the one difference ARM V may not
+       have.
 
-- [ ] 23. (S4, R7, Amendment 1) Write `tools/make_vacuous_bank.py`: deterministic
+- [x] 23. (S4, R7, Amendment 1) Write `tools/make_vacuous_bank.py`: deterministic
        from a seed and a target length distribution; entries name no artifact
        id, no claim text, no mechanism.
        done-when: `--self-test` reproduces a committed fixture bank
        byte-for-byte from a fixed seed, exit 0.
+       PROOF:
+       ```
+       deterministic: same seed -> same bank, digest 7fbd86af5cb103ca
+       lengths: min 404, median 637, max 866 (target iqr 400-900)
+       a different seed gives a different bank, so the seed is real
+       every sentence in every entry comes from the 12 stems and 6
+         continuations, and from nowhere else
+       ```
+       `--target-median` and `--target-iqr` are REQUIRED and have no defaults:
+       they are ARM C's own measured objection lengths, and a default would let
+       the bank be built before the measurement exists. Lengths are drawn
+       ACROSS the interquartile range rather than all set to the median,
+       because a bank of identical lengths would be distinguishable from ARM
+       C's on length alone — the one property the two arms must share.
 
-- [ ] 24. (S4, R9) Write the vacuity check and DRIVE IT RED: plant one
+- [x] 24. (S4, R9) Write the vacuity check and DRIVE IT RED: plant one
        target-specific entry and prove the check fails; restore and prove it
        passes.
        done-when: both outputs pasted to `proof/VACUITY_RED.txt` — the check
        fails for the reason it claims to test.
+       PROOF:
+       ```
+       clean bank:   VACUOUS (0 of 12 off-vocabulary, 0 naming their targets)
+       planted bank: NOT VACUOUS (1 off-vocabulary, 1 naming its target:
+                     ['corroboration','future','induction','reliability'])
+       ```
+       A KNOB WAS REMOVED RATHER THAN TURNED, and this is the substance of the
+       step. The first version used a hand-written stop-list alone and reported
+       8 of 12 entries as naming their targets — on the words "rather" and
+       "made". The obvious repair was to add those two to the stop-list; that
+       repair is precisely the knob this check exists to avoid, because a
+       stop-list extended whenever the bank fails is fitted to the bank and
+       would eventually absorb a real word. So the baseline became the bank
+       GENERATOR'S OWN committed vocabulary, read from `make_vacuous_bank.py`
+       at run time — fixed before any target exists, unadjustable per target.
+       What survives that subtraction is the real question: a word an entry
+       contains that the generator could not have produced. The check now
+       catches the planted entry twice over, by vocabulary and by overlap.
 
-- [ ] 25. (S4) [COMMIT] the stub, the bank generator and the vacuity proof.
+- [x] 25. (S4) [COMMIT] the stub, the bank generator and the vacuity proof.
        done-when: tree clean, head on origin.
 
 - [ ] 26. (S3, S5, A1) Write `tools/build_manifest.py` and `runs/config-{c,v,a}.yaml`:
