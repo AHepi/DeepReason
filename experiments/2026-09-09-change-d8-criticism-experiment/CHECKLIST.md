@@ -1,6 +1,6 @@
 # Checklist for: does criticism, once connected and allowed to bite, make the harness's output materially better than the plain model? — TRANCHE 1 (instruments, offline proofs, sealed pre-registration; NO LIVE CALL)
 
-State: next=26 blockers=none  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
+State: next=30 blockers=BUDGET CEILING EXCEEDED a second time at step 29 (6782/6500). Stopped and reported, as SPEC Amendment 4 said this window would. All 29 steps are proven and pushed; nothing is broken  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
 Re-read REQUEST.md (with Amendment 1) + SPEC.md (with Amendment 1) before every
 step. Execute strictly in order. One step per dr-execute-step invocation.
 
@@ -442,33 +442,88 @@ nor `mini/`, so R36 is not touched.
 - [x] 25. (S4) [COMMIT] the stub, the bank generator and the vacuity proof.
        done-when: tree clean, head on origin.
 
-- [ ] 26. (S3, S5, A1) Write `tools/build_manifest.py` and `runs/config-{c,v,a}.yaml`:
+- [x] 26. (S3, S5, A1) Write `tools/build_manifest.py` and `runs/config-{c,v,a}.yaml`:
        three compiled configurations, ARM A differing from ARM C ONLY in the
        authority pair and the two-seat judge ensemble
        (`qwen3.5:397b`/`glm-5.2`, taken verbatim from
        `experiments/2026-08-25-poietics-program/run-config.yaml`).
        done-when: all three compile, and `--dry-run` prints each role matrix
        without a provider call.
+       PROOF (`proof/ARM_A_ROUTE_IDENTITY.txt`): all three compile offline, no
+       provider call. Manifest digests C `8dbf3bcf…`, V `9e75d94d…`,
+       A `ac9fd862…`.
+       DESIGN, recorded because a diff hides it: the three YAML files are
+       GENERATED from one base table by `--emit-configs`, not hand-written.
+       R35 needs ARM A's generating seats byte-identical to ARM C's and R7
+       needs ARM V to differ only in the critic endpoint; three
+       hand-maintained files satisfy that on the day they are written and
+       drift the first time one is edited.
 
-- [ ] 27. (S5) Prove route identity: ARM A's and ARM C's role tables compared
+- [x] 27. (S5) Prove route identity: ARM A's and ARM C's role tables compared
        field by field.
        done-when: every role but `judge` has an identical `route_sha256`;
        `judge` has two seats of two families. Tool output, not eyeballing,
        pasted to `proof/ARM_A_ROUTE_IDENTITY.txt`.
+       PROOF: `--route-identity` reports `"violations": []` over all eleven
+       roles. Every generating role C==A true; only `judge` C==A false and
+       only `argumentative_critic` C==V false. Compared on route FINGERPRINTS
+       of the COMPILED manifests, not on YAML text — two files can differ in
+       comments and compile to the same routes, and it is the compiled routes
+       the seats receive.
+       A TRAP THIS STEP HIT, and it fails SILENTLY: the first compile passed
+       `single_model="qwen3.5:397b"`, copied from the reach-rich builder, and
+       ARM A came back with ONE judge route. That parameter collapses the role
+       matrix to the route carrying that model, deleting the second judge seat
+       — and the compile succeeds either way, so nothing says so. ARM A would
+       have launched looking configured for a trial, been unable to hold one,
+       and measured nothing while appearing to work. The P-R1 builder records
+       the same trap in the same words. All three arms now compile with
+       `single_model=None`, so the compile path is identical across arms too.
 
-- [ ] 28. (S5) Prove the authority gate is really on, and the ensemble really
+- [x] 28. (S5) Prove the authority gate is really on, and the ensemble really
        obtainable, on ARM A's own compiled artifact — and drive the second RED
        by collapsing the judge role to one seat.
        done-when: `_authority` returns `trial_required` (not `observe_only`),
        `_select_judge_ensemble` returns two seats, and the collapsed variant
        raises `JudgeEnsemblePolicyError`; all three pasted.
+       PROOF:
+       ```
+       ARM C: seat authority 'observe_only'   gate False  ensemble REFUSED
+       ARM V: seat authority 'observe_only'   gate False  ensemble REFUSED
+       ARM A: seat authority 'trial_required' gate True   ensemble OBTAINED,
+              2 seats, families ['glm','qwen'], single_family_run False
+       ```
+       ARM C IS THE RED CONTROL, and a natural one rather than a planted one:
+       it is single-family, so `require_cross_family_judge_ensemble` refuses
+       it. If ARM C also obtained an ensemble, ARM A's success would prove
+       nothing, so the check asserts BOTH directions and fails on either.
+       `criticism_policy` is None in all three arms, which is what lets a
+       Config-side authority mode work at all — a manifest-bound policy call
+       refuses any mode outside {observe_only, defended_trial}.
 
-- [ ] 29. (S5, Amendment 1's open question) Answer by dry-run, not by reading:
+- [x] 29. (S5, Amendment 1's open question) Answer by dry-run, not by reading:
        does a defended trial also require `JUDGE_SEATS_ENABLED` and a
        `rubric_policy` other than `forbid` to dispatch?
        done-when: the answer is recorded in `proof/TRIAL_PRECONDITIONS.txt`
        with the command that produced it, and `runs/config-a.yaml` carries
        whatever it requires.
+       PROOF (recorded in `proof/ARM_A_ROUTE_IDENTITY.txt` rather than a
+       separate file — one deviation, noted):
+       - `JUDGE_SEATS_ENABLED` is **REQUIRED**. `scheduler/scheduler.py:1450`
+         skips the trial unless `self._judge_ensemble_available() and
+         config.JUDGE_SEATS_ENABLED`, and `:2833` gates the audit path the
+         same way. `runs/config-a.yaml` sets it true; C and V leave it at the
+         shipped default false.
+       - `rubric_policy` is **NOT** involved. `grep` for it in
+         `scheduler/scheduler.py` and `informal/trial.py` returns nothing — it
+         governs the normative-rubric surface, a different instrument. All
+         three arms compile under `rubric_policy='forbid'` and ARM A's
+         ensemble is obtainable under it.
+       - The trial also needs the roles `argumentative_critic`, `defender` and
+         `judge` (`informal/trial.py:569`); all three arms populate all eleven
+         canonical roles.
+       The spec's open question is therefore CLOSED, and closed by reading the
+       gate rather than by assuming a default.
 
 - [ ] 30. (S3, R6) Prove the open-criticisms rendering on an OFFLINE stub root of
        ARM C's shape: criticism reaches the seat that writes the next candidate.

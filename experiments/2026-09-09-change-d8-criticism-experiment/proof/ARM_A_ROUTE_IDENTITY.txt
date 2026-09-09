@@ -1,0 +1,173 @@
+=== Steps 26-29 proof: the three arms, compiled, and what ARM A needs to bite ===
+
+--- the configurations are GENERATED from one base table, not hand-written ---
+R35 requires ARM A's generating seats to be byte-identical to ARM C's, and
+R7 requires ARM V to differ only in the critic's endpoint. Three
+hand-maintained YAML files would satisfy that on the day they were written
+and drift the first time one was edited. One base table plus named
+deviations makes the identity a property of the code.
+
+--- step 27: route identity, measured on the COMPILED manifests ---
+{
+ "authority": {
+  "A": {
+   "ADJUDICATION_STATUS_AUTHORITY_ENABLED": true,
+   "ARGUMENTATIVE_AUTHORITY": "trial_required",
+   "criticism_policy": null,
+   "resolved_at_the_seat": "trial_required"
+  },
+  "C": {
+   "ADJUDICATION_STATUS_AUTHORITY_ENABLED": false,
+   "ARGUMENTATIVE_AUTHORITY": "observe_only",
+   "criticism_policy": null,
+   "resolved_at_the_seat": "observe_only"
+  },
+  "V": {
+   "ADJUDICATION_STATUS_AUTHORITY_ENABLED": false,
+   "ARGUMENTATIVE_AUTHORITY": "observe_only",
+   "criticism_policy": null,
+   "resolved_at_the_seat": "observe_only"
+  }
+ },
+ "generating_roles_identical": true,
+ "judge_ensembles": {
+  "A": {
+   "families": [
+    "glm",
+    "qwen"
+   ],
+   "obtained": true,
+   "seats": 2,
+   "single_family_run": false
+  },
+  "C": {
+   "families": [],
+   "obtained": false,
+   "seats": 0,
+   "single_family_run": true
+  },
+  "V": {
+   "families": [],
+   "obtained": false,
+   "seats": 0,
+   "single_family_run": true
+  }
+ },
+ "manifest_sha256": {
+  "A": "ac9fd862b547e3423401f84821a37c20296fd327c3b7fac2e513093c1fb7af95",
+  "C": "8dbf3bcfdd12cab10382a5a6bbb3690f1bc9978d42fd0dbf6aeec76ed1ccaec9",
+  "V": "9e75d94d09de239441d190da6cee45a422725a0a9605eeb451ff75f3cc4a1768"
+ },
+ "rows": [
+  {
+   "C_equals_A": true,
+   "C_equals_V": false,
+   "role": "argumentative_critic"
+  },
+  {
+   "C_equals_A": true,
+   "C_equals_V": true,
+   "role": "conjecturer"
+  },
+  {
+   "C_equals_A": true,
+   "C_equals_V": true,
+   "role": "defender"
+  },
+  {
+   "C_equals_A": true,
+   "C_equals_V": true,
+   "role": "grounding_reviewer"
+  },
+  {
+   "C_equals_A": false,
+   "C_equals_V": true,
+   "role": "judge"
+  },
+  {
+   "C_equals_A": true,
+   "C_equals_V": true,
+   "role": "property_designer"
+  },
+  {
+   "C_equals_A": true,
+   "C_equals_V": true,
+   "role": "summarizer"
+  },
+  {
+   "C_equals_A": true,
+   "C_equals_V": true,
+   "role": "synthesizer"
+  },
+  {
+   "C_equals_A": true,
+   "C_equals_V": true,
+   "role": "thesis"
+  },
+  {
+   "C_equals_A": true,
+   "C_equals_V": true,
+   "role": "variator"
+  },
+  {
+   "C_equals_A": true,
+   "C_equals_V": true,
+   "role": "vision_critic"
+  }
+ ],
+ "schema": "route-identity.v2",
+ "violations": []
+}
+rc=0
+
+Read the rows: every generating role has C==A true. Only 'judge' has
+C==A false (ARM A's ensemble) and only 'argumentative_critic' has C==V
+false (ARM V's stub). VIOLATIONS is empty. The comparison is on route
+FINGERPRINTS, not on the YAML text: two files can differ in comments and
+compile to the same routes, and it is the compiled routes the seats get.
+
+--- A TRAP THIS STEP HIT, and it fails SILENTLY ---
+The first compile passed single_model='qwen3.5:397b', copying the
+reach-rich builder. ARM A came back with judge_routes=1. The parameter
+collapses the role matrix to the one route carrying that model, which
+DELETES the second judge seat -- and the compile succeeds either way, so
+nothing says so. ARM A would have launched looking configured for a trial
+and been unable to hold one, and the arm would have measured nothing while
+appearing to work. The P-R1 tranche's own builder records the same trap in
+the same words: 'the seats are cross-family, so single_model must be None'.
+
+--- step 28: the authority reaches the seat, and the ensemble exists ---
+ARM C: authority observe_only at the seat, gate False, ensemble REFUSED
+ARM V: authority observe_only at the seat, gate False, ensemble REFUSED
+ARM A: authority trial_required at the seat, gate True, ensemble OBTAINED,
+       2 seats, families ['glm','qwen'], single_family_run False
+
+ARM C IS THE RED CONTROL, and it is a natural one rather than a planted
+one: it is single-family, so require_cross_family_judge_ensemble refuses
+it. If ARM C also obtained an ensemble, ARM A's success would prove
+nothing. The check asserts BOTH directions and fails on either.
+
+criticism_policy is None in all three arms, which is what lets a
+Config-side authority mode work at all: a manifest-bound policy call
+refuses any mode outside {observe_only, defended_trial}.
+
+--- step 29: what a defended trial ACTUALLY requires, answered from code ---
+The question the spec could not settle by reading was whether
+JUDGE_SEATS_ENABLED and a permissive rubric_policy are needed. Both
+halves now have an answer:
+
+  JUDGE_SEATS_ENABLED: REQUIRED. scheduler.py:1450 --
+                if not self._judge_ensemble_available() or not config.JUDGE_SEATS_ENABLED:
+                    continue
+  and again at scheduler.py:2833 for the audit path. ARM A sets it true;
+  ARM C and ARM V leave it false, which is the shipped default.
+
+  rubric_policy: NOT REQUIRED, and not involved. grep for it in
+  scheduler.py and informal/trial.py returns NOTHING -- it governs the
+  normative-rubric surface, a different instrument from the defended
+  trial. All three arms compile under rubric_policy='forbid', and ARM A's
+  ensemble is obtainable under it, which is the measurement above.
+
+  The trial additionally needs the roles argumentative_critic, defender
+  and judge (informal/trial.py:569); all three arms populate all eleven
+  canonical roles, so none is missing.
