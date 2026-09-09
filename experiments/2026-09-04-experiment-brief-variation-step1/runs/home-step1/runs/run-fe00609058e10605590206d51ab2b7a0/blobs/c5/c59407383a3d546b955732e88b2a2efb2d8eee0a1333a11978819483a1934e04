@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's central claim that preference 'inevitably smuggles induction back' relies on a false dichotomy: it assumes the only alternative to induction is arbitrariness. It fails to engage with Popper's actual non-inductive justification for preference, which is based on verisimilitude (truth-likeness) and the logical content of theories, not the probabilistic expectation that the future will resemble the past. By defining any reliance on 'past performance' as 'cryptic induction,' the target begs the question against Popper's specific argument that severe testing increases a theory's informative content and proximity to truth without increasing its probability. The argument collapses if one accepts Popper's distinction between preferring a theory because it is *more likely to be true* (induction/probability) versus preferring it because it has *withstood more attempts to falsify it* (corroboration/verisimilitude), a distinction the target dismisses rather than refutes.",
+      "premise": "Popper offers a non-inductive justification for preferring better-corroborated theories based on verisimilitude and logical content, distinct from inductive probability.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "successor_question": "If the preference is based on the logical fact that a theory has survived more severe tests (increasing its empirical content) rather than an inductive leap about its future success, does the charge of 'smuggling induction' still hold?"
+    }
+  ]
+}

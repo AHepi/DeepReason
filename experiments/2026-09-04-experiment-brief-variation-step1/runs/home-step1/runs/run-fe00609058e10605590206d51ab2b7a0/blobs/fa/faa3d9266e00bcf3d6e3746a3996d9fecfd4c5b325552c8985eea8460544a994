@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as the rational basis for preferring better-corroborated theories, but this smuggles induction back in because Popper explicitly demonstrated that verisimilitude cannot be empirically assessed or compared between false theories without relying on inductive assumptions about the future matching the past. If we cannot know which false theory is closer to the truth based solely on past test results (corroboration), then claiming corroboration indicates higher potential verisimilitude is an inductive leap, not a logical deduction permitted by Popper's strict falsificationism.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's own later admission that verisimilitude cannot be reliably measured or compared among false theories using only corroboration reports undermines the claim that preference based on verisimilitude is non-inductive.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be determined from corroboration without induction, what non-inductive metric does Popper actually provide to justify acting on one theory over another?",
+      "target_alias": "SRC_001"
+    }
+  ]
+}
