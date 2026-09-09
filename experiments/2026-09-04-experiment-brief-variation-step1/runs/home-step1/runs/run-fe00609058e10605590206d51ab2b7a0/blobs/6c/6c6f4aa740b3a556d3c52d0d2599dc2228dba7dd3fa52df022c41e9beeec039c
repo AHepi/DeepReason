@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target falsely attributes a 'schism' and 'contradiction' to Popper by ignoring his explicit distinction between the logical status of theories (which cannot be probabilified) and the pragmatic rationality of preference (which relies on verisimilitude). Popper defends acting on the best-tested theory not via induction, but because it has withstood attempts at falsification, making it the most reliable guide for action without assigning it higher probability; thus, no 'compartmentalization' or surrender to induction is required.",
+      "premise": "Popper explicitly argues that preferring the better-corroborated theory is rational because corroboration reports on past performance and potential truth-content (verisimilitude), not future probability, thereby resolving the tension between falsification and action within a single consistent framework.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "successor_question": "How does Popper's concept of verisimilitude specifically allow a scientist to prefer one theory over another for practical action without implicitly relying on the principle of induction?"
+    }
+  ]
+}

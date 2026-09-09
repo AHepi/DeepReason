@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'methodological preference for testing' with 'preference for action.' The problem explicitly notes that scientists (and Popper) prefer better-corroborated theories when 'choosing which theory to act on.' Acting on a theory (e.g., building a bridge based on it) inherently relies on the expectation of its future reliability. By restricting the preference to a 'purely epistemic strategy of error elimination,' the target admits the defense cannot justify the very 'acting' the problem asks about. Thus, the target concedes that on Popper's own terms, one cannot defensibly *act* on a theory without smuggling in induction (the expectation that past survival implies future success), rendering the preference indefensible for the specific context of action required by the prompt.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Acting on a theory requires an expectation of its future reliability, which constitutes induction.",
+      "premise_evidence": null,
+      "successor_question": "If Popper cannot justify acting on a theory without induction, does his philosophy offer any practical guidance for decision-making under uncertainty, or is it limited to pure theoretical critique?"
+    }
+  ]
+}

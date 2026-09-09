@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without induction if framed as a non-epistemic, methodological rule for selecting the most informative 'best bet' for falsification, rather than a prediction of future success; however, this stance costs the agent any rational assurance that the chosen theory will work in practice, reducing scientific action to a bold gamble on truth-likeness (verisimilitude) that cannot be logically guaranteed.",
+    "mechanism": "The mechanism distinguishes between 'corroboration' (a logical report of past test severity and survival) and 'inductive inference' (a probabilistic claim about future recurrence). It posits that preferring the best-corroborated theory is a rational decision based on the goal of finding truth (verisimilitude), where the theory with the highest content surviving the severest tests is logically the closest to truth we have, even if we cannot know it will remain so. This transforms the preference from an inductive expectation ('it worked before, so it will work again') to a critical choice ('this is the most rigorous candidate currently available for our aim of truth').",
+    "counterconditions": [
+      "If verisimilitude comparisons are logically impossible between false theories (as Tichý and Miller argued), then the basis for preferring one surviving theory over another collapses.",
+      "If 'acting' on a theory inherently requires assuming the uniformity of nature (that future tests resemble past ones), then the distinction between critical preference and induction is merely semantic.",
+      "If the goal of science shifts from 'truth' to 'reliable prediction,' Popper's account fails to justify why the best-corroborated theory is the most reliable predictor."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0247998b9f0426956c8d0ef420daae0ecb43121c370bf31bd5ca9328a00d058d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly addresses the fatal objection to verisimilitude by listing it as a primary countercondition (Tichý/Miller problem). The defense does not claim verisimilitude is solved, but argues that *if* one accepts the goal of truth, it is the only non-inductive metric available, acknowledging the cost that this metric may be logically flawed."
+      },
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "revised",
+        "note": "Revised to clarify that 'acting' is justified not by expected success, but by the rationality of choosing the 'best available guess' relative to the aim of truth. The note in the mechanism now explicitly separates the 'goal of truth' from the 'expectation of practical utility'."
+      },
+      {
+        "handle": "1bd83288bc9ab8f9b04811f4e67bb8ca9d49c4f09aa66f010b8a229bd75d6fc3",
+        "kind": "rebutted",
+        "note": "The candidate agrees the preference is rational but disputes that it contradicts Popper; it argues the rationality stems from the logical relation to the *aim* (truth), not from a social convention or pragmatic fiction. The 'fiction' is only that we can guarantee the outcome, which Popper never claimed."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The distinction is maintained: corroboration measures informational content survived, while the 'preference for action' is a decision theoretic move based on that content. The candidate admits this does not guarantee future performance, thus avoiding the conflation of survival with predictive certainty."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "revised",
+        "note": "Clarified that the 'false dichotomy' charge is met by introducing a third category: 'methodological selection for falsifiability.' The agent acts on the theory not because it is psychologically believed to be true, nor purely by convention, but because it is the most efficient vehicle for the specific goal of eliminating error."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The candidate rejects the straw man accusation by strictly adhering to Popper's distinction: the 'Principle of Uniformity' is rejected, but the 'Principle of Criticism' (choose the hardest-to-kill theory) is upheld as the sole justification for action."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "rebutted",
+        "note": "The mechanism explicitly defines 'critical preference' as distinct from 'inductive prediction.' Prediction implies a claim about the future; critical preference implies a claim about the current logical status of the theory relative to tests already performed."
+      },
+      {
+        "handle": "270fdeb19c12b45908843bde3158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "revised",
+        "note": "Added explicit acknowledgment that Popper's own formal definition of verisimilitude failed. The argument now rests on the *intention* of verisimilitude as a regulative ideal rather than a calculable quantity, accepting the cost that this makes the preference less rigorous than Popper hoped."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_004"],
+      "shared_structure": [
+        "Selection of an option based on past performance metrics without assuming those metrics predict future outcomes.",
+        "Distinction between 'reporting history' and 'betting on the future'.",
+        "Reliance on a regulative ideal (truth/survival) rather than a probabilistic calculation."
+      ],
+      "disanalogies": [
+        "In evolutionary natural selection, there is no 'agent' making a rational choice; in Popper's science, the scientist actively chooses.",
+        "Biological survival is binary (live/die); theory corroboration is a matter of degree and severity of tests.",
+        "Evolution has no 'goal' of truth, whereas Popperian science explicitly aims at verisimilitude."
+      ],
+      "transfer_claims": [
+        "Just as a gambler might choose the horse with the best past record not because it guarantees a win, but because it is the 'best bet' available, scientists choose the best-corroborated theory as the best current guess.",
+        "The logic of 'survival of the fittest' transfers to 'survival of the most tested,' implying robustness but not immortality."
+      ],
+      "overturn_conditions": [
+        "If it is shown that 'best bet' reasoning implicitly assumes the future resembles the past, the analogy to non-inductive choice fails.",
+        "If the concept of 'severity' in testing cannot be defined without reference to background assumptions that are themselves inductive."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

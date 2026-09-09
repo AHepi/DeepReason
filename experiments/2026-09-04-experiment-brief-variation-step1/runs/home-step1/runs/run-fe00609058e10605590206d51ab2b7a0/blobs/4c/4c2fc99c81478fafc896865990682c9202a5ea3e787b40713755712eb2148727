@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is a 'pragmatic fiction' contradicts Popper's explicit stance that preferring better-corroborated theories is a rational decision based on critical discussion, not a mere social convention. Popper argued that while corroboration does not imply probability, it provides the only rational basis for action because it reflects the theory that has withstood the most severe attempts at falsification. By framing this as a 'fiction' or 'social decree,' the target mischaracterizes Popper's epistemology as relying on an arbitrary agreement rather than the objective history of critical testing, thereby failing to make the strongest case for the defense on Popper's own terms.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly distinguished between the logical status of corroboration (not probability) and the rationality of preferring well-corroborated theories for action, grounding the latter in the objective record of critical tests rather than social convention.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for better-corroborated theories is rational due to their survival of severe tests, how does Popper justify this rationality without implicitly relying on the assumption that the future will resemble the past?"
+    }
+  ]
+}

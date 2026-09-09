@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses because it relies on 'verisimilitude' (truth-likeness) as a regulative ideal for choice, yet explicitly admits in its own counterconditions that logical comparisons of verisimilitude between false theories are impossible (citing Tichý and Miller). If one cannot logically determine which surviving theory is 'closer to truth,' then the preference for the 'best-corroborated' theory lacks the rational basis the target claims, effectively smuggling in an inductive assumption that past survival correlates with future reliability or truth-content.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "If verisimilitude comparisons are logically impossible between false theories, then the basis for preferring one surviving theory over another collapses.",
+      "premise_evidence": null,
+      "successor_question": "Can Popperian science retain a rational preference rule if the metric for that preference (verisimilitude) is acknowledged to be uncalculable?"
+    }
+  ]
+}

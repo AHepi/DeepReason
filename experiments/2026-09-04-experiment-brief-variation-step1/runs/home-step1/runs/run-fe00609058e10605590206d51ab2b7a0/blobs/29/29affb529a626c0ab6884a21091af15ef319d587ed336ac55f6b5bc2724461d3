@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive 'critical preference' grounded in the logical asymmetry of falsification and the goal of verisimilitude, not probability; accepting this costs us the comfort of believing our chosen theory is likely true, forcing us to act on the best-uncorroborated guess while acknowledging it may still be false.",
+    "mechanism": "The mechanism distinguishes between 'justification of belief' (which requires induction and is rejected) and 'rational choice of action' (which relies on the logical status of having survived severe tests). A theory that has survived severe tests has higher informational content and closer proximity to truth (verisimilitude) than a refuted one, making it the only rational candidate for action without asserting its future success is probable.",
+    "counterconditions": [
+      "If verisimilitude cannot be logically defined without invoking inductive assumptions about the future resembling the past.",
+      "If the preference for action implicitly assumes the uniformity of nature (that what worked before will work again).",
+      "If the distinction between 'critical preference' and 'inductive belief' collapses under the pressure of practical decision-making where outcomes matter."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0247998b9f0426956c8d0ef420daae0ecb43121c370bf31bd5ca9328a00d058d",
+        "kind": "rebutted",
+        "note": "The criticism claims reliance on verisimilitude fails due to internal objections. This candidate rebuts by clarifying that Popper's later work treats verisimilitude as a regulative ideal for critical discussion rather than a quantifiable metric, thus avoiding the specific logical fatalism cited while retaining the directional guide for preference."
+      },
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The criticism argues preference fails to explain acting on Theory A. This candidate rebuts by asserting the explanation is not predictive success but the elimination of error: we act on A not because it will succeed, but because B has been proven to fail in relevant aspects, leaving A as the sole surviving option for critical testing through action."
+      },
+      {
+        "handle": "1bd83288bc9ab8f9b04811f4e67bb8ca9d49c4f09aa66f010b8a229bd75d6fc3",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly frame the preference as a 'rational decision based on critical discussion' rather than a 'pragmatic fiction,' directly addressing the charge that it contradicts Popper's stance on rationality. The revision clarifies that the 'fiction' label was a mischaracterization of the critical method."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "Rebutted the conflation of 'informational content' with 'defensible preference.' The candidate argues that high informational content combined with survival of severe tests creates a unique logical status that warrants preference precisely because it represents the boldest conjecture still standing, which is the core of Popperian rationality."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "rebutted",
+        "note": "Rebutted the false dichotomy between psychological belief and conventional action. The candidate introduces a third category: 'critical commitment,' which is neither a psychological expectation of truth nor a mere social convention, but a logical obligation to test the most promising remaining hypothesis."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "Rebutted the straw man accusation regarding the 'Principle of Uniformity.' The candidate clarifies that no such principle is invoked; instead, the preference rests on the logical fact that a refuted theory is known to be false, whereas an unrefuted one is merely unknown, making the latter the only viable candidate for action."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "rebutted",
+        "note": "Rebutted the conflation of 'critical preference' with 'inductive prediction.' The mechanism explicitly defines critical preference as a choice to subject a theory to further risk, not a prediction of its success, thereby maintaining the anti-inductive stance."
+      },
+      {
+        "handle": "270fdeb19c12b45908843bde3f158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "revised",
+        "note": "Revised the treatment of verisimilitude to acknowledge Popper's admission of its formal difficulties, reframing it as a qualitative guide for critical preference rather than a strict logical proof, thus disarming the criticism that it collapses under logical constraints."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

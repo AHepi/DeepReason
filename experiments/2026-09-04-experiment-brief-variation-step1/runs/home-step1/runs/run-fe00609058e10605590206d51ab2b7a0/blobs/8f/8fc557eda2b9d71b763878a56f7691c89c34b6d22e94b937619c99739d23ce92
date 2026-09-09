@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction if interpreted as a methodological rule for selecting the most informative, falsifiable candidate for critical testing, rather than a probabilistic prediction of future success; however, this defense costs Popper the ability to justify 'acting' on a theory as practically reliable, restricting the preference to a purely epistemic strategy of error elimination.",
+    "mechanism": "The mechanism distinguishes between 'corroboration as a report of past severity' (non-inductive) and 'preference as a decision to subject the highest-content theory to new tests' (methodological). It argues that choosing the best-corroborated theory maximizes the potential for learning (error detection) because such theories have survived the hardest attempts at falsification, not because they are likely true. The move from 'survived' to 'prefer for action' is redefined: action is not based on expected utility derived from probability, but on the rational commitment to test the boldest conjecture available. If the theory fails, we learn more; if it survives, our knowledge grows. This avoids induction by refusing to infer future performance from past survival, instead treating the selection as an optimal setup for the next critical experiment.",
+    "counterconditions": [
+      "If the agent requires a guarantee of practical success or safety (e.g., engineering a bridge), this non-inductive preference is insufficient, as it offers no assurance that the theory will hold tomorrow.",
+      "If 'acting on a theory' inherently implies believing it will work (a psychological state of expectation), then Popper's distinction collapses into hidden induction.",
+      "If the definition of 'severe test' implicitly relies on background assumptions that are themselves inductively supported, the entire structure rests on an inductive foundation."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0247998b9f0426956c8d0ef420daae0ecb43121c370bf31bd5ca9328a00d058d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on 'verisimilitude' (truth-likeness) as the justification. Instead, it grounds the preference in 'informational content' and 'potential for error detection,' sidestepping the formal impossibility results regarding verisimilitude cited in the criticism."
+      },
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "departure_declared",
+        "note": "The candidate departs from the assumption that 'acting on a theory' must mean expecting it to succeed practically. It declares that for Popper, 'acting' in science means 'testing,' and the preference is for the best test vehicle, not the safest bet for engineering applications."
+      },
+      {
+        "handle": "1bd83288bc9ab8f9b04811f4e67bb8ca9d49c4f09aa66f010b8a229bd75d6fc3",
+        "kind": "rebutted",
+        "note": "The criticism claims the 'pragmatic fiction' view contradicts Popper's rational decision stance. The candidate rebuts this by clarifying that the decision is rational precisely because it maximizes critical potential (learning), not because it is a social convention or a fiction. It aligns with Popper's view of rationality as critical discussion."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly separate 'informational content survived' from 'defensible preference for action' by redefining 'action' in the scientific context as 'experimental engagement' rather than 'practical application,' addressing the conflation noted in the criticism."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c03508f3d0352c33c974c6a",
+        "kind": "rebutted",
+        "note": "The candidate addresses the core logical problem by denying the premise that 'preference' requires an inference about the future. It argues the preference is backward-looking (reporting severity) and forward-looking only in the sense of setting up a test, not predicting an outcome."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The candidate rejects the straw man accusation by not attributing a 'Principle of Uniformity' to Popper. Instead, it reconstructs Popper's solution as a shift from 'justification' to 'criticism,' which does not require uniformity of nature."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "revised",
+        "note": "Refined the definition of 'critical preference' to ensure it is not conflated with 'inductive prediction.' The revision emphasizes that the preference is for the theory that offers the most severe testability, distinct from predicting its truth."
+      },
+      {
+        "handle": "270fdeb19c12b45908843bde3158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "rebutted",
+        "note": "Similar to the first discharge, this rebuttal clarifies that the argument does not depend on 'verisimilitude' as a measurable quantity of truth-likeness, but on the logical status of having survived severe tests, thus avoiding the specific collapse described by Popper."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
