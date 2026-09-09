@@ -55,8 +55,11 @@ def find(node, key):
 
 # The key names this script was written against are NOT the ones this
 # version's run-status.json carries: `cycles_completed`, `metered_tokens`
-# and `logged_tokens_this_run` are all absent, and `cycle` / `token_spend`
-# are what the record actually writes. Measured on arm A0's own root,
+# and `logged_tokens_this_run` are all absent from it, and `cycle` /
+# `token_spend` are what that file actually writes. The names are not
+# fictional -- `deepreason reason` prints `metered_tokens` and
+# `logged_tokens_this_run` in its own result payload (arm A2, 429,432) --
+# they were simply read from the wrong artifact. Measured on arm A0's root,
 # 2026-09-09: the old reading returned "4 cycles left, 600000 tokens left"
 # for a run that had already completed 4 cycles and spent 417,053 -- a
 # resumed arm would have been granted a full fresh budget, which is the one
