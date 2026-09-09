@@ -175,4 +175,69 @@ section rendering **zero bytes** in this question's runs. The falsifiable
 clause stands — an accepted `code:python-prop` artifact with a claim over 200
 characters would make A2 a real treatment.
 
+Finished 10:22:15Z. **The clause was not triggered**: `dr.active-properties`
+rendered zero bytes in every arm (receipts below), so no accepted
+`code:python-prop` artifact existed to widen and A2 is confirmed — from a live
+record, not from source — as the second identical-brief arm.
+
+| | A2 | A0 | A1P |
+|---|---|---|---|
+| state / stop_reason | **completed / `budget_exhausted`** | same | same |
+| cycles | 4 of 4 | 4 of 4 | 4 of 4 |
+| tokens | **429,432** | 417,053 | 474,282 |
+| accepted / refuted | 110 / 0 | 104 / 2 | 98 / 0 |
+| survivors | 53 | 50 | 54 |
+| criticism rounds | 9 of 9 | 9 of 9 | 9 of 9 |
+
+Root: `roots/A2-run-fe00609058e10605590206d51ab2b7a0` (run id `bce9e6ea…`).
+
+### The receipt census over all four completed roots
+
+From the runs' own typed section receipts, `verify_arms.py`:
+
+    arm   dr.history.v1                 dr.neighbourhood      dr.active-properties
+    A0    never rendered  0 B  (12 dropped)   11 × 14,768 B    never rendered  0 B
+    A1    RENDERED     4,228 B  (14 dropped)  11 × 14,929 B    never rendered  0 B
+    A1P   never rendered  0 B   (0 dropped)   11 × 14,286 B    never rendered  0 B
+    A2    never rendered  0 B  (12 dropped)   11 × 14,919 B    never rendered  0 B
+
+Three things are now established from records rather than from reading source:
+
+1. **PREREG §3.1 holds.** The shipped default renders no history. A1 is the
+   only arm whose seats saw refuted work.
+2. **PREREG §3.2 holds.** `dr.active-properties` rendered nothing anywhere, so
+   `claim_chars` 200 → 800 had nothing to widen.
+3. **A1P and A0/A2 reach zero by different roads, and the seat cannot tell.**
+   A1P DROPPED the plugin (0 dropped receipts, because it is not in the
+   layout); A0 and A2 kept it and it declined to render (12 dropped receipts
+   each). Both put zero bytes of history in front of the conjecturer, which is
+   what makes the briefs identical — but the receipts distinguish the two
+   roads, and a reader should not mistake "0 dropped" for "0 rendered".
+
+### The noise floor over all three identical-brief arms
+
+Same brief, byte for byte; same question, configuration, model and settings:
+
+| | A0 | A1P | A2 | spread |
+|---|---|---|---|---|
+| tokens | 417,053 | 474,282 | 429,432 | **57,229 (13.7%)** |
+| accepted | 104 | 98 | 110 | 12 (12.2%) |
+| survivors | 50 | 54 | 53 | 4 (8.0%) |
+| refuted | 2 | 0 | 0 | 2 |
+
+These are the numbers `d_noise` will be computed from on the judged scale.
+They are stated here first, on the operational scale, because they are already
+enough to say what the experiment can and cannot decide — and they say it
+before any score exists, which is the only order in which such a statement is
+worth anything.
+
+## A3 — `dr.neighbourhood` replaced by an operator `.tmpl` (a real treatment,
+## with content loss)
+
+Launched by the chain 10:22:19Z. PREREG §3.4 registered before any call that
+this is a FORMAT change WITH CONTENT LOSS, not the same content reshaped: two
+identifiers carrying distilled claims become four bare identifiers, because
+the template channel can see only what a plugin puts in `supplied` and the
+claim text is computed inside the plugin. §8 P2 predicts A3 scores LOWER.
+
 *(in flight)*
