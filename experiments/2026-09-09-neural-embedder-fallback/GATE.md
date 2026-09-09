@@ -3,9 +3,10 @@
 ## Full gate
 
     python -m pytest tests/ -q -n 4
-    5178 passed, 6 skipped in 1362.84s (0:22:42)
+    5178 passed, 6 skipped in 1362.84s (0:22:42)   # the fix
+    5178 passed, 6 skipped in 1354.94s (0:22:34)   # after the E85 correction
 
-0 failed. The 6 skips are the environment-conditional neural-weight tests the
+0 failed both times. The 6 skips are the environment-conditional neural-weight tests the
 suite already carries.
 
 ## Ring, while iterating (run before the gate, all green)

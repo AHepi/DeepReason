@@ -518,7 +518,7 @@ assert 'request_logprobs' in src and 'stream_options' in src
   values the host owns whatever the operator configured, and those seven are
   the stated exception to the compiler's own
   `ENGINE_CONFIG_FIELD_NOT_CARRIED` disclosure (`preparation.py:505-508`). So
-  the manifest compiles `scratch_policy.embedder_model = null`,
+  the manifest compiles `engine_config.EMBEDDER_MODEL = null`,
   `ops.make_embedder` returned on its `if not config.EMBEDDER_MODEL` branch
   BEFORE the `embedder-fallback` record below it, and nothing anywhere said
   which scale the run measured on or why. The five brief-variation arms
@@ -532,7 +532,13 @@ assert 'request_logprobs' in src and 'stream_options' in src
   Deliberately NOT `embedder-fallback` — R3/R15 of the 2026-08-16 tranche
   holds that the deliberate hashing escape is no degradation, and a run-time
   builder cannot tell that escape from a host override, since both arrive as
-  `EMBEDDER_MODEL is None`. STILL OPEN, and parked rather than fixed: the
+  `EMBEDDER_MODEL is None`. **Read `engine_config`, never
+  `scratch_policy.embedder_model`, when asking which embedder a manifest
+  compiled**: two soak roots differing only in the engine config carried
+  byte-identical `scratch_policy.embedder_model = null` while one measured
+  neural and the other hashing, so that field answers a different question and
+  a reader who checks it concludes the opposite of the truth half the time.
+  STILL OPEN, and parked rather than fixed: the
   managed path cannot USE a configured embedder at all, so
   `deepreason embedder-warmup` buys a managed run nothing. The general lesson,
   and the reason this entry sits beside its predecessor rather than replacing

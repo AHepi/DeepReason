@@ -18,7 +18,7 @@ make_embedder returned                   : None
   (None means: the Scheduler constructs the zero-dependency hashing default)
 Measure written                          : embedder-unconfigured
   model it would have used               : nomic-ai/nomic-embed-text-v1.5
-  cause                                  : no embedder model in the compiled run configuration, though a default one names this model: it was dropped before the manifest (run-manifest.json scratch_policy.embedder_model)
+  cause                                  : no embedder model in the compiled run configuration, though a default one names this model: it was dropped before the manifest (run-manifest.json engine_config.EMBEDDER_MODEL)
 
   >> a typed record names the cause. Defect absent.
 

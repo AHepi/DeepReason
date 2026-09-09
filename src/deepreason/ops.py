@@ -157,10 +157,16 @@ def _default_embedder_model(config) -> str | None:
     return None if field is None else field.default
 
 
+# The pointer names `engine_config`, and that is not interchangeable with the
+# scratch policy's own embedder fields: two soak roots differing ONLY in this
+# value carried byte-identical `scratch_policy.embedder_model = null` while one
+# measured neural and the other hashing. `engine_config` is what
+# `config_from_run_manifest` reads back, so it is the only field that answers
+# the question this record asks a reader to go and check.
 _EMBEDDER_UNCONFIGURED_CAUSE = (
     "no embedder model in the compiled run configuration, though a default "
     "one names this model: it was dropped before the manifest "
-    "(run-manifest.json scratch_policy.embedder_model)"
+    "(run-manifest.json engine_config.EMBEDDER_MODEL)"
 )
 
 _EMBEDDER_HASHING_IS_THE_DEFAULT = (

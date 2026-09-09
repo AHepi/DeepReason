@@ -2778,3 +2778,36 @@ a note there would assert a citation the document does not make. The
 day it happened, and "and others" was never a closed list. Recorded 2026-09-09,
 `experiments/2026-09-09-change-audit-part-6-corrections/`. Related finding:
 `experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §6.1.
+
+**E85 — the field a run-manifest carries its embedder in is `engine_config`,
+not `scratch_policy.embedder_model`.**
+`experiments/2026-09-09-neural-embedder-fallback/DIAGNOSIS.md` cites
+"`scratch_policy.embedder_model = null`" as the manifest fact showing the
+managed path dropped the configured embedder, and the fix that tranche shipped
+first sent readers to that field in the cause it records on the log.
+
+What the record shows: two soak roots driven from the same case, differing only
+in the engine config's `EMBEDDER_MODEL`, carry byte-identical
+`scratch_policy.embedder_model = null`, `embedder_backend = "disabled"` and
+`fallback_embedder = "deterministic_hashing"` — while one stamped
+`["embedder","nomic-ai/nomic-embed-text-v1.5",...]` and the other
+`["embedder","hashing-128",...]`. `config_from_run_manifest` reads the embedder
+back from the manifest's `engine_config_json` echo, whose
+`EMBEDDER_MODEL` is `'nomic-ai/nomic-embed-text-v1.5'` in the neural root and
+`None` in the hashing one. The five brief-variation arms carry
+`engine_config.EMBEDDER_MODEL = None`, which is the fact their DIAGNOSIS should
+have cited. `scratch_policy.embedder_model` is null in working and broken runs
+alike, so a reader who checks it concludes the opposite of the truth half the
+time.
+
+The diagnosis's CONCLUSION is unaffected — the managed path drops the value and
+records nothing — and every other pointer in it holds. Only the field named is
+wrong.
+
+**Where corrected.** The recorded cause in `src/deepreason/ops.py` now names
+`run-manifest.json engine_config.EMBEDDER_MODEL`, a regression test pins that
+it does, and `docs/map/SUB-llm.md`'s Traps entry states the distinction with
+the two-root evidence. DIAGNOSIS.md's own wording is NOT edited: it is a record
+of what that phase concluded on the evidence it had, and this entry is how the
+record says it was later found imprecise. Recorded 2026-09-09,
+`experiments/2026-09-09-neural-embedder-fallback/VERIFY.md`.

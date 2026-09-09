@@ -411,6 +411,13 @@ def test_a_run_that_configured_no_embedder_says_so_on_its_own_log(tmp_path):
         "which is the fact an operator who warmed that model needs"
     )
     assert said[0].inputs[2], "a cause with no text is the silence again"
+    assert "engine_config" in said[0].inputs[2], (
+        "the cause must send a reader to the field that DECIDES the embedder. "
+        "`scratch_policy.embedder_model` does not: two soak roots differing "
+        "only in the engine config carried it as null while one measured "
+        "neural and the other hashing "
+        "(experiments/2026-09-09-neural-embedder-fallback/VERIFY.md)"
+    )
 
     # R3/R15 of tranche 2026-08-16-change-embedder-auto-install: the deliberate
     # hashing escape is not a degradation. Saying why must not reclassify it.
