@@ -1,0 +1,8 @@
+TARGET CONTENT:
+Relation Kind: Abstraction. The 'Read-Only' architecture (SRC_008) is an abstraction of the 'Schema-First' approach (SRC_006) where the 'schema' is implicitly defined by the output format of the local scripts rather than an explicit JSON/Protobuf definition; the tool abstracts away the enforcement mechanism, trusting the script author to maintain consistency. REFUTED IF the local scripts frequently change their output format without breaking the ingestion pipeline, demonstrating that no effective schema (implicit or explicit) is actually governing the data integrity.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

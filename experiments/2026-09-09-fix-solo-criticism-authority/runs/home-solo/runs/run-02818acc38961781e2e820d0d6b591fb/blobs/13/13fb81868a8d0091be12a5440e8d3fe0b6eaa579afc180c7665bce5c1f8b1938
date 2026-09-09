@@ -1,0 +1,12 @@
+TARGET CONTENT:
+{"analogy":null,"claim":"Adopt a flexible existing platform but wrap it with a strict 'skeptic' validation layer that treats all tracked results as provisional until independently reproduced, leveraging community standards while maintaining epistemic rigor.","counterconditions":[{"case":"The existing platform does not allow external validation hooks or raw data export.","checker_spec":null,"eval":"observation"},{"case":"The overhead of the validation layer slows down iteration beyond the team's survival threshold.","checker_spec":null,"eval":"observation"},{"case":"The research domain is so novel that no community standards for replication exist yet.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Layered Epistemic Defense: Uses the reliability of established tools (reducing maintenance risk) while overlaying a procedural mechanism that demands replication before acceptance, satisfying the skeptic stance (SRC_002) without reinventing storage infrastructure.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+BATTERY THE EDITS WILL FACE:
+- program:reasoning_observation_pending
+- program:reasoning_observation_pending
+- program:reasoning_observation_pending
+- program:reasoning-envelope-wf
+
+KERNEL mu_struct (§10.7): the target is a skeleton — substitute at role level. Swap the mechanism, the causal link, the scope. Each edit must be a complete valid skeleton JSON. Do NOT merely reword.
+
+DIRECTIVE: produce exactly 8 bounded edits.

@@ -1,0 +1,44 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The proposed reduction fails because it conflates 'stress testing completeness' with 'validating correctness'. Even if the shadow mode's output is strictly constrained by a pre-defined schema, the parallel run acts as a discovery mechanism for *semantic* errors or logic flaws within the allowed fields, not just missing fields. The reduction claims the run is 'merely' a stress test of completeness, but this ignores that a script can perfectly adhere to a schema while producing factually incorrect data, meaning the shadow mode retains independent epistemic value beyond the schema contract.",
+      "premise": "A system can adhere to a schema while still containing logical or factual errors that a parallel run would detect.",
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "Does the 'Schema-First' contract (SRC_006) include any mechanism for validating the semantic truth of data that fits the schema, or is it purely structural?"
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The claimed contradiction relies on a category error between 'data storage' and 'process state'. The 'Read-Only' archive (SRC_008) serves as the immutable record of the script's output, while the 'Skeptic' layer (SRC_004) requires a workspace for *provisional metadata* about that record. These are not mutually exclusive; the archive can remain read-only regarding the primary data while the skeptic layer maintains a separate, writable index of verification status. The target falsely assumes that hosting provisional results requires modifying the core archive data itself.",
+      "premise": "Verification status (provisional results) can be stored in a sidecar index or separate database without altering the immutable source archive.",
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "Can the 'Skeptic' validation layer function entirely via an external metadata store linked by hash, leaving the 'Read-Only' archive technically unmodified?"
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The identification of 'Procedural Friction' as a shared mechanism is superficial because the *source* and *nature* of the friction differ fundamentally. 'Anti-Bias Configuration' introduces friction through *cognitive load* (requiring the researcher to actively log negatives), whereas 'Skeptic Validation' introduces friction through *temporal latency* (waiting for independent reproduction). Lumping these distinct types of overhead under a single mechanism obscures the fact that one targets the agent's psychology during creation, while the targets the community's workflow during consumption.",
+      "premise": "Cognitive load during data entry and temporal latency during review are mechanistically distinct forms of overhead with different failure modes.",
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "If an automated tool could log negatives without researcher input, would the 'Anti-Bias' goal still be met, and does this reveal the friction was incidental rather than mechanistic?"
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": true,
+      "case": "The abstraction claim fails because an 'implicit schema' defined by ad-hoc script outputs lacks the necessary property of *enforceability* to be considered a true schema abstraction. In the 'Schema-First' approach, the schema acts as a gatekeeper that rejects non-compliant data. In the 'Read-Only' architecture described, if the script changes its format, the pipeline ingests the broken data rather than rejecting it. Without the ability to reject invalid instances, the 'implicit schema' is merely a descriptive pattern, not a governing constraint, and thus cannot be an abstraction of the enforcement mechanism.",
+      "premise": "A schema must have the capacity to reject non-conforming data to function as a governance mechanism; a pattern that accepts all inputs is not a schema.",
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "Does the ingestion pipeline in the 'Read-Only' architecture ever reject data based on format inconsistencies, or does it always attempt to parse and store whatever the script produces?"
+    }
+  ]
+}

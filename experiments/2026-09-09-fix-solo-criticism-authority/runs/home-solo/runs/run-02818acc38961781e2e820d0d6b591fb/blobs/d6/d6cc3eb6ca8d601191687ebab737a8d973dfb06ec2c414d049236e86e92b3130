@@ -1,0 +1,8 @@
+TARGET CONTENT:
+Relation Kind: Reduction. The 'Shadow Mode' validation (SRC_007) reduces to the 'Schema-First' contract (SRC_006) if the disposable script's output during the shadow period is strictly constrained by a pre-defined schema, making the parallel run merely a stress test of the schema's completeness rather than a discovery of new fields. REFUTED IF the shadow mode explicitly allows the script to evolve unstructured fields that the schema cannot capture, thereby proving the schema was insufficient and the reduction invalid.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

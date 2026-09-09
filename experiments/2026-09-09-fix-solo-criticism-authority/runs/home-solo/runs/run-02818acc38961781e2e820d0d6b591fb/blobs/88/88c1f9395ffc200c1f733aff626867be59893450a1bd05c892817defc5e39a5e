@@ -1,0 +1,8 @@
+TARGET CONTENT:
+Relation Kind: Integration. The 'Schema-First' contract (SRC_006) integrates with 'Shadow Mode' (SRC_007) by using the shadow period specifically to generate the initial versioned schema; the disposable script acts as a schema miner, and the formal tool becomes the enforcer only after the shadow phase concludes. REFUTED IF the shadow mode is used solely for data volume testing or performance benchmarking without any intent to extract or validate structural definitions for the schema.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

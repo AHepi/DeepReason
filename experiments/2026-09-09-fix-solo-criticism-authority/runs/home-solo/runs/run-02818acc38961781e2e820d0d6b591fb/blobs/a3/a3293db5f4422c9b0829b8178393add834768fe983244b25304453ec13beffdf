@@ -1,0 +1,8 @@
+TARGET CONTENT:
+Relation Kind: Contradiction. The 'Read-Only' archive approach (SRC_008) contradicts the 'Skeptic' validation layer (SRC_004) because SRC_008 treats local scripts as the source of truth and the tool as passive, whereas SRC_004 requires the platform to actively host provisional results pending independent reproduction; a read-only archive cannot serve as the active workspace for provisional tracking required by the skeptic stance. REFUTED IF the 'Read-Only' tool supports an external hook or sidecar process that allows the skeptic layer to write provisional status metadata without altering the core archive data.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

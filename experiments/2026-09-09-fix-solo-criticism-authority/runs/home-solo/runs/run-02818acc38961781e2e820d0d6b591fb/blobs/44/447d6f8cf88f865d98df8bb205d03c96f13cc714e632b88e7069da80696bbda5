@@ -1,0 +1,8 @@
+TARGET CONTENT:
+Relation Kind: Shared Mechanism. Both 'Anti-Bias Configuration' (SRC_005) and 'Skeptic Validation' (SRC_004) share the mechanism of 'Procedural Friction': they intentionally introduce overhead (logging negatives, requiring reproduction) to counteract natural systemic drifts (publication bias, false positives). REFUTED IF the implementation of either strategy can be achieved through passive automation that removes all friction from the researcher's workflow while still achieving the epistemic goal.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

@@ -1,0 +1,45 @@
+{
+  "candidate": {
+    "claim": "A small team should adopt an existing experiment tracker only if their workflow is strictly observational; however, if the research involves active learning loops where the tracker must function as a real-time controller modifying experimental parameters, they must build a custom minimal tracker to avoid the 'integration tax' of forcing a causal control mechanism into a passive logging tool.",
+    "mechanism": "The mechanism relies on the distinction between 'passive observation' and 'active control.' Existing tools are architected as databases with UIs (passive), lacking the low-latency, bidirectional API hooks required for control theory applications. Attempting to wrap such tools introduces an 'integration tax'—hidden engineering costs to hack plugins or manage state synchronization—which creates a 'migration cliff' where early unstructured scripting prevents clean data schema adoption later. A custom build enforces a 'mechanist' causal model from day one, treating the tracker as the state machine itself rather than a log of states, thereby eliminating the single point of failure associated with mismatched abstractions.",
+    "counterconditions": [
+      "The team lacks the engineering bandwidth to maintain even a minimal custom state machine.",
+      "The active learning loop operates on a timescale slow enough to tolerate the latency of external API calls to a managed service.",
+      "The experimental parameters can be decoupled from the tracking logic via a robust middleware layer that already exists."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly provides the causal mechanism: active learning loops require the tracker to act as a controller (bidirectional), whereas existing tools are architected as passive logs (unidirectional). This architectural mismatch necessitates a custom build to avoid the latency and complexity of hacking a passive tool into an active role."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly name the 'integration tax' as the hidden cost of wrapping mismatched tools. The mechanism now details how this tax manifests as engineering effort to force a causal control model onto a passive database, validating the criticism's concern while using it to justify the custom build."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "rebutted",
+        "note": "The candidate argues that building a custom minimal tracker *prevents* the migration cliff by enforcing a defined schema and state machine from day one. The 'disposable script' risk arises only if the team fails to treat the custom build as a formal state machine, which the proposed mechanism explicitly mandates."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The criticism claims a custom tracker introduces fragility. The rebuttal is that a *mismatched* existing tool creates a more severe fragility: a distributed failure mode where the logging system and the control logic drift out of sync. A custom, unified state machine consolidates this risk into a single, auditable component, reducing overall systemic fragility."
+      }
+    ],
+    "optional_refs": [
+      "SRC_002",
+      "SRC_004"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_002",
+        "SRC_004"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
