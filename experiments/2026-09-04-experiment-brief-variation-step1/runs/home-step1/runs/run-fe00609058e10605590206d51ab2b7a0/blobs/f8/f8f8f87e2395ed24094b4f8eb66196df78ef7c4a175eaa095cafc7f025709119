@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation as required by the problem context. Instead of establishing a dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction between the isolated context (03f8b3f2f004) and its neighbourhood, the target describes a 'negative instantiation' based on the *absence* of a named rule in the isolated context. A relation requires two positive endpoints to relate; characterizing one endpoint by what it lacks (refusing to name a rule) and contrasting it with another does not constitute a substantive relational link (e.g., they do not 'share' a mechanism if one explicitly refuses to instantiate it). The response effectively states there is no relation due to the isolation, rather than proposing the specific substantive relation demanded by the prompt.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}
