@@ -332,16 +332,34 @@ def test_rejected_patch_calls_keep_their_wire_valid_final_attempt(engaged_root):
         ] == [True]
 
 
-def test_fabricated_valid_attempt_on_wire_invalid_turn_fails_closed(
+def test_fabricated_valid_attempt_on_a_wire_invalid_turn_is_no_longer_refused(
     engaged_root, tmp_path
 ):
+    """The tripwire road A gave up, pinned rather than deleted.
+
+    This assertion ran the other way until 2026-09-09.  `attempt-validity`
+    refused any non-admitted call carrying a wire-valid attempt, which caught
+    this forgery and also condemned two legitimate records: a work order a
+    resume closes without calling anyone (ARM R
+    run-c3f3bf10bc57d63e224a9f1c68bf1057) and a wire-valid simulation proposal
+    refused on its semantics (run-9a6be78e1e79184a0bd89923b957586c).  The
+    operator granted the widening with this cost stated
+    (`experiments/2026-09-06-defect-continuation-verification-flip/FIX.md`,
+    road A and its Grant section): a record claiming a wire-valid reply was
+    semantically rejected is now read as an ordinary semantic rejection.
+
+    Pinned so the loss stays visible and so restoring the tripwire is a
+    deliberate act that turns this test red, not a silent regression.
+    """
+
     root = _copy_root(engaged_root, tmp_path, "fabricated-parent-validity")
     rows = _log_rows(root)
     parent = _provider_rows(rows)[0]
     parent["llm"]["attempt_trace"][-1]["valid"] = True
     _write_log(root, rows)
 
-    assert "attempt-validity" in _checks(root)
+    assert "attempt-validity" not in _checks(root)
+    assert verify_root(root)["violations"] == []
 
 
 def test_merge_conj_bound_to_non_latest_child_fails_closed(engaged_root, tmp_path):

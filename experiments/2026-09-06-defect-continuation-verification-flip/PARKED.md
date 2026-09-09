@@ -54,6 +54,15 @@ state this one: what a NON-ADMITTED semantic admission implies about the
 trace. If this tranche's fix lands, that sentence should be written into the
 seam with a check; if it does not, the gap is still worth closing.
 
+**PARTLY LANDED, 2026-09-09.** The fix landed, and with it the seam gained the
+one sentence this defect broke — a non-admitted call is classified by its
+trace, with a `check:` that fails if the classifier stops agreeing. What is
+still parked is the REST of the census the prompt below asks for: the
+`admitted`, `dropped` and `transport_failure` clauses, each derived from
+`invariants.py` as it then stands, so the seam states the whole agreement
+rather than the half a defect forced. Send the prompt as written; it will find
+one clause already there.
+
 ```
 EXECUTOR WINDOW — CHANGE (map only, no code): write the missing seam agreement
 Read CLAUDE.md and docs/map/SCHEMA.md. Load dr-change-orchestrator.

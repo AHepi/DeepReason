@@ -183,7 +183,6 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
 
     from deepreason.log.event_log import EventLog
     from deepreason.storage.objects import ObjectStore
-    from deepreason.workflow.models import WorkflowTaskKind
     from deepreason.workflow.transaction import (
         ContractDecompositionCompletionV1,
         ContractDecompositionTransitionV1,
@@ -749,39 +748,26 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
                 f"event seq={source_seq}: provider route differs from prepared route-seat lease",
             )
 
-    def _is_patch_repair_semantic_rejection(row: dict, admission) -> bool:
-        """Prove from durable records that a wire-valid attempt was rejected.
+    def _is_semantic_rejection(row: dict) -> bool:
+        """A non-admitted call whose wire reply parsed is a SEMANTIC rejection.
 
-        A separately authorized patch-repair step dispatches under the patch
-        wire contract, so its raw response can parse valid while applying the
-        patch still fails the parent contract.  Only the exact durable chain
-        authorizes this shape: the work item is a ``repair.semantic-task.v1``
-        patch preparation bound to a durable parent work item, the rejecting
-        admission carries its diagnostics, and the typed terminal binds this
-        exact provider attempt / admission pair.
+        What separates the two kinds of non-admission is the attempt trace, not
+        the task that produced it: a call whose final attempt is wire-valid got
+        a reply that PARSED and was then refused on its semantics, which is the
+        one shape ``FAILURE_REQUIRED`` cannot express -- that clause forbids any
+        valid attempt at all.  A trace whose final attempt is not wire-valid is
+        an ordinary failure and stays there, so the check does not go blind.
+
+        The patch-repair chain this replaced (a ``repair.semantic-task.v1``
+        patch preparation bound to a durable parent) is a strict subset: its
+        rejected attempts are wire-valid by construction.  ``SEMANTIC_REJECTION``
+        still admits at most ONE final wire-valid attempt, so a trace carrying
+        an earlier valid attempt as well is still condemned.
         """
 
-        preparation = preparations.get(row["work_id"])
-        terminal = terminals.get((row["work_id"], row["attempt_index"]))
-        if preparation is None or terminal is None:
-            return False
-        payload = preparation.task_payload_value
-        if not hasattr(payload, "get"):
-            return False
-        parent_work_id = payload.get("parent_work_id")
-        return bool(
-            preparation.task_kind == WorkflowTaskKind.REPAIR
-            and payload.get("schema") == "repair.semantic-task.v1"
-            and payload.get("mode") == "patch"
-            and isinstance(parent_work_id, str)
-            and parent_work_id in preparations
-            and parent_work_id != row["work_id"]
-            and admission.outcome in {"rejected", "schema_exhausted"}
-            and admission.diagnostic_refs
-            and terminal.status in {"rejected", "schema_exhausted"}
-            and terminal.provider_attempt_ref == row["attempt"].id
-            and terminal.semantic_admission_ref == admission.id
-        )
+        call = row["event"].llm
+        trace = list(call.attempt_trace) if call is not None else []
+        return bool(trace and trace[-1].valid)
 
     for source_seq, row in provider_rows.items():
         key = (row["work_id"], row["attempt_index"])
@@ -796,7 +782,7 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
         if row["attempt"].outcome == "transport_failure":
             context["failure_call_seqs"].add(source_seq)
         elif admission is not None and admission.outcome != "admitted":
-            if _is_patch_repair_semantic_rejection(row, admission):
+            if _is_semantic_rejection(row):
                 context["semantic_rejection_call_seqs"].add(source_seq)
             else:
                 context["failure_call_seqs"].add(source_seq)

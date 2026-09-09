@@ -1,5 +1,5 @@
 <!-- DR-INV-frozen-surfaces -->
-Verified-at: b865b7cbe
+Verified-at: a36fc8abb
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capabilities/state.py, src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/run_manifest.py
 Seams: 
@@ -252,6 +252,97 @@ from deepreason.ontology.event import LLMAttempt as A
 assert not {'split_leg', 'split_max_tokens'} & set(A.model_fields)
 " && python -m pytest tests/test_split_leg_recording.py -q`
 `check: python -m pytest tests/test_split_leg_recording.py::test_an_attempt_from_a_committed_root_deserialises_with_no_legs -q`
+
+**Granted contact, 2026-09-09 — a non-admitted call is classified by its trace.**
+Requested at
+`experiments/2026-09-06-defect-continuation-verification-flip/FIX.md` before a
+line of code existed, with `tools/blast_radius.py`'s own `CONTACT` verdict and
+its rows pasted and disposed one by one, and stopped there. The monitor
+recommended road A and put the decision to the operator ("Road A is
+recommended … This is your decision."); the operator granted it on 2026-09-09
+in one word, "do it", ledgered verbatim in that FIX.md's Grant section.
+
+What moved: ONE nested predicate inside `_controller_v3_history` and the ONE
+call site that uses it. `_is_patch_repair_semantic_rejection(row, admission)`
+— which proved a durable `repair.semantic-task.v1` patch chain before it would
+allow a non-admitted call to carry a wire-valid attempt — became
+`_is_semantic_rejection(row)`, which reads the call's attempt trace and nothing
+else: a final wire-valid attempt means the reply PARSED and was refused on its
+semantics (`SEMANTIC_REJECTION`, at most one final wire-valid attempt);
+anything else stays `FAILURE_REQUIRED` (no valid attempt at all). The now-unused
+`WorkflowTaskKind` import went with it. **19 insertions, 33 deletions**, one
+file. No record FORMAT changed: no field, no check name, no `_EPISTEMIC_CHECKS`
+entry, no `verification/` file, no digest input. The transport-failure branch
+still runs FIRST, and the proposal-receipt / legacy-chain precedence in
+`_expected_call_outcome` still runs afterwards, so a seq required to fail by
+either still fails.
+
+Why the reader had to change at all: the WRITER is right. A work order left
+open when a run dies is closed by a resume with a semantic admission over the
+attempt the original run already recorded — the canonical compact-recovery
+shape, passing every other replay rule — and the old classification condemned
+exactly the evidence that makes that closure honest. The same wire-valid call
+verified CLEAN while its work order was open and violated once the work order
+was closed (ARM R `run-c3f3bf10bc57d63e224a9f1c68bf1057`, three calls), and the
+same shape had stood condemned for a month over a wire-valid simulation
+proposal refused on its semantics (`run-9a6be78e1e79184a0bd89923b957586c`, one
+call). Both roots now re-derive to ZERO `verify_root` violations without either
+root being touched.
+
+The safety argument is a census, not a sweep: across every committed root,
+`SEMANTIC_REJECTION` accepts `valid_indexes in ([], [len(trace) - 1])` where
+`FAILURE_REQUIRED` accepts only `[]`, so the widened route is a strict superset
+and no root's verdict can move except from dirty to clean. Measured that way,
+not argued: a check-name-and-detail census over all 94 committed roots carrying
+a `log.jsonl`, run on the fixed tree and on a worktree at the pre-fix head,
+moves exactly TWO verdicts — the two roots above, both dirty to clean — and
+leaves all 67 previously-clean roots clean. Script and both outputs are
+committed at
+`experiments/2026-09-06-defect-continuation-verification-flip/census/`.
+
+**The cost, recorded because it is real and was granted with it stated:** the
+check loses one tripwire. A record that CLAIMS a wire-valid reply was
+semantically rejected is now read as an ordinary semantic rejection.
+`tests/test_v6_engaged_repair_verification.py` carried a mutation test for that
+tripwire; it is kept and inverted rather than deleted, so the loss is visible
+and restoring it is a deliberate act.
+
+`frozen_adjacent_contacts` is EMPTY and nothing else takes contact:
+`route_fingerprint` is untouched, no `Route` field moves, and
+`capabilities/state.py`, `harness.py`, `verification/`, `run_manifest.py` and
+`qualification.py` take no contact at all. `tools/blast_radius.py --files
+src/deepreason/invariants.py --symbols _controller_v3_history
+_expected_call_outcome _is_semantic_rejection`, pasted verbatim:
+
+    frozen_surface_verdict: CONTACT
+    frozen_surface_contacts:
+      {"surface": "replay-validation record formats (invariants.py)", "tier": "DIRECT", "target": "src/deepreason/invariants.py", "detail": "target file is surface path src/deepreason/invariants.py"}
+      {"surface": "replay-validation record formats (invariants.py)", "tier": "SYMBOL_INDIRECT", "target": "_controller_v3_history", "detail": "'_controller_v3_history' referenced in src/deepreason/invariants.py (grep-based; not proof of semantic contact)"}
+      {"surface": "replay-validation record formats (invariants.py)", "tier": "SYMBOL_INDIRECT", "target": "_expected_call_outcome", "detail": "'_expected_call_outcome' referenced in src/deepreason/invariants.py (grep-based; not proof of semantic contact)"}
+      {"surface": "replay-validation record formats (invariants.py)", "tier": "SYMBOL_INDIRECT", "target": "_is_semantic_rejection", "detail": "'_is_semantic_rejection' referenced in src/deepreason/invariants.py (grep-based; not proof of semantic contact)"}
+    frozen_adjacent_contacts: []
+    reachability: _controller_v3_history REACHABLE; _expected_call_outcome REACHABLE; _is_semantic_rejection REACHABLE
+
+`check: python -c "
+import json, subprocess
+out = json.loads(subprocess.run(
+    ['python', 'tools/blast_radius.py', '--files', 'src/deepreason/invariants.py'],
+    capture_output=True, text=True, check=True).stdout)
+assert [row['target'] for row in out['frozen_surface_contacts']] == ['src/deepreason/invariants.py'], out
+assert out['frozen_adjacent_contacts'] == []
+" && python -m pytest tests/test_attempt_validity_semantic_rejection.py tests/test_v6_engaged_repair_verification.py -q`
+`check: python -c "
+import inspect
+from deepreason.invariants import _controller_v3_history
+src = inspect.getsource(_controller_v3_history)
+# The granted widening, stated so a regression of it fails here: the route is
+# decided by the TRACE, transport failures are still decided before it, and the
+# patch-repair chain it replaced is gone rather than kept alongside.
+assert 'def _is_semantic_rejection(row: dict) -> bool:' in src
+assert 'return bool(trace and trace[-1].valid)' in src
+assert '_is_patch_repair_semantic_rejection' not in src
+assert src.index('transport_failure') < src.index('_is_semantic_rejection(row)')
+"`
 
 **Granted contact, 2026-09-03 — the transport retry policy's Config echo line.**
 The tranche instruction forecast this contact ("prefer a Config value or an
