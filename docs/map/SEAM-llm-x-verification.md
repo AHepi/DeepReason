@@ -155,6 +155,34 @@ assert 'split_legs' in LLMAttempt.model_fields
 assert not {'split_leg', 'split_max_tokens'} & set(LLMAttempt.model_fields)
 "`
 
+**A NON-ADMITTED call is classified by its trace, not by the task that made
+it.** The workflow side writes a semantic admission per attempt; when its
+outcome is anything but `admitted`, the verification side has to decide what
+the call's attempt trace is allowed to contain, and the record distinguishes
+two cases that look alike in the admission alone. A trace whose FINAL attempt
+is wire-valid means the reply PARSED and was then refused on its semantics —
+the wire did its job, the content did not — so at most one final wire-valid
+attempt is permitted (`SEMANTIC_REJECTION`). A trace whose final attempt is
+not wire-valid means the call never produced a usable value at all, and no
+valid attempt is permitted (`FAILURE_REQUIRED`). A `transport_failure` outcome
+on the durable attempt is decided before either, and carries no valid attempt.
+The distinction is a property of the trace and of nothing else: the same shape
+arrives from a rejected simulation proposal, from a patch repair, and from a
+work order a resume closes without calling anyone.
+
+`check: python -c "
+import inspect
+from deepreason.invariants import _controller_v3_history
+src = inspect.getsource(_controller_v3_history)
+# The classification reads the trace. If it goes back to reading the TASK --
+# a patch-repair chain, a terminal reason code -- an honestly closed work
+# order is condemned again and this sentence is false.
+assert 'def _is_semantic_rejection(row: dict) -> bool:' in src
+assert 'return bool(trace and trace[-1].valid)' in src
+assert '_is_patch_repair_semantic_rejection' not in src
+assert src.index('outcome == \"transport_failure\"') < src.index('_is_semantic_rejection(row)')
+" && python -m pytest tests/test_attempt_validity_semantic_rejection.py -q`
+
 ## Which fraction of each side is involved
 
 Small, and worth stating so a change here is not scoped as "the adapter" or
@@ -304,3 +332,31 @@ assert 'attempt_trace.extend' not in src
   by independent review, fixed 2026-08-30, same tranche; the sixteen-form
   table is the check's own proof and is committed beside it.
 `check: python experiments/2026-08-30-fix-rotted-map-checks/proof/d1_crossing_forms.py`
+
+- **A record that gets MORE complete can verify WORSE, and that asymmetry is
+  the tell.** A run died with three work orders open. `verify_root` called it
+  `valid: true` with `violations: 0` while its own stats listed all three as
+  outstanding. A no-op continuation then closed them — a semantic admission
+  `schema_exhausted` over the attempt the original run had already recorded,
+  plus its typed terminal, no model call, `logged_tokens_this_run: 0` — and the
+  same three events, byte-identical at both commits, drew three
+  `attempt-validity` violations: "failed call must contain no valid attempt,
+  got [0]". Two verdicts on one root, minutes apart, from one instrument. The
+  cause was on the READING side and had been shipped for a month: any
+  non-admitted semantic admission routed the call to `FAILURE_REQUIRED`, whose
+  rule assumes the call never produced a usable reply, and a semantic
+  non-admission is precisely the case where it did. The permissive category
+  already existed — `SEMANTIC_REJECTION` — but the only route into it demanded
+  a durable patch-repair chain, which an ordinary conjecturer call closed by a
+  resume can never present. When two verdicts disagree over identical events,
+  ask what the classifier reads BESIDES the events; here it was records
+  appended after them. The 2026-08-04 root
+  `run-9a6be78e1e79184a0bd89923b957586c` had carried the same violation over a
+  wire-valid simulation proposal refused on its semantics and had said
+  `valid: false` ever since, so the continuation did not create the defect —
+  it made a month-old one collide with itself in public. Fixed 2026-09-09 under
+  an operator grant on frozen surface 3, run ids
+  `run-c3f3bf10bc57d63e224a9f1c68bf1057` and
+  `run-9a6be78e1e79184a0bd89923b957586c`,
+  `experiments/2026-09-06-defect-continuation-verification-flip/`.
+`check: python -m pytest tests/test_attempt_validity_semantic_rejection.py::test_an_abandoned_work_order_and_its_honest_closure_verify_the_same -q`
