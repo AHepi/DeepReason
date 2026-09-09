@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target falsely dichotomizes the justification for preferring corroborated theories as either 'purely non-inductive' or 'pragmatic induction,' ignoring Popper's explicit decisionist account where preference is a rational choice based on critical discussion rather than an inductive leap.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly distinguishes between the logical question of corroboration (which rejects induction) and the practical question of action (which relies on decisionism), whereas the target conflates the necessity of action with a hidden commitment to induction.",
+      "premise_evidence": null,
+      "successor_question": "Does the target's claim that Popper 'practically utilized' induction accurately reflect his writings on decisionism, or does it mischaracterize his view that acting on the best-tested theory is a non-inductive rational decision?"
+    }
+  ]
+}

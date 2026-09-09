@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's resolution fails to answer the specific question of whether the preference is defensible on Popper's own terms because it substitutes Popper's falsificationist framework with Evolutionary Epistemology (associated with Campbell or Lorenz), which Popper did not fully endorse as a solution to the problem of induction. By shifting the justification to 'methodological survival,' the target concedes that the preference cannot be defended on Popper's original logical grounds (which strictly separate corroboration from probability and utility), thereby answering 'no' to the defensibility question while masking this negative result as a 'reinterpretation.' This avoids the required task of making the strongest case for the affirmative answer before rejecting it, instead dismissing the affirmative possibility by changing the philosophical premises.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly distinguished his falsificationism from evolutionary epistemology and maintained that corroboration reports past performance without implying future reliability or pragmatic utility.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is merely a biological or methodological survival trait rather than a rational choice based on truth-likeness, does this not reduce scientific rationality to irrational instinct, contradicting Popper's defense of science as a rational enterprise?"
+    }
+  ]
+}
