@@ -1,0 +1,39 @@
+=== Step 31 proof: ARM V's objections reach the next candidate by the SAME route ===
+
+The proof is STRUCTURAL because the mechanism allows it to be.
+discharge/channel.py::_open_with_total reads the scrutiny Measures and the
+attack edges, takes the criticism artifact's TEXT, and carries no field
+naming who wrote it. Its own comment says why:
+
+    Which channel a criticism arrived through is deliberately NOT carried
+    forward: the writer answers the criticism, and a field naming its
+    provenance would be a number-shaped invitation to treat the two as
+    differently weighty.
+
+So a bank objection and a model's objection are the SAME OBJECT to this
+channel. These tests hold it to that, on the observe_only record shape both
+arms actually produce.
+
+--- green, as shipped ---
+.....                                                                    [100%]
+5 passed in 1.01s
+
+--- MUTATION 1: make the channel skip a criticism whose text is short ---
+    (the shape of a defect that would silently drop bank objections while
+     keeping a model's, making ARM V a no-criticism arm with nothing in the
+     record to say so)
+FAILED experiments/2026-09-09-change-d8-criticism-experiment/tests/test_vacuous_route_identity.py::test_both_render_into_the_same_section_with_the_same_shape
+FAILED experiments/2026-09-09-change-d8-criticism-experiment/tests/test_vacuous_route_identity.py::test_a_bank_objection_renders_a_NON_EMPTY_section
+3 failed, 2 passed in 1.09s
+
+--- MUTATION 2: give OpenCriticism a provenance field ---
+    (the field whose ABSENCE is the guarantee: with it, a downstream
+     reader could weigh a bank objection differently)
+=========================== short test summary info ============================
+FAILED experiments/2026-09-09-change-d8-criticism-experiment/tests/test_vacuous_route_identity.py::test_the_channel_carries_no_field_that_could_tell_the_two_apart
+1 failed, 4 passed in 1.24s
+
+--- restored, and src/ is byte-identical to HEAD ---
+.....                                                                    [100%]
+5 passed in 1.02s
+(no diff above = src/ byte-untouched, as R36 requires)

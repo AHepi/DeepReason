@@ -1,0 +1,5 @@
+[soak] stub provider on 127.0.0.1:34199 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/soak-v
+[soak] built root: manifest 3a82a23918176bfb…  criteria []
+[soak] qualified in 4.7s
+[soak] driving 8 cycles …
