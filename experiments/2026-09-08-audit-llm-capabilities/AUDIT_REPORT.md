@@ -1,10 +1,17 @@
 # AUDIT REPORT — four questions about language models, answered from this record
 
-Read-only audit of `main`, 2026-09-08. Scope is the experiment and test
-record, not the harness. No verification instrument was run: this is a
-review-kind task and the operator's standing rule (CLAUDE.md, 2026-09-05)
-forbids it without permission stated for the task. Every number below was
-read out of a committed artifact.
+Read-only audit of `main`, 2026-09-08. **This is an audit of language-model
+behaviour, not of the harness.** The harness appears only where it decides
+whether an observation is about the model or about the code, or where it
+decides whether a number can be trusted. No verification instrument was run:
+this is a review-kind task and the operator's standing rule (CLAUDE.md,
+2026-09-05) forbids it without permission stated for the task. Every number
+below was read out of a committed artifact.
+
+**The harness changed continuously while this record was being made, and each
+change maps to its own test records.** That fact does more work in this report
+than any single measurement, so it is stated at the top rather than buried in
+a caveat — §0.1 works out what follows from it.
 
 **How to read the standing of a number.** Three tiers, and the audit says
 which tier every load-bearing claim sits in:
@@ -17,6 +24,10 @@ which tier every load-bearing claim sits in:
   of replay.
 - **Tier 3 — narrative only.** A committed document states a number and
   nothing in the tree produces it.
+- **Demoted.** A pre-registered falsifier fired against the *instrument* that
+  produced the number, and the repository's own registered consequence was to
+  mark such numbers unverified. One family of numbers in this report is in this
+  state and §6.4 is about it.
 
 Tier matters because this repository's own rule is that the record is the
 only admissible evidence and model prose never is. An audit that quotes a
@@ -31,6 +42,40 @@ the generalisation costs.
 ---
 
 ## Part 0 — What the corpus is
+
+### 0.1 A moving harness, and what follows for reading this record
+
+The record was not produced by one system observed over time. It was produced by
+a system under continuous change, where each change brought its own tests and its
+own runs. Three consequences, and they pull in different directions:
+
+**A behaviour that replicates across harness versions is worth more than its
+sample size suggests.** When the same property turns up in 2026-07 and again in
+2026-09, the two measurements were taken on materially different machines, with
+different briefs, different forms, different authority defaults and often
+different models. The harness is not a constant that could be silently causing
+both. This is why the strongest claims in Part 1 are the ones with dates far
+apart: the argumentative critic objecting to everything, measured four times
+between 2026-07-13 and 2026-09-04; the two fault classes never caught, measured
+in 2026-07 and again eighteen months later; the harness losing to the plain
+model, measured in 2026-07, 2026-08 and 2026-09 on three different task families
+and three different builds. Read those as replications across implementations,
+which is a stronger thing than three trials of one.
+
+**A pooled census mixes versions, and must be read as a corpus property rather
+than a system property.** The two censuses below sweep 96 run roots produced over
+months of change. Their numbers are true of *the corpus*. They are not a
+measurement of any one build's behaviour, and where they look like devastating
+capability findings, Part 2 §2.3 says why they are not.
+
+**An old finding may have been superseded by a change rather than by a
+measurement.** The record's own remedy for this is `docs/ERRATA.md` — eighty
+entries — and the retirement and withdrawal notes in
+`experiments/results/INDEX_2026-07-13.md`. Where this audit relies on a pre-2026-08
+number, it says so, and §6.4 is what happens when a superseding measurement
+exists and the document it supersedes was never updated.
+
+### 0.2 The corpus
 
 128 dated tranches plus a dozen earlier campaigns; 63 results documents; 415
 test files; 41 report files under `experiments/results/`. The measurement
@@ -254,6 +299,13 @@ critic family × how the artifact was presented, the objection rate was 1.0 in
 **all six** (`schema_comparator_v1_report.json`) — so it survives changing the
 representation as well as the model, the brief and the domain.
 
+Those four measurements span 2026-07-13 to 2026-09-04 — different harness
+builds, different briefs, different forms, different authority defaults,
+different models, curated corpora and real run output. Per §0.1 that is what
+makes this the best-supported behavioural claim in the report: no constant in
+the apparatus could be producing all four, because the apparatus was not
+constant.
+
 The obvious explanation is that the brief tells the critic to prosecute. That
 was tested and **refuted, and inverted**. Stripping the prompt to a neutral
 *"assess for one material, checkable defect"* made things worse: acquittal of
@@ -336,9 +388,14 @@ removal.
 Two more instances of the same shape, from different tranches:
 
 - Told to cite only from a supplied 32-item legend, a seat produced **58**
-  citations of identifiers not in it — `EVIDENCE_REF_UNKNOWN_BLOCK`, first at
-  `log.jsonl` seq 42, found mechanically by `tools/record_claims.py`
-  (`2026-09-06-change-record-claims/DELIVERY.md`).
+  citations of identifiers that **do not exist in the record at all** — the
+  typed class is `EVIDENCE_REF_UNKNOWN_BLOCK`, first at `log.jsonl` seq 42,
+  found mechanically by `tools/record_claims.py`
+  (`2026-09-06-change-record-claims/DELIVERY.md`). The distinction matters and
+  runs the strong way: the harness has a separate typed class for citing a real
+  block that was withheld from the legend, `EVIDENCE_REF_NOT_EXPOSED`, and that
+  class appears **nowhere** in the run. So these were not real sources the seat
+  was forbidden to name. They were identifiers with no referent.
 - A judge ruled against a survivor and cited a decisive point that appeared
   nowhere in the trial exchange. A referential-integrity check — again a
   program — blocked the warrant (`docs/STATE_OF_THE_THEORY.md` §II).
@@ -584,6 +641,58 @@ criticism. No run in the corpus granted the authority and exercised the road
 that would produce a second hop, so the depth-1 shape of all 6,370 artifacts
 still cannot be read as a limit.
 
+### 2.3a The strongest confound in the corpus: criticism was never shown to the thing that writes the next candidate
+
+This deserves its own heading because it bounds every criticism finding in this
+report, and it is measured rather than inferred.
+
+The run-anatomy tranche W2 took the two priority live roots and asked whether
+criticism did causal work. Its answer, from generated tables rather than prose:
+
+- **0 of 196 model-written attacks were ever exposed to a later conjecture
+  dispatch.** Not a low rate — zero. The criticism was written, recorded, and
+  never put in front of the seat that makes the next candidate.
+- **Every status any criticism moved was moved by the problem's own admission
+  criteria.** All 118 attack edges in one root and all 345 in the other come
+  from demonstrative warrants minted by mechanical commitment verdicts; **0 come
+  from a model-written attack**, and no model attack in either run carried a
+  warrant at all. Every criticism dispatch was `observe_only`.
+- The tranche's own summary: *"two organs called criticism, one of which is
+  load-bearing and is not criticism, and one of which is criticism and is
+  inert."*
+
+And the measurement discipline is worth copying. Because candidates are
+generated in batches, the candidate following a criticism is usually a fresh
+construction that would have differed anyway — so every rate was computed twice,
+once on the candidate *after* the criticism and once on the candidate *before*
+it, which cannot have been influenced. The difference is the only evidence:
+
+| root | n | coupling | placebo | **difference** | did any coupled change improve the score? |
+|---|---|---|---|---|---|
+| P-R1, mechanical | 118 | 17.8% | 30.5% | **−12.7 pp** | — |
+| P-R1, prose-quote | 54 | 98.1% | 100.0% | **−1.9 pp** | — |
+| P-C1, mechanical | 341 | 9.4% | 3.5% | **+5.9 pp** | **not one of 32** |
+| P-C1, prose-quote | 60 | 100.0% | 100.0% | **+0.0 pp** | — |
+
+Three of four placebo-corrected effects are zero or negative, and the fourth
+bought nothing. Note what that means: it is not a finding that criticism does
+not work. **It is the correct result for a channel that was shut**, and it
+validates the instrument. Any apparent coupling without that placebo column is
+an artifact.
+
+A companion finding from W3 bounds the evidence channel the same way: **591 of
+623 admitted evidence blocks were never shown to any model**, because the
+citable legend caps at 32 — 93% of the dossier by bytes, admitted, digested and
+frozen, and *"nothing in the record discloses that the truncation happened."*
+
+**What this does to the rest of this report.** It strengthens §2.3's attribution
+of the corpus's near-empty attack graph to configuration rather than to the
+models, and it means Part 5's third gap is worse than "unmeasured": in the two
+roots examined closely, the mechanism whose value was in question was not
+connected. Every statement in this report about what criticism did or did not
+achieve should be read as a statement about criticism that could not have
+achieved anything.
+
 ### 2.3b One experiment could not run because the models were right
 
 Recorded here because an audit of limits that omits it is dishonest. The
@@ -694,18 +803,22 @@ and only the arms carrying an explicit planning step lifted it (6.0, 12.0).
 Whatever the cheap method does, it does not do it where the problem is tightly
 constrained. There, being made to plan first is what worked.
 
-**A cross-tranche inference, marked as an inference.** The basin study
-concluded that novelty fades because the model runs out of distinct answers,
-having ruled out the prompt as the cause — it removed the model's view of its
-own prior output and the fade continued at the same rate (0.888 against 0.846).
-The diversity experiment then got three to four times as many distinct ideas
-from the same model by changing not what it was *shown* but what it was
-*asked for*. Both can be true, and together they say something neither says
-alone: **the ceiling the basin study found is a property of asking the same
-question over and over, not a property of the model's repertoire.** The
-project's phrase "repertoire exhaustion" is better read as exhaustion of what
-one prompt regime can reach. This is an inference across two tranches, not a
-result either registered, and no experiment in the record tests it directly.
+**A cross-tranche inference, marked as an inference and now carrying a
+demotion.** The basin study concluded that novelty fades because the model runs
+out of distinct answers, having ruled out the prompt as the cause — it removed
+the model's view of its own prior output and the fade continued at the same rate
+(0.888 against 0.846). The diversity experiment then got three to four times as
+many distinct ideas from the same model by changing not what it was *shown* but
+what it was *asked for*. Both can be true, and together they say something
+neither says alone: **the ceiling the basin study found looks like a property of
+asking the same question over and over, not a property of the model's
+repertoire.** The project's phrase "repertoire exhaustion" is better read as
+exhaustion of what one prompt regime can reach.
+
+Two things weaken this and must travel with it. It is an inference across two
+tranches, not a result either registered. And the basin half of it rests on
+novelty numbers this repository has itself demoted to unverified — see §6.4,
+which is the most consequential finding of this audit for Q3.
 
 ### 3.2 Sense two — distance from what it was trained on: NOT MEASURED, and the record says so
 
@@ -801,7 +914,12 @@ so the instrument was discriminating.
 That makes **three** independent occasions, spread over fourteen months and
 three different task families — informal prose, exact construction, and
 composition — on which this apparatus was measured against the plain model and
-did not win.
+did not win. Per §0.1, and this is the part that matters: those were three
+*different builds* of the apparatus, not three trials of one. No single
+implementation was tested three times, which is a weakness; but no single
+implementation's defect can explain all three either, which is a strength, and
+the second outweighs the first here because the three tasks share nothing but
+the model.
 
 Neither of the 2026 tranches is a fair test of criticism's value and both say
 so. What can be said is narrower and still worth saying: **in this record there
@@ -816,8 +934,9 @@ their own residue sections that no baseline arm exists.
 | sense of "creative" | verdict | standing |
 |---|---|---|
 | produces many genuinely distinct ideas | **YES**, and 3-4× more than repeated asking reveals, at ~8× per token | Tier 1, 2.24M tokens, one model |
-| sustains distinctness under repeated asking on one question | **NO** — it fades, and the fade is inside the model, not the prompt | Tier 2, n=1 per condition |
-| the distinctness can be restored by structural means | **YES** for rotating the angle (0.973 vs 0.846) and changing the question (1.12); **NO** for telling it to be different (placebo) | Tier 2, n=1 per condition |
+| sustains distinctness under repeated asking on one question | **NO** — it fades, and the fade is inside the model, not the prompt | **DEMOTED** (§6.4), n=1 per condition |
+| the distinctness can be restored by structural means | **YES** for rotating the angle (0.973 vs 0.846) and changing the question (1.12); **NO** for telling it to be different (placebo) | **DEMOTED** (§6.4), n=1 per condition |
+| cannot let go of an idea already refuted | **YES** — 54 and 36 blocked re-proposals from single refutations, at 4.3× the tokens per idea that stuck | Tier 2 and **NOT** demoted: these are counts of a gate that ran hash-and-verdict-only, so they do not depend on the demoted instrument (§6.4) |
 | the extra ideas are *good* | **NOT MEASURED**, registered out of scope in advance | — |
 | reaches outside its training distribution | **NOT MEASURED**, and the record says so in its own words | — |
 | originates something by its own construction | one suggestive instance, self-described as recombination; one clear instance of useful criticism | Tier 3 and Tier 1 respectively |
@@ -1040,13 +1159,18 @@ unknown worth. *Missing:* the same four conditions with the candidates put
 through criticism, and survival rates compared. The tranche's own `PARKED.md`
 holds this.
 
-**3. Whether criticism improves anything.** The record contains no measurement
-that isolates it. The two arms that compared harness to no harness compared
-whole pipelines, and both are single-run with named measurement defects.
-*Missing:* one question, matched budget, three arms — plain repeated sampling,
-generation with criticism, and generation with an equal quantity of vacuous
-criticism — judged blind with length held constant. The third arm is the one
-that turns a pipeline comparison into a measurement of criticism.
+**3. Whether criticism improves anything.** Worse than unmeasured. In the two
+live roots examined closely, **not one of 196 model-written attacks was ever
+shown to the seat that writes the next candidate** (§2.3a), and every status
+change came from mechanical verdicts instead. So the three occasions on which
+this apparatus lost to the plain model (§3.5) tested a pipeline in which the
+organ under suspicion was not connected. *Missing:* one question, matched
+budget, four arms — plain repeated sampling; generation with criticism actually
+rendered into the next dispatch; generation with an equal quantity of vacuous
+criticism; and the same with authority granted — judged blind with length held
+constant, with W2's before-and-after placebo column computed. The vacuous arm is
+what turns a pipeline comparison into a measurement of criticism; the rendering
+is what makes the comparison mean anything at all.
 
 **4. Whether a model can criticise a criticism.** Still never attempted:
 every attack relation in 6,370 artifacts is one hop deep and no run exercised a
@@ -1111,10 +1235,15 @@ re-read with that in mind.
 
 ---
 
-## Part 6 — Two findings against the record itself
+## Part 6 (appendix) — Findings about evidence standing, not about models
 
-These are not answers to the four questions. They are things the audit found
-while looking, and both change how the answers should be read.
+**Why this is here at all, given the scope.** None of what follows is a finding
+about language-model behaviour, and the operator has said plainly that the
+harness is not the subject. It is included for one reason: each item decides
+whether a number in Parts 1 to 4 can be relied on. §6.4 in particular determines
+the standing of the answer to Q3, so leaving it out would make Part 3 dishonest.
+Read this as the audit showing its working on evidence quality, not as a second
+audit of the machine.
 
 ### 6.1 The oldest capability evidence is archived, not lost — and the signposts do not reach the reader
 
@@ -1218,3 +1347,77 @@ embargo)"* and *"'zero novel mechanisms' as a measured result"* — with the
 original report, pre-registration and corrections all left unedited. Two
 capability claims withdrawn, in writing, with the reason. That is the pattern
 §6.1's fix should follow.
+
+### 6.4 The project measured that its own novelty instrument was wrong, set a gate on repeating the claim, never ran the gate, and published the claim
+
+This is the most consequential finding in the audit, because it decides the
+standing of the answer to Q3, and every word of it is the repository's own.
+
+**What was measured.** `E0.1`, a zero-token recalibration, compared the hashing
+embedder every novelty number in this record was computed with against a real
+neural embedder (`BAAI/bge-small-en-v1.5`). **All four pre-registered
+predictions were REFUTED.** The decisive one: the proportion of
+"hash-novel" ideas that a real embedder scores as near-duplicates was predicted
+at 20% or less, with a falsifier at 40%. Measured: **1.0 on both roots.** In the
+report's own words — *"under the neural embedder the corpus cross-problem median
+distance (0.26) sits BELOW the planted-paraphrase median (0.32): the entire
+conjecture stream is more homogeneous than typical paraphrase pairs. What
+hashing scored as variation is near-duplication at neural scale."*
+
+**What the pre-registration said would follow, written before the numbers.**
+From `docs/EXPERIMENT_PROGRAM_2026-07.md:135-137`: *"Falsifier: > 40%, and the
+soft-basin finding may be an embedder artifact; **E2.3 must run before the basin
+claim is repeated anywhere.**"* And the program's own reason for running E0.1 at
+all, at line 143: the scale-blind embedder *"can hide real convergence, meaning
+every self-diversity number in `docs/CAN_LLMS_EXPLORE.md` is suspect."*
+
+**What the index recorded as the consequence**, verbatim from
+`experiments/results/INDEX_2026-07-13.md:75-77*: *"Consequences: prior hash-based
+novelty numbers demoted to unverified; E2.3 now gates any repetition of the
+soft-basin claim."*
+
+**What then happened.** `E2.3` exists only as a plan. There is no report in
+`experiments/results/`, no tranche directory, and no run. By the same index's own
+standing rule — *"An experiment that isn't in an index does not exist"* — it did
+not happen. And `docs/CAN_LLMS_EXPLORE.md`, the document written for outside
+readers and inviting them to replicate, presents the soft-basin claim as its
+Result 1 and contains **no mention** of E0.1, of the contamination measurement,
+of the neural embedder, or of the demotion. Neither does `docs/BASIN_REPORT.md`.
+Both discuss the embedder's weakness at length — and both argue it in the
+*opposite* direction, that the instrument's blindness makes real effects
+understated and confirmations conservative. E0.1 measured the error running the
+other way.
+
+**How far the demotion reaches, precisely, because this decides what survives.**
+
+- **Demoted:** every novelty *level* and every late/early *ratio* in the basin
+  study and in `docs/CAN_LLMS_EXPLORE.md` — 0.846, 0.888, 0.973, 0.865, 1.037,
+  1.12 — and the echo-vs-chance figures, which locate a nearest neighbour with
+  the same embedder. These are hash-based novelty numbers and the registered
+  consequence names them.
+- **Not demoted, and this preserves the strongest basin finding:** the
+  gate-block counts (0 in every healthy arm, 54 and 36 in the two orbiting
+  arms) and the 4.3× cost figure. The anti-relapse gate has three paths — hash
+  identity against a refuted prior, an embedding path, and battery equivalence
+  over a verdict vector — and the embedding path ships disarmed
+  (`config.py:350`, `NEAR_DUP_EPS: float | None = None`, with the comment at
+  line 704 confirming none ship armed). So in this era the gate was
+  hash-and-verdict-only. **Refuted-attractor orbiting does not depend on the
+  demoted instrument.**
+- **Scope that cuts both ways:** E0.1's own caveat is *"n=2 roots, both
+  gemma4:31b website runs"*, and the basin live phase was a different model on a
+  different workload. So the contamination measurement does not directly cover
+  the basin corpus — which is precisely why E2.3 was made the gate rather than
+  the demotion being called final. The honest state is not "the basin finding is
+  false". It is **"the basin finding is unverified by this repository's own
+  ruling, and the experiment appointed to resolve it was never run."**
+
+**Why this matters more than a bookkeeping lapse.** Q3 is the operator's
+creativity question. The repository's most quotable creativity evidence, in its
+most public document, is evidence its own calibration study demoted — and the
+strongest *undemoted* creativity result in the whole corpus, the 2.24M-token
+diversity experiment with its raw responses committed and a neural embedder, is
+cited by no capability-facing document at all (§6.2). The evidence is in better
+shape than the documents are. Part 3 is written that way deliberately: its
+verdict rests on the diversity experiment, and the basin material carries its
+demotion wherever it appears.
