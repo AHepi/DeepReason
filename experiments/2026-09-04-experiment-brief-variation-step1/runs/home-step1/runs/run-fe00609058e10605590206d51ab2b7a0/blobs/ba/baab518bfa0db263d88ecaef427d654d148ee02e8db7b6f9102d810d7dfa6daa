@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes 'Dependence (Normative Grounding)' but fails to define the specific mechanism of dependence. It asserts the decision postulate is 'dependent on empirical success' without explaining how biological truth-likeness mechanically or logically grounds a normative rule, leaving the relation as a mere assertion of connection rather than a substantive explanation of the dependency structure.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'last man standing' mechanism fails to address the problem's core challenge regarding action: eliminating known-false theories from an infinite set of possibilities does not logically justify preferring the survivor for future application unless one assumes the uneliminated theories share a stable pattern with the survivor. This assumption is an inductive leap about the structure of the remaining hypothesis space, meaning the preference still 'smuggles in' induction rather than avoiding it via criticism alone.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Eliminating false theories from an infinite set leaves an infinite set of unfalsified theories; selecting one for action requires an additional criterion beyond mere survival.",
+      "premise_evidence": null,
+      "successor_question": "If the set of unfalsified theories is infinite and mutually incompatible, what non-inductive principle allows a Popperian to select the 'best-corroborated' one for technological application rather than choosing arbitrarily?"
+    }
+  ]
+}

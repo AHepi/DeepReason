@@ -1,0 +1,48 @@
+{
+  "candidate": {
+    "content": "The isolated context (03f8b3f2f004) inherits its procedural validity from the neighbourhood sources SRC_004 and SRC_005, specifically reducing the 'decision postulate' to a shared mechanism of evolutionary selection where refutation acts as the filter. This relation is REFUTED IF the decision postulate requires an inductive justification to be considered rational, or if the historical entrenchment of false paradigms (like Ptolemaic astronomy) demonstrates that corroboration does not correlate with truth-likeness, thereby breaking the inheritance chain between the convention and the selected theory.",
+    "typicality": 0.85,
+    "neighbours": [
+      "SRC_004",
+      "SRC_005"
+    ],
+    "discharges": [
+      {
+        "handle": "0b4d9d521533949983ebf9a089471762235689cdbc2df89eeb8df79bcd8b0124",
+        "kind": "revised",
+        "note": "Explicitly named the relation kind as 'inherits' and 'reduces to' in the first sentence, defining endpoints as the isolated context and the neighbourhood sources.",
+        "where": "content start"
+      },
+      {
+        "handle": "1b0b94d1a782d96f1f858b2d5a65896934b84b34312b6e0f3be620a2375b91d5",
+        "kind": "revised",
+        "note": "Included the exact phrase 'REFUTED IF' followed by specific conditions derived from the foundation's counterconditions.",
+        "where": "content middle"
+      },
+      {
+        "handle": "80eab863206ce0c8df11819709e3a5fcf99293f74ab93e85f4c6e0fbdc8e6810",
+        "kind": "rebutted",
+        "note": "The candidate accepts this criticism as a valid 'REFUTED IF' condition; the relation holds only if this historical counter-example does not break the correlation between corroboration and truth-likeness.",
+        "where": "content end"
+      },
+      {
+        "handle": "94163256f07492b3245326e6eac861ccfd2f039793dac1da7af23aa4afb59f33",
+        "kind": "revised",
+        "note": "Defined the relation between 'decision postulate' and 'evolutionary selection' explicitly as a reduction/shared mechanism.",
+        "where": "content start"
+      },
+      {
+        "handle": "e7fbb6551168524f2d90d4a6a81e9ef6d04b2dd4fbfba506908474a7",
+        "kind": "revised",
+        "note": "Specified the endpoints (isolated context vs SRC_004/SRC_005) and the mechanism (evolutionary selection/refutation filter) to satisfy the substantive definition requirement.",
+        "where": "content entire"
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "03f8b3f2f004",
+        "quote": "Popper explicitly frames the choice of the best-tested theory as a 'decision.' In this view, there is no logical bridge between 'survived tests' and 'should be used.'"
+      }
+    ]
+  }
+}

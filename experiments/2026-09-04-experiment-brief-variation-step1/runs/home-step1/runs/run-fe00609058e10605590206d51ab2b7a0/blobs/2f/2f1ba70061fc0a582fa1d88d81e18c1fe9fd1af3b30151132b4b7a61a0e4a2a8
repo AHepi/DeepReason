@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims the relation is 'integration' via a 'shared mechanism,' but the 'REFUTED IF' clause admits that if the decision requires an inductive bridge to truth, the proposed mechanism (non-justificational filtering) fails. Since standard scientific realism often posits that corroboration implies a likelihood of truth (an inductive bridge), the target's own condition exposes that its proposed 'shared mechanism' may not exist in the intended neighborhood, thereby refuting the asserted integration.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "The target asserts integration based on non-justificational filtering but concedes this fails if an inductive bridge is required.",
+      "premise_evidence": null,
+      "successor_question": "Does the neighborhood of evolutionary selection of theories operate purely as a procedural convention without any implicit inductive assumption that corroborated theories are closer to truth?"
+    }
+  ]
+}

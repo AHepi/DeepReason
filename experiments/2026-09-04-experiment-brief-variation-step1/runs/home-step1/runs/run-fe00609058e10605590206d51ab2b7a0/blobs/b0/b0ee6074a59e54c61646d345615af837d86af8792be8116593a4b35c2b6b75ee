@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the dilemma dissolves via a 'convention' fails to address the problem's specific challenge regarding whether this preference 'smuggles back in induction.' By framing the preference as a voluntary decision postulate, the target asserts the rationality is 'internal to the game,' but it does not demonstrate why acting on a theory without an expected link to truth (which induction usually provides) is not itself an inductive gamble. If the 'decision' to prefer corroborated theories is made because they are *more likely* to succeed in future applications (even pragmatically), the target has merely relabeled induction as a 'rule of procedure' rather than eliminating it, thus failing to show the preference is defensible on Popper's strict anti-inductivist terms without cost.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "A convention that guides action based on past success implicitly relies on the assumption that the future will resemble the past, which is the definition of induction.",
+      "premise_evidence": null,
+      "successor_question": "Does defining the preference as a 'decision' successfully sever the logical dependency on the expectation of future success, or does it simply hide the inductive assumption within the definition of the 'game'?"
+    }
+  ]
+}

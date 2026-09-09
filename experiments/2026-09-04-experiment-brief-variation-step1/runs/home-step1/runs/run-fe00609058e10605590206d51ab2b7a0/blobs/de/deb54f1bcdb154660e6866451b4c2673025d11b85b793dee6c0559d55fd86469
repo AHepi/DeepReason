@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims the relation is 'integration' via a 'procedural bridge' that avoids inductive justification. However, the 'REFUTED IF' condition identifies that the 'decision postulate' (the bridge itself) implicitly relies on an unacknowledged inductive assumption (that the future resembles the past). If this condition holds, the mechanism does not merely fail to integrate; it actively contradicts its own premise of being non-inductive. The target fails because it asserts a successful 'integration' based on a mechanism that, by its own admission in the refutation clause, collapses into the very logical dependency (induction) it claims to bypass, rendering the proposed relation self-defeating rather than integrative.",
+      "premise": "The decision postulate implicitly relies on an unacknowledged inductive assumption about the future resembling the past.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "counterexample": null,
+      "successor_question": "Can a procedural bridge truly function as an integrator if its operational validity depends on the very inductive assumption it purports to eliminate?"
+    }
+  ]
+}

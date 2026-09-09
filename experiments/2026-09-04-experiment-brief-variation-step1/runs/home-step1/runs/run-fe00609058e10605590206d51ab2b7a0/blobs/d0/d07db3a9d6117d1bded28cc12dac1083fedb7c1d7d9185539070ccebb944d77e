@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's evolutionary analogy fails to resolve the specific tension in Popper's framework because it conflates 'survival' with 'rational preference.' While the mechanism explains why scientists *do* prefer corroborated theories (biological/methodological survival), it does not justify why they *ought* to do so as a rational act without smuggling in induction. If the environment is unstable (as noted in the target's own counterconditions), the 'fittest' methodology might be one that ignores past tests entirely; thus, appealing to the survival of the current method presupposes that the future will resemble the past regarding methodological efficacy, which is precisely the inductive assumption Popper sought to avoid.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "The target claims preference is a survival trait of the methodology, shifting justification from the theory to the meta-methodology.",
+      "premise_evidence": null,
+      "successor_question": "Does asserting that a methodology has 'survived' implicitly rely on an inductive inference that it will continue to survive or yield truth-like results in the future?"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "candidates": [
+    {
+      "content": "KIND: Integration. The isolated problem (03f8b3f2f004) integrates the 'Decision Postulate' (SRC_005) and 'Evolutionary Selection' (SRC_003) by proposing that the voluntary decision to prefer corroborated theories is itself the selection pressure in the evolutionary epistemology model. REFUTED IF: The decision postulate is shown to be arbitrary such that it cannot function as a consistent selection criterion, or if evolutionary success is demonstrated to occur independently of this specific methodological decision.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "This candidate explicitly names the relation kind ('Integration') and defines the endpoints (SRC_005 and SRC_003), directly addressing the failure to propose a substantive relation."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "The content includes the phrase 'refuted if', satisfying the relation-form predicate requirement."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "While historical false paradigms existed, this candidate does not claim corroboration guarantees truth; it claims the *decision* acts as a selection mechanism for methodology survival, which remains valid even if specific theories are later falsified."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "The candidate explicitly names the relation kind ('Integration') between the 'decision postulate' and 'evolutionary selection', refuting the claim of vagueness."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "The mechanism is defined: the decision serves as the selection pressure. Endpoints are clearly identified as SRC_005 and SRC_003."}
+      ]
+    },
+    {
+      "content": "KIND: Contradiction. The isolated problem (03f8b3f2f004) exposes a fundamental contradiction between the 'Convention/Decision' view (SRC_001) and the 'Evolutionary' view (SRC_003). If preference is merely a convention (game rule), it cannot simultaneously be an objective survival trait selected by nature. REFUTED IF: It can be demonstrated that a rule adopted by convention can also be the very trait that ensures survival in an evolutionary context without logical conflict (i.e., if the convention is the adaptation).",
+      "typicality": 0.45,
+      "neighbours": ["SRC_001", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Explicitly proposes 'Contradiction' as the relation kind between SRC_001 and SRC_003."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Contains 'refuted if' and relation keywords."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Irrelevant to this specific contradiction claim regarding the nature of the preference mechanism."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Names the relation kind and endpoints clearly."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Defines the contradiction mechanism: incompatibility between arbitrary convention and objective selection."}
+      ]
+    },
+    {
+      "content": "KIND: Abstraction. The 'Decision Postulate' (SRC_002) is an abstraction of the 'Evolutionary Selection' mechanism (SRC_003). The conscious decision to follow tested theories is the high-level description of a low-level blind variation and selective retention process operating on methodologies. REFUTED IF: The decision postulate requires conscious agency or normative justification that cannot be reduced to or described as a blind evolutionary process.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_002", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Proposes 'Abstraction' as the substantive relation."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Satisfies relation-form criteria."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Does not rely on corroboration entrenching truth, but on the structural relationship between decision and evolution."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Clearly identifies endpoints and relation kind."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Mechanism defined as high-level description of low-level process."}
+      ]
+    },
+    {
+      "content": "KIND: Dependence. The viability of the 'Evolutionary Selection' explanation (SRC_003) is strictly dependent on the 'Decision Postulate' (SRC_004). Without the community's voluntary decision to eliminate falsified theories, the evolutionary mechanism lacks the necessary selection pressure to operate. REFUTED IF: Evolutionary selection of theories can occur purely through natural consequences (e.g., technological failure) without any voluntary human decision to prefer one theory over another.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_003", "SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Explicitly states 'Dependence' as the relation kind."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Includes required 'refuted if' phrasing."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Focuses on the operational necessity of the decision, not the truth-tracking history."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Names relation and endpoints specifically."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Mechanism detailed: decision provides the selection pressure."}
+      ]
+    },
+    {
+      "content": "KIND: Shared Mechanism. Both the 'Decision Postulate' (SRC_005) and the 'Evolutionary' view (SRC_003) share the mechanism of 'Error Elimination'. Whether framed as a rational decision or an evolutionary filter, the core operative principle is the negative feedback loop of rejecting falsified content. REFUTED IF: One of these views relies fundamentally on positive verification or accumulation of probability rather than solely on the elimination of error.",
+      "typicality": 0.90,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Proposes 'Shared Mechanism' with specific definition."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Meets all formatting predicates."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Avoids truth-correlation claims, focusing on the procedural mechanism of error elimination."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Clearly articulates the shared mechanism and endpoints."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Defines the mechanism as 'Error Elimination' operating across both domains."}
+      ]
+    },
+    {
+      "content": "KIND: Reduction. The 'Decision Postulate' (SRC_001) reduces to a psychological manifestation of the 'Evolutionary Selection' (SRC_003). The feeling of making a rational decision is merely the subjective experience of the underlying biological/cultural evolutionary algorithm selecting for survival-promoting heuristics. REFUTED IF: The normative force of the decision postulate (the 'ought') cannot be fully explained by descriptive evolutionary facts (the 'is'), preserving the autonomy of the rational decision.",
+      "typicality": 0.30,
+      "neighbours": ["SRC_001", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Proposes 'Reduction' as the relation."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Satisfies schema requirements."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Addresses the is-ought gap rather than historical truth tracking."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Specific relation and endpoints named."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Mechanism defined as psychological reduction of normative choice to evolutionary fact."}
+      ]
+    }
+  ]
+}

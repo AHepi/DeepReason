@@ -1,0 +1,76 @@
+{
+  "candidates": [
+    {
+      "content": "The isolated context (decision postulate) INTEGRATES with the evolutionary selection mechanism (SRC_003) to form a dual-aspect rationality: the decision provides the normative 'ought' for the immediate choice, while the evolutionary history provides the descriptive 'why' the rule exists. This relation is REFUTED IF the evolutionary success of the method implies its truth-likeness (collapsing back into induction) OR if the decision postulate requires a logical guarantee of success to be considered rational (making the evolutionary account irrelevant).",
+      "typicality": 0.85,
+      "neighbours": ["SRC_003", "SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "revised", "note": "Explicitly named 'INTEGRATES' as the relation kind and defined endpoints as 'decision postulate' and 'evolutionary selection mechanism'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "The candidate now explicitly contains the phrase 'REFUTED IF' satisfying the relation-form criterion."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "The refutation condition explicitly targets the collapse into truth-likeness, acknowledging the historical risk of entrenched false paradigms as a failure mode of the integration."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Defined the substantive relation between 'decision postulate' and 'evolutionary selection' rather than summarizing them."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "revised", "note": "Specified how the mechanism operates: decision provides normativity, evolution provides genealogy, avoiding vague 'voluntarism'.")
+      ]
+    },
+    {
+      "content": "The preference for corroborated theories (SRC_005) CONTRADICTS the requirement for a logical bridge to truth, functioning instead as a pragmatic abstraction that hides the lack of inductive support. This relation is an ABSTRACTION of the logical gap into a procedural rule. It is REFUTED IF scientists can demonstrate that maintaining this stance logically entails an expectation of future success, or if the 'cost' of relativism is shown to be zero (meaning the abstraction is unnecessary).",
+      "typicality": 0.60,
+      "neighbours": ["SRC_005", "SRC_002"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "revised", "note": "Proposed 'ABSTRACTION' and 'CONTRADICTS' as relations between the theory preference and the logical gap."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "revised", "note": "Included explicit 'REFUTED IF' clause detailing the conditions for failure."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "The candidate accepts the contradiction with truth-likeness as a feature, not a bug, but sets the refutation condition on the possibility of bridging the gap logically."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Clearly identified endpoints: 'preference for corroborated theories' and 'requirement for a logical bridge'."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "The mechanism is defined as 'hiding the lack of inductive support', which is a specific operational definition of the abstraction."}
+      ]
+    },
+    {
+      "content": "The decision postulate (SRC_004) DEPENDS ON the social agreement of the scientific community to function as a surrogate for objective probability. Without this shared convention, the postulate is an arbitrary fiat. This relation is REFUTED IF the decision postulate can be justified solely by individual rationality without reference to communal norms, or if the convention itself can be derived from non-conventional facts about the world.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "revised", "note": "Named 'DEPENDS ON' as the relation between the postulate and social agreement."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "revised", "note": "Content includes 'REFUTED IF' followed by specific logical conditions."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "departure_declared", "note": "Departing from the debate on truth-likeness; focusing strictly on the dependency of the postulate on social convention."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Endpoints defined as 'decision postulate' and 'social agreement'."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "revised", "note": "Mechanism defined as 'surrogate for objective probability' reliant on 'shared convention'."}
+      ]
+    },
+    {
+      "content": "The evolutionary selection mechanism (SRC_003) REDUCES the concept of scientific rationality to biological adaptation, stripping it of normative force. The relation is a REDUCTION where 'rationality' is merely the name given to successful survival traits. It is REFUTED IF there exists a component of scientific methodology that actively works against biological fitness (e.g., pursuing truths that are dangerous to the species) yet is still considered rational.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "revised", "note": "Proposed 'REDUCTION' as the substantive relation."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "revised", "note": "Explicit 'REFUTED IF' condition provided regarding counter-fitness rationality."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "The reduction inherently accepts the pessimistic meta-induction risk, making the refutation condition about the existence of non-adaptive rationality."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Endpoints are 'evolutionary selection mechanism' and 'scientific rationality'."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "revised", "note": "Mechanism defined as stripping normative force to reveal biological adaptation."}
+      ]
+    },
+    {
+      "content": "The conventionalist view (SRC_001) is COMPATIBLE WITH the evolutionary view (SRC_003) only under the condition that the 'environment' selected for includes the internal rules of the scientific game itself. This relation is COMPATIBILITY conditional on meta-stability. It is REFUTED IF the external environment changes in a way that makes the internal rules of science maladaptive, forcing a choice between survival and adherence to the decision postulate.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_001", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "revised", "note": "Named 'COMPATIBILITY' as the relation kind."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "revised", "note": "Included 'REFUTED IF' describing the breakdown of compatibility."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Addresses the entrenchment risk by positing a scenario where survival forces abandonment of the convention."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Endpoints defined as 'conventionalist view' and 'evolutionary view'."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "revised", "note": "Mechanism specified as 'meta-stability' of the scientific environment."}
+      ]
+    },
+    {
+      "content": "The decision postulate (SRC_002) INHERITS the structural properties of an axiom in a formal system, meaning its validity is purely internal and non-empirical. This relation is INHERITANCE of logical status. It is REFUTED IF the decision postulate claims any empirical content or if it can be falsified by observational data regarding the success rate of corroborated theories.",
+      "typicality": 0.90,
+      "neighbours": ["SRC_002"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "revised", "note": "Proposed 'INHERITANCE' as the relation."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "revised", "note": "Contains 'REFUTED IF' clause."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "departure_declared", "note": "Departing from the truth-likeness debate to focus on the formal/axiomatic nature of the postulate."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Endpoints are 'decision postulate' and 'axiom in a formal system'."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "revised", "note": "Mechanism defined as the transfer of 'internal validity' status."}
+      ]
+    }
+  ]
+}

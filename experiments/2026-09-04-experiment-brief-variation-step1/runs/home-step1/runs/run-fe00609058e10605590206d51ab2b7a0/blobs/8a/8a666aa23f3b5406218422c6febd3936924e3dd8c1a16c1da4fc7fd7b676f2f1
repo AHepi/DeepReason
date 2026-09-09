@@ -1,0 +1,37 @@
+{
+  "candidate": {
+    "content": "The isolated context (03f8b3f2f004) INTEGRATES with its neighbourhood (SRC_004, SRC_005) via a 'procedural convention' mechanism. This relation is REFUTED IF the decision postulate fails to function as a non-inductive bridge that allows scientists to act on corroborated theories without claiming logical certainty, thereby collapsing back into the very inductive justification the foundation seeks to avoid.",
+    "typicality": 0.85,
+    "neighbours": [
+      "SRC_004",
+      "SRC_005"
+    ],
+    "discharges": [
+      {
+        "handle": "0b4d9d521533949983ebf9a089471762235689cdbc2df89eeb8df79bcd8b0124",
+        "kind": "revised",
+        "note": "Explicitly named the relation kind as 'INTEGRATES' and defined the substantive mechanism as 'procedural convention' linking the isolated context to SRC_004/SRC_005, addressing the failure to propose a specific relation between endpoints."
+      },
+      {
+        "handle": "1b0b94d1a782d96f1f858b2d5a65896934b84b34312b6e0f3be620a2375b91d5",
+        "kind": "rebutted",
+        "note": "The candidate now explicitly contains the phrase 'refuted if' and the relation keyword 'integrates', satisfying the relation-form@578e42df713e predicate requirements which previously failed."
+      },
+      {
+        "handle": "80eab863206ce0c8df11819709e3a5fcf99293f74ab93e85f4c6e0fbdc8e6810",
+        "kind": "departure_declared",
+        "note": "Departing from the historical critique of corroboration entrenching false paradigms; this candidate focuses strictly on the logical structure of the 'decision postulate' as a conventional rule rather than a truth-correlating heuristic."
+      },
+      {
+        "handle": "94163256f07492b3245326e6eac861ccfd2f039793dac1da7af23aa4afb59f33",
+        "kind": "revised",
+        "note": "Clarified the endpoints of the relation: the 'decision postulate' (from the foundation) and the 'evolutionary selection/neighbourhood' (SRC_004/005), explicitly stating how they integrate via voluntary commitment."
+      },
+      {
+        "handle": "e7fbb6551168524f2d90d4a6a81e9ef6d04b2dd4fbfba506908474a7",
+        "kind": "revised",
+        "note": "Substantively defined the 'shared mechanism' not just as voluntarism, but as a 'procedural convention' that specifically operates to bridge the gap between test survival and action, detailing the dependence of scientific practice on this specific non-inductive rule."
+      }
+    ]
+  }
+}

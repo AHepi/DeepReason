@@ -1,0 +1,51 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"CompactConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"minLength": 1, "title": "Content", "type": "string"}, "discharges": {"items": {"$ref": "#/$defs/DischargeWireV1"}, "maxItems": 32, "title": "Discharges", "type": "array"}, "evidence_refs": {"items": {"$ref": "#/$defs/EvidenceRefClaimV1"}, "maxItems": 8, "title": "Evidence Refs", "type": "array"}, "neighbours": {"items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011", "SRC_012", "SRC_013", "SRC_014", "SRC_015"], "type": "string"}, "title": "Neighbours", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "CompactConjectureCandidate", "type": "object"}, "ConjectureAbstentionV1": {"additionalProperties": false, "description": "A responsible no-proposal signal using the existing search vocabulary.", "properties": {"note": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Note"}, "search_signal": {"default": "stuck", "enum": ["need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "ConjectureAbstentionV1", "type": "object"}, "DischargeWireV1": {"additionalProperties": false, "description": "One criticism, answered (REBUILD F1).\n\n`handle` is the criticism's handle exactly as the pack listed it, and it is\nleft a PLAIN STRING on purpose: its legal set has one authority --\n`deepreason.discharge.open_criticisms` -- and leaving the field open is what\nlets a menu renderer key on it by registering, without either side learning\nthe other's subsystem. A private enum here would close that seam.\n\nNOTHING here is evidence. A discharge is a precondition on SUBMISSION; no\nfield, kind or count may feed a label, a warrant, a rank or an admission\ndecision (`DR-CON-discharge-channel`, the law line).", "properties": {"handle": {"maxLength": 256, "minLength": 1, "title": "Handle", "type": "string"}, "kind": {"enum": ["revised", "rebutted", "departure_declared"], "minLength": 1, "title": "Kind", "type": "string"}, "note": {"default": "", "title": "Note", "type": "string"}, "where": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Where"}}, "required": ["handle", "kind"], "title": "DischargeWireV1", "type": "object"}, "EvidenceRefClaimV1": {"additionalProperties": false, "description": "One claimed grounding in an admitted dossier block (admission \u00a74).\n\n``block`` names a dossier block by id or by a unique hex prefix of at\nleast 12 characters. ``quote``, when present, must reproduce a\ncontiguous byte span of the block's canonical text exactly \u2014 the\ncitation checker byte-verifies it and a mismatch is a durable finding,\nnever a silent pass.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"anyOf": [{"maxLength": 2000, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Quote"}}, "required": ["block"], "title": "EvidenceRefClaimV1", "type": "object"}}, "additionalProperties": false, "allOf": [{"oneOf": [{"required": ["candidate"]}, {"required": ["abstention"]}]}], "description": "One bounded candidate slot or an honest no-candidate outcome.\n\nThe exactly-one rule is in the schema, not only in the validator below.", "properties": {"abstention": {"$ref": "#/$defs/ConjectureAbstentionV1"}, "candidate": {"$ref": "#/$defs/CompactConjectureCandidate"}}, "title": "AtomicConjectureCandidateWireV1", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_004
+SRC_005
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 6 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM conn:03f8b3f2f004
+connect isolated 03f8b3f2f004 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@ff007a913aed: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+## open-criticisms
+OPEN CRITICISMS ON THIS PROBLEM -- these are part of what your candidate must answer, not advice.
+Every candidate you submit must DISCHARGE each handle below, one of:
+  - revised -- say WHAT changed and WHERE in the candidate
+  - rebutted -- say why the criticism fails. Your rebuttal enters the record as an ordinary claim and can be attacked like any other
+  - departure_declared -- say what you are breaking with. Declaring costs you nothing; nothing scores a departure
+  [0b4d9d521533949983ebf9a089471762235689cdbc2df89eeb8df79bcd8b0124] against ba7905b2f3e34194bb55fee9d42637cd997bd787bb970da707f904db2a809134
+      CLAIM: The target fails to propose a substantive relation between the isolated context and its neighbourhood as required. Instead of defining a relation kind (e.g., dependence, reduction) between the specific endpoints provided in the problem cont
+      CITED SPAN: (none quoted)
+  [1b0b94d1a782d96f1f858b2d5a65896934b84b34312b6e0f3be620a2375b91d5] against 3ebfa26e9f4e973709bb8f163d910bb9e8b6d0162a3230a725c35d41ecf068db
+      CLAIM: critic: relation-form@578e42df713e failed on 3ebfa26e9f4e
+      CITED SPAN: (none quoted)
+  [80eab863206ce0c8df11819709e3a5fcf99293f74ab93e85f4c6e0fbdc8e6810] against 41d0b80ce63262d35b95a03ea7cae11c20921b040fe042cf0ec303b59d431f26
+      CLAIM: The target claims the preference for corroborated theories survives because it correlates with truth-likeness, but this is refuted by historical instances where corroboration entrenched false paradigms (e.g., Ptolemaic astronomy or Phlogist
+      CITED SPAN: (none quoted)
+  [94163256f07492b3245326e6eac861ccfd2f039793dac1da7af23aa4afb59f33] against bae6ca0ec73662965d9b85108ffbc69c5ccd7f7fc75365f519bacfa16d72bd61
+      CLAIM: The target fails to propose a substantive relation as required by the problem context. Instead of naming a specific kind of relation (e.g., dependence, reduction, shared mechanism) between the 'decision postulate' and 'evolutionary selectio
+      CITED SPAN: (none quoted)
+  [e7fbb6551168524f2d90d4a6a81e9ef6d04b2dd4fbf8aceb9bfba506908474a7] against 863e98cda9802d1cf681c05786286e5a3d68145d4330ceb06765eca16e569a63
+      CLAIM: The target proposes a 'shared mechanism' of voluntarism but fails to substantively define the relation's endpoints or how the mechanism operates across them. Instead of detailing the dependence or integration between SRC_005/SRC_004 and SRC
+      CITED SPAN: (none quoted)
+
+## mandatory-interface
+FOUNDATION (adjudicated groundwork this problem builds on — your candidate MUST implement it faithfully):
+--- foundation artifact 03f8b3f2f0045799db01bdb5c40524ddb0adf4dcd784fe98187408e4f273c86b ---
+{"analogy":null,"claim":"The dilemma dissolves if we treat the preference for corroborated theories as a convention or decision postulate, similar to choosing axioms, rather than a derived logical consequence.","counterconditions":[{"case":"If the decision itself requires an inductive justification to be considered rational.","checker_spec":null,"eval":"observation"},{"case":"If scientists cannot coherently maintain a stance that their actions have no expected link to truth.","checker_spec":null,"eval":"observation"},{"case":"If this conventionalism undermines the objective status of scientific knowledge.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Popper explicitly frames the choice of the best-tested theory as a 'decision.' In this view, there is no logical bridge between 'survived tests' and 'should be used.' The bridge is built by a voluntary commitment to a rule of procedure: 'We decide to act as if the best-tested theory is the most reliable.' This avoids smuggling in induction because it makes no claim about the world guaranteeing the theory's success; it only establishes a 

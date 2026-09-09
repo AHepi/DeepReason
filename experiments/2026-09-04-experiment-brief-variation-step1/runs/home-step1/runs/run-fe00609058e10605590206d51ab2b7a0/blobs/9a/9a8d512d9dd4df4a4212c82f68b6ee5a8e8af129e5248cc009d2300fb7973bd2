@@ -1,0 +1,42 @@
+{
+  "candidate": {
+    "content": "The isolated context (03f8b3f2f004) INTEGRATES with its neighbourhood (SRC_004, SRC_005) via a 'procedural bridge' mechanism: the decision postulate acts as the voluntary commitment that allows evolutionary selection (SRC_005) to operate on corroborated theories without requiring inductive justification. This relation is REFUTED IF the decision postulate itself implicitly relies on an unacknowledged inductive assumption about the future resembling the past, thereby collapsing the distinction between convention and logical consequence.",
+    "typicality": 0.85,
+    "neighbours": [
+      "SRC_004",
+      "SRC_005"
+    ],
+    "discharges": [
+      {
+        "handle": "0b4d9d521533949983ebf9a089471762235689cdbc2df89eeb8df79bcd8b0124",
+        "kind": "revised",
+        "note": "Explicitly named the relation kind as 'INTEGRATES' and defined the endpoints as the 'decision postulate' and 'evolutionary selection' in the content string.",
+        "where": "content"
+      },
+      {
+        "handle": "1b0b94d1a782d96f1f858b2d5a65896934b84b34312b6e0f3be620a2375b91d5",
+        "kind": "rebutted",
+        "note": "The candidate now explicitly includes the phrase 'REFUTED IF' followed by a conditional summary, satisfying the relation-form criterion.",
+        "where": "content"
+      },
+      {
+        "handle": "80eab863206ce0c8df11819709e3a5fcf99293f74ab93e85f4c6e0fbdc8e6810",
+        "kind": "departure_declared",
+        "note": "Departing from the historical critique of corroboration; this candidate focuses strictly on the structural integration of the decision postulate with evolutionary selection, not the truth-likeness of corroborated theories.",
+        "where": "scope"
+      },
+      {
+        "handle": "94163256f07492b3245326e6eac861ccfd2f039793dac1da7af23aa4afb59f33",
+        "kind": "revised",
+        "note": "Clarified the specific relation kind ('INTEGRATES') and explicitly linked the 'decision postulate' to 'evolutionary selection' as the two endpoints.",
+        "where": "content"
+      },
+      {
+        "handle": "e7fbb6551168524f2d90d4a6a816e9ef6d04b2dd4fbfba506908474a7",
+        "kind": "revised",
+        "note": "Defined the 'procedural bridge' mechanism explicitly as the voluntary commitment allowing evolutionary selection to function, detailing how it operates across the specified endpoints.",
+        "where": "content"
+      }
+    ]
+  }
+}
