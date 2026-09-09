@@ -111,7 +111,7 @@ named, a fault outside that rubric, and a clean item.
 
 | model | fault it had the category for | fault it did not | clean work it flagged anyway |
 |---|---|---|---|
-| minimax-m2.7 | 0.950 | 0.150 | 0.075 |
+| minimax-m2.7 * | 0.950 | 0.150 | 0.075 |
 | qwen3-coder:480b | 0.950 | 0.225 | 0.075 |
 | mistral-large-3:675b | 0.975 | 0.250 | 0.000 |
 | gemma3:27b | 0.950 | 0.325 | 0.075 |
@@ -144,16 +144,64 @@ What differs between these models is not how well they tell a flaw from sound
 work; it is how readily they object. Detection of an unlabelled fault is
 bought almost one-for-one with false alarms on good work.
 
+**The same fault, labelled and unlabelled — the cleanest form of this
+result.** The zoo's exploratory tables break both batteries down by fault
+class, and two classes appear in both, which makes them a matched pair. Mean
+catch across all eleven seats:
+
+| fault | in the rubric's own vocabulary | the same fault, unlabelled |
+|---|---|---|
+| circular support | `circularity` — **1.000** (n=5) | `circular_support` — **0.173** (n=10) |
+| explaining nothing | `dormitive_vacuity` — **0.970** (n=3) | `vacuous_generality` — **0.491** (n=10) |
+
+Eleven models. Same items' construction, same day, same temperature. Circular
+support named as "circularity" is caught by every one of eleven seats; the same
+fault not named is caught at 0.173, with **five of the eleven seats at exactly
+0.000** (`gemma3:27b`, `minimax-m2.7`, `mistral-large-3:675b`,
+`nemotron-3-ultra`, `qwen3-coder:480b`). The pre-registration's own appended
+reading adds that the only three items missed by *every* seat are all circular.
+
+Nothing about the fault changed. The label changed. If one measurement in this
+audit should be remembered, it is this one.
+
+For completeness, the labelled battery's other classes sit where the first
+column predicts — `affirming_the_consequent`, `base_rate_neglect`,
+`conjunction_fallacy`, `denying_the_antecedent`, `hasty_generalization`,
+`post_hoc_causation` all at 1.000; `composition` 0.970; `false_arithmetic_premise`
+0.864; `equivocation` 0.841 — and the unlabelled battery's others at 0.491 to
+0.609.
+
 One more line from the same tranche, because it cuts against the intuitive
 remedy: turning reasoning on **lowered** unlabelled detection on the model
 where it was measured most cleanly — `deepseek-v4-flash` went from 0.625 to
 0.400, a 22.5 point fall (prediction P4, per-model rule).
 
-*Limit, stated because it matters.* Every unlabelled-fault item and every
+*\* One row must not be read as a measurement.* `minimax-m2.7` failed the
+strict-output contract on **64 of its 120 calls**, and those failures are
+recorded as "no fault found" — distributed 36 of 40 on clean items, 28 of 40 on
+unlabelled faults, and **0 of 40 on labelled faults**. Among its 12 parseable
+unlabelled responses it flagged 6, a rate of 0.5 rather than 0.15. Its
+apparently excellent specificity is an artifact of not answering, and the
+report does not flag it. Both CONFIRMED verdicts survive dropping the seat —
+the median ratio becomes 0.5375, still far below the 0.8 line — and P3's zero is
+untouched, since minimax was never a candidate to qualify. Every other headline
+figure in §1.2 and §1.3 was independently recomputed from the raw judgment
+blobs during this audit and matched to the digit.
+
+*Limits, stated because they matter.* Every unlabelled-fault item and every
 clean item in this corpus was written by one model, `deepseek-v4-pro`
 (`caveats[2]`), so family effects on those two batteries are tangled with the
 author's family. And 40 items per cell puts roughly ±0.08 on a rate near 0.5.
-Neither touches the first column's saturation or P3's zero.
+Neither touches the first column's saturation, the matched pairs, or P3's zero.
+
+*One aggregation warning, because the record's own headline invites a wrong
+reading.* The 2026-07-13 red-team reported cross-family pairs 41 points *worse*
+than same-family pairs at unlabelled faults, which reads as a family effect and
+is not one. Inside that cross pair, the single `gpt-oss` seat caught 30 of 40
+unlabelled faults on its own — better than either same-family seat and better
+than every pair. Requiring both seats to agree, with a split counted as no
+catch, turned the best single seat into the worst pair. The lesson is about the
+vote rule, not about families.
 
 ### 1.3 The vocabulary is adopted; the operation is not performed
 
@@ -180,12 +228,59 @@ detection:
 Overall sensitivity **0.119** against a registered bound of 0.80 (P1:
 REFUTED). False conviction of sound work: **0.0**.
 
+**And the fault was not subtle.** This audit opened the corpus. All seven
+planted scope contradictions are an exact string appearing in both
+`scope.covers` and `scope.excludes`, with the intersection empty in all seven
+clean twins. All seven planted vacuous forbidden cases are the *same
+byte-identical sentence* inserted into the forbidden-case list: *"Evidence
+emerges that contradicts the central claim of this account."* Fourteen items
+whose fault is a set intersection or a string match on two adjacent fields.
+Caught: 0 of 14. The court meanwhile grounded 74–93% of its objections in scope
+formalism.
+
 Eighteen months later, a different model, a different brief, a different
 domain, and a sealed pre-registration reproduced the two extremes. In the
 2026-09-04 blind-critic tranche, across 480 calls in four conditions,
 `scope-contradiction` ran at 0.0 to 0.2 and `vacuous-forbidden-case` at
 **0.00 in every single cell** — while overall planted-fault naming sat at
 about 0.50.
+
+**Objecting unconditionally is now measured four times, not twice, and it is
+not the prompt's fault.** Beyond the two above: on 85 *real* harness artifacts,
+three different critic families objected at 85/85, 85/85 and 84/85 — a spread of
+1.18 points against a pre-registered 25-point bar
+(`bronze_court_cross_v1_report.json`, P1 REFUTED). And across six cells of
+critic family × how the artifact was presented, the objection rate was 1.0 in
+**all six** (`schema_comparator_v1_report.json`) — so it survives changing the
+representation as well as the model, the brief and the domain.
+
+The obvious explanation is that the brief tells the critic to prosecute. That
+was tested and **refuted, and inverted**. Stripping the prompt to a neutral
+*"assess for one material, checkable defect"* made things worse: acquittal of
+sound work fell from 0.325 to 0.20 — 32 of 40 sound arguments convicted — while
+conviction of genuinely flawed work stayed at 1.0
+(`defended_trial_v1_report.json`, arm B, P1 REFUTED). Adding a defender and a
+two-pass adjudicator then moved the failure rather than fixing it: acquittal of
+sound work rose to 0.95, and conviction of genuinely flawed work **collapsed to
+0.375** (arm C). This is the single dial of §1.2 again, found by a different
+route: every configuration that bought specificity paid for it in sensitivity.
+
+**What the critic convicts sound work *of* is the sharpest part.** On 40
+arguments whose central claim a trusted local checker had verified TRUE, the
+bare critic convicted 27. Of those 27, **18 named the machine-verified-true
+number itself as the defect** (`critic_specificity_report.json`). The
+pre-registered falsifier fired — specificity 0.325 against a 0.60 bar and a
+0.40 falsifier line — and the tranche's registered consequence was to demote
+"survived criticism" as a metric **record-wide**. That demotion is a
+pre-registered instrument judgement in this repository's own record, and it is
+why no claim in this audit rests on an artifact having survived criticism.
+
+**Two models scoring the same items can disagree completely.** In the clean-item
+re-adjudication, the argumentative critic convicted 11 of 11 suspect items,
+naming a specific and checkable-looking defect in each, and the strict judge
+acquitted 11 of 11 with `flawed: false, kind: none`. All three of that
+tranche's predictions were refuted and nothing was reclassified
+(`e02_t2b_readjudication_report.json`).
 
 Look at what separates the one class that is caught from the five that are
 not. A causal non sequitur is visible in the prose: the sentences do not
@@ -205,6 +300,14 @@ correctly and commit to nothing falsifiable. Cross-family evaluators caught
 program (`docs/STATE_OF_THE_THEORY.md` §II). Across four measurements, the
 answer that satisfies the form and says nothing is the fault models do not
 see, and the only thing that ever caught it was code.
+
+One arithmetic line from the committed placement analysis puts the whole
+section in a sentence. On the 84-item calibration corpus the critic's
+item-level objection precision is **42/84 = 0.5 — exactly the base rate of
+corrupted items** — so, in that report's own words, *"at this unit level the
+objection carries zero information."* Every bit of clean-from-corrupted
+separation in that dataset came from the court, which convicted 5 items, all 5
+correctly, at a recall of 5 in 42.
 
 ### 1.4 A model's report on its own work is not reliable, and this is the model, not the harness
 
@@ -324,14 +427,17 @@ the only one measured with the harness taken away.
 
 ## Part 2 — What these models could not do here
 
-**The answer in three sentences.** The record supports a small number of real
-limits, and they are all the same limit wearing different clothes: these
-models cannot check a thing against a standard when the checking has to be
-done rather than described. They can produce the check's output; they cannot
-produce its result. Everything else the record might look like it shows about
-"cannot" is either a single run, a task the models were never given, or
-something this repository's own code prevented — and I separate those below
-because conflating them is how a code defect becomes a false claim about
+**The answer in four sentences.** The record supports two limits, not a long
+list. The first is that these models cannot check a thing against a standard
+when the checking has to be *done* rather than described — they produce the
+check's output reliably and its result unreliably. The second is separate and
+was the surprise of this audit: offered a working tool, a budget, and an
+explicit invitation to do second-order work — answer this objection, cite this
+premise, run this simulation — they decline, at 129 declines out of 130
+invitations across two runs. Everything else the record might look like it
+shows about "cannot" is either a single run, a task the models were never
+given, or something this repository's own code prevented, and I separate those
+below because conflating them is how a code defect becomes a false claim about
 language models.
 
 **The discipline used.** Four buckets, and only the first supports a limit
@@ -366,6 +472,35 @@ grounded most of its objections in scope formalism.
 nothing.** 10 of 40 cross-family (`e02` toothless envelopes), 0.00 in every
 cell of the blind-critic tranche, and in live running the only thing that ever
 caught one was a deterministic program.
+
+**Taking up an invitation to do second-order work.** This is the finding that
+most changed during the audit, and it is measured on live runs with the
+occasion actually offered:
+
+| what was offered | what happened |
+|---|---|
+| an invitation to answer a premise question and cite it (run P-S1) | **1 accepted, 122 declined** |
+| the same, run P-A1 | **0 accepted, 7 declined** of 2 invitations and 6 batch offers |
+| an objection to discharge, P-A1 | **19 left undischarged, 6 re-asks issued, 0 discharges recorded** |
+| a working contained simulation runner with a 12-of-12 budget, on a question whose pre-registration says its natural moves are small exhaustive checks and Monte Carlo | **0 simulation proposals in 5 cycles** |
+| an enabled scratchpad | **no event carries a scratch payload** |
+
+Sources: `2026-09-01-live-all-modules-p-a1/module_census.json`
+(`top_signals`, `measured.D3_premise_citation_rate`) and `MODULE_COVERAGE.md`
+rows D3 and the did-not-fire table; the P-S1 comparison is registered at
+`PREREG.md:394`.
+
+Read the last two rows carefully, because they are the strongest form of this
+finding. The tool was configured, budgeted, probed available, and the question
+was chosen *because* its natural moves would exercise it. The model used
+neither. Across 130 invitations to answer a premise, one was taken.
+
+Two caveats that keep this in bucket (i) rather than making it decisive: the
+P-A1 run died at cycle 5 of 24 on a typed operational failure, so its numbers
+are five cycles' worth; and "declined" is a typed disposition the harness
+records, which means the model produced a well-formed refusal rather than
+silence — consistent with §1.1, and worth noting because it means the channel
+worked and the answer was no.
 
 ### 2.2 Bucket (ii) — measured once, and reported as once
 
@@ -432,35 +567,69 @@ in the state where prose cannot refute anything, **by default**
 (`2026-08-09-change-judge-evidence-review/REVIEW.md` §4, §8.1).
 
 **No criticism was ever itself criticised, and no objection was ever
-answered.** Every attack relation in the corpus is one hop deep; there are
-zero recorded discharges of any kind across every source root of the
-blind-critic tranche. Given the two facts above, the record cannot tell
-whether this is something the models cannot do or something they were never
-asked to do. I report it as the corpus's shape and not as a limit. It is the
-single most important untested question in this record, and Part 5 says what
-would settle it.
+answered.** Every attack relation in the corpus is one hop deep, and there are
+zero recorded discharges across every source root of the blind-critic tranche.
+
+**Partly corrected, and this is the audit correcting itself.** I first wrote
+that the record could not tell whether this was an inability or an absence of
+the occasion. That is too weak. In the P-A1 live run the occasion WAS offered
+and typed: the discharge channel fired, 6 re-asks were issued, **19 objections
+were left undischarged, and no discharge was recorded**; the premise channel
+offered work and got 7 declines, against P-S1's 1 accepted and 122 declined
+(§2.1). So for *answering* an objection the record does show repeated failure
+under measurement, on the occasion being given.
+
+What remains genuinely untested is the other half — a model criticising a
+criticism. No run in the corpus granted the authority and exercised the road
+that would produce a second hop, so the depth-1 shape of all 6,370 artifacts
+still cannot be read as a limit.
+
+### 2.3b One experiment could not run because the models were right
+
+Recorded here because an audit of limits that omits it is dishonest. The
+decisive-criticism experiment was pre-registered to measure whether criticism
+fixes errors, and it needed a baseline error rate of at least 0.10 to have
+anything to fix. Two independently constructed 8-question probes returned **80
+of 80 candidates correct** — a base error of 0.0. An escalation arm on a smaller
+cross-family model reached a base error of 0.023, with every error a minority of
+4-of-5 or 3-of-5, so no majority was ever contested. Registered outcome:
+`regime_not_reached` (`experiments/criticism_decisive_prereg.yaml`).
+
+The experiment failed because the models did not make mistakes. That is a
+capability finding, and it belongs beside the others.
 
 ### 2.4 What the record cannot support, and why
 
 | a claim one might want to make | why the record cannot carry it |
 |---|---|
-| LLMs cannot reason recursively / cannot criticise their own criticism | never attempted: authority defaults to observe-only, no discharge road was exercised, depth-1 everywhere (§2.3) |
+| LLMs cannot criticise their own criticism | never attempted: authority defaults to observe-only and no run exercised a second hop, so depth-1 everywhere is an absence of occasion (§2.3). Note this is now narrower than it was: *answering* an objection WAS offered and failed, 19 undischarged after 6 re-asks |
 | LLMs cannot explore beyond their training data | explicitly not measured anywhere. Every novelty number in this record is distance from the model's *own earlier answers in the same run*. `docs/CAN_LLMS_EXPLORE.md` says so in its own boundary paragraph and asks for help closing exactly this gap |
 | criticism does not improve output | two instances where the harness did not beat plain calls, both single-run, both with named measurement defects, and neither designed to isolate criticism |
 | these limits hold for language models generally | most of the corpus is one provider model (`glm-5.2` on Ollama Cloud). The one broad result is the eleven-model zoo, and its unlabelled-fault and clean items were all authored by a single model |
 | a limit is intrinsic rather than conditional | nothing here separates "this model, this prompt, this budget" from "models of this kind". No experiment in the corpus varies the prompt shape and the model together on a ground-truth battery |
 | reasoning effort helps | measured once, on three models, and it *lowered* unlabelled detection on the cleanest arm by 22.5 points |
 
-**The honest form of the answer to Q2.** There is exactly one class of task
-this record establishes these models did not perform: *applying a criterion to
-an object and returning the result*, as opposed to producing text of the shape
-that applying it would produce. Everything the models were asked to check —
-their own scores, a claim against its scope, a quotation against its source, a
-form against whether it forbids anything — they described competently and got
-wrong. Everything they were asked to *produce* — candidates, objections,
-essays, research proposals, well-formed envelopes — they produced fluently and
-in volume. The record does not show a second, independent limit; it shows this
-one, from six directions.
+**The honest form of the answer to Q2.** Two classes, and the record reaches
+both from several directions.
+
+*The first is applying a criterion and returning the result*, as opposed to
+producing text of the shape that applying it would produce. Everything the
+models were asked to check — their own scores, a claim against its scope, a
+quotation against its source, a form against whether it forbids anything — they
+described competently and got wrong. Everything they were asked to *produce* —
+candidates, objections, essays, research proposals, well-formed envelopes — they
+produced fluently and in volume. Six independent measurements, one of them
+across eleven models.
+
+*The second is taking up work that is offered rather than asked for.* An
+objection to answer, a premise to cite, a simulation to run on a question chosen
+because simulation was its natural move, a scratchpad to think in: each was
+configured, budgeted and reachable, and each went unused — 129 declines in 130
+invitations, 19 objections undischarged after 6 re-asks, zero simulation
+proposals, zero scratch payloads. This is a weaker finding than the first (two
+runs, one of them five cycles long) and it is a different shape: not an
+operation performed wrongly, but an available move not made. If one thing in
+this report deserves a dedicated experiment, it is this.
 
 ---
 
@@ -617,10 +786,27 @@ the same model produces without the harness). Two measurements exist:
   named — the arms did not overlap in length and the rubric was written for the
   essay shape only one arm produced.
 
-Neither is a fair test of criticism's value and both tranches say so. What can
-be said is narrower and still worth saying: **in this record there is no
-measured case of the harness making the model's output better than the model
-alone, and two cases of it not doing so.** Every other live tranche either has
+**And this is a replication, not a first.** In 2026-07, with a pre-validated
+scoring instrument and decision rules committed in advance, the
+rank-concentration experiment tested whether the criticism-and-adjudication
+apparatus improved the *best* artifact over raw generation plus self-selection.
+Its registered result, verbatim from
+`experiments/rank_concentration_prereg.yaml`: *"the criticism/adjudication
+apparatus showed NO measurable quality advantage over raw generation +
+self-selection on these informal problems — and lost outright on one."*
+H_rank REFUTED on both fresh problems: one at a margin of −0.372, the other
++0.055 against a +0.15 bar, and pooled ranks all ≤ 0. Its control gates passed,
+so the instrument was discriminating.
+
+That makes **three** independent occasions, spread over fourteen months and
+three different task families — informal prose, exact construction, and
+composition — on which this apparatus was measured against the plain model and
+did not win.
+
+Neither of the 2026 tranches is a fair test of criticism's value and both say
+so. What can be said is narrower and still worth saying: **in this record there
+is no measured case of the harness making the model's output better than the
+model alone, and three cases of it not doing so.** Every other live tranche either has
 no such arm or records its absence as a decision — the blind-critic tranche,
 the history-channel tranche and the conjecturer-interface tranche each state in
 their own residue sections that no baseline arm exists.
@@ -770,7 +956,7 @@ replication cashed the caveat."* E78 corrected a cost finding that did not
 replicate, and notes both originals *"said in their own text that one pair could
 not settle it."*
 
-Sixty-seven errata entries, and the two that touch a capability claim both
+Eighty errata entries, and the two that touch a capability claim both
 landed where the residue pointed. That is what 2.3 predicts.
 
 *One thing the record adds against the claim's practical value:* exposing the
@@ -862,11 +1048,13 @@ generation with criticism, and generation with an equal quantity of vacuous
 criticism — judged blind with length held constant. The third arm is the one
 that turns a pipeline comparison into a measurement of criticism.
 
-**4. Whether a model can criticise a criticism, or answer one.** Never
-attempted. Zero discharges in the record, and every attack relation one hop
-deep. *Missing:* one run with criticism authority actually granted and a
-discharge road exercised. Until then the record cannot separate "cannot" from
-"was never asked".
+**4. Whether a model can criticise a criticism.** Still never attempted:
+every attack relation in 6,370 artifacts is one hop deep and no run exercised a
+second hop. *Missing:* one run with criticism authority granted and a
+criticism-of-criticism road actually reachable. **Answering** an objection is no
+longer in this gap — P-A1 offered it and got 19 undischarged after 6 re-asks —
+but the run died at cycle 5 of 24, so *missing* there too: the same run
+completed.
 
 **5. Whether the failure shapes in Part 1 hold for generation as well as
 evaluation.** Points 1, 3 and 4 of §1.7 rest mostly on evaluator seats.
@@ -928,63 +1116,73 @@ re-read with that in mind.
 These are not answers to the four questions. They are things the audit found
 while looking, and both change how the answers should be read.
 
-### 6.1 Thirteen evidence files cited by committed documents are not in the repository
+### 6.1 The oldest capability evidence is archived, not lost — and the signposts do not reach the reader
 
-Nine committed documents state numbers and name a report file as the source.
-The file is not in the working tree, and it is not excluded by `.gitignore`
-either — so this is an absence, not a deliberate exclusion:
+**This section replaces a wrong finding, and the correction is the point.** The
+audit first recorded that thirteen report files cited by nine committed
+documents were absent from the tree and not excluded by `.gitignore`, and read
+that as evidence gone missing. That framing is wrong, and the repository itself
+says why.
 
-| absent file | document(s) resting on it |
-|---|---|
-| `basin_offline_report.json` | `docs/BASIN_REPORT.md` |
-| `basin_live_report.json` | `docs/BASIN_REPORT.md`, `docs/CAN_LLMS_EXPLORE.md` |
-| `mini_creativity_report.json` | `docs/CAN_LLMS_EXPLORE.md`, `docs/INDEX.md` |
-| `mini_smoke_report.json` | `docs/CAN_LLMS_EXPLORE.md`, `docs/INDEX.md`, `docs/MINI_PLAN.md` |
-| `mini_chaos_report.json` | `docs/MINI_STRESS_REPORT.md`, `docs/INDEX.md` |
-| `mini_gauntlet_report.json` | `docs/MINI_STRESS_REPORT.md`, `docs/INDEX.md` |
-| `mini_seat_certification.json` | `docs/MINI_PLAN.md` |
-| `lambda_v2_report.json` | `docs/REPORT.md` |
-| `stress_campaign_report.json` | `docs/STRESS_INSIGHTS.md` |
-| `controller_ab_report.json` | `docs/CONTROLLER_SPEC.md` |
-| `operator_probes.json` | `docs/OPERATOR_DIAGNOSIS.md` |
-| `cache_design_report.json` | `docs/CACHE_DESIGN.md` |
-| `cachebench_report.json` | `docs/CACHE_DESIGN.md` |
+`experiments/results/INDEX_2026-07-13.md` records one deliberate act: the 61
+pre-rebuild result files under `experiments/results/` were **removed from the
+working tree on purpose**, with the reason given, a recovery point named — commit
+`3d839b3`, *"the last commit containing the complete record"* — and an explicit
+paragraph headed **"Citations elsewhere"** which names `docs/CAN_LLMS_EXPLORE.md`,
+`docs/BASIN_REPORT.md`, `docs/STATE_OF_THE_THEORY.md` and `docs/MINI_PLAN.md` as
+documents that cite retired paths, stating that those citations refer to the
+archived commit and the claims they back are unchanged.
 
-The run roots behind them are under `/runs/`, which `.gitignore` excludes by
-design, so they are gone too.
+So the evidence was retired with a pointer, not lost. An audit that had stopped
+at "the file is not there" would have filed a false finding against a
+repository that had already done the honest thing.
 
-**Why this matters and how far it goes.** This repository's rule is that the
-record is the only admissible evidence and model prose never is. On `main` as
-it stands, the numbers in the basin study, the exploration report, the
-stress report and the grounding comparison in `docs/REPORT.md` cannot be
-re-derived. `docs/CAN_LLMS_EXPLORE.md` invites readers to *"re-derive it from
-the log or re-run the arm yourself"*; a reader who accepts that invitation
-today cannot do the first half of it.
+**What survives the correction, and it is narrower and worth acting on:**
 
-**What saves most of it, and how much.** The basin study's pre-registration,
-`experiments/basin_study_prereg.yaml`, IS committed, and the outcomes were
-appended beneath the predictions in the same file — 0.888, 0.846, 0.973, 0.865,
-the gate-block counts, and each verdict. So the *predictions and the verdicts*
-are auditable even though the raw data is not. That is why this audit calls the
-basin numbers Tier 2 rather than Tier 3, and it is why the exploration
-findings still appear in Part 3 rather than being struck. The λ grounding
-comparison in `docs/REPORT.md` has no such companion and is Tier 3.
+1. **The pointer is a bare commit hash, and it does not resolve here.**
+   `git cat-file -t 3d839b3` returns *"Not a valid object name"* in this
+   container, because this is a shallow clone truncated at 2026-08-30. Any
+   session, contributor or CI job working from a shallow clone — which is how
+   this environment gets the repository — cannot follow the pointer.
+2. **The citing documents do not carry the pointer.** `docs/BASIN_REPORT.md`
+   opens with a `Data:` line naming `basin_offline_report.json` and
+   `basin_live_report.json`, with nothing to say the files were retired or where
+   they went. `docs/CAN_LLMS_EXPLORE.md` invites outside readers to
+   *"re-derive it from the log or re-run the arm yourself"* — a reader who
+   accepts that invitation gets a dead path, and the note that would rescue
+   them lives in a file those documents do not link. The retirement is
+   documented in the index; it is not documented where a reader arrives.
+3. **Ten of the thirteen appear in neither index.** Only `basin_offline_report`,
+   `basin_live_report` and `operator_probes` are named in the pre-rebuild
+   `INDEX_2026-07-05.md`. `mini_creativity_report`, `mini_chaos_report`,
+   `mini_gauntlet_report`, `mini_smoke_report`, `mini_seat_certification`,
+   `lambda_v2_report`, `stress_campaign_report`, `controller_ab_report`,
+   `cache_design_report` and `cachebench_report` are named by no index at all —
+   while `docs/MINI_STRESS_REPORT.md`, `docs/REPORT.md`, `docs/STRESS_INSIGHTS.md`,
+   `docs/CONTROLLER_SPEC.md`, `docs/CACHE_DESIGN.md` and
+   `docs/CAN_LLMS_EXPLORE.md` cite them as their evidence. The repository's own
+   standing guidance in that same index reads *"An experiment that isn't in an
+   index does not exist."* By that rule these ten are unresolved: not retired
+   with a pointer, not present, not indexed.
 
-**What I could NOT determine, stated so nobody repeats the mistake I nearly
-made.** This container holds a **shallow clone**, truncated at 2026-08-30 with
-539 commits. Whether these files were ever committed, and whether each
-pre-registration was committed before its data existed, is **not decidable
-here** — the earlier history is simply absent from this container. Nothing above
-should be read as a claim that a pre-registration was back-dated or that a
-file was removed. The finding is about what a reader of `main` can re-derive
-today, and nothing more.
+**What none of this changes.** The tiering used throughout this report stands
+exactly as written, because it was always about what a reader of `main` can
+re-derive today, and that is unchanged: the basin and exploration numbers stay
+Tier 2 (their pre-registration and verdicts are committed in
+`experiments/basin_study_prereg.yaml`), and the λ grounding comparison in
+`docs/REPORT.md` stays Tier 3.
 
-**One thing worth checking on a full clone**, and the only action item this
-finding produces: whether those thirteen files exist in history before
-2026-08-30. If they do, restoring them costs nothing and moves the repository's
-flagship capability claims from Tier 2 and Tier 3 to Tier 1. If they never
-existed, then four public-facing documents rest on numbers that were never
-committed, and the honest fix is a note in each saying so.
+**The cheap fix, which is now a documentation task rather than a data
+recovery.** A one-line note in each of the nine citing documents saying the
+data is archived and where — and, for the ten unindexed files, an index line or
+a note that they are not recoverable. Neither costs a measurement.
+
+**One methodological note on the audit itself.** The wrong version of this
+finding was produced by reading the working tree and the ignore rules and
+stopping there. It was caught by reading a file that documents the act. That is
+the same failure shape this report attributes to the models in Part 1 — a check
+performed on the fields in front of it, not on the fields that would settle it —
+and it is recorded here rather than quietly fixed.
 
 ### 6.2 The strongest capability evidence and the most-cited capability evidence are not the same documents
 
@@ -997,3 +1195,26 @@ result in the repository: **no model of eleven could find half the unlabelled
 faults without flagging more than fifteen percent of sound work.**
 
 That is a presentation gap, not an evidence gap, and it is cheap to close.
+
+### 6.3 Two capability claims in standing documents that the record does not carry as stated
+
+**The judge law in `CLAUDE.md` compresses two different units into one range.**
+Its amended text reads *"0-2.5% false conviction of sound work"*. The 0.0 is the
+defended court's *sustain* rate on 42 clean items
+(`court_calibration_v1_report.json`); the 0.025 is an unanimous judge *pair's*
+flag rate on 40 clean items with no defender present
+(`e02_t2_voting_report.json`). Two instruments, two units, two corpora. The
+review tranche that produced the amendment names both sources in the same
+sentence and is scrupulous about it; the compression into one range happened
+when the finding was carried into the standing law. Not wrong, but a reader who
+takes "0-2.5%" as one measured interval is reading something the record does not
+have. The same law's *"11.9% sensitivity"* is single-sourced and exact.
+
+**A precedent worth citing for how to fix that.** `experiments/results/`'s own
+index carries a model for it: `INDEX_2026-07-13.md` records that the
+`bronze_flat_v1` interpretation was superseded and lists the **withdrawn
+claims** by name — among them *"F4 as model circling (gate-manufactured
+embargo)"* and *"'zero novel mechanisms' as a measured result"* — with the
+original report, pre-registration and corrections all left unedited. Two
+capability claims withdrawn, in writing, with the reason. That is the pattern
+§6.1's fix should follow.
