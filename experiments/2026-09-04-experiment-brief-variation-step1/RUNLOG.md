@@ -281,4 +281,67 @@ continue and `resume.sh` does not apply. Relaunched 10:30:00Z with receipt
 `{"arm": "A3", "installed": true, "layout_id":
 "seat-pack.conjecturer.step1-a3", "template_loaded": ["op.neighbourhood.v1"]}`.
 
-*(in flight)*
+### A3 ran clean, and the content loss §3.4 predicted is now MEASURED
+
+Finished 11:11:02Z. Root: `roots/A3-run-fe00609058e10605590206d51ab2b7a0`
+(run id `527a09ed…`).
+
+| | A3 | A0 |
+|---|---|---|
+| state / stop_reason | **completed / `budget_exhausted`** | same |
+| cycles | 4 of 4 | 4 of 4 |
+| tokens | 430,908 | 417,053 |
+| accepted / refuted | 115 / 0 | 104 / 2 |
+| survivors | 53 | 50 |
+| criticism rounds | 9 of 9 | 9 of 9 |
+
+The receipts:
+
+    A3   dr.neighbourhood     never rendered      0 B   (0 dropped)
+    A3   op.neighbourhood.v1  RENDERED   11 ×  6,870 B  (1 dropped)
+    A0   dr.neighbourhood     RENDERED   11 × 14,768 B  (1 dropped)
+
+Same section, same number of renders, **6,870 bytes against 14,768 — 53% of
+the content gone**. `PREREG.md` §3.4 registered this before any call: the
+template language sees only what a plugin puts in `supplied`, the
+conjecturer's `supplied["accepted"]` is a tuple of artifact identifiers, and
+the distilled claim printed beside each identifier is computed inside the
+plugin where no template can reach it. So A3 is a FORMAT change WITH CONTENT
+LOSS, and the number above is the size of the loss. `PARKED.md` F3 is the gap.
+
+This makes §8 P2 — "A3 scores LOWER" — a prediction about a brief carrying
+half as much about what already stands, not about formatting taste.
+
+## All five arms, and B0
+
+| arm | tokens | accepted | refuted | survivors | rounds | terminal |
+|---|---|---|---|---|---|---|
+| A0 (control) | 417,053 | 104 | 2 | 50 | 9 of 9 | completed / budget_exhausted |
+| A1 (history) | **560,500** | **150** | **4** | **68** | **12 of 12** | completed / budget_exhausted |
+| A1P (null) | 474,282 | 98 | 0 | 54 | 9 of 9 | completed / budget_exhausted |
+| A2 (null) | 429,432 | 110 | 0 | 53 | 9 of 9 | completed / budget_exhausted |
+| A3 (template) | 430,908 | 115 | 0 | 53 | 9 of 9 | completed / budget_exhausted |
+| B0 (no harness) | **21,284** | — | — | — | — | 12 of 12 calls, 0 empty |
+
+**Five clean typed terminals, no operational failure, no arm death, no
+transport fault in any arm.** The known P3 shape ("token budget denied
+transactional work") did not occur. One relaunch, disclosed above, of an arm
+that had not yet made a call.
+
+No verdict is read off this table and none may be. Artifact counts are not the
+measure: `PREREG.md` §4 makes blind-judged quality primary, §5 forbids stating
+a verdict on anything but the length-adjusted figure, and §7's `d_noise` — the
+largest gap among the three arms whose briefs are byte-identical — decides what
+counts as real. A1's larger numbers are the kind of difference the noise floor
+exists to price.
+
+## Judging
+
+248 candidates harvested from the five arms' seed-problem conjectures plus
+B0's 12 answers: A0 46, A1 48, A1P 48, A2 47, A3 47, B0 12.
+`blind/candidates.jsonl` carries `{bid, text}` and nothing else — verified by
+reading its key set, not by trusting the code — with uuid4 ids and rows sorted
+by id so position carries no origin signal. `blind/keymap.json` stays shut
+until `blind/scores.json` exists.
+
+*(scoring in flight — three judges per candidate, 744 calls)*
