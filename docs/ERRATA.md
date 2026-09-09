@@ -2659,3 +2659,34 @@ and carries a Traps entry. Narrowed on the operator's decision, 2026-09-05,
 The error to avoid repeating: an instrument written to record that a road WAS
 taken must be scoped to that road. A diff-size assertion is never scoped to
 anything — it freezes a file, and a frozen file is a rule nobody voted for.
+
+---
+
+## 2026-09-09
+
+**E81 — "both roots go clean" names an instrument, and two instruments over one
+root give two numbers.**
+`experiments/2026-09-06-defect-continuation-verification-flip/FIX.md`, road A:
+"Fixes all four calls. **Both roots go clean.**" The executor brief written
+from it then required the two roots to "re-verify by `deepreason results --json
+--verify` to 0 violations".
+
+What the record shows: after the fix, `verify_root` returns an EMPTY violations
+list on both roots — the claim's evident meaning, and the check the defect was
+about. `deepreason results --json --verify` reports `violations: 1` on each and
+`valid: false` (before the fix: 4 on
+`run-c3f3bf10bc57d63e224a9f1c68bf1057`, 2 on
+`run-9a6be78e1e79184a0bd89923b957586c`). The residual finding on both is
+`run-result-verification` — "RunResult v2 records an integrity-invalid
+verification summary" — raised by `src/deepreason/verification/report.py:283-296`
+from the verdict each run STORED in its own `RunResult` record when it
+terminalized. It reads a stored artifact, not the events, so it cannot move
+without editing a committed root, which is never done. Evidence: that tranche's
+VERIFY.md §3, both tables.
+
+Not corrected in FIX.md, which is a proposal and stands as written; recorded
+because a reader taking "goes clean" to the second instrument will find one
+violation and think the fix incomplete. The error to avoid repeating: state
+which instrument a verdict belongs to. `verify_root`'s violations list and the
+epistemic-check report's violation count are different numbers over the same
+root, and only one of them is about the events.
