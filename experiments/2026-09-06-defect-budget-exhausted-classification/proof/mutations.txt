@@ -1,0 +1,19 @@
+M1: the cycle loop's arm no longer names the transactional denial
+    2 failed, 7 passed in 23.77s
+    red: test_a_denial_on_a_spent_ceiling_publishes_a_clean_budget_exhausted_stop
+    red: test_the_clean_budget_stop_leaves_what_a_relaunch_needs
+M2: the guard is gone -- every denial is treated as a spent ceiling
+    1 failed, 8 passed in 22.26s
+    red: test_a_denial_with_budget_remaining_stays_an_operational_failure
+M3: the rule says every refusal is a spent ceiling
+    2 failed, 7 passed in 22.59s
+    red: test_a_request_no_empty_ceiling_could_have_served_is_not_exhaustion
+    red: test_the_rules_edge_sits_at_the_whole_ceiling_both_sides
+M4: a refusal whose size cannot be established reads as spent
+    1 failed, 8 passed in 23.12s
+    red: test_a_fail_closed_refusal_is_a_plumbing_fault_until_nothing_remains
+M5: the denial stops carrying the meter's answer
+    3 failed, 6 passed in 23.04s
+    red: test_the_transactional_denial_carries_the_meters_answer
+    red: test_a_denial_on_a_spent_ceiling_publishes_a_clean_budget_exhausted_stop
+    red: test_the_clean_budget_stop_leaves_what_a_relaunch_needs

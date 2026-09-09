@@ -57,7 +57,7 @@ or a space, and every import-shape count matches `import` as well as `from`.)
 | Presentation authority | `llm/adapter.py` | `_transactional_base_profile_for` / `_transactional_profile_for` | the profile comes from the manifest plus the durable compact transition, never from adapter state |
 | Failure carrier | `llm/adapter.py` | `_spend(attempts)`, bound to `.spend` at nine sites | tokens already spent reach the record even when the call raises |
 | Terminal from a failure | callers | `record_provider_attempt(call=<the spend>, outcome="transport_failure", ...)` in seven modules (six spell the argument `spend`; `repair_transaction` spells it `transport_spend`) | a call that touched the provider still gets a durable attempt |
-| Budget denial | `workflow/transaction_service.py` | `reserve_dispatch` → `WorkTerminalV1(status="budget_denied")` → `WorkBudgetDenied` | a refused reservation is a typed terminal, not an adapter exception |
+| Budget denial | `workflow/transaction_service.py` | `reserve_dispatch` → `WorkTerminalV1(status="budget_denied")` → `WorkBudgetDenied`, carrying `budget_exhausted` from the meter's own refusal | a refused reservation is a typed terminal, not an adapter exception — and the meter's verdict on WHY has to be handed across the exception change or it is lost |
 | One action carries a call | `harness.py` | `record_transaction_transition(..., llm=)` | "only provider_result may carry an LLM call" |
 | Replay pairing | `workflow/replay.py` | `PROVIDER_RESULT` branch of `_apply_transaction` | the stored attempt and the logged `LLMCall` must agree on bundle, contract, lease, prompt digest, raw blob and token total |
 | Mid-flight recovery | `workflow/transaction_service.py` | `recover_incomplete` | unissued work is abandoned, issued-but-unanswered work is abandoned, an unadmitted result is handed back for validation |
@@ -140,7 +140,23 @@ the identical shape); `rules/conj.py` re-raises too, except on the
 context-continuation path where a denied child IS the answer and the caller
 returns no candidates; `scheduler/scheduler.py` is the consumer, not a call
 site, and returns because the terminal is already durable.
-`check: grep -q "raise WorkBudgetDenied(terminal) from error" src/deepreason/workflow/transaction_service.py && grep -q 'status="budget_denied",' src/deepreason/workflow/transaction_service.py && test "$(grep -rlE "^ *except WorkBudgetDenied:" --include=*.py src/deepreason | wc -l)" -eq 8 && python -c "import re, pathlib; bad=[f for f in ('src/deepreason/bridge/transactional_adapter.py','src/deepreason/workflow/repair_transaction.py','src/deepreason/scratch/authoring.py','src/deepreason/referee.py','src/deepreason/rules/crit.py','src/deepreason/informal/trial.py') if not re.search(r'except WorkBudgetDenied:\n\s+(#[^\n]*\n\s+)*raise\n\s+except (BaseException|Exception):', pathlib.Path(f).read_text())]; assert not bad, bad; assert re.search(r'except WorkBudgetDenied:\n\s+if v6_context_continuation is not None:\n\s+return \[\]\n\s+raise\n', pathlib.Path('src/deepreason/rules/conj.py').read_text()), 'conj'; assert re.search(r'except WorkBudgetDenied:\n\s+(#[^\n]*\n\s+)*return\n\s+except \(SchemaRepairError, EndpointError\) as error:', pathlib.Path('src/deepreason/scheduler/scheduler.py').read_text()), 'scheduler'" && python -m pytest tests/test_v6_live_repair_transactions.py::test_repair_budget_denial_has_no_repair_exposure_or_dispatch tests/test_v6_context_continuation.py::test_child_budget_denial_has_no_exposure_and_no_dispatch -q`
+
+`WorkBudgetDenied` is not a `TokenBudgetExceeded` -- it is a plain
+`RuntimeError` raised `from` one -- so nothing the meter decided survives the
+exception change unless it is passed by hand. `reserve_dispatch` passes it:
+the denial carries `budget_exhausted`, and the scheduler's cycle loop reads it
+to tell a ceiling that has nothing left from a refusal it could still have
+afforded (DR-SEAM-scheduler-x-workflow's Traps, and DR-SUB-llm for the rule).
+A denial rebuilt from a recovered terminal carries False, because a terminal
+recorded in an earlier epoch says nothing about what this ceiling can book.
+`check: grep -q "budget_exhausted=budget_denial_exhausted(error)" src/deepreason/workflow/transaction_service.py && python -c "
+from types import SimpleNamespace
+from deepreason.workflow.transaction import WorkBudgetDenied
+terminal = SimpleNamespace(work_id='sha256:' + 'd' * 8)
+assert WorkBudgetDenied(terminal).budget_exhausted is False
+assert WorkBudgetDenied(terminal, budget_exhausted=True).budget_exhausted is True
+"`
+`check: grep -q "raise WorkBudgetDenied(" src/deepreason/workflow/transaction_service.py && grep -q 'status="budget_denied",' src/deepreason/workflow/transaction_service.py && test "$(grep -rlE "^ *except WorkBudgetDenied:" --include=*.py src/deepreason | wc -l)" -eq 8 && python -c "import re, pathlib; bad=[f for f in ('src/deepreason/bridge/transactional_adapter.py','src/deepreason/workflow/repair_transaction.py','src/deepreason/scratch/authoring.py','src/deepreason/referee.py','src/deepreason/rules/crit.py','src/deepreason/informal/trial.py') if not re.search(r'except WorkBudgetDenied:\n\s+(#[^\n]*\n\s+)*raise\n\s+except (BaseException|Exception):', pathlib.Path(f).read_text())]; assert not bad, bad; assert re.search(r'except WorkBudgetDenied:\n\s+if v6_context_continuation is not None:\n\s+return \[\]\n\s+raise\n', pathlib.Path('src/deepreason/rules/conj.py').read_text()), 'conj'; assert re.search(r'except WorkBudgetDenied:\n\s+(#[^\n]*\n\s+)*return\n\s+except \(SchemaRepairError, EndpointError\) as error:', pathlib.Path('src/deepreason/scheduler/scheduler.py').read_text()), 'scheduler'" && python -m pytest tests/test_v6_live_repair_transactions.py::test_repair_budget_denial_has_no_repair_exposure_or_dispatch tests/test_v6_context_continuation.py::test_child_budget_denial_has_no_exposure_and_no_dispatch -q`
 
 ## What is deliberately absent
 

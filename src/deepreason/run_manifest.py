@@ -2531,6 +2531,15 @@ def _versioned_source_config_data(
     # stood-down seat. Dropping it keeps every manifest and qualification
     # digest byte-identical.
     data.pop("SEAT_RETIREMENT_POLICY", None)
+    # What a refused criticism batch does to the run (granted contact,
+    # 2026-09-06 -- the operator's instruction "ensure config is plugged in so
+    # that it can affect token allocation during a run"; see
+    # DR-INV-frozen-surfaces). Here for the reason every knob above is: it is
+    # read inside a run at the criticism dispatch site, never written to the
+    # manifest, and its effect IS recorded -- the `criticism.dispatch.v1`
+    # declaration says whether a pass ran in full and names what it skipped.
+    # UNCONDITIONAL and at four spaces, per that document's own trap.
+    data.pop("CRITICISM_BUDGET_DENIAL_POLICY", None)
     return data
 
 

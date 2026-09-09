@@ -11,6 +11,7 @@ from deepreason.llm.budget import (
     Reservation,
     TokenBudgetExceeded,
     TokenMeter,
+    budget_denial_exhausted,
     conservative_prompt_bound,
 )
 from deepreason.ontology.event import LLMCall
@@ -439,7 +440,9 @@ class InquiryTransactionService:
                 transition,
                 records=(terminal,),
             )
-            raise WorkBudgetDenied(terminal) from error
+            raise WorkBudgetDenied(
+                terminal, budget_exhausted=budget_denial_exhausted(error)
+            ) from error
 
         try:
             reservation_record = TokenReservationV2.create(

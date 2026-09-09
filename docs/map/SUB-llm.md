@@ -174,6 +174,7 @@ through the caller, including on the failure paths.
 | Transport retry / timeout policy | `_BACKOFFS`, `TIMEOUT_FACTORS`, `DEFAULT_TIMEOUT_S`, `request_with_retries` in `llm/endpoints.py` | `tests/test_llm.py` |
 | What a transport failure SAYS about itself | `EndpointError.__init__`'s `http_status` / `condition` in `llm/endpoints.py`; the two branches in `cli/doctor.py::_failure_code` that read them. The bound ABOVE the per-call ladder is not here — see DR-SUB-manifest | `tests/test_llm.py::test_failure_code_distinguishes_a_credential_from_a_quota_refusal`, `::test_the_provider_status_is_never_exposed_as_a_numeric_code_attribute` |
 | The hard provider ceiling or its bound | `TokenMeter.reserve`, `conservative_prompt_bound` (see DR-CON-packs-and-token-economy) | `tests/test_budget.py::test_budget_smaller_than_any_bound_blocks_the_first_dispatch` |
+| Whether a budget refusal means the ceiling is SPENT | `TokenMeter._deny` -- it stamps `budget_remaining`, `budget_booking` and `budget_exhausted` on every refusal; `budget_denial_exhausted` reads the answer back, defaulting True for an error carrying none | `tests/test_budget_exhausted_classification.py::test_the_observed_roots_own_numbers_read_as_a_spent_ceiling`, `::test_a_request_no_empty_ceiling_could_have_served_is_not_exhaustion` |
 | How a school resolves to a seat | `resolve_school_role_lease` (see DR-CON-schools) | `tests/test_school_execution_binding_v4.py` |
 | v6 transactional dispatch preconditions | `bind_v6_authority`, `_require_transactional_route_dispatchable`, `_transactional_profile_for` | `tests/test_adapter_workflow_authorization_c2.py`, `tests/test_v6_insufficient_capability_terminal.py` |
 | Which capabilities are probed, or the profile they select | `deterministic_probe_cases` + `probe_capabilities`; `select_profile` in `llm/profiles.py` | `tests/test_llm_repair_capabilities.py::test_capability_probes_are_deterministic_and_cached_by_revision`, `tests/test_compact_profiles.py::test_capable_route_selects_frontier_and_unknown_length_selects_standard` |
@@ -196,6 +197,38 @@ body = ast.get_source_segment(src, fn)
 assert 'spec_from_file_location' not in body, 'a layout file must not be imported'
 assert 'SEAT_PACK_LAYOUT_FILE_UNPARSEABLE' in body, 'the typed refusal is gone'
 assert 'register_seat_pack_layout(' in body
+"`
+
+The rule that row implements, stated once so no caller re-invents it: **the
+ceiling is SPENT when the refused booking would have fitted an untouched
+ceiling and no longer fits this one.** Then the run's own prior spend is the
+whole reason the call cannot be made, which is the operator's law of
+2026-08-29 ("a budget denial on an exhausted budget terminates as
+`budget_exhausted` (clean), never `operational_failure`"). A booking no empty
+ceiling could ever have served is a dispatch too large for the run's
+configuration, and a refusal whose size cannot be established at all is a
+plumbing fault -- neither is a budget with nothing left, and neither may buy a
+clean terminal. The meter is the only object holding the ceiling, the spend,
+the outstanding reserves and the refused booking at one instant, which is why
+the answer is decided here and carried out rather than re-derived by readers.
+
+`check: python -c "
+from deepreason.llm.budget import TokenMeter, budget_denial_exhausted
+spent = TokenMeter(budget=500_000)
+spent.prompt_tokens = 495_362
+try:
+    spent.reserve(prompt_text='x' * 3_000, max_tokens=8_192)
+except Exception as error:
+    assert budget_denial_exhausted(error) is True, 'a spent ceiling must read as spent'
+else:
+    raise AssertionError('the spent ceiling did not refuse')
+fresh = TokenMeter(budget=500_000)
+try:
+    fresh.reserve(prompt_text='x' * 3_000_000, max_tokens=8_192)
+except Exception as error:
+    assert budget_denial_exhausted(error) is False, 'an unservable booking is not exhaustion'
+else:
+    raise AssertionError('the oversized booking did not refuse')
 "`
 
 ## Traps

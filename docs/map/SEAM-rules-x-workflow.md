@@ -346,8 +346,14 @@ of a canonical controller-v3 history).
   `budget_denied` child terminal re-raises as `WorkBudgetDenied` rather than as a
   hard recovery error, because the typed stop path owns it (selfstudy
   `run-9175f0ec`). Any new terminal status needs the same judgement made
-  explicitly on both sides.
-`check: grep -q "raise WorkBudgetDenied(terminal) from error" src/deepreason/workflow/transaction_service.py && grep -q "raise WorkBudgetDenied(selected.terminal)" src/deepreason/workflow/atomic_recovery.py && grep -q 'raise ValueError("atomic child is terminally failed")' src/deepreason/workflow/atomic_recovery.py && python -m pytest tests/test_config_referee.py::test_budget_denied_referee_terminates_typed_without_second_transition -q`
+  explicitly on both sides. The two raises differ in ONE thing, deliberately:
+  `reserve_dispatch` passes the live meter's `budget_exhausted` verdict and
+  `recover_atomic_child_output` passes nothing, taking the False default. A
+  terminal recorded in an earlier epoch says what a past reservation was
+  refused; it says nothing about what THIS ceiling can still book, and reading
+  it as a spent ceiling would end a run the budget had not stopped
+  (DR-SEAM-scheduler-x-workflow's Traps for what turns on that verdict).
+`check: grep -q "raise WorkBudgetDenied($" src/deepreason/workflow/transaction_service.py && grep -q ") from error$" src/deepreason/workflow/transaction_service.py && grep -q "raise WorkBudgetDenied(selected.terminal)" src/deepreason/workflow/atomic_recovery.py && grep -q 'raise ValueError("atomic child is terminally failed")' src/deepreason/workflow/atomic_recovery.py && python -m pytest tests/test_config_referee.py::test_budget_denied_referee_terminates_typed_without_second_transition -q`
 - **Two identical critic outputs are two effects, not one.** Epistemic
   identifiers are content addresses, so the same prose from two authorized
   attempts produces the same critic artifact id — and without `source:<call seq>`

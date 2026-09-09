@@ -18,7 +18,7 @@ from deepreason.capture import detection, ladder, schools
 from deepreason.capture import diagnostics as capture14
 from deepreason.capture.pareto import frontier
 from deepreason.llm.adapter import SchemaRepairError, WorkflowAuthorizationError
-from deepreason.llm.budget import TokenBudgetExceeded
+from deepreason.llm.budget import TokenBudgetExceeded, budget_denial_exhausted
 from deepreason.llm.endpoints import EndpointError
 from deepreason.signals import DEAD_SEAT_STREAK_SIGNAL
 from deepreason.runtime.seat_retirement import (
@@ -65,6 +65,7 @@ from deepreason.runtime.criticism_dispatch import (
     OUTCOME_CUT_CALL,
     OUTCOME_CUT_FOREIGN,
     OUTCOME_CUT_SEAT,
+    OUTCOME_CUT_TOKEN_BUDGET,
     declare_criticism_dispatch,
 )
 from deepreason.rules.spawn import scan_spawns
@@ -1595,21 +1596,17 @@ class Scheduler:
                     eligible.append(aid)
                     self._arg_crit_this_cycle += 1
         size = config.CRIT_BATCH_K or 1
-        dropped = False
-        for i in range(0, len(eligible), size):
-            batch = eligible[i : i + size]
-            try:
-                crit_argumentative_batch(harness, batch, self.adapter, config)
-            except (SchemaRepairError, EndpointError) as e:
-                dropped = True
-                self._drop(e)
-            else:
-                dispatched += len(batch)
+        attacked, dropped, budget_cut = self._dispatch_criticism_batches(
+            [tuple(eligible[i : i + size]) for i in range(0, len(eligible), size)]
+        )
+        dispatched += len(attacked)
         declare_criticism_dispatch(
             harness,
             cycle=self._cycles,
             outcome=(
-                OUTCOME_CUT_CALL
+                OUTCOME_CUT_TOKEN_BUDGET
+                if budget_cut
+                else OUTCOME_CUT_CALL
                 if dropped
                 else OUTCOME_CUT_BUDGET
                 if truncated
@@ -1617,9 +1614,91 @@ class Scheduler:
             ),
             planned=len(eligible),
             dispatched=dispatched,
-            targets=eligible[:dispatched],
+            # The targets a call actually reached, not the first `dispatched`
+            # of the eligible list: a partly-refused pass attacks targets out
+            # of order, and naming the wrong ones would misstate exactly what
+            # this declaration exists to make exact.
+            targets=attacked,
         )
         self._run_after_criticism_hooks()
+
+    def _dispatch_criticism_batches(self, batches):
+        """Send each batch, and decide what a refused one costs.
+
+        Returns (targets attacked, a call was dropped, the token budget cut
+        the pass short).
+
+        A budget refusal on a SPENT ceiling is re-raised whatever the policy
+        says, and that is not switchable: the cycle loop above turns it into
+        the clean `budget_exhausted` terminal the operator's law of 2026-08-29
+        requires. What the policy governs is only the refusal the ceiling
+        could still have afforded, which used to end the run and is what
+        parked P1 was about.
+        """
+
+        from deepreason.runtime.criticism_budget_policy import (
+            POLICY_SHRINK,
+            POLICY_STOP,
+            resolve_policy,
+            split_batch,
+        )
+
+        policy, _fallback = resolve_policy(self.config)
+        self._record_criticism_budget_stop_warning(policy)
+        attacked: list[str] = []
+        dropped = False
+        budget_cut = False
+        queue = [tuple(batch) for batch in batches]
+        while queue:
+            batch = queue.pop(0)
+            try:
+                crit_argumentative_batch(
+                    self.harness, list(batch), self.adapter, self.config
+                )
+            except WorkBudgetDenied as denial:
+                if budget_denial_exhausted(denial) or policy == POLICY_STOP:
+                    raise
+                halves = split_batch(batch) if policy == POLICY_SHRINK else ()
+                if halves:
+                    # Re-allocate: the same targets in calls the remaining
+                    # budget can cover, tried before anything queued behind
+                    # them so a pass stays in target order where it can.
+                    queue[:0] = halves
+                    continue
+                budget_cut = True
+            except (SchemaRepairError, EndpointError) as e:
+                dropped = True
+                self._drop(e)
+            else:
+                attacked.extend(batch)
+        return attacked, dropped, budget_cut
+
+    def _record_criticism_budget_stop_warning(self, policy: str) -> None:
+        """The ungated-seats law's typed warning, once per run.
+
+        Switching this gate to the setting that can kill a run is never a
+        refusal and never silence.
+        """
+
+        from deepreason.runtime.criticism_budget_policy import (
+            POLICY_STOP,
+            STOP_SIGNAL,
+            STOP_WARNING,
+        )
+
+        if policy != POLICY_STOP:
+            return
+        tail = [policy, STOP_WARNING]
+        if self._measure_recorded([STOP_SIGNAL, *tail]):
+            return
+        # The signal census (DR-SUB-scheduler) reads the LITERAL at this call
+        # site, so the name is spelled here rather than passed in a variable;
+        # a variable makes the emission invisible to the check that exists to
+        # find it. `STOP_SIGNAL` above is the same string, and the test asserts
+        # they agree.
+        self.harness.record_measure(
+            inputs=["criticism.budget-stop-the-run.v1", *tail]
+        )
 
     def _run_after_criticism_hooks(self) -> None:
         """Announce that a criticism pass finished, and run whatever listens.
@@ -3578,11 +3657,22 @@ class Scheduler:
                     control_trace=control_trace,
                 )
                 raise
-            except TokenBudgetExceeded as e:
+            except (TokenBudgetExceeded, WorkBudgetDenied) as e:
+                if not budget_denial_exhausted(e):
+                    # A refusal the ceiling could still have afforded is not
+                    # the budget ending the run: one oversized request, or a
+                    # dispatch whose own bound could not be established. It
+                    # stays the operational failure the operator's law of
+                    # 2026-08-29 separates a clean stop FROM.
+                    raise
                 # Budget exhaustion is a logged stop, never a crash: state is
                 # consistent (Adj runs inside every registration). Mid-retry
                 # exhaustion carries the spent-but-uncarried attempts — and the
-                # stop REASON goes into the log for the post-hoc reader.
+                # stop REASON goes into the log for the post-hoc reader. The v6
+                # transactional path arrives here as WorkBudgetDenied, raised
+                # after its own durable budget_denied terminal; without this arm
+                # it left the run entirely and every ceiling stop on that path
+                # published as a breakage (run-c3f3bf10bc57d63e224a9f1c68bf1057).
                 spend = getattr(e, "spend", None)
                 if spend is not None:
                     self.harness.record_llm_calls([spend], "dropped-call", str(e)[:120])

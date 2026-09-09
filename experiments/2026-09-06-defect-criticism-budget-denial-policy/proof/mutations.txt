@@ -1,0 +1,30 @@
+M1: the criticism road stops absorbing the refusal (P1 restored)
+    4 failed, 9 passed in 0.83s
+    red: test_a_partly_refused_pass_names_only_what_it_actually_attacked
+    red: test_a_refusal_with_budget_remaining_leaves_the_cycle_alive
+    red: test_the_knob_changes_what_the_run_spends
+    red: test_the_record_says_what_the_token_budget_cut
+M2: a SPENT ceiling is absorbed too -- the law becomes configurable
+    2 failed, 11 passed in 0.61s
+    red: test_a_spent_ceiling_still_ends_the_pass_under_every_policy[drop-the-batch.v1]
+    red: test_a_spent_ceiling_still_ends_the_pass_under_every_policy[shrink-the-batch.v1]
+M3: the policy is ignored -- every refusal drops, nothing shrinks
+    2 failed, 11 passed in 0.63s
+    red: test_a_partly_refused_pass_names_only_what_it_actually_attacked
+    red: test_the_knob_changes_what_the_run_spends
+M4: the pass no longer declares that money cut it short
+    2 failed, 11 passed in 0.62s
+    red: test_the_knob_changes_what_the_run_spends
+    red: test_the_record_says_what_the_token_budget_cut
+M5: the declaration guesses its targets again
+    1 failed, 12 passed in 0.63s
+    red: test_a_partly_refused_pass_names_only_what_it_actually_attacked
+M6: switching the gate to stop-the-run goes silent
+    1 failed, 12 passed in 0.62s
+    red: test_stop_the_run_keeps_the_old_behaviour_and_warns_about_it
+M7: the versioned-source drop is lost -- every subject digest moves
+    1 failed, 12 passed in 0.62s
+    red: test_the_field_reaches_no_manifest_and_moves_no_digest
+M8: an unknown policy id refuses instead of falling back
+    1 failed, 12 passed in 0.58s
+    red: test_every_value_is_reachable_and_an_unknown_one_never_refuses

@@ -749,8 +749,21 @@ class AuthorizedDispatch:
 class WorkBudgetDenied(RuntimeError):
     """Raised after a durable ``budget_denied`` terminal was appended."""
 
-    def __init__(self, terminal: WorkTerminalV1) -> None:
+    # Whether the meter refused because the ceiling had nothing left.  False
+    # unless a live refusal says otherwise: `atomic_recovery` rebuilds this
+    # exception from a terminal recorded in an earlier epoch, which is
+    # evidence about a past reservation, not about what the current ceiling
+    # can still book.
+    budget_exhausted = False
+
+    def __init__(
+        self,
+        terminal: WorkTerminalV1,
+        *,
+        budget_exhausted: bool = False,
+    ) -> None:
         self.terminal = terminal
+        self.budget_exhausted = bool(budget_exhausted)
         super().__init__(f"token budget denied transactional work {terminal.work_id}")
 
 

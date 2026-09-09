@@ -37,6 +37,10 @@ OUTCOME_CUT_BUDGET = "cut:budget"    # ARG_CRIT_PER_CYCLE truncated the targets
 OUTCOME_CUT_SEAT = "cut:seat"        # no argumentative critic role was available
 OUTCOME_CUT_CALL = "cut:call"        # a batch call was dropped before it was made
 OUTCOME_CUT_FOREIGN = "cut:foreign"  # the manifest road, which this does not measure
+# The TOKEN budget refused a batch and the run kept going. Distinct from
+# `cut:budget` above, which is the per-cycle cap on how many TARGETS one pass
+# may attack: one is a ration of attention, this one is a ration of money.
+OUTCOME_CUT_TOKEN_BUDGET = "cut:token-budget"
 
 OUTCOMES = (
     OUTCOME_COMPLETE,
@@ -44,6 +48,7 @@ OUTCOMES = (
     OUTCOME_CUT_SEAT,
     OUTCOME_CUT_CALL,
     OUTCOME_CUT_FOREIGN,
+    OUTCOME_CUT_TOKEN_BUDGET,
 )
 
 

@@ -133,7 +133,14 @@ verbatim, and the rule *refuses* to fall back to `Config` for such a call. So
 there is no third state in which attention decides whether a sustained prose
 case changes a status — `ARGUMENTATIVE_AUTHORITY` does not appear in the
 scheduler at all (`DR-CON-authority`, `DR-INV-frozen-surfaces`).
-`check: python -c 'import ast, inspect, textwrap; import deepreason.rules.crit as C; from deepreason.authority import argumentative_authority_mode as M; from deepreason.scheduler.scheduler import Scheduler as S; f = lambda m: [n for n in ast.walk(ast.parse(textwrap.dedent(inspect.getsource(getattr(S, m))))) if isinstance(n, ast.Call) and getattr(n.func, "id", "") == "crit_argumentative_batch"]; a = f("_arg_crit"); b = f("_foreign_arg_crit"); assert len(a) == 1 and not a[0].keywords, [k.arg for k in a[0].keywords]; assert [ast.unparse(k.value) for k in b[0].keywords if k.arg == "argumentative_authority"] == ["policy.authority"]; r = inspect.getsource(C._resolve_authority); assert "return _authority(config)" in r and "manifest-bound criticism requires explicit argumentative authority" in r; assert "ARGUMENTATIVE_AUTHORITY" in inspect.getsource(M)' && ! grep -q "ARGUMENTATIVE_AUTHORITY" src/deepreason/scheduler/scheduler.py`
+
+The local call moved out of `_arg_crit` into `_dispatch_criticism_batches`
+on 2026-09-06, when a refused batch stopped ending the run and started being
+retried in smaller pieces. The invariant is unchanged and the check follows
+the call rather than the method name: whichever method holds it, the local
+dispatch carries NO keywords, which is what makes "the rule reads the config"
+true by construction rather than by habit.
+`check: python -c 'import ast, inspect, textwrap; import deepreason.rules.crit as C; from deepreason.authority import argumentative_authority_mode as M; from deepreason.scheduler.scheduler import Scheduler as S; f = lambda m: [n for n in ast.walk(ast.parse(textwrap.dedent(inspect.getsource(getattr(S, m))))) if isinstance(n, ast.Call) and getattr(n.func, "id", "") == "crit_argumentative_batch"]; a = f("_dispatch_criticism_batches"); b = f("_foreign_arg_crit"); assert not f("_arg_crit"), "the local dispatch belongs to the helper, not to _arg_crit"; assert len(a) == 1 and not a[0].keywords, [k.arg for k in a[0].keywords]; assert [ast.unparse(k.value) for k in b[0].keywords if k.arg == "argumentative_authority"] == ["policy.authority"]; r = inspect.getsource(C._resolve_authority); assert "return _authority(config)" in r and "manifest-bound criticism requires explicit argumentative authority" in r; assert "ARGUMENTATIVE_AUTHORITY" in inspect.getsource(M)' && ! grep -q "ARGUMENTATIVE_AUTHORITY" src/deepreason/scheduler/scheduler.py`
 
 **No attention state crosses into `rules/`.** The per-cycle counters and caches
 that make rationing work — `_arg_crit_this_cycle`, `_advisory_trials_this_cycle`,

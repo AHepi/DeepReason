@@ -1,0 +1,23 @@
+docs_verify [failed-only]: 82 documents, 8 checks, 1424 skipped (green last run), 4 workers
+  FAIL SEAM-llm-x-rules.md:54: unparseable check: a column-0 `check: opener must close with a trailing backtick, on its own line or at the end of a later line, before the next opener or the end of the file. Opener reads: '`check: test "$(python -c "import ast,pathlib; T=[ast.parse(p.read_text()) for p in pathlib.Path(\'sr'
+  FAIL CON-run-identity.md:213: git log -1 --format=%s 1637e808 | grep -qi retire
+      -> fatal: ambiguous argument '1637e808': unknown revision or path not in the working tree. | Use '--' to separate paths from revisions, like this: | 'git <command> [<revision>...] -- [<file>...]'
+  FAIL CON-run-identity.md:215: test -z "$(git show -M --diff-filter=R --name-status --format= f304fec1)" && git log -1 --format=%s f304fec1 | grep -qi "retire.*epoch3" && git show --name-status --format= 6a8758a5 -- experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json | grep -q "^A"
+      -> fatal: ambiguous argument 'f304fec1': unknown revision or path not in the working tree. | Use '--' to separate paths from revisions, like this: | 'git <command> [<revision>...] -- [<file>...]'
+  FAIL CON-run-identity.md:211: git log -M --diff-filter=R --name-status --format= -- experiments/live_research_2026-07-29/selfstudy/runs/ | grep -o 'runs/[a-z0-9-]*run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json' | sort -u | tr '\n' ' ' | grep -qx 'runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json runs/run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json '
+      -> 
+  FAIL INV-frozen-surfaces.md:1241: python tools/record_claims.py --claims experiments/2026-09-06-change-writers-room-organiser-testing/claims.json --root experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-36d9a22c3e2045ae1b8c7bfb9d95d092 --json | python -c "
+        import json, sys
+        rows = {c['claim_id']: (c['status'], c['standing']) for c in json.load(sys.stdin)['claims']}
+        assert rows['RUN-STOP-01'] == ('REFUTED', 'SHOWN_ABLE_TO_FAIL'), rows['RUN-STOP-01']
+        assert rows['CRIT-CAP-01'] == ('UNREFUTED_FOR_DECLARED_SCOPE', 'NOT_SHOWN_ABLE_TO_FAIL'), rows['CRIT-CAP-01']
+        assert rows['ARMH-STOP-01'][0] == 'NOT_TESTED', rows['ARMH-STOP-01']
+        "
+      ->   File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode |     raise JSONDecodeError("Expecting value", s, err.value) from None | json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+  FAIL INV-frozen-surfaces.md:206: test "$(find experiments runs -path '*workflow-provider-attempt-v1/*.json' -exec grep -l 'transport_failure' {} + 2>/dev/null | wc -l)" -eq 0
+      -> 
+  FAIL INV-frozen-surfaces.md:876: python experiments/2026-09-01-defect-judge-canary-compile-gap/price_compile_gap.py --expect fixed >/dev/null && python -m pytest tests/test_judge_canary_compile_gap.py -q
+      ->   File "/usr/lib/python3.11/subprocess.py", line 571, in run |     raise CalledProcessError(retcode, process.args, | subprocess.CalledProcessError: Command '['git', 'show', 'origin/claude/deepreason-p-s1-commitments-wowcib:experiments/2026-08-31-p-s1-commitments/run-config.yaml']' returned non-zero exit status 128.
+  FAIL INV-seat-section-plugins.md:179: python -m pytest tests/test_organiser_seat.py -q
+      -> FAILED tests/test_organiser_seat.py::test_admission_mints_one_block_per_room_record | FAILED tests/test_organiser_seat.py::test_the_organiser_brief_shows_the_whole_room_and_the_directive | 3 failed, 9 passed in 4.58s
+docs_verify: 8 failed
