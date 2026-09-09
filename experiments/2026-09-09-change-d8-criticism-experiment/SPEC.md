@@ -847,3 +847,60 @@ than usual.
 Rubric: 6/6 yes — the correction traces to R38's tranche-1 scope and to the
 change workflow's own budget rule; the headline now equals its own pasted
 arithmetic; no census, forecast or acceptance check moves.
+
+---
+
+# Amendment 3 (2026-09-09) — a class of false positive in the disclosure gate, declared in advance
+
+Found three times in six steps, so it is named here rather than re-argued each
+time. Declaring it is what the checkpoint is for: a contact "already named in
+SPEC.md" is disclosed, and a disclosed mechanism is what the operator's words
+would be given over. This amendment does NOT waive the gate; it records what
+the gate is matching, and keeps the manual cross-check every time.
+
+**The mechanism.** `tools/blast_radius.py` resolves declared SYMBOLS by grep
+across `src/`, and says so of itself in every hit: *"grep-based; not proof of
+semantic contact"*. A tranche-local tool whose function carries a common
+English name therefore trips it. Three instances so far, all in files under
+`experiments/2026-09-09-change-d8-criticism-experiment/tools/`:
+
+| symbol | reported surface | what was actually matched |
+|---|---|---|
+| `table` | replay-validation formats, manifest schemas, `route_fingerprint` | the word in prose |
+| `measure` | manifest schemas | the word in prose |
+| `render` | replay-validation formats, manifest schemas | the word in prose |
+| `question` | replay-validation formats, manifest schemas | `invariants.py:870,872` are COMMENTS; `:889` is an error-message string; `run_manifest.py:2504,2509` are COMMENTS |
+
+**Why contact is impossible here by construction, not merely unlikely.** No
+module under `src/deepreason/` imports anything from the repository's
+`experiments/` directory. (`src/deepreason/experiments/` is a package inside
+`src/` and is a different thing sharing a name — checked, and named here
+because it is the one way this claim could be misread.) A tranche tool is not
+on any import path the harness can take, so no symbol it defines can shadow,
+override, or reach a frozen surface.
+
+**What this tranche does about it, in order.**
+1. Where a rename costs nothing, RENAME rather than argue: `table` →
+   `render_arm_table`, `measure` → `measure_root`, `render` →
+   `render_census_table`. Each was renamed and the gate re-run to `CLEAR`.
+   Removing an ambiguity beats explaining it.
+2. Where a rename would make a COPIED instrument diverge from its original for
+   no reason — `arm0.py::question`, whose name comes from the mini tranche's
+   committed file — keep the name, and disclose the hit here with the lines
+   the gate matched pasted above.
+3. Every remaining instance still gets the manual grep cross-check the
+   checkpoint requires, recorded in the step.
+
+**Standing for the rest of this tranche.** A `frozen_surface_contacts` entry
+whose `tier` is `SYMBOL_INDIRECT`, whose target is a symbol defined only under
+this tranche's `tools/` or `tests/`, and whose matched lines are comments,
+docstrings or string literals, is DECLARED HERE and is not new drift. Anything
+else — any `DIRECT` tier, any target under `src/`, any match on executable
+code, or any `reachability` direction of `newly_dead`/`newly_live` — remains a
+STOP requiring the operator's words. The CLEAR forecast of Amendment 1 stands
+for the tranche's actual targets, none of which is under `src/`.
+
+Rubric: 6/6 yes — traces to R30/R36 (the scope this gate guards) and to the
+change workflow's own frozen-surface checkpoint; the mechanism is measured
+(the matched lines are pasted, not summarised); no acceptance check moves; the
+gate is not weakened, only its false-positive class disclosed.

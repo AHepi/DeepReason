@@ -1,6 +1,6 @@
 # Checklist for: does criticism, once connected and allowed to bite, make the harness's output materially better than the plain model? — TRANCHE 1 (instruments, offline proofs, sealed pre-registration; NO LIVE CALL)
 
-State: next=11 blockers=none  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
+State: next=14 blockers=none  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
 Re-read REQUEST.md (with Amendment 1) + SPEC.md (with Amendment 1) before every
 step. Execute strictly in order. One step per dr-execute-step invocation.
 
@@ -183,17 +183,49 @@ nor `mini/`, so R36 is not touched.
        `run_manifest.py` and made the gate report frozen-surface CONTACT.
        Renamed; the gate re-reads CLEAR.
 
-- [ ] 11. (S2, R5, A3) Edit the copied `tools/arm0.py` in exactly one place: `K`
+- [x] 11. (S2, R5, A3) Edit the copied `tools/arm0.py` in exactly one place: `K`
        becomes a required argument. Nothing else moves.
        done-when: `diff` against the copy shows changes confined to the `K`
        definition and its argument parsing, pasted into `proof/ARM0_DIFF.txt`.
+       PROOF: `proof/ARM0_DIFF.txt` carries the whole diff. It is THREE changes,
+       not the one this step's line predicted, and the extra two are recorded
+       rather than absorbed:
+       (a) `K` becomes a required argument — the planned change;
+       (b) the frozen input is reached by an explicit path from the
+           repository rather than from this file's neighbours, because the
+           instrument moved tranches and the old relative path resolved
+           somewhere else here (same class of change as step 4's repo-root
+           line);
+       (c) a `--dry-run` is added, because step 12's done-criterion is that no
+           call is made and the copied instrument had no way to demonstrate
+           that.
+       Each is forced by the move or by the checklist's own next step; none
+       changes what a live call sends.
 
-- [ ] 12. (S2, C9) Prove it makes no call: `--dry-run`.
+- [x] 12. (S2, C9) Prove it makes no call: `--dry-run`.
        done-when: it prints the prompt's sha256 and byte size, exits 0, and no
        network call is made; the printed question digest equals the digest of
        `input-d8`'s `problem.description`.
+       PROOF (`proof/ARM0_DIFF.txt`), run with the credential DELIBERATELY
+       removed from the environment:
+       ```
+       $ env -u OLLAMA_API_KEY python arm0.py 9 --dry-run
+       { "calls_that_would_be_made": 9, "dry_run": true, "k": 9,
+         "model": "qwen3.5:397b", "question_bytes": 450,
+         "question_sha256": "e8e720d251b3cab2cddd548cb5064a74575404c8ae47f347f840faa6021a19b1" }
+       rc=0
 
-- [ ] 13. (S2) [COMMIT] arm0 and its dry-run proof.
+       independent sha256: e8e720d251b3cab2cddd548cb5064a74575404c8ae47f347f840faa6021a19b1
+       no K -> rc=2      K=0 -> rc=2
+       ```
+       The digest is re-derived from the frozen input by a separate command,
+       not merely printed by the instrument under test. That mattered: the
+       dry run CAUGHT a path defect in change (b) above — the first version
+       resolved the frozen input outside `experiments/` and failed loudly. Had
+       the wrong path happened to exist, ARM 0 would have answered a different
+       question and nothing in its output would have said so.
+
+- [x] 13. (S2) [COMMIT] arm0 and its dry-run proof.
        done-when: tree clean, head on origin.
 
 - [ ] 14. (S8 §5, R16, R19, M7) Extend the copied `tools/compose_result.py` with

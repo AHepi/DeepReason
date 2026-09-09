@@ -142,3 +142,45 @@ shows a window actually lost time for want of the index.
 - The `pyproject.toml` dependency-declaration gap (`pytest-xdist`,
   `jsonschema`) — `experiments/2026-08-30-change-execution-safety-parks/PARKED.md`
   S5.
+
+---
+
+## P4 — the disclosure gate matches comment prose, and says CONTACT
+
+**What.** `tools/blast_radius.py` resolves declared symbols by grep across
+`src/`, so a symbol whose name is a common English word matches occurrences
+inside COMMENTS, DOCSTRINGS and STRING LITERALS and is reported as a
+frozen-surface contact. Measured four times in six steps of this tranche
+(`table`, `measure`, `render`, `question`); for `question` the matched lines
+are `src/deepreason/invariants.py:870,872` (comments), `:889` (an error
+message) and `src/deepreason/run_manifest.py:2504,2509` (comments). The tool
+labels every hit "grep-based; not proof of semantic contact", so the behaviour
+is disclosed — but a checkpoint whose rule is "any unnamed contact is a STOP"
+converts a disclosed imprecision into a stop that must be argued past, which is
+the shape that erodes a gate people are supposed to obey.
+
+**Ready-to-send prompt.**
+
+```
+Route through dr-change-orchestrator. One goal: blast_radius.py's symbol
+matching stops reporting comment and string-literal occurrences as
+frozen-surface contacts, without becoming less strict about real ones.
+
+Evidence: experiments/2026-09-09-change-d8-criticism-experiment/SPEC.md
+Amendment 3 carries the four measured instances and the matched line numbers.
+The tool's own detail string already says "grep-based; not proof of semantic
+contact".
+
+Smallest change to price first: resolve symbols with ast.parse over each
+source file and match only NAME-BEARING nodes (definitions, references,
+attribute access), falling back to the current grep when a file does not
+parse -- so the tool never becomes blind on a file it cannot read. Keep the
+detail string honest about which mode produced each hit.
+
+Frozen-surface reading first: blast_radius.py is an instrument, not a surface,
+but it READS the surface list, so run the tool on itself and paste the result.
+Mutation-prove the new matcher: plant a real reference to a frozen symbol in a
+test fixture and show it is still reported, then plant the same word in a
+comment and show it is not. A change that only silences the false positives,
+without a test proving the true positives survive, is worse than the defect.
+```

@@ -10,6 +10,7 @@ length-truncated completion is recorded as such and kept.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import pathlib
@@ -22,12 +23,24 @@ HERE = pathlib.Path(__file__).resolve().parent
 OUT = HERE / "arm0"
 ENDPOINT = "https://ollama.com/v1/chat/completions"
 MODEL = "qwen3.5:397b"
-K = 3
 MAX_TOKENS = 8192
 
 
+INPUT_D8 = (
+    HERE.parents[1]
+    / "2026-09-05-change-mini-isolation-programme" / "runs" / "input-d8"
+)
+
+
 def question() -> str:
-    root = HERE.parent / "runs" / "input-d8"
+    """The D8 question, from the frozen input R4 names -- never retyped.
+
+    The path is absolute-from-the-repository rather than relative to this
+    file's neighbours: the instrument was copied into another tranche, and a
+    relative path would have silently resolved to a directory that does not
+    exist here, or worse, to a different frozen input that does.
+    """
+    root = INPUT_D8
     run_input = json.loads((root / "run-input.json").read_text(encoding="utf-8"))
     return run_input["problem"]["description"]
 
@@ -79,8 +92,29 @@ def one_call(key: str, q: str, k: int) -> dict:
 
 
 def main() -> int:
-    key = os.environ["OLLAMA_API_KEY"]
+    args = [a for a in sys.argv[1:] if a != "--dry-run"]
+    dry_run = "--dry-run" in sys.argv
+    if len(args) != 1 or not args[0].isdigit() or int(args[0]) < 1:
+        print(__doc__)
+        print("K is REQUIRED and is not a default: R5 matches ARM 0's spend to "
+              "the harness arms' own conjecturer-seat call count, which does "
+              "not exist until they have run. Passing it explicitly is what "
+              "stops a stale 3 from standing in for a measurement.",
+              file=sys.stderr)
+        return 2
+    K = int(args[0])
     q = question()
+    if dry_run:
+        print(json.dumps({
+            "dry_run": True, "k": K, "model": MODEL, "endpoint": ENDPOINT,
+            "max_tokens": MAX_TOKENS,
+            "question_sha256": hashlib.sha256(q.encode("utf-8")).hexdigest(),
+            "question_bytes": len(q.encode("utf-8")),
+            "input": str(INPUT_D8),
+            "calls_that_would_be_made": K,
+        }, indent=1, sort_keys=True))
+        return 0
+    key = os.environ["OLLAMA_API_KEY"]
     OUT.mkdir(exist_ok=True)
     summary = {"schema": "d8-arm0-result.v1", "model": MODEL, "k": K, "calls": []}
     for k in range(1, K + 1):

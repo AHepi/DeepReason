@@ -1,0 +1,82 @@
+=== Step 11-12 proof: ARM 0's instrument, and that it spends nothing here ===
+
+--- the diff against the byte-for-byte copy (three changes, each with its reason) ---
+12a13
+> import hashlib
+25d25
+< K = 3
+28a29,34
+> INPUT_D8 = (
+>     HERE.parents[1]
+>     / "2026-09-05-change-mini-isolation-programme" / "runs" / "input-d8"
+> )
+> 
+> 
+30c36,43
+<     root = HERE.parent / "runs" / "input-d8"
+---
+>     """The D8 question, from the frozen input R4 names -- never retyped.
+> 
+>     The path is absolute-from-the-repository rather than relative to this
+>     file's neighbours: the instrument was copied into another tranche, and a
+>     relative path would have silently resolved to a directory that does not
+>     exist here, or worse, to a different frozen input that does.
+>     """
+>     root = INPUT_D8
+82c95,105
+<     key = os.environ["OLLAMA_API_KEY"]
+---
+>     args = [a for a in sys.argv[1:] if a != "--dry-run"]
+>     dry_run = "--dry-run" in sys.argv
+>     if len(args) != 1 or not args[0].isdigit() or int(args[0]) < 1:
+>         print(__doc__)
+>         print("K is REQUIRED and is not a default: R5 matches ARM 0's spend to "
+>               "the harness arms' own conjecturer-seat call count, which does "
+>               "not exist until they have run. Passing it explicitly is what "
+>               "stops a stale 3 from standing in for a measurement.",
+>               file=sys.stderr)
+>         return 2
+>     K = int(args[0])
+83a107,117
+>     if dry_run:
+>         print(json.dumps({
+>             "dry_run": True, "k": K, "model": MODEL, "endpoint": ENDPOINT,
+>             "max_tokens": MAX_TOKENS,
+>             "question_sha256": hashlib.sha256(q.encode("utf-8")).hexdigest(),
+>             "question_bytes": len(q.encode("utf-8")),
+>             "input": str(INPUT_D8),
+>             "calls_that_would_be_made": K,
+>         }, indent=1, sort_keys=True))
+>         return 0
+>     key = os.environ["OLLAMA_API_KEY"]
+
+--- the dry run, with the credential DELIBERATELY absent from the environment ---
+$ env -u OLLAMA_API_KEY python arm0.py 9 --dry-run
+{
+ "calls_that_would_be_made": 9,
+ "dry_run": true,
+ "endpoint": "https://ollama.com/v1/chat/completions",
+ "input": "/home/user/DeepReason/experiments/2026-09-05-change-mini-isolation-programme/runs/input-d8",
+ "k": 9,
+ "max_tokens": 8192,
+ "model": "qwen3.5:397b",
+ "question_bytes": 450,
+ "question_sha256": "e8e720d251b3cab2cddd548cb5064a74575404c8ae47f347f840faa6021a19b1"
+}
+rc=0
+
+--- the question digest, re-derived independently from the frozen input ---
+independent sha256: e8e720d251b3cab2cddd548cb5064a74575404c8ae47f347f840faa6021a19b1
+  (equal to the dry run's question_sha256 above)
+
+--- K really is required: no default can stand in for the measurement ---
+no K   -> rc=2
+K=0    -> rc=2
+
+A path defect this dry run CAUGHT, recorded because it is the reason the
+dry run exists at all: the first edit computed the frozen input's
+directory from the wrong ancestor and resolved to a path outside
+experiments/. It failed loudly here. Had the wrong path happened to
+exist, ARM 0 would have run against a different question and nothing in
+its output would have said so -- which is why the digest is re-derived
+independently above rather than merely printed.
