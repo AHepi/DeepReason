@@ -1,0 +1,186 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible as a non-inductive 'critical preference' rule: we choose the theory that has withstood the most severe tests not because it is likely true, but because it is the most informative false theory we have not yet eliminated, maximizing our proximity to truth (verisimilitude) without assigning probability.",
+      "mechanism": "Verisimilitude-based critical selection. Action is guided by the logical content and survival of the theory, treating the choice as a methodological imperative to test the boldiest surviving conjecture rather than a bet on its future success.",
+      "counterconditions": [
+        "If the agent implicitly relies on the assumption that the future will resemble the past to justify the utility of verisimilitude.",
+        "If the formal definition of verisimilitude collapses under logical scrutiny (as per Tichý), leaving no non-probabilistic metric for 'better'.",
+        "If acting on a theory for practical purposes (e.g., building a bridge) inherently requires an inductive leap regarding safety that corroboration alone cannot supply."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The distinction holds because the strategy minimizes the risk of relying on a *known* falsehood, not because it assumes past conditions guarantee future ones. The preference is for the theory with the highest informational content that hasn't failed, which is a logical status, not a probabilistic forecast."
+        },
+        {
+          "handle": "[SRC_020] against SRC_018",
+          "kind": "rebutted",
+          "note": "It is not a false dichotomy; 'elimination of danger' refers to eliminating theories known to be false. Choosing the best-corroborated theory is choosing the one least likely to be *known* false at this moment, which is a valid risk-management strategy within falsificationism."
+        },
+        {
+          "handle": "[SRC_014] against SRC_003",
+          "kind": "revised",
+          "note": "Revised to acknowledge Tichý's critique: the defense now rests on 'potential verisimilitude' or 'corroboration as a proxy for closeness to truth' without claiming a formal logical definition of verisimilitude is fully resolved, framing it as a regulative ideal rather than a calculated value."
+        },
+        {
+          "handle": "[SRC_004] against SRC_003",
+          "kind": "rebutted",
+          "note": "Preferring a theory for action does not assume it will continue to work; it assumes it is the best current target for further testing and the least risky option among those not yet falsified. The cost of being wrong is accepted as part of the fallibilist stance."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The criterion 'least error-prone known option' does not assign subjective probability of success; it assigns a logical status of 'not yet refuted despite severe attempts.' The expectation of success is a hope, not a premise of the decision logic."
+        },
+        {
+          "handle": "[SRC_019] against SRC_017",
+          "kind": "rebutted",
+          "note": "Acting on a theory as a methodological rule does not require assigning higher subjective probability. It requires accepting the rule: 'Always act on the most severely tested surviving theory.' This is a procedural commitment, not a probabilistic belief."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "Popper's 'rational action' is defined precisely by this critical preference. It is not a gamble in the dark, but a reasoned choice based on the critical history of the theories. The dichotomy is between rational critical preference and irrational dogmatism, not assurance vs. gamble."
+        },
+        {
+          "handle": "[SRC_021] against SRC_005",
+          "kind": "rebutted",
+          "note": "The pragmatic rule does not rely on inductive expectations; it relies on the logical fact that the theory has survived tests others have not. The 'expectation' is purely psychological, not part of the logical justification for the choice."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The preference inevitably smuggles induction back in; any decision to act on a corroborated theory for future applications logically entails an implicit premise that the future will resemble the past, rendering Popper's distinction between corroboration and probability practically null for agents who must act.",
+      "mechanism": "Pragmatic induction re-emergence. The act of using a theory for prediction or engineering necessitates an inductive bridge that corroboration (a report of the past) cannot logically provide without assuming the uniformity of nature.",
+      "counterconditions": [
+        "If the agent can act solely on the basis of avoiding known errors without expecting positive success.",
+        "If 'preference' is redefined as a purely negative selection process (choosing the least bad) rather than a positive endorsement.",
+        "If the cost of acting on a falsified theory is infinite, making the avoidance of known falsehoods sufficient justification without induction."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The distinction collapses because any strategy preferring A over B based on past results *must* assume those results are relevant to the future, which is the definition of induction. Risk-minimization in this context is indistinguishable from probabilistic reasoning."
+        },
+        {
+          "handle": "[SRC_020] against SRC_018",
+          "kind": "rebutted",
+          "note": "The dichotomy is false because 'avoiding known falsehoods' in a forward-looking context implies a prediction that the unknown falsehoods are less likely in the chosen theory, which is an inductive claim about the distribution of error."
+        },
+        {
+          "handle": "[SRC_014] against SRC_003",
+          "kind": "rebutted",
+          "note": "Even if verisimilitude is flawed, the core issue remains: acting on *any* metric derived from past performance for future gain is inductive. The failure of verisimilitude just strengthens the claim that no non-inductive bridge exists."
+        },
+        {
+          "handle": "[SRC_004] against SRC_003",
+          "kind": "rebutted",
+          "note": "This criticism hits the mark: preferring a theory for future action *does* inherently assume it will continue to perform, which is exactly the inductive step Popper tried to ban. The defense fails to sever this link."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Labeling it 'risk-management' does not change the logic. Assessing 'least error-prone' based on past data implicitly assigns a higher probability of future reliability, which is subjective induction."
+        },
+        {
+          "handle": "[SRC_019] against SRC_017",
+          "kind": "rebutted",
+          "note": "A methodological rule that guides action towards future success based on past data *is* an inductive rule, regardless of whether agents consciously assign probabilities. The functional outcome is induction."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "Popper's 'critical preference' is semantically distinct but functionally identical to induction when applied to future action. Ignoring the functional equivalence creates a false sense of security against the problem of induction."
+        },
+        {
+          "handle": "[SRC_021] against SRC_005",
+          "kind": "rebutted",
+          "note": "Conflating logical status with pragmatic rule is exactly what happens when scientists act. The pragmatic rule *requires* the inductive expectation to be rational; without it, the preference is arbitrary."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only via a 'dual-epistemology': logically, corroboration reports past survival (non-inductive), but pragmatically, scientists adopt a 'fictional' inductive stance to motivate action, acknowledging this as a necessary psychological heuristic rather than a logical derivation.",
+      "mechanism": "Epistemic compartmentalization. Separating the logical justification (falsificationism) from the psychological/pragmatic driver (inductive habit) allows Popper's system to remain logically pure while accounting for actual scientific behavior.",
+      "counterconditions": [
+        "If the 'fiction' undermines the rationality of the scientific enterprise by admitting its motivational core is illogical.",
+        "If the logical and pragmatic spheres cannot be cleanly separated in the mind of the acting scientist.",
+        "If the cost of maintaining this duality is a loss of normative force for Popper's methodology."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from the idea that a single logical framework must explain both justification and motivation. We accept the collapse in the pragmatic sphere while maintaining purity in the logical sphere."
+        },
+        {
+          "handle": "[SRC_020] against SRC_018",
+          "kind": "revised",
+          "note": "Revised to explicitly state that the 'risk-management' is a pragmatic fiction. The defense admits the dichotomy is false in practice but maintains it is necessary heuristically."
+        },
+        {
+          "handle": "[SRC_014] against SRC_003",
+          "kind": "rebutted",
+          "note": "Verisimilitude is not needed here; the mechanism is psychological. The failure of formal verisimilitude supports the need for a pragmatic fiction rather than undermining the dual approach."
+        },
+        {
+          "handle": "[SRC_004] against SRC_003",
+          "kind": "rebutted",
+          "note": "The defense agrees that future action assumes continuity (induction) but classifies this as a pragmatic necessity, not a logical claim. The 'smuggling' is admitted but categorized as extra-logical."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The 'subjective probability' is acknowledged as a psychological reality, not a logical component of Popper's theory. The defense separates the agent's psychology from the theory's logic."
+        },
+        {
+          "handle": "[SRC_019] against SRC_017",
+          "kind": "rebutted",
+          "note": "The methodological rule is defended as a logical constraint, while the 'expectation of success' is relegated to the pragmatic/psychological domain. The criticism conflates the two domains which this candidate separates."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "Rational action in this view includes recognizing the limits of logic and adopting necessary fictions. Popper's concept is preserved logically, while the 'gamble' is managed psychologically."
+        },
+        {
+          "handle": "[SRC_021] against SRC_005",
+          "kind": "rebutted",
+          "note": "The conflation is intentional and necessary. The logical status informs the choice, but the pragmatic rule (with its inductive flavor) drives the action. They are distinct layers of the same process."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference is an evolutionary adaptation: organisms (scientists) who prefer hypotheses that have survived severe tests are more likely to survive and reproduce, making the preference defensible as a biological imperative rather than a logical or inductive argument.",
+      "mechanism": "Evolutionary epistemology. The validity of the preference is grounded in natural selection's filtering of cognitive strategies, bypassing the need for logical justification or inductive proof.",
+      "counterconditions": [
+        "If evolution selects for fitness, not truth, and a false theory could be more fit than a true one.",
+        "If the timescale of biological evolution is too slow to account for rapid scientific theory change.",
+        "If the 'preference' is a cultural rather than biological trait, rendering the evolutionary explanation irrelevant."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The strategy doesn't assume conditions will remain the same; it assumes that the cognitive heuristic of trusting tested models has been selected for because it generally worked in *varying* environments."
+        },
+        {
+          "handle": "[SRC_020] against SRC_018",
+          "kind": "rebutted",
+          "note": "It is not a prediction of safety but a description of a successful survival trait. The 'danger' is extinction, and the 'elimination' is the removal of maladaptive cognitive

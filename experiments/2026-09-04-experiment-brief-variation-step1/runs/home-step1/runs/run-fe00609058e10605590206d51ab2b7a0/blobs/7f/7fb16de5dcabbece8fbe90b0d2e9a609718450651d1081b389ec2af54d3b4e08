@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms not as an inductive prediction of future success, but as a methodological rule for maximizing informational content and minimizing known error, accepting that this offers no guarantee against future falsification.",
+    "mechanism": "The mechanism distinguishes between 'rational expectation' (which implies induction) and 'rational choice' (which implies selecting the best-tested option as the most informative current state of knowledge). By treating corroboration as a historical report of severity passed rather than a probability score, the scientist chooses the theory that has withstood the strongest attempts at refutation. This choice is rational because it utilizes the full weight of critical discussion, whereas ignoring corroboration would be irrational dogmatism. The 'smuggling' of induction only occurs if one assumes the choice guarantees future truth; if the choice is merely the best available basis for action while remaining fallible, induction is avoided.",
+    "counterconditions": [
+      "If preferring Theory A over B based on past tests logically necessitates assuming the future will resemble the past (Uniformity of Nature), then the distinction collapses into induction.",
+      "If Popper's concept of verisimilitude (truth-likeness) cannot be formally defined without logical contradiction (as per Tichý and Miller), then it cannot serve as the non-inductive bridge for action.",
+      "If acting on a theory inherently assigns a subjective probability to its future success, then the 'risk-minimization' strategy is just Bayesian updating in disguise."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism assumes that preferring A over B requires assuming conditions will remain constant. Rebuttal: Preference requires only that A is currently the best-tested solution, not that it will remain so. It is a choice of the 'least error-prone known option,' not a prediction of invulnerability."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "revised",
+        "note": "Revised to acknowledge that while formal verisimilitude failed, the pragmatic notion of 'depth of testing' remains valid. The defense now relies on the severity of tests passed rather than a quantitative measure of truth-likeness."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "Preferring a theory for action does not assume it will continue to work; it assumes it is the most rational starting point given current ignorance. The cost of being wrong is accepted as part of the falsificationist framework."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "Assigning 'higher subjective probability' is exactly what Popper rejects. The claim is re-stated: we assign higher 'critical preference,' which is a ordinal ranking of test severity, not a cardinal probability of truth."
+      },
+      {
+        "handle": "38f75e15ef32982858ed94b505c7bbfe87ec9a0ebbd2867ed39855d8423771d8",
+        "kind": "rebutted",
+        "note": "The dichotomy is not false; it highlights that rational action in Popper's view is critical preference, not assurance. The criticism misses that 'rational' here means 'open to criticism,' not 'guaranteed.'"
+      },
+      {
+        "handle": "4cbbab057ec51a122476741bd3c2ff4172e6fa0617a24361597807f86f8c8cc7",
+        "kind": "rebutted",
+        "note": "Agreed that it is a methodological rule, but the criticism falsely equates following a rule with inductive supplementation. The rule is constitutive of the scientific method itself, not an external inductive add-on."
+      },
+      {
+        "handle": "5367cfefcbb7e990f45e4aefa87059bd0469703b7ecb99cb937fc65222e22087",
+        "kind": "rebutted",
+        "note": "Treating past resilience as a proxy for reliability is only inductive if one claims it ensures future reliability. Popper claims it only identifies the theory that has survived the most rigorous attempts to destroy it so far."
+      },
+      {
+        "handle": "68d9af4a435acc1cd4234dc084ba218e221621e23b6343e1c10f7f2d559a8ebd",
+        "kind": "revised",
+        "note": "Clarified that 'informational content' is dynamic. Choosing the better-corroborated theory is choosing the one with the highest surviving content, which directly addresses the context of action by maximizing the potential for learning through future errors."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a non-inductive 'critical preference' grounded in risk-minimization rather than probability-maximization, but accepting this defense costs us the ability to claim rational assurance that the preferred theory will succeed in the future; it reduces scientific action to a gamble where we simply choose the option with the most thoroughly tested failure modes, without any logical guarantee that past test survival predicts future performance.",
+    "mechanism": "The argument distinguishes between 'inductive inference' (assigning higher probability of truth/success based on past instances) and 'methodological rule of action' (choosing the theory that has withstood the most severe attempts at falsification because it offers the most informative basis for criticism if it fails). The mechanism relies on the asymmetry of falsification: while we cannot verify a theory, we can eliminate error. Preferring Theory A over B is not claiming A is more likely true, but that A is the 'least bad' known option because its specific potential errors have been mapped out by severe testing, whereas B's errors remain hidden. This shifts the justification from 'expectation of success' to 'preparedness for failure'.",
+    "counterconditions": [
+      "If preferring a theory for action logically entails assigning it a higher subjective probability of future success, then the distinction collapses into induction.",
+      "If Popper's concept of 'verisimilitude' (truth-likeness) is required to justify the preference but his formal definition of it failed (as per Tichý and Miller), then the non-inductive basis is undermined.",
+      "If the 'risk-management' strategy implicitly assumes that the conditions making a theory superior in the past will hold in the future, then it smuggles in the uniformity of nature principle."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism claims the distinction collapses because any preference assumes past conditions will hold. This rebuttal argues that Popperian preference does not assume the *success* will continue, but only that the *structure of the test* remains relevant. We choose the theory we know how to falsify best; if nature changes arbitrarily, both theories fail, but the corroborated one fails more informatively. The assumption is not about nature's uniformity, but about the utility of information density in error detection."
+      },
+      {
+        "handle": "10d458d5ba5df5b51b41f157dbd7e3ca6a57c55a4ae84258055f2e2e2ab75127",
+        "kind": "revised",
+        "note": "Revised to clarify that the dichotomy is not between 'prediction of safety' and 'elimination of danger' as mutually exclusive outcomes, but as different justificatory frameworks. The candidate now explicitly states that the 'elimination of danger' framework does not promise safety (prediction), but only maximizes the informational yield of a potential disaster. The revision appears in the mechanism description where 'preparedness for failure' is emphasized over 'avoidance'."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate explicitly abandons the reliance on 'verisimilitude' as a positive metric. Instead of claiming the better-corroborated theory is 'closer to the truth,' it claims only that it is 'further from known falsehoods' in a topological sense of having survived specific, severe attacks. This avoids Tichý's paradox by refusing to quantify truth-likeness."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "The criticism states that preferring a theory for future action inherently assumes it will continue to perform. The rebuttal is that Popperian action is a 'critical preference' which admits the possibility of immediate failure. The preference is rational not because it expects success, but because it minimizes the surprise content of failure. If the theory fails, we learn more than if an untested theory fails. Thus, the assumption of future continuity is not required for the rationality of the choice."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The claim that 'least error-prone known option' assigns higher subjective probability is rejected. In the Popperian framework, 'error-prone' refers to the *detectability* of error, not the *likelihood* of error occurrence. We prefer the theory where errors are most easily detected (high corroboration), not the one we subjectively feel is least likely to err. This preserves the non-probabilistic nature of the choice."
+      },
+      {
+        "handle": "350db731d51a09f1568348da67e40e50c3417a7e7bde9c041860ce74daf212ec",
+        "kind": "revised",
+        "note": "Revised to address the third countercondition directly. The candidate now concedes that if acting *requires* assigning higher subjective probability, then Popper fails. However, it argues that acting only requires a 'rule of selection' based on critical discussion, not a probabilistic belief state. The revision clarifies that the 'cost' of accepting this view is the abandonment of 'rational expectation' in favor of 'rational selection criteria'."
+      },
+      {
+        "handle": "38f75e15ef32982858ed94b505c7bbfe87ec9a0ebbd2867ed39855d8423771d8",
+        "kind": "rebutted",
+        "note": "The criticism ignores Popper's specific concept of 'critical preference.' The rebuttal emphasizes that Popper does not argue for a 'non-rational gamble' but for a rational choice based on the logical status of the theories (their content and test history). The dichotomy is not between assurance and gamble, but between induction (justifying belief) and criticism (justifying choice). The preference is rational because it is based on the best available critical arguments, not on a feeling of certainty."
+      },
+      {
+        "handle": "46dcad061a396079ae006feb765ad05c214a8b686266e3ca68d45ddff6e5b102",
+        "kind": "revised",
+        "note": "Revised to explicitly separate the 'logical status' (survived tests) from the 'pragmatic rule' (act on it). The candidate now admits that the pragmatic rule *looks* like induction but argues its *justification* is purely negative: we act on it because we have no better alternative that has been as rigorously scrutinized. The revision adds a clause stating that the rule is a 'convention of critical rationality' rather than an inductive inference."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "medical_triage_protocol",
+        "bridge_engineering_safety_factors"
+      ],
+      "shared_structure": [
+        "Selection of an option based on known failure modes rather than predicted success rates.",
+        "Preference for the option with the most rigorous stress-testing history.",
+        "Acceptance that the chosen option may still fail, but the failure will be better understood."
+      ],
+      "disanalogies": [
+        "In medical triage, the goal is often to maximize survival probability (inductive), whereas Popper explicitly rejects maximizing probability.",
+        "Bridge engineering uses safety factors derived from statistical load data (inductive), while Popper forbids using statistical confirmation as a basis for truth."
+      ],
+      "transfer_claims": [
+        "Just as a doctor might choose a treatment with known side effects over an untested one not because it's 'more likely to work' but because its risks are mapped, scientists choose corroborated theories because their potential errors are mapped.",
+        "The rationality of the choice lies in the transparency of the risk, not the minimization of the risk probability."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that mapping known failure modes logically entails a prediction of fewer future failures.",
+        "If the distinction between 'known risk' and 'probability of risk' is demonstrated to be semantically empty in practical decision contexts."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

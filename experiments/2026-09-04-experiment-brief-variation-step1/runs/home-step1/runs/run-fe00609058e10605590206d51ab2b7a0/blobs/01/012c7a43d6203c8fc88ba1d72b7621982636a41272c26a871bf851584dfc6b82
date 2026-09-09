@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'logical status' with 'practical utility.' While the target correctly distinguishes corroboration from probability, it cannot explain why a scientist should prefer Theory A (highly corroborated) over Theory B (falsified) for *future* action without implicitly assuming that past performance is a reliable guide to future results. Popper explicitly rejects the principle of the uniformity of nature; without it, the fact that Theory A survived yesterday offers no logical basis for expecting it to work tomorrow any more than a falsified theory might. The target claims this is a 'non-rational gamble,' but if the choice is truly non-rational (lacking a reason to expect success), then the preference is arbitrary, not defensible. To call it 'defensible' while admitting it lacks a link to future success is contradictory: a methodological rule that cannot distinguish between a reliable and an unreliable guide for future action is not a rational preference, rendering the 'cost' actually a fatal collapse of the argument.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper rejects the principle of the uniformity of nature, meaning past test results logically imply nothing about future performance.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for the better-corroborated theory provides no logical expectation of future success, in what specific sense can the action be called 'rational' rather than merely habitual or arbitrary?"
+    }
+  ]
+}
