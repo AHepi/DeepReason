@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's own terms not as an inductive inference of future truth, but as a non-inductive 'conventional decision' to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing the informational content of our errors should we fail.",
+    "mechanism": "Severity-Based Conventionalism: The preference is a methodological rule (a convention) rather than a logical derivation. It selects the theory that offers the highest empirical content and has survived the strictest tests, ensuring that if the theory is false, the resulting practical failure will be most informative for subsequent conjecture. This avoids induction because it makes no claim about the probability of future success, only about the current status of the theory regarding past tests.",
+    "counterconditions": [
+      "If corroboration is interpreted as assigning a higher logical probability of truth to the theory, the defense collapses into the induction Popper rejected.",
+      "If the agent requires a guarantee of practical safety (e.g., bridge stability) rather than a willingness to learn from potential failure, Popperian preference is insufficient.",
+      "If 'acting on' a theory logically entails believing it is approximately true (verisimilitude) in a way that can be calculated, the formal undefined nature of verisimilitude undermines the rational basis for the choice."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The criticism conflates the need for a formal metric of verisimilitude with the act of preferring based on severity. Popper's defense does not require calculating verisimilitude; it requires only ranking theories by test severity and survival. The preference is for the theory that is 'better tested,' not the one proven 'more true-like' via a formula."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The candidate explicitly distinguishes between 'logical probability' (which is rejected) and 'practical preference' (which is accepted as a convention). No category error occurs because the mechanism denies that preference entails an expectation of success derived from logic; it entails a decision to risk error on the most informative hypothesis."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Clarified in the 'mechanism' field that 'acting on' a theory in Popper's framework means adopting it as the basis for action while remaining critically open to its falsification, distinct from 'testing' which is the active attempt to refute. The revision emphasizes that practical reliance is provisional and aimed at error detection."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The criticism assumes 'practical reliance' implies dogmatic belief. The candidate rebuts this by defining reliance as a 'conventional decision' to treat the theory as true until further notice, specifically to maximize the severity of potential refutation in the real world (e.g., if the bridge falls, we learn more than if we used an untested theory)."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is consistent with his theory if viewed as an adherence to his own methodological rules. He acts on the best-tested theory because he values the growth of knowledge through severe testing, not because he believes induction works. The 'tension' is resolved by accepting that rationality for Popper is procedural (following the method), not probabilistic."
+      },
+      {
+        "handle": "2116bf4d6b856c4733930a702b792937dca2166147675dc886115c8804a7b37a",
+        "kind": "revised",
+        "note": "Added explicit distinction in 'counterconditions' that relying on a corroborated theory is rational only if the goal is 'severity maximization' and not 'safety maximization' in the inductive sense. The revision clarifies that the 'cost' of this view is accepting that we may act on a false theory, but we do so in the most intellectually honest way possible."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The candidate relies strictly on Popper's concept of 'corroboration' and 'severity' from 'Logic of Scientific Discovery' and 'Conjectures and Refutations,' without invoking Evolutionary Epistemology. The mechanism is purely methodological conventionalism, which is central to Popper's original formulation."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "The pragmatic contradiction dissolves when 'rationality' is defined as fidelity to the critical method rather than instrumental success. Acting on the best-corroborated theory is rational because it is the only action consistent with the acceptance of fallibilism; acting on a less-tested theory would be irrational as it voluntarily reduces the severity of potential learning."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
