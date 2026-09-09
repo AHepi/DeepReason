@@ -645,3 +645,146 @@ output, twice; every mechanism the request names traced to code it reaches
 (M1-M8) and the two that do not reach it named as such (M3/M4 for ARM V's
 managed road, M6 for ARM A); every claim measured and every option priced;
 nothing untraceable to an R or C number.
+
+---
+
+# Amendment 1 (2026-09-09) — the operator answers both questions; the tranche splits
+
+Authority: REQUEST.md Amendment 1, R34-R40, C9. Everything above this line is
+UNCHANGED — S1-S16, M1-M10, the census and the two forecasts stand as sealed,
+and the STOP they recorded is now answered rather than edited away. This
+amendment says what the answers change and nothing else.
+
+## What Q-OP1's answer changes: S5 becomes buildable, on one road
+
+**S5 (R34, R35, R10-partial, C2) — ARM A, Road A-cross. REPLACES the STOPPED
+S5 above.** ARM A is ARM C with two differences and no others:
+
+1. `ARGUMENTATIVE_AUTHORITY=trial_required` (R34 supersedes R10's
+   `single_family_trial`) and `ADJUDICATION_STATUS_AUTHORITY_ENABLED=true`
+   (R10's half, retained: `rules/crit.py::_authority` returns `observe_only`
+   whatever the mode says unless this master gate is on).
+2. The `judge` role alone carries a two-seat cross-family ensemble. The seats
+   are taken VERBATIM from the committed precedent rather than invented —
+   `experiments/2026-08-25-poietics-program/run-config.yaml`, measured:
+
+       judge = [('qwen3.5:397b', 'qwen', 'https://ollama.com/v1'),
+                ('glm-5.2',      'glm',  'https://ollama.com/v1')]
+
+   which is also the shape `scripts/cycle_soak.py --case pr1` already soaks
+   ("a two-seat qwen3.5/glm-5.2 judge ensemble").
+
+Every other seat — conjecturer, argumentative_critic, defender, variator,
+summarizer, synthesizer, vision_critic, property_designer, thesis,
+grounding_reviewer — stays on `qwen3.5:397b`, byte-identical to ARM C's.
+**The defender is a GENERATING seat, not an adjudicating one** — it writes a
+defence, it does not rule — so R35's confinement keeps it on the one model.
+That reading is recorded here because the opposite one is available and the
+precedent run happens to put a different family in that seat.
+
+`accept (route identity):` ARM A's and ARM C's compiled role tables are
+compared field by field; every role but `judge` has an identical
+`route_sha256`, and `judge` differs by having two seats of two families. The
+comparison is a committed tool output, not an eyeballing.
+`accept (the gate is really on):` on a dry-run against the stub, the rebuilt
+run configuration reports `ARGUMENTATIVE_AUTHORITY=trial_required` AND
+`ADJUDICATION_STATUS_AUTHORITY_ENABLED=True`, and
+`rules/crit.py::_authority` over that configuration returns `trial_required`
+rather than `observe_only` — the same measurement M1 made, re-made on ARM A's
+own compiled artifact.
+`accept (the ensemble is obtainable):` on the same dry-run,
+`_select_judge_ensemble` returns two seats and does NOT raise
+`JudgeEnsemblePolicyError`; the check is driven RED by collapsing the judge
+role to one seat, so it fails for the reason it claims to test.
+
+**An open question this amendment does NOT assume away.** Whether a defended
+trial also requires `JUDGE_SEATS_ENABLED` and a `rubric_policy` other than
+`forbid` to dispatch is NOT settled here from reading. It is a done-criterion
+of a tranche-1 step: the answer comes from a dry-run and a stub soak, offline,
+and whatever it turns out to be is recorded in PREREG §2 before sealing. The
+P-C1 soak case runs with `rubric_policy forbid, JUDGE_SEATS_ENABLED false`,
+which is evidence that the two settings are independently switchable, not
+evidence about what a trial needs.
+
+**S5b (R35).** PREREG §0 carries the deviation as a named, dated disclosure in
+its own row — not a footnote — in the form: ARM A's judging seats are not the
+one model; its conjecturer and critic are byte-identical to ARM C's; therefore
+`A vs C` measures granted authority WITH cross-family adjudication against no
+authority, and no claim of a pure one-model comparison may be made from it.
+
+**S5c (R37).** PARKED P1 is untouched and unbuilt. Road A-cross is not a fix
+for it and must not be reported as one: the solo road the 2026-08-09 law
+requires still does not reach a run, and this tranche routes around that
+rather than repairing it — the same move, and the same disclosure, that the
+organiser tranche's Amendment 8 made for its own parked defect.
+
+**Q-OP1's other consequence: the frozen-surface forecast for the tranche as
+now specified is the CLEAR one.** The `CONTACT` verdict recorded above belongs
+to Road A-code, which the operator has ruled out (R37). Nothing in this
+tranche declares a target under `src/`, so the forecast that governs is:
+
+    frozen_surface_verdict: CLEAR
+    frozen_surface_contacts: []
+    frozen_adjacent_contacts: []
+
+## What Q-OP2's answer changes: the tranche is TRANCHE 1, and it spends nothing
+
+**The bound (R38, C9): no live call.** Every instrument in tranche 1 is proven
+against the deterministic stub, a committed root, or a fixture. The credential
+in the tranche's gitignored `env` is not read by anything tranche 1 runs.
+`accept:` at delivery, `grep -rn "ollama.com" experiments/2026-09-09-*/` returns
+only configuration files and documents — no executed log; and no tranche-1
+artifact carries a provider response.
+
+**Tranche 1 owns:** S1's pins (as declarations), S2's `arm0.py` (built, not
+run), S3's and S5's configurations and manifest builder, S4's stub and bank
+TOOL, S8's `PREREG.md` sealed, S9's `coupling_placebo.py` with its W2
+reproduction, S10's `record_census.py`, S11's `claims.json`, S12's soaks,
+S13's env discipline (already met), S16's scope and delivery discipline.
+
+**Tranche 2 owns:** S6's launches and root retirements, S7's three
+qualification batteries, S2's ARM 0 execution with K set from the measured
+call count, S4's bank MINTED from ARM C's measured objection lengths, S14's
+detached runs and failure ledger, S15's RESULTS.md, and the judging.
+
+**S4 is split, and the split is the honest one (R38 × R7/R9).** ARM V's bank
+must be length-matched to ARM C's objections, and ARM C has not run. So
+tranche 1 ships `tools/make_vacuous_bank.py` — a deterministic generator that
+takes a target length distribution and emits the bank — and proves it on the
+objection lengths of an ALREADY-COMMITTED root, not on ARM C's. PREREG
+registers the RULE that mints the real bank (median and interquartile range of
+ARM C's own argumentative-critic objections, both runs pooled, reported before
+the bank is generated), so the number is fixed by a rule sealed in advance and
+filled in by a measurement, which is what pre-registration is for. The same
+pattern covers S2's K.
+`accept:` `make_vacuous_bank.py --self-test` reproduces a committed fixture
+bank byte-for-byte from a fixed seed and a fixed target distribution.
+
+**PREREG.md is sealed in tranche 1, before tranche 2's first call (R15, R38).**
+It therefore states, in §0, exactly which of its values are rules awaiting a
+measurement (ARM V's bank, ARM 0's K) and which are fixed numbers — so a reader
+can tell a pre-registered rule from a post-hoc choice without trusting anyone's
+memory.
+
+## Budget, recomputed for tranche 1 only
+
+    python3 -c "print(sum([120,220,150,120,180,250,200,250,60,320,140]))"
+    2010
+
+`tools/critic_stub.py` + `make_vacuous_bank.py` come to 220 rather than S4's
+350, because the bank ITSELF (the 130 lines of generated content) is tranche
+2's artifact, not tranche 1's. Everything else is unchanged from the itemization
+above. **~2 010 lines, ~12 commits, 0 provider tokens, 0 frozen surfaces.**
+
+Rubric: 6/6 yes — R34-R40 each have an item with a machine-decidable accept
+(R34/R35 -> S5, S5b; R36 -> S16's accept; R37 -> S5c; R38/C9 -> the no-live-call
+accept and the tranche-1/2 table; R39/R40 -> S16's delivery discipline); the
+blast-radius census above is unchanged and still classifies every hit, and the
+forecast that now governs is the CLEAR one, restated verbatim; every mechanism
+this amendment names is traced to committed code or a committed configuration
+(the judge ensemble to `poietics/run-config.yaml`, the master gate to
+`rules/crit.py::_authority`, the ensemble selection to
+`llm/adapter.py:702-706`), and the one thing it could not settle by reading —
+whether a trial needs `JUDGE_SEATS_ENABLED` — is written down as an open
+done-criterion instead of an assumption; nothing here is untraceable to an R
+or C number.

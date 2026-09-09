@@ -204,3 +204,58 @@ Q6: Is ARM 0's spend match "by number of calls" (the brief's words in R5)
 
 (append-only; later operator messages land here as R34... or
 "R2a supersedes R2", each with its verbatim quote)
+
+### Amendment 1 (2026-09-09) — the operator answers SPEC.md's two questions
+
+Received after SPEC.md was committed and pushed (commit `7fd80663a`) and the
+STOP was presented. Verbatim, both answers in one message:
+
+> Q-OP1: Road A-cross. Keep every generating seat on the one model and give the
+> JUDGE role a two-seat cross-family ensemble with
+> ARGUMENTATIVE_AUTHORITY=trial_required, exactly as you priced it. Disclose the
+> deviation from the one-model rule in PREREG and confine it to the seats that
+> adjudicate, so the conjecturer and critic in ARM A stay byte-identical to ARM
+> C. Zero lines under src/. Your PARKED P1 (the solo road the 2026-08-09 law
+> requires does not reach a run) stays parked as its own defect window; do not
+> build it here.
+>
+> Q-OP2: Split. Tranche 1: every instrument, the offline proofs, the soaks,
+> PREREG.md sealed, no live call. Deliver and stop; the launches are tranche 2
+> in this same window after the monitor has read tranche 1.
+
+New requirements, numbered from R34:
+
+R34 (behavior): "Road A-cross. Keep every generating seat on the one model and
+    give the JUDGE role a two-seat cross-family ensemble with
+    ARGUMENTATIVE_AUTHORITY=trial_required, exactly as you priced it."
+    **SUPERSEDES R10's** `single_family_trial` and its
+    `ADJUDICATION_STATUS_AUTHORITY_ENABLED` half is RETAINED (the master gate
+    is still required for any trial mode to take effect —
+    `rules/crit.py::_authority`). R10 is marked `superseded-by:R34` for the
+    authority mode only; its "with the typed warning any switched gate emits
+    captured on the record" clause stands unchanged.
+R35 (artifact): "Disclose the deviation from the one-model rule in PREREG and
+    confine it to the seats that adjudicate, so the conjecturer and critic in
+    ARM A stay byte-identical to ARM C." Amends R4's "one model ... every
+    seat": the generating seats stay one model; the judge seats do not, and
+    the deviation is disclosed rather than hidden.
+R36 (process): "Zero lines under src/." Restates and hardens R30 — no
+    exception is granted by this amendment.
+R37 (process): "Your PARKED P1 (the solo road the 2026-08-09 law requires does
+    not reach a run) stays parked as its own defect window; do not build it
+    here."
+R38 (process): "Split. Tranche 1: every instrument, the offline proofs, the
+    soaks, PREREG.md sealed, no live call."
+R39 (process): "Deliver and stop". Tranche 1 ends at `dr-deliver-change` with
+    the R-by-R table; R33's "Stop when delivered and pushed" applies to
+    tranche 1's delivery.
+R40 (process): "the launches are tranche 2 in this same window after the
+    monitor has read tranche 1." Tranche 2 does not begin in this turn and does
+    not begin unprompted.
+
+Standing constraint added:
+
+C9: "no live call" (R38) is an absolute bound on tranche 1. Every instrument
+    is proven against the deterministic stub, a committed root, or a fixture —
+    never against the provider. The credential stays in place for tranche 2
+    and is not read by anything tranche 1 runs.
