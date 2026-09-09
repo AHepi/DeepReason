@@ -1,0 +1,110 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference, but as a rational 'decision postulate' akin to choosing axioms: it is a non-cognitive, pragmatic convention required to initiate action in the absence of certainty, distinct from any claim about future probability.",
+      "mechanism": "Reframes the act of preference as a performative speech act (a decision) rather than a descriptive belief state, thereby bypassing the need for inductive justification entirely.",
+      "counterconditions": [
+        "If Popper explicitly stated that such decisions must be grounded in expected utility derived from past success.",
+        "If the distinction between 'decision' and 'belief' collapses under the pressure of high-stakes practical action (e.g., bridge building).",
+        "If the 'decision postulate' inevitably relies on a hidden premise that the future will resemble the past."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_019] against SRC_003", "kind": "rebutted", "note": "This candidate does not rely on verisimilitude as a calculable metric; it relies on the normative force of a decision rule, rendering the undefinability of truth-likeness irrelevant to the specific mechanism of choice."},
+        {"handle": "[SRC_005] against SRC_004", "kind": "rebutted", "note": "It explicitly avoids conflating logical probability with practical preference by categorizing the latter as a non-epistemic convention, thus no category error occurs."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "It directly addresses the 'acting on' dilemma by defining action-initiation as the sole domain of the decision postulate, separate from the testing domain."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Distinguishes 'willingness to criticize' (testing mode) from 'commitment to act' (decision mode), resolving the conflation."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Accepts that Popper's personal preference was a conventional decision, arguing this consistency validates rather than undermines his framework."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "rebutted", "note": "Strictly adheres to Popper's falsificationist framework without importing Evolutionary Epistemology."},
+        {"handle": "[SRC_024] against SRC_023", "kind": "rebutted", "note": "Resolves the pragmatic contradiction by denying that rational action requires an expectation of success, only a rule for selection."},
+        {"handle": "[SRC_025] against SRC_008", "kind": "rebutted", "note": "Justifies action via methodological convention rather than evolutionary survival traits."}
+      ],
+      "optional_refs": ["SRC_009"]
+    },
+    {
+      "claim": "The preference unavoidably smuggles induction back into Popper's system because the very concept of 'severe testing' presupposes a nomological stability of nature; without an inductive assumption that the mechanisms tested today will operate tomorrow, corroboration is epistemically inert and irrational to prefer.",
+      "mechanism": "Argues that the definition of a 'severe test' contains a hidden inductive premise regarding the uniformity of nature, making the rejection of induction self-defeating.",
+      "counterconditions": [
+        "If 'severe testing' can be defined purely logically without reference to future outcomes.",
+        "If one can rationally prefer a theory for action while believing the underlying laws might change arbitrarily tomorrow.",
+        "If Popper provided a non-inductive account of why severe tests are more informative than mild ones."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_019] against SRC_003", "kind": "rebutted", "note": "This argument bypasses verisimilitude entirely, focusing instead on the temporal assumptions inherent in the testing process itself."},
+        {"handle": "[SRC_005] against SRC_004", "kind": "rebutted", "note": "It argues that the 'category error' is actually Popper's mistake; the conflation is real and fatal, not a misunderstanding by critics."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "Posits that acting on a theory is impossible without the hidden inductive bet that the test conditions persist."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Claims that 'practical reliance' inherently demands an inductive bridge which Popper failed to provide."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Suggests Popper's personal behavior reveals the impossibility of his own strictures, proving the smuggling occurred unconsciously."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "rebutted", "note": "Uses internal logic of falsificationism to show its dependency on induction, avoiding external evolutionary frameworks."},
+        {"handle": "[SRC_024] against SRC_023", "kind": "rebutted", "note": "Asserts the pragmatic contradiction is genuine: one cannot act rationally on corroboration without induction."},
+        {"handle": "[SRC_025] against SRC_008", "kind": "rebutted", "note": "Rejects the evolutionary analogy as insufficient to justify the specific rationality of acting on *past* test results."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_010"]
+    },
+    {
+      "claim": "The preference is defensible if reinterpreted through a 'propensity' ontology: corroboration indicates a theory's high propensity to withstand tests (a physical property of the theory-world relation), not a logical probability, allowing rational preference based on objective physical dispositions rather than inductive history.",
+      "mechanism": "Shifts the ground from logical confirmation to objective physical propensities, treating corroboration as evidence of a stable dispositional property.",
+      "counterconditions": [
+        "If Popper's propensity interpretation applies only to single-case probabilities and not to theory selection.",
+        "If identifying a 'propensity' from past tests still requires an inductive leap.",
+        "If the notion of a theory having a 'physical propensity' is category-mistaken."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_019] against SRC_003", "kind": "revised", "note": "Replaces 'verisimilitude' with 'propensity' as the non-inductive metric, addressing the definability issue by grounding it in physical disposition."},
+        {"handle": "[SRC_005] against SRC_004", "kind": "rebutted", "note": "Clarifies that propensity is an objective physical feature, not a logical probability, avoiding the cited category error."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "Action is justified by the current objective propensity of the theory, not by an inference from past to future."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Distinguishes reliance on a physical disposition from mere willingness to criticize."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Explains Popper's preference as a recognition of objective propensities revealed by testing."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "rebutted", "note": "Remains within Popper's later ontological commitments (propensities) rather than importing Campbell's evolution."},
+        {"handle": "[SRC_024] against SRC_023", "kind": "rebutted", "note": "Resolves the contradiction by grounding the preference in present reality (propensity) rather than past frequency."},
+        {"handle": "[SRC_025] against SRC_008", "kind": "rebutted", "note": "Offers a physicalist justification for action distinct from biological survival analogies."}
+      ],
+      "optional_refs": ["SRC_006"]
+    },
+    {
+      "claim": "The dilemma dissolves if we view scientific preference as a 'game-theoretic equilibrium' where adopting the best-corroborated theory is the dominant strategy for the community, regardless of individual epistemic justification, making the question of 'smuggled induction' a misframing of a social coordination problem.",
+      "mechanism": "Applies game theory to scientific methodology, framing theory choice as a coordination game where corroboration serves as a focal point (Schelling point).",
+      "counterconditions": [
+        "If scientists frequently coordinate on non-corroborated theories for social reasons.",
+        "If the 'dominant strategy' argument implicitly assumes that corroboration predicts future payoff.",
+        "If Popper's individualist epistemology is incompatible with communal game-theoretic models."
+      ],
+      "typicality": 0.25,
+      "discharges": [
+        {"handle": "[SRC_019] against SRC_003", "kind": "departure_declared", "note": "Departure: Rejects the need for an epistemic metric like verisimilitude entirely in favor of a sociological/game-theoretic explanation."},
+        {"handle": "[SRC_005] against SRC_004", "kind": "rebutted", "note": "Argues the category error lies in seeking logical justification for a social coordination move."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "Explains 'acting on' as participating in the coordinated equilibrium, which requires no inductive belief."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Reframes practical reliance as adherence to the community's focal point."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Interprets Popper's behavior as adherence to the rational norms of the scientific game."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "rebutted", "note": "Uses game theory instead of evolutionary epistemology to explain the stability of preference."},
+        {"handle": "[SRC_024] against SRC_023", "kind": "rebutted", "note": "Dissolves the pragmatic contradiction by shifting the locus of rationality from the individual mind to the system dynamics."},
+        {"handle": "[SRC_025] against SRC_008", "kind": "rebutted", "note": "Provides a structural reason for action (equilibrium) distinct from evolutionary survival."}
+      ],
+      "optional_refs": ["SRC_001"]
+    },
+    {
+      "claim": "The preference is an illusion of language; 'better-corroborated' is merely a retrospective label applied to whichever theory is currently preferred for action, rendering the statement tautological and devoid of any independent epistemic weight regarding truth or probability.",
+      "mechanism": "Deflationary semantic analysis: treats 'corroboration' as a synonym for 'currently chosen,' eliminating the causal link between testing and preference.",
+      "counterconditions": [
+        "If scientists genuinely cite test survival as the primary reason for preference prior to the choice.",
+        "If the term 'corroboration' has a specific technical meaning in Popper that exceeds mere preference.",
+        "If this view renders the concept of 'severe testing' meaningless as a precursor to choice."
+      ],
+      "typicality": 0.15,
+      "discharges": [
+        {"handle": "[SRC_019] against SRC_003", "kind": "rebutted", "note": "Since no metric is needed (it's just a label), the failure of verisimilitude definitions is irrelevant."},
+        {"handle": "[SRC_005] against SRC_004", "kind": "rebutted", "note": "Denies the existence of two distinct categories; claims the confusion arises from reifying a label."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "Argues that 'acting on' creates the status of 'better-corroborated,' not vice versa."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Collapses the distinction between willingness to criticize and reliance; both are aspects of the current linguistic stance."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Explains Popper's behavior as consistent with using the label to describe his own decisions."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "rebutted", "note": "Avoids evolutionary frameworks by sticking to linguistic deflation."},
+        {"handle": "[SRC_024] against SRC_023", "kind": "rebutted", "note": "Eliminates the pragmatic contradiction by denying the premise that corroboration is an independent variable."},
+        {"handle": "[SRC_0
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

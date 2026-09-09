@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future truth, but as a non-inductive methodological rule akin to a gambler preferring a die that has not yet shown bias: the preference is rational because it maximizes the severity of potential falsification in the next test, not because it increases the probability of success.",
+    "mechanism": "The mechanism is 'Severity Maximization': choosing the best-corroborated theory is the only choice that keeps the game of science going by subjecting the most resilient survivor to the hardest possible next test. If we chose a poorly tested theory, we would risk a trivial falsification or miss the chance to learn from a deep error. Thus, the 'practical' act of building a bridge on a corroborated theory is not a belief in its safety (induction), but a commitment to test the limits of our current knowledge under load; if it fails, we learn more than if we built it on a weak theory.",
+    "counterconditions": [
+      "If Popper admits that acting on a theory implies an expectation of its practical success (e.g., the bridge won't fall), then the distinction between corroboration and probability collapses into induction.",
+      "If the 'Severity Maximization' argument cannot explain why a scientist would personally rely on the theory for life-critical decisions rather than just proposing it for further testing.",
+      "If the analogy of the 'gambler' secretly relies on the uniformity of nature (that the die will behave tomorrow as it did today), which is the very inductive principle Popper rejects."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The criticism assumes the defense requires a formal metric of 'verisimilitude' to calculate truth-likeness. The proposed mechanism bypasses this by framing preference as a procedural rule for maximizing test severity, not a calculation of closeness to truth. No formal definition of verisimilitude is needed to prefer the theory that has survived the hardest tests so far."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The rebuttal clarifies that 'rational preference' here does not entail an 'expectation of future success' in the probabilistic sense. It entails an expectation of 'maximum information gain' regardless of the outcome. The category error is avoided by strictly separating pragmatic utility (learning speed) from predictive confidence."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly address the 'acting on' dilemma. The revision argues that 'acting on' a theory (building the bridge) is itself the 'severe test.' One does not build the bridge because one believes it will hold, but because building it is the only way to rigorously test the theory under real-world stakes. If it holds, corroboration increases; if it falls, falsification is achieved. The action is the test."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'practical reliance' with 'belief in truth.' The candidate distinguishes them: reliance is a methodological stance to expose the theory to destruction. Popper's preference is for the theory that offers the best chance of being decisively refuted if false, which coincidentally makes it the safest bet for action only in the sense that it has survived the most attempts to kill it."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal behavior is consistent if viewed as adhering to the methodological rule of 'always test the strongest survivor.' His preference is not a contradiction but an application of the rule that defines scientific rationality: do not waste time testing weak theories when strong ones are available to be challenged."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids Evolutionary Epistemology. It relies solely on Popper's logic of situational analysis and the definition of corroboration as a report of past test severity, not an evolutionary fitness function."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "revised",
+        "note": "Revised to clarify that the 'pragmatic contradiction' dissolves if 'rationality' is defined as 'adherence to the method of conjecture and refutation' rather than 'maximization of expected utility.' The preference is rational because it serves the goal of truth-seeking (via falsification), not the goal of safety."
+      },
+      {
+        "handle": "2bb824986a07c70a152db1deb50653be633a98497dc1a927ef76e718b290d85f",
+        "kind": "rebutted",
+        "note": "The analogy resolves the tension by redefining 'action' as 'testing.' Acting on the theory is the ultimate severe test. The justification for acting is not that the theory is likely true, but that acting provides the highest quality data (corroboration or falsification) compared to inaction or acting on weaker theories."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_004"],
+      "shared_structure": [
+        "Selection of an option based on past survival of stress tests.",
+        "Rejection of probabilistic prediction of future performance.",
+        "Preference driven by the desire to maximize the informational value of the next trial."
+      ],
+      "disanalogies": [
+        "In engineering, failure often means catastrophe, whereas in Popperian science, failure (falsification) is a success for knowledge growth.",
+        "The gambler usually seeks profit (inductive hope), while the Popperian scientist seeks refutation (deductive progress)."
+      ],
+      "transfer_claims": [
+        "Just as a pilot prefers a plane model with a long safety record not because it guarantees no crashes, but because it has survived diverse conditions, scientists prefer corroborated theories to subject them to new, diverse conditions.",
+        "The rationality of the choice lies in the structure of the testing regime, not in the statistical likelihood of the outcome."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that 'maximizing test severity' logically requires assuming the future will resemble the past (uniformity principle).",
+        "If Popper explicitly stated that acting on a theory requires a belief in its probable truth, contradicting the 'methodological rule' interpretation."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,139 @@
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 2 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## open-criticisms
+OPEN CRITICISMS ON THIS PROBLEM (8 of 42 shown, by handle) -- these are part of what your candidate must answer, not advice.
+Every candidate you submit must DISCHARGE each handle below, one of:
+  - revised -- say WHAT changed and WHERE in the candidate
+  - rebutted -- say why the criticism fails. Your rebuttal enters the record as an ordinary claim and can be attacked like any other
+  - departure_declared -- say what you are breaking with. Declaring costs you nothing; nothing scores a departure
+  [0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e] against 9ec93ef2543266c6b15de61811d514e7ef65e509285937e40f66c62807c2abe9
+      CLAIM: The target's defense relies on 'verisimilitude' (truth-likeness) as a non-inductive metric for rational choice, but this fails Popper's own terms because Popper explicitly conceded that verisimilitude cannot be formally defined or calculate
+      CITED SPAN: (none quoted)
+  [0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255] against d811afa95acdf601f66b12132d20acc9e0b09386022589039b752b0e26717e9c
+      CLAIM: The target's claim that rational preference 'logically entails' an expectation of future success commits a category error by conflating Popper's specific rejection of *logical probability* (inductive confirmation) with the broader concept o
+      CITED SPAN: (none quoted)
+  [1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79] against 257a06501d005a8cb12c16b8d5d506e8c8277840a703ba6a82e9a6257fb2c23e
+      CLAIM: The target's defense fails to address the specific dilemma of 'acting on' a theory versus merely 'testing' it. Popper's problem highlights that scientists must choose which theory to rely on for practical decisions (e.g., building a bridge)
+      CITED SPAN: (none quoted)
+  [1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f] against 1a4cdb521d31c5b24b1de820ec0d34f915eac64ca11659a89054a7d7d0ae8109
+      CLAIM: The target's defense fails to address the problem's core challenge regarding 'acting on' a theory (e.g., building bridges), conflating 'willingness to criticize' with 'practical reliance'. Popper's own admission that scientists prefer bette
+      CITED SPAN: (none quoted)
+  [1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd] against 48969427b03779fe5b60e6d65e7ca0dd60ef43fd032d937aa00bf30552f8d043
+      CLAIM: The target's defense fails to resolve the specific tension in the prompt regarding Popper's own behavior: if corroboration offers no objective reason for preference (being merely a 'conventional' decision postulate), then Popper's personal
+      CITED SPAN: (none quoted)
+  [254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471] against 1cc757de7d755c213decb665865118f54ad52a4636c4ec03514f37f51f6314fe
+      CLAIM: The target's resolution fails to answer the specific question of whether the preference is defensible on Popper's own terms because it substitutes Popper's falsificationist framework with Evolutionary Epistemology (associated with Campbell
+      CITED SPAN: (none quoted)
+  [2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686] against fc00b7847d7b2fd0b86adf20f851511ff05651681867ef70e05c8ae9404b17e9
+      CLAIM: The target's defense relies on a distinction between 'logical probability' and 'practical preference' that fails to address the core pragmatic contradiction: if acting on the better-corroborated theory is rational because it has survived se
+      CITED SPAN: (none quoted)
+  [2bb824986a07c70a152db1deb50653be633a98497dc1a927ef76e718b290d85f] against 9f4b6c4e088cd97b6be95d65128df768599424916141496d8b4eadcfd54ae935
+      CLAIM: The target's evolutionary analogy fails to resolve the specific tension Popper identified regarding *action*. While the target explains why scientists might *prefer* a theory (methodological survival), it does not justify why acting on that
+      CITED SPAN: (none quoted)
+
+## school-stance
+SCHOOL STANCE (weight 0.40): seek the covering principle
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural) — each entry is its CLAIM, distilled; request an alias through context_request to read that artifact whole:
+- 30be11905db881ea7a4e488a8e68f34e4f6b262380bb3b1a31ceb9763a9aea81: {"school_policy": {"school": "school-2", "stance": "unifier"}}
+- 330d5bc4591d8cdcf71690c55147054e893fed61a10313eab1118c1b42329eec: The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, pragmatic decision rule based on verisimilitude (truth-liken …[clipped; request this alias for the whole text]
+- a42c26613903a62362e81642760b23ca4630ce6ad63f6363de1c05cc29695d9b: The preference for better-corroborated theories smuggles induction back into Popper's system, rendering his rejection of probabilistic confirmation inconsistent …[clipped; request this alias for the whole text]
+- 9f4b6c4e088cd97b6be95d65128df768599424916141496d8b4eadcfd54ae935: The resolution lies in reinterpreting corroboration as an evolutionary selection mechanism where 'preference' is a survival trait of the methodology, not a logi …[clipped; request this alias for the whole text]
+- 459e3f4e6098c090a0c99c13070152da30cd3c5e88dee54d561167281a3b5234: The dilemma dissolves if we treat the preference for corroborated theories as a convention or decision postulate, similar to choosing axioms, rather than a disc …[clipped; request this alias for the whole text]
+- cd0c9478db4b9864129676438e46704207d4f9acb6ab8938b2a04f8bee830d24: The preference is defensible only if we accept a weakened form of induction ('pragmatic induction') that Popper officially rejected but practically utilized, ad …[clipped; request this alias for the whole text]
+
+## superseded-conjectures
+SUPERSEDED (refuted — do not re-propose these; they are here so you can tell a new idea from a repeat) — each entry is its CLAIM, distilled; request an alias through context_request to read that artifact whole:
+- 10cccbd90c233cd7272568355bc793f78a2a05995976f35cb7de6dc1f365b556: Relation Kind: Abstraction of Mechanism. The isolated context serves as a high-level abstraction of the neighbourhood's concrete evolutionary mechanism; the 'de …[clipped; request this alias for the whole text]
+- db75b149db56cceea83761676e29dd735100d611e94c0a7400f595ee45d9758a: Relation Kind: Reduction (Failed). The isolated context (03f8b3f2f004) attempts to reduce the complex social agreement described in SRC_004 to a solitary cognit …[clipped; request this alias for the whole text]
+- 9a7763d2cda49c8dc56cc59365bac162c93c494828fd98c60541c0c062c12cd1: Relation Kind: Abstraction. The isolated context (03f8b3f2f004) is an abstraction of the procedural conventions found in SRC_001, SRC_002, and SRC_004, strippin …[clipped; request this alias for the whole text]
+
+## complement-directive
+COMPLEMENT DIRECTIVE: produce the attempt these summaries make least likely — avoid the modal continuation of the neighbourhood.
+
+## live-neighbourhood
+LIVE NEIGHBOURHOOD (accepted and still standing — shown whole because these are the ones to build on or beat):
+- 353eb6c0f6480488dc16d580d0182802666495bf1058ad2ed3b518f800185d4b: {"analogy":null,"claim":"The preference is an illusion of language; 'better-corroborated' simply means 'currently preferred for action,' making the statement tautological and devoid of epistemic weight regarding truth or probability.","counterconditions":[{"case":"If scientists genuinely cite test survival as the primary reason for preference.","checker_spec":null,"eval":"observation"},{"case":"If the term 'corroboration' has a specific technical meaning in Popper that exceeds mere preference.","checker_spec":null,"eval":"observation"},{"case":"If this view renders the concept of 'severe testing' meaningless.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"This deflationary 
+…[section compressed]…
+compatible with the neighbourhood as two aspects of a single phenomenon: the 'decision postulate' is the first-person experience of the third-person 'evolutionary selection' process, requiring no causal bridge but only an identity of reference. REFUTED IF: A case is found where the first-person decision systematically misaligns with the third-person evolutionary outcome in a way that cannot be explained by error or lag (suggesting they are distinct phenomena).
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates. EVERY candidate must carry a `discharges` entry for EVERY handle listed under OPEN CRITICISMS above. A submission missing any of them is returned to you once with the open list, and then accepted with the gap recorded.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.
+
+REFERENCE MENU -- /candidates/*/optional_refs/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (25 legal values)
+  [0] OMIT -- leave "optional_refs" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+  [17] SRC_017
+  [18] SRC_018
+  [19] SRC_019
+  [20] SRC_020
+  [21] SRC_021
+  [22] SRC_022
+  [23] SRC_023
+  [24] SRC_024
+  [25] SRC_025
+You may answer with the handle itself or with its [index].
+
+REFERENCE MENU -- /candidates/*/neighbours/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (25 legal values)
+  [0] OMIT -- leave "neighbours" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+  [17] SRC_017
+  [18] SRC_018
+  [19] SRC_019
+  [20] SRC_020
+  [21] SRC_021
+  [22] SRC_022
+  [23] SRC_023
+  [24] SRC_024
+  [25] SRC_025
+You may answer with the handle itself or with its [index].

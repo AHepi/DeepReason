@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future truth, but as a non-inductive 'conventional decision' to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing the content of our conjectures while accepting that this preference offers no guarantee of success.",
+    "mechanism": "The mechanism distinguishes between 'logical probability' (which Popper rejects as inductive) and 'rational preference based on critical scrutiny.' By treating the choice to act on a corroborated theory as a methodological rule rather than an epistemic proof, the agent avoids smuggling in induction. The preference is justified by the fact that the better-corroborated theory has survived tests that would have eliminated weaker rivals, making it the 'best available' guess without claiming it is 'probably true.'",
+    "counterconditions": [
+      "If the preference for corroborated theories implicitly assumes that the future will resemble the past (uniformity of nature), then it smuggles in induction.",
+      "If acting on a theory requires a belief in its probable truth rather than just a willingness to risk falsification, then Popper's distinction collapses.",
+      "If 'verisimilitude' (truth-likeness) cannot be defined without inductive assumptions, then it cannot serve as the basis for rational choice."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The criticism claims verisimilitude fails because it lacks formal definition. However, Popper's defense of preference does not strictly require a calculable metric of verisimilitude; it relies on the comparative history of severe testing. The rebuttal clarifies that 'better-corroborated' refers to the severity of tests passed, not a calculated distance to truth, thus bypassing the need for a formal verisimilitude calculus."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The criticism alleges a category error between logical probability and practical expectation. The candidate rebuts this by explicitly framing the expectation of success not as a logical entailment but as a 'conventional decision' to bet on the theory that has proven most robust. This maintains the category distinction: logic forbids induction, but methodology permits choosing the strongest survivor."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly address the 'acting on' dilemma. The revision emphasizes that acting on a theory is a pragmatic commitment to its current survival status, not a declaration of its eternal validity. This directly answers the challenge of building bridges: we build on the theory that hasn't failed yet, knowing it might fail tomorrow."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'willingness to criticize' with 'practical reliance.' The rebuttal asserts that practical reliance IS the willingness to stake resources on a theory's current unrefuted status. Popper's admission of preference is consistent with this: we rely on what works until it doesn't, which is the essence of critical rationalism in action."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Regarding Popper's personal behavior: his preference is defensible as a consistent application of his own rule to choose the boldest, best-tested conjecture. It is not a contradiction but an embodiment of the 'conventional decision' he advocated. He acts on the best available knowledge without claiming it is certain."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The candidate does not substitute Evolutionary Epistemology but stays within Popper's falsificationist framework. The argument relies solely on the logic of severe testing and the rejection of induction, avoiding external evolutionary analogies that might introduce biological determinism."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "The pragmatic contradiction is resolved by denying that 'rational' implies 'probabilistically secure.' Rationality, for Popper, means acting on the most critically examined option. The tension dissolves when one accepts that rational action can proceed without inductive justification."
+      },
+      {
+        "handle": "2bb824986a07c70a152db1deb50653be633a98497dc1a927ef76e718b290d85f",
+        "kind": "revised",
+        "note": "Revised the mechanism to clarify that 'acting on' a theory is justified by its survival of severe tests, which is a factual record of the past, not a prediction of the future. This addresses the specific tension regarding action by grounding the decision in historical performance rather than future certainty."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["naval_strategy_severe_test"],
+      "shared_structure": [
+        "Selection of a strategy based on survival of previous battles rather than probability of future victory.",
+        "Recognition that past survival does not guarantee future success but offers the best available basis for action.",
+        "Distinction between betting on a survivor and believing the survivor is invincible."
+      ],
+      "disanalogies": [
+        "Naval battles involve physical destruction of ships, whereas scientific theories are only logically falsified.",
+        "A general may have intuitive hunches about enemy patterns (induction), whereas a Popperian scientist strictly forbids such hunches as justification."
+      ],
+      "transfer_claims": [
+        "Just as a commander chooses the ship that survived the storm to lead the fleet, a scientist chooses the theory that survived falsification to guide research.",
+        "The choice is pragmatic and risk-aware, not a claim of absolute safety."
+      ],
+      "overturn_conditions": [
+        "If the naval analogy implies that survival makes a ship 'unsinkable' (inductive leap), the analogy fails.",
+        "If the context of action requires certainty rather than risk management, the analogy breaks down."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a 'pragmatic' distinction between acting on a theory and believing it probable, but this collapses when addressing the problem's specific challenge regarding 'verisimilitude' (truth-likeness). The target asserts that choosing the best-corroborated theory maximizes content without inductive assumptions, yet Popper's own concept of verisimilitude—which underpins the idea that one theory is 'closer to truth' than another—was shown by Miller and Tichý to require inductive probability to be formally defined. By failing to address how a scientist can rationally prefer Theory A over Theory B as 'better' (i.e., closer to truth) without assuming the future will resemble the past (induction), the target's claim that the preference is purely a 'non-inductive conventional decision' is unsubstantiated. The analogy to naval strategy fails because a commander chooses a ship based on the inductive expectation that its past survival predicts future durability; similarly, a scientist's preference implicitly relies on the inductive leap that passing severe tests makes a theory more likely to be true or closer to it, which is exactly what the problem asks the target to defend against.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's concept of verisimilitude cannot be coherently defined without inductive assumptions, rendering any preference for 'better' theories inherently inductive.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude requires induction, what non-inductive metric does Popper actually provide for preferring one corroborated theory over another?"
+    }
+  ]
+}

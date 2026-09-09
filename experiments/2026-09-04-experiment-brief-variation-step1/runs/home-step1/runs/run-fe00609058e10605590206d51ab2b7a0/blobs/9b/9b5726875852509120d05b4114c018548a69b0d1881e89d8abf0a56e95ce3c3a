@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a false dichotomy between 'logical guarantee' and 'mere convention,' failing to address Popper's specific concept of 'objective knowledge' (World 3). Popper argues that corroboration reports an objective logical relation between theory and evidence, not just a subjective decision or social convention. By reducing the preference to a 'decision postulate' akin to choosing axioms, the target ignores Popper's claim that severe testing provides non-inductive, objective grounds for preferring one theory over another as closer to the truth (verisimilitude), thereby misrepresenting the 'cost' as relativism when Popper intended it to be rational realism without induction.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguishes between the logical probability (which he rejects) and the objective logical situation created by severe tests, which allows for a rational preference based on verisimilitude rather than mere procedural convention.",
+      "premise_evidence": null,
+      "successor_question": "Does characterizing Popper's preference as a 'mere convention' ignore his explicit arguments for objective verisimilitude as a non-inductive basis for theory choice?"
+    }
+  ]
+}

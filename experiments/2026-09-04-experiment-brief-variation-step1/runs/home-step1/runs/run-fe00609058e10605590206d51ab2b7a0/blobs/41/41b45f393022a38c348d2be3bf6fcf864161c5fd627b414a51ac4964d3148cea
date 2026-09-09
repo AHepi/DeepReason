@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's own terms not as an inductive inference of future truth, but as a non-inductive 'conventional decision' to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing the informational content of our errors should we fail.",
+    "mechanism": "The preference operates via a pragmatic convention: since all theories are equally unproven (probability zero), rational action dictates choosing the one that has survived the most stringent tests because it offers the highest potential for learning (highest empirical content) if it is eventually falsified. This avoids induction by treating the choice as a methodological rule for error elimination rather than a prediction of success.",
+    "counterconditions": [
+      "If corroboration is interpreted as increasing the logical probability of the theory being true.",
+      "If the preference relies on an assumption that nature is uniform or that the future will resemble the past.",
+      "If the agent claims certainty that the chosen theory will not fail in the specific application (e.g., bridge building)."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'verisimilitude' with 'corroboration.' The proposed defense does not rely on calculating verisimilitude (which Popper admitted was problematic) but on the logical asymmetry of falsification and the conventional decision to prefer high-content theories that have survived severe tests."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The claim explicitly distinguishes between 'logical probability' (rejected) and 'practical preference' (accepted as convention). The mechanism avoids the category error by framing the preference as a rule for maximizing testability, not an expectation of logical confirmation."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma: the justification for building a bridge with Theory A over Theory B is not that A is 'safer' in a probabilistic sense, but that A has been tested more severely regarding structural integrity, making it the better vehicle for potential falsification and thus the only rational choice for a critical rationalist."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The defense does not conflate criticism with reliance; it argues that reliance IS the act of subjecting the theory to a new, practical test. Choosing the better-corroborated theory is simply choosing the best candidate to expose to the next potential falsifier (the real-world application)."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is consistent with his philosophy if viewed as a consistent application of his own methodological rules. He prefers the better-corroborated theory because he consistently chooses the path of highest risk/highest information gain, which is the core of his ethical stance as a scientist."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The argument remains strictly within Falsificationism. It does not invoke Evolutionary Epistemology but relies solely on the logical asymmetry between verification and falsification and the definition of corroboration as a report on past performance, not a predictor of future success."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "revised",
+        "note": "Clarified that the 'pragmatic contradiction' is dissolved by accepting that 'rationality' in Popper's system means 'adherence to critical methods,' not 'maximization of expected utility' based on inductive probabilities. The cost is admitting we have no guarantee the bridge won't fall, only that we chose the theory most open to having that failure reveal itself."
+      },
+      {
+        "handle": "2bb824986a07c70a152db1deb50653be633a98497dc1a927ef76e718b290d85f",
+        "kind": "rebutted",
+        "note": "The analogy to survival is not biological but logical. Acting on the theory is the ultimate test. The justification for action is that it completes the cycle of conjecture and refutation; refusing to act on the best-tested theory would be an abandonment of the critical method itself."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

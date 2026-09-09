@@ -1,0 +1,216 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible as a 'procedural imperative' distinct from epistemic probability: we choose the theory that has survived the most severe tests not because it is likely true, but because it is the only one that has successfully withstood our best attempts to eliminate error, making it the most reliable tool for further criticism and action until falsified.",
+      "mechanism": "Critical Rationalist Imperative: Preference is based on the logical status of having survived severe testing (corroboration report), which functions as a decision rule for action without implying inductive support or increased truth probability.",
+      "counterconditions": [
+        "If acting on a theory (e.g., building a bridge) requires an expectation of future success that corroboration cannot logically provide.",
+        "If the distinction between 'logical probability' and 'practical reliance' collapses under the weight of pragmatic necessity.",
+        "If Popper's own admission of preferring better-corroborated theories implicitly relies on an inductive assumption about the uniformity of nature."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_016] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate does not rely on 'verisimilitude' as a calculable metric but on the binary status of 'surviving severe tests' as a procedural signal for action, avoiding the formal definition problem cited."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "The claim explicitly distinguishes between 'logical probability' (rejected) and 'procedural reliability' (accepted), addressing the category error by defining preference as a non-inductive decision postulate."
+        },
+        {
+          "handle": "[SRC_014] against SRC_010",
+          "kind": "rebutted",
+          "note": "The mechanism addresses 'acting on' by framing the choice as a rational obligation to use the most error-resistant tool available, rather than a prediction of success."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "revised",
+          "note": "Clarified that 'willingness to criticize' is the *source* of the theory's robustness, which justifies 'practical reliance' not as a belief in truth, but as a bet on the absence of known errors."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Popper's personal preference is explained as consistent with his system if viewed as adherence to the critical method itself, not as a covert inductive inference."
+        },
+        {
+          "handle": "[SRC_023] against SRC_022",
+          "kind": "rebutted",
+          "note": "Severity maximization separates preference from induction by focusing on the *past* performance of the test (severity) rather than the *future* probability of the theory."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "The argument remains strictly within Popper's falsificationist framework, avoiding Evolutionary Epistemology by grounding the imperative in logic of testing, not biological survival."
+        },
+        {
+          "handle": "[SRC_021] against SRC_020",
+          "kind": "rebutted",
+          "note": "The pragmatic contradiction is resolved by denying that 'rational preference' entails 'expectation of success'; it entails only 'absence of known failure'."
+        }
+      ],
+      "optional_refs": ["SRC_007", "SRC_012"]
+    },
+    {
+      "claim": "The preference smuggles induction back into Popper's system because any rational basis for preferring one conjecture over another for practical action inevitably relies on an implicit assumption that the future will resemble the past (uniformity of nature), which is the core of the inductive principle Popper sought to reject.",
+      "mechanism": "Implicit Induction via Pragmatic Necessity: The act of 'preferring' for 'action' logically entails a belief in future reliability, which cannot be derived from past falsification attempts alone without an inductive bridge.",
+      "counterconditions": [
+        "If a non-inductive basis for practical preference can be formulated (e.g., purely conventional or decision-theoretic).",
+        "If 'acting on' a theory can be decoupled from any expectation of its continued validity.",
+        "If Popper's system allows for 'rational choice' without 'epistemic support'."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_016] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate argues that *any* metric for preference, including verisimilitude or corroboration, fails Popper's terms if it guides action, thus sidestepping the specific definitional critique of verisimilitude."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "The claim asserts that the 'category error' is illusory; conflating logical probability with practical expectation is unavoidable when acting, thus reinstating induction."
+        },
+        {
+          "handle": "[SRC_014] against SRC_010",
+          "kind": "rebutted",
+          "note": "Directly addresses the dilemma by arguing that 'acting on' a theory *requires* the very inductive leap Popper forbids, making the defense impossible on his own terms."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "Argues that 'practical reliance' is indistinguishable from 'inductive confidence' in the context of high-stakes action like bridge-building."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Posits that Popper's personal behavior reveals the impossibility of his strict theoretical stance, confirming the smuggling of induction."
+        },
+        {
+          "handle": "[SRC_023] against SRC_022",
+          "kind": "rebutted",
+          "note": "Claims that 'Severity Maximization' cannot separate preference from induction because severity itself assumes the relevance of past tests to future outcomes."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "Maintains that the critique holds even without Evolutionary Epistemology, as the logical structure of 'preference for action' is inherently inductive."
+        },
+        {
+          "handle": "[SRC_021] against SRC_020",
+          "kind": "rebutted",
+          "note": "Affirms the pragmatic contradiction: rational action demands an expectation of success that corroboration cannot supply without induction."
+        }
+      ],
+      "optional_refs": ["SRC_008", "SRC_011"]
+    },
+    {
+      "claim": "The preference is defensible via an evolutionary analogy where 'corroboration' signals the survival fitness of the *methodology* used to generate the theory, not the truth probability of the theory itself; thus, preferring it is rational as selecting the most robust heuristic, not as an inductive inference about the world.",
+      "mechanism": "Evolutionary Heuristic Selection: Corroboration indicates that the theory-generation process has survived selection pressures, making the output a 'fit' instrument for interaction, independent of its truth value.",
+      "counterconditions": [
+        "If the analogy between biological survival and logical corroboration breaks down regarding 'truth' vs 'fitness'.",
+        "If agents must know the evolutionary mechanism to rationally prefer the outcome (reflexivity problem).",
+        "If 'acting on' a theory requires truth-aptness rather than instrumental fitness."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_016] against SRC_003",
+          "kind": "departure_declared",
+          "note": "This candidate explicitly adopts an evolutionary framework (departing from strict Popperian logic) to resolve the tension, accepting the cost of modifying Popper's original terms."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "Reframes the 'category error' as a feature: the shift from 'truth' to 'fitness' avoids the need for logical probability entirely."
+        },
+        {
+          "handle": "[SRC_014] against SRC_010",
+          "kind": "rebutted",
+          "note": "Addresses 'acting on' by treating theories as tools selected for durability, similar to choosing a sturdy hammer, without needing to believe it is the 'truest' hammer."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "Distinguishes 'practical reliance' on a fit tool from 'belief' in its ultimate correctness."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Explains Popper's behavior as intuitive alignment with evolutionary rationality, even if his formal logic lagged."
+        },
+        {
+          "handle": "[SRC_023] against SRC_022",
+          "kind": "rebutted",
+          "note": "Severity becomes a measure of 'environmental stress' survived, validating the heuristic without inducing truth."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "revised",
+          "note": "Acknowledges the use of Evolutionary Epistemology but argues it is a necessary extension to save Popper's core insight from self-contradiction."
+        },
+        {
+          "handle": "[SRC_021] against SRC_020",
+          "kind": "rebutted",
+          "note": "Resolves the contradiction by replacing 'expectation of success' with 'expectation of continued utility'."
+        }
+      ],
+      "optional_refs": ["SRC_009", "SRC_003"]
+    },
+    {
+      "claim": "The preference is a 'conventionalist stratagem' ironically rehabilitated: we decide by convention to treat the best-tested theory as true for the purpose of action, acknowledging this is a voluntary commitment rather than a logical derivation, thus preserving Popper's rejection of induction while allowing for scientific practice.",
+      "mechanism": "Voluntarist Convention: The preference is a speech act or social agreement to provisionally accept a theory, grounded in will rather than evidence or logic.",
+      "counterconditions": [
+        "If conventions require justification that reintroduces induction.",
+        "If 'acting on' a convention differs significantly from acting on a believed truth.",
+        "If the arbitrariness of the convention undermines the rationality of the preference."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_016] against SRC_003",
+          "kind": "rebutted",
+          "note": "Avoids verisimilitude entirely by grounding the choice in human volition, not objective metrics."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "Accepts the conflation of categories as a deliberate pragmatic move, not a logical error."
+        },
+        {
+          "handle": "[SRC_014] against SRC_010",
+          "kind": "rebutted",
+          "note": "Directly solves the 'acting on' dilemma by defining action as the enactment of the convention."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "Equates 'practical reliance' with the strength of the communal convention."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Interprets Popper's personal preference as an expression of his own conventional commitment to critical rationalism."
+        },
+        {
+          "handle": "[SRC_023] against SRC_022",
+          "kind": "rebutted",
+          "note": "Severity serves only as the trigger for the convention, not the justification for truth."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "Remains within a modified falsificationism where the 'decision' element is foregrounded over the 'logic' element."
+        },
+        {
+          "handle": "[SRC_021] against SRC_020",
+          "kind": "rebutted",
+          "note": "Denies the contradiction by asserting that rationality includes the power to make unjustified but necessary commitments."
+        }
+      ],
+      "optional_refs": ["SRC_010"]
+    },
+    {
+      "claim": "The preference
