@@ -1,0 +1,20 @@
+{
+  "candidate": {
+    "content": "The 'Critical Conventionalism' described in the foundation inherits its structural vulnerability from the broader problem of arbitrary rule adoption in normative systems; this relation is REFUTED IF the convention can be shown to emerge necessarily from the logical structure of falsification itself rather than being a free-standing decree.",
+    "typicality": 0.65,
+    "neighbours": [
+      "SRC_002",
+      "SRC_003"
+    ],
+    "evidence_refs": [
+      {
+        "block": "02361cabd962",
+        "quote": "The preference is defensible only if we accept a 'Critical Conventionalism' where the rule to prefer corroborated theories is a self-imposed, arbitrary decree"
+      },
+      {
+        "block": "088a63a65bb3",
+        "quote": "The cost is that the foundation of scientific action becomes arbitrary (though useful) rather than grounded in reality."
+      }
+    ]
+  }
+}

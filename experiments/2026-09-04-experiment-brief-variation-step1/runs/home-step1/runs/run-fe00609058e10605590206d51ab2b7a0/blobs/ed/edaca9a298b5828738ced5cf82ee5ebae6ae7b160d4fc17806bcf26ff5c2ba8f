@@ -1,0 +1,20 @@
+{
+  "candidate": {
+    "content": "The 'Critical Conventionalism' of foundation 02361cab... inherits its structural vulnerability from the 'methodological falsificationism' of foundation 088a63..., specifically regarding the psychological stability of scientists; it is REFUTED IF the arbitrary nature of the decree in the former fails to resolve the belief-convention tension identified in the latter, thereby collapsing the distinction between a useful game rule and a groundless fiction.",
+    "typicality": 0.72,
+    "neighbours": [
+      "SRC_002",
+      "SRC_003"
+    ],
+    "evidence_refs": [
+      {
+        "block": "02361cabd962",
+        "quote": "The preference is defensible only if we accept a 'Critical Conventionalism' where the rule to prefer corroborated theories is a self-imposed, arbitrary decree"
+      },
+      {
+        "block": "088a63a65bb3",
+        "quote": "If scientists believe they are acting on truth, not following a convention."
+      }
+    ]
+  }
+}

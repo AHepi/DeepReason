@@ -1,0 +1,93 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive methodological rule for selecting the most 'testable' (and thus most informative) surviving candidate, but this defense costs him the ability to claim that such theories are more likely to be true or reliable in future applications, reducing scientific rationality to a game of eliminating error rather than approaching truth.",
+    "mechanism": "The argument proceeds by distinguishing between 'probability' (inductive support) and 'corroboration' (a report of past test severity). It posits that preferring the better-corroborated theory is not an prediction of future success (which would be induction) but a strategic choice to bet on the theory that has survived the hardest attempts at falsification, thereby maximizing the potential for future learning should it fail. This treats the preference as a 'convention of action' similar to choosing the sharpest knife not because it will definitely cut better tomorrow, but because it has proven most responsive to sharpening and use today.",
+    "counterconditions": [
+      "If surviving severe tests implies any degree of future reliability, the view collapses into induction.",
+      "If the preference cannot guide action in novel situations where no past test data exists, the view is practically useless.",
+      "If 'verisimilitude' (truth-likeness) is invoked to justify the preference, it must be shown not to rely on inductive assumptions about the distribution of truth."
+    ],
+    "typicality": 0.85,
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_survival_of_species",
+        "tournament_elimination_logic",
+        "survivorship_bias_investment"
+      ],
+      "shared_structure": [
+        "Selection based on past survival against harsh conditions",
+        "No guarantee of future survival despite past success",
+        "Preference for the 'fittest' survivor as the only rational betting strategy available"
+      ],
+      "disanalogies": [
+        "Biological evolution lacks a conscious agent making a 'choice', whereas scientists actively select theories.",
+        "In tournaments, the winner is declared best by definition, whereas in science, the survivor is only 'not yet falsified'.",
+        "Investment survivorship often ignores the graveyard of failed funds, while Popper explicitly focuses on the falsified ones to learn."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the species that survived an ice age without claiming it is immune to the next one, we adopt the corroborated theory without claiming it is probable.",
+        "The rationality of the choice lies in the quality of the elimination process, not the ontological status of the survivor."
+      ],
+      "overturn_conditions": [
+        "If the 'harsh conditions' of the past are structurally different from future conditions, the analogy breaks and the choice becomes arbitrary.",
+        "If the goal of science is defined as 'finding true theories' rather than 'eliminating false ones', the non-inductive preference fails to meet the goal."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate origin with justification; it explicitly frames the preference as a forward-looking methodological rule (justification) derived from the logical status of corroboration reports, distinct from the psychological or evolutionary reasons scientists might feel drawn to them."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "revised",
+        "note": "Revised to clarify that the 'non-inductive rationality' is strictly limited to the context of 'maximizing testability' and does not imply the theory is 'better' in terms of truth probability, addressing the false dichotomy by narrowing the scope of 'defensible'."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "The move from 'others falsified' to 'choose this one' does not assume uniformity of nature; it assumes only that the set of available theories is finite and that the unfalsified one is the only one not known to be false. It is a choice of the 'least bad' option, not a prediction of success."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate rejects the premise that 'severity of tests' must be a reliable indicator of future performance to be useful. It argues severity is valuable precisely because it maximizes the chance of *future* failure (learning), not success."
+      },
+      {
+        "handle": "2a1d181e2a5d8865430bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "The convention is not 'arbitrary' in the Poincaré sense (chosen for convenience); it is necessitated by the logic of falsification. If one seeks to avoid error, one *must* prefer the theory that has withstood the most rigorous attempts to show it is wrong. This is a logical imperative, not a free convention."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "revised",
+        "note": "Clarified the distinction: 'Methodological convention' refers to the rule of adoption; 'pragmatic reliability' is explicitly denied as a justification. The candidate now stresses that the utility lies in error detection, not pragmatic success."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f006bbde5f67",
+        "kind": "rebutted",
+        "note": "The candidate makes the strongest case for the 'smuggling induction' view by admitting the cost: the loss of any claim to likelihood or reliability. The resolution is that the 'induction' charge stands if one demands predictive certainty, but fails if one accepts a non-justificatory account of rational action."
+      },
+      {
+        "handle": "6a6dff5b56f376b6210260a3024b5e5ea88897b277e4d65a4a2fd99616ab6457",
+        "kind": "rebutted",
+        "note": "The candidate avoids relying on 'verisimilitude' as a positive metric. Instead, it frames the preference as a negative selection process (avoiding the falsified), rendering the tenability of verisimilitude irrelevant to the core argument of choosing the 'only standing' candidate."
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_012"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_004",
+        "SRC_012"
+      ],
+      "search_signal": "productive"
+    },
+    "checker_specs": []
+  }
+}
