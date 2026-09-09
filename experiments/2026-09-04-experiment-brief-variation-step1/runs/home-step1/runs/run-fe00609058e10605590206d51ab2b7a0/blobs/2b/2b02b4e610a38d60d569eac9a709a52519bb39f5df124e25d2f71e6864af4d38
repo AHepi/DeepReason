@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction if reinterpreted as a 'critical preference' grounded in the logical asymmetry of falsification rather than probabilistic prediction; however, this defense costs the agent any rational assurance that the preferred theory will succeed in future applications, reducing scientific action to a non-justified leap of faith consistent with his fallibilism.",
+    "mechanism": "Reframes the preference not as an inductive inference (past success implies future truth) but as a methodological rule derived from the logical status of theories: since all universal laws are equally unproven, the one that has survived the most severe tests offers the best opportunity for further error elimination, making it the rational choice for critical discussion and tentative action, even if its future reliability remains logically unknowable.",
+    "counterconditions": [
+      "If corroboration is shown to logically entail a higher probability of future success, the non-inductive defense collapses.",
+      "If Popper's own writings on 'acting' explicitly rely on an implicit uniformity of nature principle, the distinction between critical preference and induction fails.",
+      "If the cost of 'no assurance' renders the preference practically indistinguishable from arbitrary guesswork, the defense becomes vacuous for working scientists."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The criticism assumes 'acting' requires a guarantee of success or a probabilistic edge. The candidate rebuts by defining 'acting' in Popperian terms as adopting a theory for the specific purpose of subjecting it to new tests; the preference is justified because the well-tested theory provides a harder target for falsification, not because it is safer for practical utility."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "revised",
+        "note": "Revised to explicitly decouple 'informational content survived' from 'defensible preference.' The revision clarifies that the preference is defensible only as a strategic move to maximize learning potential (error detection), not as a claim that the theory is 'better' in a truth-like sense that aids decision-making under uncertainty."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "rebutted",
+        "note": "The criticism posits a false dichotomy between psychological belief and conventional action. The rebuttal argues Popper introduces a third category: 'critical preference,' which is neither a psychological conviction nor a blind convention, but a logical stance acknowledging that while we cannot know the future, we can know which theory has withstood the most rigorous attempts to destroy it."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The candidate agrees the 'Principle of Uniformity' charge is a straw man but clarifies that the real tension lies in whether 'critical preference' implicitly relies on a meta-inductive assumption that methods which worked before (falsification) will work again. The defense holds only if one accepts that the logic of falsification is timeless, not empirical."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "revised",
+        "note": "Revised mechanism to sharpen the distinction between 'prediction' and 'expectation.' The candidate now explicitly states that preferring a corroborated theory involves an expectation based on logical history, not a prediction of future performance, thereby avoiding the conflation with inductive prediction."
+      },
+      {
+        "handle": "270fdeb19c12b45908843bde3f158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "departure_declared",
+        "note": "Departing from the reliance on 'verisimilitude' as a stable metric. The candidate declares that invoking verisimilitude is indeed fatal given Popper's later proofs, and instead grounds the preference solely on the immediate logical status of 'unfalsified yet severely tested,' abandoning any claim that the theory is closer to the truth."
+      },
+      {
+        "handle": "283c021802bb4232adf1e0244e99140ec8500555bce3ce33ec8dc4b9ecc2ebdc",
+        "kind": "rebutted",
+        "note": "The criticism claims the preference is inert. The rebuttal argues it is not inert for the specific goal of science (truth-seeking via error elimination), even if it is inert for pragmatic engineering safety. The defense survives by accepting that Popper's framework sacrifices pragmatic assurance for logical purity."
+      },
+      {
+        "handle": "2b2b9f8685410277445fc083713971a8c5bf992ab5fbf0a1093b143dcfb45882",
+        "kind": "revised",
+        "note": "Revised to stop characterizing the justification as a 'methodological fiction.' Instead, it is framed as a 'rational conjecture' where the rationality stems from the alignment with the objective of maximizing testability, not from any hidden probabilistic warrant."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "mem_chess_strategy_01",
+        "mem_evolutionary_selection_03"
+      ],
+      "shared_structure": [
+        "Selection of an option based on past survival against rigorous challenges rather than predicted future utility.",
+        "Acceptance that survival does not guarantee future success but represents the best available heuristic for continued testing.",
+        "Distinction between the logical status of the survivor and the pragmatic outcome of choosing it."
+      ],
+      "disanalogies": [
+        "Chess strategies operate in a closed system with defined rules, whereas scientific theories face an open, potentially infinite universe of facts.",
+        "Evolutionary selection has no conscious agent making a 'preference,' while Popper's scientist must actively choose which theory to act upon."
+      ],
+      "transfer_claims": [
+        "Just as a chess player chooses a line that has survived grandmaster analysis not because it guarantees a win but because it is the hardest to refute, a scientist chooses a corroborated theory to maximize the chance of finding new errors.",
+        "The 'cost' in both domains is the inability to predict the opponent's (nature's) next move with certainty."
+      ],
+      "overturn_conditions": [
+        "If it is demonstrated that surviving past tests in an open system logically increases the probability of surviving future tests, the analogy to non-probabilistic selection fails.",
+        "If the 'choice' in chess is shown to rely on implicit probabilistic assessments of the opponent's behavior, the disanalogy collapses."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a methodological rule to maximize the 'content' of potential falsification; acting on the most severely tested theory ensures that if the theory is false, we find out sooner, thereby accelerating the growth of knowledge without assuming nature's uniformity.",
+    "mechanism": "Critical Preference via Maximized Falsifiability: The agent selects the theory with the highest degree of corroboration because it has survived the most severe tests against high empirical content. This selection is a decision to expose oneself to the highest risk of immediate refutation. If the theory holds, knowledge grows; if it fails, error is eliminated rapidly. This avoids induction because it makes no claim about the probability of the theory being true or surviving the *next* test, only that it is the most efficient vehicle for critical testing at this moment.",
+    "counterconditions": [
+      "If the agent prefers the theory because they believe it is *more likely* to be true or to succeed in the future, the defense collapses into induction.",
+      "If the concept of 'verisimilitude' (truth-likeness) is required to justify the preference, the defense fails given Popper's later admission that verisimilitude cannot be formally defined for false theories.",
+      "If the preference relies on a hidden 'Principle of Uniformity' regarding the stability of natural laws over time, it smuggles in the very metaphysical assumption Popper sought to reject."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The criticism assumes 'acting' requires a belief in future success. The candidate rebuts this by redefining 'acting' as 'submitting to the severest possible test.' One acts on Theory A not because it will work, but because it is the most dangerous theory to bet against; if it works, we learn more than betting on a safe, low-content theory."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes 'informational content survived' from 'defensible preference' by arguing the preference *is* the commitment to high informational content. The defensibility lies in the goal of science (error elimination), not in a prediction of utility. It conflates nothing; it strictly separates logical probability (which remains undefined) from methodological choice (which is governed by the aim of rapid learning)."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "rebutted",
+        "note": "The dichotomy is not between 'psychological belief' and 'conventional action,' but between 'inductive prediction' and 'critical strategy.' The core logical problem is solved by refusing to guarantee future truth. The preference is rational because it optimizes the *process* of discovery, not the *outcome* of specific actions. Past success guarantees nothing about the future, but it identifies the theory currently offering the best leverage for finding errors."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids the 'Principle of Uniformity' straw man. It does not claim nature is uniform. It claims that *if* we want to learn fast, we must test the boldest conjectures. This is a conditional imperative based on the definition of scientific progress, not a metaphysical claim about the world's structure."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "rebutted",
+        "note": "The mechanism clarifies that 'Action implies prediction' is only true in a trivial sense (all action involves expectation), but Popper's 'critical preference' is distinct because it decouples the *rationale* for the action from the *expectation* of the outcome. We act on the corroborated theory *in order to* risk its falsification, not because we predict its verification."
+      },
+      {
+        "handle": "270fdeb19c12b45908843bde3f158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "departure_declared",
+        "note": "The candidate departs from any reliance on 'verisimilitude' as a formal metric. It accepts Popper's later critique that verisimilitude is logically problematic and instead grounds the preference solely in the pragmatic methodology of maximizing test severity and content, which requires no formal measure of truth-likeness."
+      },
+      {
+        "handle": "2b2b9f8685410277445fc083713971a8c5bf992ab5fbf0a1093b143dcfb45882",
+        "kind": "rebutted",
+        "note": "The candidate agrees the preference is not a 'mere fiction' but argues it is a 'rational methodological rule.' The criticism fails by assuming rationality requires a link to truth-probability. In Popper's framework, rationality is linked to the efficiency of error elimination. The preference is rational because it is the optimal strategy for the defined goal of science, independent of truth probabilities."
+      },
+      {
+        "handle": "4685bd2f65b86b20f04d65067f8fc4526a28a4375555eb78127f0f9de465ad93",
+        "kind": "revised",
+        "note": "Revised to clarify that 'decoupled from expectation of truth' does not mean scientists don't *hope* the theory works, but that the *logical justification* for the choice does not depend on that hope. The choice is justified by the structural advantage of the theory in a critical dialogue, regardless of the agent's subjective confidence in its ultimate truth."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["mountaineering_route_selection"],
+      "shared_structure": [
+        "Selection of a path based on difficulty rather than safety",
+        "Goal is learning/map-making rather than guaranteed summit",
+        "High risk of failure provides high information gain"
+      ],
+      "disanalogies": [
+        "Mountaineering often values survival (safety) over information; science values information over survival of the theory",
+        "Physical terrain is static; scientific landscape changes as theories are refuted"
+      ],
+      "transfer_claims": [
+        "Just as a climber chooses the hardest route to test their skill and map the mountain accurately, a scientist chooses the most corroborated (severe) theory to test the limits of current knowledge",
+        "Choosing the easy route (low corroboration) yields little new information even if successful"
+      ],
+      "overturn_conditions": [
+        "If the goal of the climb shifts from mapping to guaranteed safe arrival, the analogy breaks and induction becomes necessary",
+        "If the mountain's geology changes unpredictably (no uniformity), the value of past route data vanishes completely, unlike logical content"
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to resolve the pragmatic contradiction inherent in 'acting on' a theory. Popper explicitly states scientists prefer better-corroborated theories when choosing which theory to act on (e.g., building a bridge). If the preference is merely a procedural mandate to 'maximize test severity' or 'reveal error quickly,' it cannot rationally support actions that depend on the theory's reliability for safety or success. One does not build a bridge on a theory chosen specifically because it is the 'best target for falsification'; one builds it on a theory believed to be the most reliable guide to truth. By reducing the preference to a methodological rule for risk-taking, the target makes the very act of 'preferring' for practical application irrational on Popperian terms, thus failing to show the preference is defensible without smuggling in an implicit belief in probable truth (induction).",
+      "premise": "Acting on a theory for practical ends (like engineering) requires an expectation of its reliability, which contradicts selecting it solely as the best candidate for falsification.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "successor_question": "If the preference for a corroborated theory is not based on an expectation of its truth or reliability, how can Popper justify using it as the basis for high-stakes practical action rather than continuing to test the less corroborated ones?"
+    }
+  ]
+}
