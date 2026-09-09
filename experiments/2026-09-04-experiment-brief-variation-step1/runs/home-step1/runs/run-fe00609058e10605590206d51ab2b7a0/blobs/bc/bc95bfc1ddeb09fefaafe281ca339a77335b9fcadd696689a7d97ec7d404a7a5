@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive 'rational decision' to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing the potential for learning from error even if the theory is false.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which Popper rejects as requiring induction) and 'critical preference' (a logical assessment of past test severity). By treating the choice to act as a decision under uncertainty rather than a probabilistic prediction, the agent selects the theory with the highest informational content that has not yet been refuted. This avoids smuggling in induction because the preference relies solely on the logical relation of the theory to past evidence (corroboration report), not on the assumption that the future will resemble the past.",
+    "counterconditions": [
+      "If the preference for corroborated theories implicitly assumes that nature is uniform enough that past survival predicts future survival, then it smuggles in induction.",
+      "If Popper cannot explain why acting on a highly corroborated false theory is more rational than acting on a low-corroborated false theory without appealing to expected utility based on probability, the defense collapses.",
+      "If the concept of 'verisimilitude' (truth-likeness) is required to justify the preference but remains logically undefined for false theories, the argument fails."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0247998b9f0426956c8d0ef420daae0ecb43121c370bf31bd5ca9328a00d058d",
+        "kind": "rebutted",
+        "note": "The criticism claims reliance on verisimilitude is fatal due to logical objections. The rebuttal is that the proposed mechanism does not require a quantitative comparison of verisimilitude between false theories to be logically perfect; it only requires a qualitative decision rule: prefer the theory that has survived more severe tests. This is a methodological rule for error elimination, not a metaphysical claim about the degree of truth."
+      },
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The criticism asks why one should act on Theory A over B if both might be false. The rebuttal is that acting on the better-corroborated theory maximizes the 'growth of knowledge' potential. If Theory A fails, we learn more because it made bolder predictions. The rationality lies in the strategy of error detection, not in the expectation of practical success derived from induction."
+      },
+      {
+        "handle": "0adb3edd4258581107a99742865c538d498f109f3691f5b5018688135c01a694",
+        "kind": "revised",
+        "note": "Revised to explicitly decouple the decision rule from the need for a formal calculus of verisimilitude. The candidate now frames the preference as a 'methodological imperative' to test bold conjectures, sidestepping the logical impossibility of comparing verisimilitude of known false theories by focusing on the severity of tests passed."
+      },
+      {
+        "handle": "1b2552d33d55591ca7f103b9ef6ebf34db311437d30c176088055707d875315b",
+        "kind": "rebutted",
+        "note": "The criticism argues that abandoning expectation of predictive success misrepresents the position. The rebuttal clarifies that while we abandon *inductive justification* for that expectation, we retain a *critical hope* based on the fact that the theory has not yet failed. This is not an expectation of success, but a willingness to risk failure on the most informative option available."
+      },
+      {
+        "handle": "1bd83288bc9ab8f9b04811f4e67bb8ca9d49c4f09aa66f010b8a229bd75d6fc3",
+        "kind": "rebutted",
+        "note": "The claim that this is a 'pragmatic fiction' is rebutted by asserting Popper's view that critical discussion provides objective grounds for preference. It is not a mere convention but a logical consequence of the goal to eliminate error. The 'fiction' charge ignores the objective status of the corroboration report."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The criticism conflates informational content with defensible preference. The rebuttal is that the defensible preference *is* precisely for the theory with higher informational content that has survived. The 'action' is justified by the desire to learn, which is best served by betting on the boldest surviving theory."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "rebutted",
+        "note": "The false dichotomy between psychological belief and conventional action is rejected. The proposal introduces a third category: 'critical preference.' This is neither a psychological feeling of certainty nor an arbitrary convention, but a reasoned stance based on the logical history of testing."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The accusation of a straw man regarding the 'Principle of Uniformity' is addressed by confirming that the proposed solution strictly adheres to Popper's distinction between the logic of discovery/testing and the psychology of belief. No uniformity principle is invoked; only the logical asymmetry between verification and falsification is used."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "naval_strategy_falsification",
+        "medical_triage_error_minimization"
+      ],
+      "shared_structure": [
+        "Selection of an option based on survival of severe stress tests rather than predicted success.",
+        "Goal is to maximize information gain from potential failure, not to guarantee positive outcome.",
+        "Decision is procedural and backward-looking (what survived) rather than inductive and forward-looking (what will happen)."
+      ],
+      "disanalogies": [
+        "In naval strategy, survival often implies future durability due to physical laws, whereas Popper denies this implication for scientific theories.",
+        "Medical triage often uses probabilistic estimates of survival, which Popper explicitly forbids in theory choice."
+      ],
+      "transfer_claims": [
+        "Just as a commander chooses the route that has survived reconnaissance despite not knowing it is safe, a scientist chooses the theory that survived falsification attempts.",
+        "The rationality of the choice lies in the quality of the screening process, not the reliability of the survivor."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that selecting the 'survivor' inevitably presupposes that the screening process correlates with future performance.",
+        "If the definition of 'severe test' secretly relies on inductive assumptions about background knowledge."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

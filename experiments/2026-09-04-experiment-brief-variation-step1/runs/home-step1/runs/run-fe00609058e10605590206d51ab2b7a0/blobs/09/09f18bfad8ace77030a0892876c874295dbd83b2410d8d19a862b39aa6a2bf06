@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) to justify preferring better-corroborated theories without induction, but this fails because Popper's own formal definition of verisimilitude was proven logically incoherent by critics like David Miller and Pavel Tichý. If the metric used to determine which theory is 'closer to the truth' is formally broken, then the preference cannot be rationally grounded on Popper's terms as claimed; it either collapses into the very probabilistic induction Popper rejected or becomes an arbitrary choice unsupported by the logical content of the tests.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's formal definition of verisimilitude is logically incoherent, as demonstrated by Miller and Tichý, meaning one cannot consistently define a theory as 'closer to truth' based solely on test outcomes within Popper's framework.",
+      "premise_evidence": null,
+      "successor_question": "Given the collapse of Popper's quantitative verisimilitude, can a qualitative notion of 'critical preference' survive without implicitly assuming that past success predicts future reliability?"
+    }
+  ]
+}

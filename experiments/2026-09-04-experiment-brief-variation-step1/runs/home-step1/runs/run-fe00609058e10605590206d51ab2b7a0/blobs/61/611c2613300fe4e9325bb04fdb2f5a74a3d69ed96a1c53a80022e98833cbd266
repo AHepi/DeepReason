@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is 'defensible' contradicts its own admission that the action lacks 'logical warrant' and reduces to a 'non-justifiable' commitment. By defining the rational choice as one that explicitly cannot be justified by logic or probability (the very tools required for defense in a philosophical argument), the target fails to demonstrate defensibility on Popper's terms, instead confirming that the preference is an arbitrary psychological leap rather than a defensible rational rule.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "A preference cannot be logically defensible if its justification relies entirely on abandoning logical warrant and accepting a non-justifiable commitment.",
+      "premise_evidence": null,
+      "successor_question": "If the commitment is explicitly 'non-justifiable,' in what sense can the preference be called 'defensible' rather than merely 'inevitable' or 'psychological'?"
+    }
+  ]
+}

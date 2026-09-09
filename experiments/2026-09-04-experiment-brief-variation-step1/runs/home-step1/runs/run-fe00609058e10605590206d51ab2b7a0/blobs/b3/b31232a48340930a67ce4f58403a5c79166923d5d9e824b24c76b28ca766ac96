@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction by framing it as a non-epistemic, methodological rule of 'critical rationality': we prefer the theory that has withstood the severest tests not because it is more likely to be true or successful in the future, but because it is the most informative theory currently available for criticism and error elimination. The cost of this view is the abandonment of any rational expectation that the future will resemble the past; action becomes a gamble on the best-tested error-correcting mechanism rather than a prediction based on accumulated probability.",
+    "mechanism": "Reinterpret 'preference' not as an inductive inference about future truth (which Popper rejects) but as a procedural commitment to the theory with the highest empirical content and testability. Since high corroboration implies a theory has survived severe attempts to falsify its high-content claims, choosing it maximizes the potential for learning (error detection) regardless of whether it turns out to be true. This aligns with Popper's distinction between the logical status of a theory (unchanged by testing) and the pragmatic decision of which theory to subject to further critical scrutiny.",
+    "counterconditions": [
+      "If one can demonstrate that acting on a theory logically entails an assumption that its past success predicts future success, then the preference smuggles in induction.",
+      "If Popper's own examples of 'acting' on theories implicitly rely on a principle of uniformity of nature that he explicitly denies, then his position is inconsistent.",
+      "If the concept of 'verisimilitude' (truth-likeness) is required to justify the preference but remains formally undefined or incoherent for false theories, then the defense collapses."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0247998b9f0426956c8d0ef420daae0ecb43121c370bf31bd5ca9328a00d058d",
+        "kind": "rebutted",
+        "note": "The criticism assumes the defense must rely on verisimilitude to justify preference. This candidate rebuts that by grounding preference solely in 'methodological utility for error elimination' rather than proximity to truth. The choice is about maximizing testability, not estimating truth-likeness, thus bypassing the formal objections to comparing verisimilitude of false theories."
+      },
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The claim that preference fails to explain 'why act' is rebutted by distinguishing between 'expectation of success' and 'rationality of procedure'. One acts on Theory A not because it is predicted to work, but because it is the only rational object of critical discussion; acting on a less-corroborated theory would be methodologically irrational as it offers less opportunity for error correction, even if both are equally likely to fail."
+      },
+      {
+        "handle": "0adb3edd4258581107a99742865c538d498f109f3691f5b5018688135c01a694",
+        "kind": "rebutted",
+        "note": "This candidate explicitly avoids relying on verisimilitude comparisons. The preference is justified by the severity of tests survived (informational content), not by an estimate of truth-likeness. Therefore, the impossibility of logically comparing verisimilitude between false theories does not undermine this specific defense."
+      },
+      {
+        "handle": "1b2552d33d55591ca7f103b9ef6ebf34db311437d30c176088055707d875315b",
+        "kind": "revised",
+        "note": "Revised to clarify that abandoning the 'intuition of rational expectation' is precisely the point, not a misrepresentation. The defense argues that Popperian rationality is purely negative (avoiding known errors) rather than positive (expecting success). The candidate now explicitly states that accepting this view costs us any comfort in predictive reliability, framing it as a necessary sacrifice for logical consistency."
+      },
+      {
+        "handle": "1bd83288bc9ab8f9b04811f4e67bb8ca9d49c4f09aa66f010b8a229bd75d6fc3",
+        "kind": "rebutted",
+        "note": "The criticism confuses 'pragmatic fiction' with 'methodological rule'. Popper's stance is not a social convention but a logical imperative of critical rationalism: if the goal is truth (or error elimination), one must test the boldes conjectures. Preferring the better-corroborated theory is the operational definition of this goal, not a fictional narrative."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The dichotomy is not false; the candidate argues that 'informational content survived' IS the only defensible basis for 'preference for action' in a non-inductive framework. Any other basis (like probability) would indeed be inductive. The defense holds that action based on critical preference is distinct from action based on predictive confidence."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "rebutted",
+        "note": "The core logical problem is addressed by denying the premise that action requires an assumption of uniformity. Action requires a decision rule; Popper provides a decision rule (choose the best-tested) that does not entail a belief in uniformity. It entails only a commitment to the method of trial and error."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The candidate agrees that the 'Principle of Uniformity' straw man should be avoided. Instead, it focuses on Popper's actual solution: the separation of the context of discovery/testing from the justification of belief. The preference is a rule for the former, not a claim about the latter."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "navIGATION_by_star_position_despite_uncertainty",
+        "medical_triage_based_on_survival_rates_not_cure_guarantees"
+      ],
+      "shared_structure": [
+        "Decision made under conditions where positive prediction is impossible",
+        "Preference given to the option with the most rigorous historical stress-testing",
+        "Goal is optimization of process (learning/survival) rather than guarantee of outcome"
+      ],
+      "disanalogies": [
+        "Navigation often assumes stable physical laws (uniformity), whereas Popper explicitly denies assuming natural uniformity",
+        "Medical triage usually relies on statistical probability of survival, which Popper rejects as a basis for theory choice"
+      ],
+      "transfer_claims": [
+        "Just as a navigator uses the most verified star charts without claiming they guarantee safe passage, a Popperian scientist uses the best-corroborated theory without claiming it guarantees predictive success",
+        "The rationality lies in the selection procedure (using the best available data), not in the expected result"
+      ],
+      "overturn_conditions": [
+        "If it is shown that navigating by star charts logically implies a belief that stars will remain in place (induction), then the analogy fails to support non-inductive action",
+        "If medical triage cannot be conducted without implicit probabilistic assumptions, then the analogy smuggles in the very thing Popper rejects"
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

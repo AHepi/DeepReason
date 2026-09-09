@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction by framing it as a non-justificatory, critical decision rule: we prefer the theory that has withstood the most severe tests not because it is more likely true or predictive, but because it is the most informative survivor of our best attempts at falsification. This preference is rational in the sense of being the outcome of critical discussion, not probabilistic inference. The cost of accepting this view is the abandonment of any rational expectation that the future will resemble the past; we act on the best-tested theory solely because it is the only one not yet known to be false, acknowledging that it may fail tomorrow just as easily as any other.",
+    "mechanism": "Reframing 'preference' as a methodological rule of critical selection rather than an epistemic judgment of likelihood. The mechanism relies on the asymmetry between verification and falsification: while survival of tests does not increase probability, it does eliminate competitors, leaving the corroborated theory as the sole viable option for action until it too is falsified. This avoids induction by refusing to project past success into future reliability.",
+    "counterconditions": [
+      "If one insists that rational action requires a belief in future predictive success based on past performance, then Popper's position fails.",
+      "If verisimilitude (truth-likeness) cannot be meaningfully compared between false theories, the justification for preferring one over another collapses.",
+      "If the distinction between 'psychological expectation' and 'methodological choice' is untenable in practice, the defense becomes purely semantic."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0247998b9f0426956c8d0ef420daae0ecb43121c370bf31bd5ca9328a00d058d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on verisimilitude as a measurable quantity for comparison. Instead, it grounds preference in the negative fact of non-falsification relative to competitors, sidestepping the logical impossibility of comparing truth-content among false theories."
+      },
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The candidate addresses action by defining it as a critical choice among surviving options, not a prediction of success. We act on Theory A not because it will work, but because Theory B, C, and D have already been shown to fail in specific domains, making A the only remaining candidate for testing via action."
+      },
+      {
+        "handle": "0adb3edd4258581107a99742865c538d498f109f3691f5b5018688135c01a694",
+        "kind": "rebutted",
+        "note": "Agrees that logical comparison of verisimilitude is impossible for false theories but argues this is irrelevant. The preference is based on the history of severe testing survived, which is a factual record of criticism endured, not a claim about proximity to truth."
+      },
+      {
+        "handle": "1b2552d33d55591ca7f103b9ef6ebf34db311437d30c176088055707d875315b",
+        "kind": "revised",
+        "note": "Clarified that the position does not deny the intuition of predictive success entirely but reinterprets it: the 'expectation' is not rational in an inductive sense but is a pragmatic necessity of having no other uncriticized option. The revision strengthens the distinction between 'rational expectation' (inductive) and 'critical necessity' (Popperian)."
+      },
+      {
+        "handle": "1bd83288bc9ab8f9b04811f4e67bb8ca9d49c4f09aa66f010b8a229bd75d6fc3",
+        "kind": "rebutted",
+        "note": "The candidate aligns with Popper's view that this is a rational decision based on critical discussion. It rejects the label 'pragmatic fiction' by asserting that the decision is grounded in the objective history of test outcomes, making it a substantive, albeit non-probabilistic, rational basis."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes 'informational content survived' from 'predictive guarantee' but argues they are linked in action: we choose the high-content survivor because it offers the most precise potential for falsification going forward, which is the goal of science, even if it doesn't guarantee success."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "rebutted",
+        "note": "Explicitly accepts the core logical problem: past success does not guarantee future truth. The defense rests on the claim that rational action does not require such a guarantee, only the absence of known errors in the chosen path compared to alternatives."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "Confirms that the candidate does not accuse Popper of using a 'Principle of Uniformity.' Instead, it reconstructs his solution as a shift from justificatory rationality (induction) to critical rationality (selection of the least refuted option)."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

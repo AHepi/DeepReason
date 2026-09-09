@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction by reframing 'preference' as a critical decision to adopt the theory with the highest informational content that has withstood the most severe tests, rather than an expectation of future truth. This avoids induction because it relies on the logical asymmetry between verification and falsification: while past survival does not increase probability, it uniquely identifies the theory that has been most rigorously exposed to potential falsity and survived, making it the rational choice for action under uncertainty. Accepting this costs us the intuitive comfort of believing our best theories are likely true; we must instead act on the theory that is currently the 'least bad' known option, acknowledging that future tests may still refute it.",
+    "mechanism": "The mechanism is a shift from probabilistic justification (inductive) to critical selection (deductive/pragmatic). Instead of inferring 'Theory A will work because it worked before,' the agent decides 'Theory A is the only one not yet eliminated by severe testing, whereas Theory B was eliminated; therefore, acting on A is the only non-refuted path.' The preference is based on the negative knowledge of what has failed, not positive knowledge of what will succeed.",
+    "counterconditions": [
+      "If the agent treats corroboration as a measure of likelihood or probability of future success, the defense collapses into hidden induction.",
+      "If the preference cannot distinguish between a theory that survived one trivial test and one that survived many severe tests, it fails to capture Popper's notion of 'severity'.",
+      "If the agent claims the preferred theory is 'true' or 'approximately true' based solely on corroboration, they violate Popper's prohibition on verifying universal statements."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0247998b9f0426956c8d0ef420daae0ecb43121c370bf31bd5ca9328a00d058d",
+        "kind": "rebutted",
+        "note": "The criticism assumes the defense requires 'verisimilitude' comparisons which Popper admitted were logically problematic for false theories. However, the proposed claim does not rely on comparing degrees of truth-likeness between false theories. It relies solely on the binary status of 'corroborated' (not yet falsified despite severe tests) vs 'falsified'. The preference is for the unfalsified over the falsified, a logical distinction Popper maintains is valid, avoiding the need for quantitative verisimilitude calculations."
+      },
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The criticism argues that 'hasn't been proven false' is insufficient for action. The rebuttal is that in a landscape where all universal theories are potentially false, the *only* rational basis for action is the elimination of alternatives. Acting on Theory A isn't because it's 'good', but because Theory B, C, and D have been demonstrably 'bad' (falsified). This is a deductive elimination process, not an inductive leap. The 'preference' is simply the recognition that the set of viable options has been reduced to A."
+      },
+      {
+        "handle": "0adb3edd4258581107a99742865c538d498f109f3691f5b5018688135c01a694",
+        "kind": "rebutted",
+        "note": "Similar to the first discharge, this candidate explicitly rejects using 'verisimilitude' as a comparative metric for false theories. The defense rests entirely on the status of 'survival of severe tests' as a marker of non-falsification. The counterconditions acknowledge that we cannot know if the surviving theory is closer to truth, only that it hasn't been ruled out yet. This accepts the limitation cited in the criticism rather than failing to address it."
+      },
+      {
+        "handle": "1b2552d33d55591ca7f103b9ef6ebf34db311437d30c176088055707d875315b",
+        "kind": "revised",
+        "note": "Revised the claim to clarify that 'rational expectation' is strictly forbidden. The previous phrasing might have implied a subtle expectation of success. The new formulation emphasizes 'critical selection' and 'non-elimination' to ensure no inductive expectation of predictive success is smuggled in. The rationality lies in the method of selection (critical discussion/testing), not in the anticipated outcome."
+      },
+      {
+        "handle": "1bd83288bc9ab8f9b04811f4e67bb8ca9d49c4f09aa66f010b8a229bd75d6fc3",
+        "kind": "rebutted",
+        "note": "The criticism claims calling it a 'pragmatic fiction' contradicts Popper. This candidate does not call it a fiction; it calls it a 'critical decision'. It aligns with Popper's view that the decision is rational because it is based on the results of critical discussion (tests), not social convention. The 'cost' mentioned (abandoning belief in likelihood) reinforces that this is a hard logical stance, not a soft social agreement."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The criticism fears conflating 'informational content' with 'defensible preference'. The mechanism explicitly links them: high informational content implies high testability (severity). A theory that survives severe tests (high content) is preferred not because it's probable, but because it has passed a harder hurdle. The preference is defensible precisely because the content dictates the severity of the test survived. No conflation occurs; the content defines the test, the test result defines the preference."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "rebutted",
+        "note": "The criticism posits a false dichotomy between psychological belief and conventional action. This candidate introduces a third category: 'critical adoption'. One can act on a theory without psychologically believing it is probable (rejecting induction) and without it being a mere convention (it's based on specific test results). The 'core logical problem' is solved by accepting that action does not require a guarantee of future truth, only the absence of current falsification."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The criticism accuses the target of creating a straw man regarding the 'Principle of Uniformity'. This candidate explicitly avoids invoking any principle of uniformity. It relies solely on the logical asymmetry of falsification. The solution to the problem of action is not a hidden uniformity assumption, but the pragmatic necessity of choosing the only remaining unrefuted option. This matches Popper's actual distinction between the logic of discovery (no induction) and the psychology/pragmatics of action (choose the best-tested)."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

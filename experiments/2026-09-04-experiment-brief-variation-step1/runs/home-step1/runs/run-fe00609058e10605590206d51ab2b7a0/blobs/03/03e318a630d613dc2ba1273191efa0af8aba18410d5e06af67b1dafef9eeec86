@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'procedural rationality' with 'defensibility of preference for action.' Popper explicitly rejects acting on theories as if they were probable; he argues we choose the best-tested theory precisely because it is the most informative and thus most easily falsifiable, not as a 'fiction' of reliability. By framing the preference as a 'methodological fiction' where we act 'as if' the theory is reliable, the target reintroduces the very pragmatic induction (expecting past success to guide future safety/utility) that Popper sought to eliminate. The 'cost' described (lack of ultimate security) does not address the core contradiction: if the theory is not more probable, acting on it for life-or-death decisions (as noted in the counterconditions) remains irrational unless one secretly assumes the uniformity of nature, which is the induction Popper rejected.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguishes between corroboration (past performance) and probability (future likelihood), arguing that preferring a corroborated theory for action requires an inductive leap unless the preference is solely for the purpose of further testing, not for practical reliance.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for the best-corroborated theory in high-stakes action cannot be justified without assuming the future will resemble the past, does Popper's system ultimately force a choice between irrational action or total skepticism?"
+    }
+  ]
+}
