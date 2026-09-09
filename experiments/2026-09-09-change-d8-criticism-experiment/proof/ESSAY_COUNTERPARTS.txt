@@ -1,0 +1,59 @@
+=== Step 16 proof: the bare-essay counterpart rule (R19 / SPEC S8 §10) ===
+
+This rule was written THREE times. Each correction came from its own
+self-test, before the pre-registration seals it -- which is the only
+reason the order 'build, test, then seal' exists.
+
+--- version 1: first prefix at or above the target, paragraph units ---
+  achieved ratios 1.73 / 1.84 / 1.94 -- EVERY pair unmatched. Paragraphs
+  run ~350 chars, so the crossing paragraph overshoots a ~1200-char
+  position.
+
+--- version 2: CLOSEST paragraph prefix, two-sided [1/1.5, 1.5] ---
+  Still empty, and measurably so. The first committed essay's paragraph
+  prefix lengths are:
+    358, 464, 469, 579, 741, 2212, 2339, 2553, ...
+  The window a 1200-char position allows is [800, 1800].
+  paragraph prefixes inside that window: NONE
+  sentence  prefixes inside that window: 888, 1079, 1082, 1322, 1494, 1497
+  The granularity of a paragraph is too coarse for the window the length
+  rule leaves. That is a fact about these essays, measured, not a guess.
+
+--- version 3 (the rule, as it will be sealed): SENTENCE prefixes ---
+three committed D8 essays: [7262, 7688, 7985] characters
+  call-1: 19 paragraphs, 56 sentences
+  call-2: 22 paragraphs, 53 sentences
+  call-3: 22 paragraphs, 56 sentences
+deterministic: two runs at target 1200 produced identical counterparts
+  call-1: 8/56 sentences, 1082 chars, ratio 0.90, within 1.5x: True
+  call-2: 8/53 sentences, 1166 chars, ratio 0.97, within 1.5x: True
+  call-3: 6/56 sentences, 1142 chars, ratio 0.95, within 1.5x: True
+unreachable target: whole essay used, shortfall 992760 chars, ratio 0.0072, REPORTED as unmatched rather than padded
+target far below one paragraph: ratio 4.85, REPORTED as unmatched
+at a 1200-character position, all three essays match: ratios 0.90, 0.97, 0.95
+rc=0
+
+--- end to end, against the 36 real position units from step 15 ---
+{
+ "length_rule": 1.5,
+ "pairs": 108,
+ "pairs_excluded_as_unmatched": 0,
+ "pairs_within_length_rule": 108,
+ "schema": "essay-counterparts.v1"
+}
+
+108 pairs = 36 positions x 3 essays, and all 108 fall inside the length
+rule. So the secondary comparison is REACHABLE -- which the first two
+versions of this rule were not, and which is the property that matters,
+because the primary comparison is expected to be NULLed by length.
+
+--- determinism: two runs, byte-identical output ---
+diff /tmp/counterparts.json /tmp/counterparts2.json -> IDENTICAL
+
+TWO BOUNDARIES THE RULE MUST NOT PAPER OVER, both asserted in the
+self-test above: a target no prefix can reach reports UNMATCHED with its
+shortfall stated rather than padding the essay; and a target far below
+one sentence reports UNMATCHED rather than passing a one-sided test. The
+two-sidedness is the load-bearing half: a one-sided rule would have let a
+fragment a tenth the length count as 'within the length rule', smuggling
+the length confound back in under the rule written to exclude it.

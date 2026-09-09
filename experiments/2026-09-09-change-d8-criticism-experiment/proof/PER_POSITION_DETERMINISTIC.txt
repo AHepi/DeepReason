@@ -1,0 +1,33 @@
+=== Step 14-15 proof: --per-position adds units without moving the composed text ===
+
+--- step 14: the composed unit is BYTE-IDENTICAL before and after the edit ---
+before: 21bd15edcfc92215dd9533c69b52a75b7e695725763cdd466ba9f1ab7c321c9f
+after : 21bd15edcfc92215dd9533c69b52a75b7e695725763cdd466ba9f1ab7c321c9f
+COMPOSED TEXT IDENTICAL / SUMMARY JSON IDENTICAL
+self-test, both versions: 43 surviving, 0 refuted, 53423 chars, seed positions 43
+
+This matters more than it looks. The primary comparison is judged on the
+composed unit; the secondary one (R19) is judged on its positions. If the
+edit that added the second had moved the first, the two comparisons would
+be reading different things and the secondary could not be the check on
+the primary that it is meant to be. One renderer, _position_block, is
+called by both paths, so a per-position unit is byte-identical to its own
+paragraph inside the composed unit.
+
+--- step 15: two runs, same root, byte-identical output ---
+$ diff -r /tmp/pp1 /tmp/pp2
+  (no output above: identical) rc=0
+
+units: 36 positions
+first three, by size:
+  position-01.txt: 1241 bytes  sha256 64013085badf5be6
+  position-02.txt: 1043 bytes  sha256 7b1cbb78196bc158
+  position-03.txt: 1056 bytes  sha256 d40741ed11db2087
+
+--- and the units really are the composed unit's own paragraphs ---
+positions whose text does NOT appear verbatim in the composed unit: NONE
+
+Named by ORDINAL, never by artifact id: a filename that renumbered when a
+lower-sorting position arrived is the one thing a stable unit may not do
+(the same rule the discharge channel's handle follows, and for the same
+reason).

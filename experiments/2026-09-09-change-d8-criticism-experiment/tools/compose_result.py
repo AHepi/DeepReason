@@ -52,6 +52,32 @@ def _claim_body(artifact) -> dict | None:
     return value
 
 
+def _position_block(index: int, body: dict) -> list[str]:
+    """One surviving position, rendered once.
+
+    Called by the composed text AND by --per-position, so a per-position unit
+    is byte-identical to its own paragraph inside the composed unit. Two
+    renderers would let the secondary comparison drift away from the primary
+    one silently, which is exactly the drift the secondary comparison exists
+    to be immune from.
+    """
+
+    claim = body.get("claim") or body.get("content") or body.get("statement") or ""
+    block = [f"{index}. {claim.strip()}"]
+    mechanism = (body.get("mechanism") or "").strip()
+    if mechanism:
+        block.append(f"   Mechanism: {mechanism}")
+    counters = [c.get("case", "") for c in body.get("counterconditions") or [] if isinstance(c, dict)]
+    if counters:
+        block.append("   Refuted if:")
+        for case in counters:
+            block.append(f"   - {case.strip()}")
+    uncertainties = [u for u in body.get("uncertainties") or [] if isinstance(u, str) and u.strip()]
+    if uncertainties:
+        block.append("   Uncertainties: " + " | ".join(u.strip() for u in uncertainties))
+    return block
+
+
 def compose(root: pathlib.Path) -> tuple[str, dict]:
     from deepreason.evidence.state import load_run_input
     from deepreason.harness import Harness
@@ -99,20 +125,12 @@ def compose(root: pathlib.Path) -> tuple[str, dict]:
 
     lines = [f"QUESTION: {question}", ""]
     lines.append(f"SURVIVING POSITIONS ({len(accepted)}):")
+    per_position = []
     for index, (aid, body, _status) in enumerate(accepted, 1):
-        claim = body.get("claim") or body.get("content") or body.get("statement") or ""
-        lines.append(f"{index}. {claim.strip()}")
-        mechanism = (body.get("mechanism") or "").strip()
-        if mechanism:
-            lines.append(f"   Mechanism: {mechanism}")
-        counters = [c.get("case", "") for c in body.get("counterconditions") or [] if isinstance(c, dict)]
-        if counters:
-            lines.append("   Refuted if:")
-            for case in counters:
-                lines.append(f"   - {case.strip()}")
-        uncertainties = [u for u in body.get("uncertainties") or [] if isinstance(u, str) and u.strip()]
-        if uncertainties:
-            lines.append("   Uncertainties: " + " | ".join(u.strip() for u in uncertainties))
+        block = _position_block(index, body)
+        per_position.append({"index": index, "artifact": aid,
+                             "text": "\n".join(block).rstrip() + "\n"})
+        lines.extend(block)
         lines.append("")
     lines.append(f"REFUTED POSITIONS ({len(refuted)}):")
     for index, (aid, body, _status) in enumerate(refuted, 1):
@@ -146,7 +164,7 @@ def compose(root: pathlib.Path) -> tuple[str, dict]:
         "derived_positions": len(derived_positions),
         "chars": len(text),
     }
-    return text, summary
+    return text, summary, per_position
 
 
 def main() -> int:
@@ -155,16 +173,32 @@ def main() -> int:
     ap.add_argument("--out", default=None)
     ap.add_argument("--json", default=None)
     ap.add_argument("--self-test", action="store_true")
+    ap.add_argument("--per-position", default=None, metavar="DIR",
+                    help="write each surviving position as its own unit (R19)")
     args = ap.parse_args()
     root = SELF_TEST_ROOT if args.self_test else pathlib.Path(args.root or "")
     if not (root / "log.jsonl").exists():
         print(f"not a run root: {root}", file=sys.stderr)
         return 2
-    text, summary = compose(root)
+    text, summary, per_position = compose(root)
     if args.out:
         pathlib.Path(args.out).write_text(text, encoding="utf-8")
     if args.json:
         pathlib.Path(args.json).write_text(json.dumps(summary, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    if args.per_position:
+        out_dir = pathlib.Path(args.per_position)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        # Named by ORDINAL, which `order_key` already fixed, never by artifact
+        # id: a filename that renumbered when a lower-sorting position arrived
+        # is the one thing a stable unit may not do.
+        for unit in per_position:
+            (out_dir / f"position-{unit['index']:02d}.txt").write_text(
+                unit["text"], encoding="utf-8")
+        (out_dir / "UNITS.json").write_text(
+            json.dumps({"schema": "per-position-units.v1", "root": str(root),
+                        "units": [{"index": u["index"], "artifact": u["artifact"],
+                                   "chars": len(u["text"])} for u in per_position]},
+                       indent=1, sort_keys=True) + "\n", encoding="utf-8")
     if args.self_test:
         print(f"self-test: {summary['accepted']} surviving, {summary['refuted']} refuted, "
               f"{summary['chars']} chars, seed positions {summary['seed_positions']}")

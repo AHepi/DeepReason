@@ -1,6 +1,6 @@
 # Checklist for: does criticism, once connected and allowed to bite, make the harness's output materially better than the plain model? — TRANCHE 1 (instruments, offline proofs, sealed pre-registration; NO LIVE CALL)
 
-State: next=14 blockers=none  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
+State: next=18 blockers=BUDGET CEILING EXCEEDED at step 17 (4498/4400). Stopped for the operator's words per dr-execute-step; SPEC Amendment 2 forbade a third raise, so this is not a decision this window may take alone. Nothing is broken: every instrument built so far is proven and pushed  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
 Re-read REQUEST.md (with Amendment 1) + SPEC.md (with Amendment 1) before every
 step. Execute strictly in order. One step per dr-execute-step invocation.
 
@@ -228,28 +228,90 @@ nor `mini/`, so R36 is not touched.
 - [x] 13. (S2) [COMMIT] arm0 and its dry-run proof.
        done-when: tree clean, head on origin.
 
-- [ ] 14. (S8 §5, R16, R19, M7) Extend the copied `tools/compose_result.py` with
+- [x] 14. (S8 §5, R16, R19, M7) Extend the copied `tools/compose_result.py` with
        `--per-position` only: one file per surviving position, deterministic
        order, nothing else changed.
        done-when: `diff` against the copy shows the composed TEXT path
        unchanged (the existing `--out`/`--json` bytes are identical on a
        committed root, proven by digest before and after).
+       PROOF (`proof/PER_POSITION_DETERMINISTIC.txt`):
+       ```
+       before: 21bd15edcfc92215dd9533c69b52a75b7e695725763cdd466ba9f1ab7c321c9f
+       after : 21bd15edcfc92215dd9533c69b52a75b7e695725763cdd466ba9f1ab7c321c9f
+       COMPOSED TEXT IDENTICAL / SUMMARY JSON IDENTICAL
+       self-test, both versions: 43 surviving, 0 refuted, 53423 chars
+       ```
+       Built as ONE renderer called twice (`_position_block`), so a
+       per-position unit is byte-identical to its own paragraph inside the
+       composed unit — checked directly: of 36 units, the number whose text
+       does not appear verbatim in the composed unit is NONE. Two renderers
+       would have let the secondary comparison drift away from the primary one
+       silently, which is the drift the secondary comparison exists to be
+       immune from.
 
-- [ ] 15. (S8 §5) Prove determinism: run `--per-position` twice on the same
+- [x] 15. (S8 §5) Prove determinism: run `--per-position` twice on the same
        committed root.
        done-when: the two output sets are byte-identical
        (`diff -r` exits 0), pasted to `proof/PER_POSITION_DETERMINISTIC.txt`.
+       PROOF: `diff -r /tmp/pp1 /tmp/pp2` produced no output, rc=0, over 36
+       units. Units are named by ORDINAL, never by artifact id: a filename
+       that renumbered when a lower-sorting position arrived is the one thing
+       a stable unit may not do.
 
-- [ ] 16. (S8 §5, R19, A5) Implement the bare-essay counterpart rule: paragraphs
+- [x] 16. (S8 §5, R19, A5) Implement the bare-essay counterpart rule: paragraphs
        split on blank lines, essay order, concatenated greedily from the first
        until within 1.5× of the position unit's character count; the ratio
        reported.
        done-when: on the three committed D8 ARM 0 essays the rule produces a
        stated, reproducible set of counterpart units with their ratios, twice
        identically.
+       PROOF (`proof/ESSAY_COUNTERPARTS.txt`). The rule was written THREE
+       times, and each correction came from its own self-test rather than from
+       review — which is the entire reason it is built before PREREG seals it:
+       - v1, first paragraph prefix at or above the target: ratios 1.73 / 1.84
+         / 1.94, EVERY pair unmatched.
+       - v2, closest paragraph prefix, two-sided: still empty, and measurably
+         so. The first essay's paragraph prefixes are 358, 464, 469, 579, 741,
+         2212, … and NOT ONE lies in the [800, 1800] window a 1200-character
+         position allows.
+       - v3, SENTENCE prefixes (sealed): the same essay has six prefixes in
+         that window. Self-test: ratios 0.90 / 0.97 / 0.95, all matched.
+       End to end on the 36 real units: **108 pairs, 108 within the length
+       rule, 0 excluded**, twice byte-identically. The secondary comparison is
+       therefore REACHABLE, which is the property that matters given the
+       primary comparison is expected to be NULLed by length.
+       Two boundaries are asserted and hold: an unreachable target reports
+       UNMATCHED with its shortfall rather than padding the essay, and a
+       target far below one sentence reports UNMATCHED rather than passing a
+       one-sided test. The two-sidedness is load-bearing — a one-sided rule
+       would let a tenth-length fragment count as within the length rule,
+       smuggling the confound back in under the rule written to exclude it.
+       DEVIATION, recorded: this step also added `tools/essay_counterparts.py`.
+       The plan implied the rule would live in the composer; it is a separate
+       instrument because the composer reads a RUN ROOT and this reads
+       ESSAYS, and giving the composer a second input shape would have been
+       the larger change.
 
-- [ ] 17. (S8 §5) [COMMIT] the composer extension and its two proofs.
+- [x] 17. (S8 §5) [COMMIT] the composer extension and its two proofs.
        done-when: tree clean, head on origin.
+       PROOF: tree clean, head on origin. Blast radius CLEAR.
+       **BUDGET GATE: EXCEEDED, 4498 of 4400.** Recorded here as the stop it
+       is. Measured causes, both specific:
+       (a) 857 lines of W2's own instruments copied verbatim
+           (`w2_census.py` 519, `w2_q5.py` 338), a step-4 decision that was
+           right — reimplementing the placebo measurement would have created
+           two things to keep in agreement — and that no itemization included,
+           because the itemization was written before the decision.
+       (b) the workflow documents carry their evidence inline: SPEC.md 906
+           (three amendments), CHECKLIST.md 441 (every done-criterion's pasted
+           output), REQUEST.md 261, PARKED.md 186 = 1 794 against 1 190
+           budgeted for those four PLUS the two not yet written.
+       Estimated remaining: ~1 660 of instruments and PREREG, plus ~300 for
+       VALIDATION and DELIVERY, so the tranche lands near 6 450.
+       Not resolved in this window: SPEC Amendment 2 states in writing that
+       approaching this ceiling is a signal to SPLIT, not to amend a third
+       time, and a window that amends its own ceiling whenever it trips is a
+       window with no ceiling.
 
 - [ ] 18. (S8 §6, R17) Prove the copied `tools/judge_pairwise.py`'s CRITERIA are
        byte-identical to the organiser tranche's, by `diff` AND by the tool's
