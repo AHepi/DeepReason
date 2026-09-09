@@ -176,14 +176,93 @@ The honest reading of both: this tranche twice reached for the cheap version of
 a declared interface, and the repo's own instruments refused it twice. That is
 the modularity law working, not incidental noise, and it is worth the paragraph.
 
+## 7. The live run — the one thing a stub cannot show
+
+Root: `runs/home-solo/runs/run-02818acc38961781e2e820d0d6b591fb`, committed.
+Ladder `runs/solo_road_run.sh`, log at `proof/LIVE_LADDER.log`. Provider
+`ollama/qwen3.5:397b`, one model in every seat, ONE judge seat — which is what
+the managed path gives a single-model run, since `run_manifest` copies one
+exact route per role and the two-seat shape needs `--blind-same-model-judges`.
+So the live run is the one-seat case the operator's amendment opened, reached
+by the ordinary path with no exotic flag.
+
+SOAK: skipped, on the operator's explicit instruction of 2026-09-09 ("Soak is
+only for when tokens are sparse. I'd rather get results faster with real
+tests"). Recorded because CLAUDE.md's ladder rule otherwise requires one.
+
+Qualification: 360/360 cases, tier `full`, ~6 minutes. Run: 6 cycles, 378 157
+of 400 000 tokens, `state: completed`, `stop_reason: budget_exhausted` — a
+CLEAN terminal under the 2026-08-29 law, with `amend_ready: true` and
+`continuation_authority: true`.
+
+The typed outcome (`proof/LIVE_RECORD_CENSUS.txt`):
+
+```
+warrants: 7  {argumentative: 6, demonstrative: 1}
+attack edges: 15
+   22  trial-gate-switched:single-judge-seat
+   22  trial-gate-switched:solo-road
+    8  trial-declined:defence-sustained
+    5  trial-declined:execution-backed
+    2  trial-declined:paraphrase-flip
+    1  trial-declined:referential-integrity
+```
+
+**Six argumentative warrants, minted by a lone judge on a one-model run, on a
+real question.** Both disclosures are on the record 22 times — once per trial —
+so the road is auditable from the record alone.
+
+**The lone seat did not rubber-stamp.** Of 22 trials it convicted 6: eight
+defences were sustained, five targets were execution-backed and never reached
+prose, two failed the paraphrase screen and one the referential-integrity
+check. State this carefully, because it is tempting to over-read: this is a
+CONVICTION RATE on unlabelled content, not a false-conviction rate. Nothing
+here was planted, so nothing here says how often the seat was WRONG. It is the
+first live behaviour anyone has recorded for a single-seat configuration, and
+it is not a calibration.
+
+## 8. What the live run found that the stubs could not — and it is not mine
+
+`deepreason results --verify` reports this run `"valid": false` with 76
+findings in the SECURITY channel. Seventy-five are one thing:
+`transaction-authority :: work sha256:... exceeds frozen authority: unknown v6
+task kind 'defended_trial_step'`.
+
+The replay validator disagrees, and both are right about their own question:
+`verify_root` returns **0 violations** — the record replays exactly. The
+integrity channel is clean; it is the security channel's authority census that
+does not recognise the trial's work kind, because
+`verification/report.py`'s if/elif chain has no branch for
+`defended_trial_step`.
+
+**Proven not to be this tranche's**, by running the road that existed BEFORE
+it: a stub driving `ENGAGED_CRITICISM_AUTHORITY=defended_trial`, with none of
+this tranche's switches, shows the identical finding at the identical check
+(`proof/LIVE_VERIFICATION_CHANNELS.txt`). The gap dates from the
+defended-trial wiring of 2026-08-13. What this tranche changed is that a
+launchable configuration now reaches a defended trial at all — so a defect that
+was unreachable became visible on its first real use. Parked as P4 with the
+two-root table and a ready-to-send prompt; NOT fixed here, because
+`verification/` is frozen surface 3 and widening what a security check admits
+is its own tranche with its own grant.
+
+Said plainly, because it qualifies everything above: **the road works and the
+record replays, but the harness's own security census currently calls every
+defended trial's record invalid.** That is a real defect on the road this
+tranche opened, even though it is not a defect this tranche introduced.
+
 ## Residue — what remains unproven
 
-- **No live provider run.** Every figure above is from deterministic stubs. The
-  operator supplied a key and asked for real tests; the live arm is the next
-  step and is NOT claimed here.
-- **A single judge seat has no measurement.** The 47-60% figure is for looser
-  ENSEMBLES; nobody has measured a lone seat's false-conviction rate on this
-  corpus. The switch discloses; it does not calibrate. Anyone turning it on is
+- ~~**No live provider run.**~~ DISCHARGED, section 7: one run, 6 cycles, 6
+  argumentative warrants, clean terminal. What it did NOT do is compare against
+  the same model WITHOUT the harness — the 2026-09-03 success law's no-harness
+  baseline arm. This run shows the road WORKS; it says nothing about whether
+  its output is materially better than a bare call, and that is the question
+  the law makes the acceptance criterion.
+- **A single judge seat still has no CALIBRATION.** The live run gives it a
+  conviction rate (6 of 22) but no ground truth, so its false-conviction rate
+  remains unmeasured; the 47-60% figure is for looser ensembles, not for one
+  seat. The switch discloses; it does not calibrate. Anyone turning it on is
   choosing an unmeasured regime, and the record will say they did.
 - **The single-family MULTI-model gap is untouched** — parked with its full
   pricing at `PARKED.md` P1. This tranche closed a different road, and said so.

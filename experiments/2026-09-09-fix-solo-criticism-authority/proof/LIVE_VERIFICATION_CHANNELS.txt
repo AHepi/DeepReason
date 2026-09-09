@@ -1,0 +1,13 @@
+LIVE run-02818acc (this tranche road, 22 trials)
+  verify_root (integrity/replay) violations: 0
+  report: integrity 0 security 76 completion 2 operational 16 valid False
+      75  transaction-authority
+       1  run-result-verification
+    unknown kinds: {"'defended_trial_step'": 75}
+
+STUB pre-existing road (ENGAGED_CRITICISM_AUTHORITY, 1 trial)
+  verify_root (integrity/replay) violations: 0
+  report: integrity 0 security 3 completion 0 operational 5 valid False
+       3  transaction-authority
+    unknown kinds: {"'defended_trial_step'": 3}
+

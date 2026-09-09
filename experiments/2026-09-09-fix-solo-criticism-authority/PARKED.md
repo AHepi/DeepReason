@@ -134,6 +134,85 @@ non-zero AND print typed JSON on stdout, so a piped check fails with its own
 reason instead of a JSON decode error three layers away.
 ```
 
+## P4 — every defended trial writes a record its own security check calls invalid
+
+**What.** `verification/report.py::_transaction_findings` walks each v6 work
+transaction and matches its task kind against an if/elif chain. There is no
+branch for `defended_trial_step` (`workflow/models.py:160`), so every trial
+step falls into `else: unknown v6 task kind` and is reported as
+`transaction-authority :: work sha256:... exceeds frozen authority`. Because
+`VerificationReportV2.valid` is `integrity_valid AND security_valid`, ONE
+defended trial is enough to make a completed, replay-clean run report
+`"valid": false` from `deepreason results --verify`.
+
+Measured on two roots, one live and one stub
+(`proof/LIVE_VERIFICATION_CHANNELS.txt`):
+
+```
+LIVE run-02818acc (this tranche's road, 22 trials)
+  verify_root (integrity/replay) violations: 0
+  report: integrity 0 security 76 completion 2 operational 16 valid False
+      75  transaction-authority      unknown kinds: {'defended_trial_step': 75}
+       1  run-result-verification
+
+STUB pre-existing road (ENGAGED_CRITICISM_AUTHORITY, 1 trial)
+  verify_root (integrity/replay) violations: 0
+  report: integrity 0 security 3 completion 0 operational 5 valid False
+       3  transaction-authority      unknown kinds: {'defended_trial_step': 3}
+```
+
+**Not this tranche's, and the second row is why.** The stub uses
+`ENGAGED_CRITICISM_AUTHORITY=defended_trial` — the road that existed before
+this tranche, with none of its switches — and shows the identical finding at
+the identical check. The gap has been in the tree since the defended-trial
+wiring of 2026-08-13; what this tranche changed is that a launchable
+configuration now reaches the trial, so the gap became visible for the first
+time. Integrity is 0 on both: the record REPLAYS correctly. It is the security
+channel's authority census that does not recognise the work.
+
+**Why it matters beyond a red instrument.** The operator's 2026-08-29 law gates
+continuation on the record verifying intact, and makes tampering-that-buys-a-
+resumable-run a security boundary. Today the two verdicts disagree: this run's
+`terminal.continuation_authority` is `true` and `record_security_violations` is
+empty, while `results --verify` says `valid: false` with 76 security findings.
+One of those two readings is wrong, and which one it is decides whether a real
+containment breach would be caught or lost in 75 false ones.
+
+**Ready-to-send prompt.**
+
+```
+Route through deepreason-orchestrator (dr-set-goal first). One goal: a
+completed defended trial writes a record its own verification calls valid, or
+the check states in typed terms why it cannot.
+
+Evidence, all read-only:
+- experiments/2026-09-09-fix-solo-criticism-authority/proof/LIVE_VERIFICATION_CHANNELS.txt
+  -- the two-root table above. The live root is
+  runs/home-solo/runs/run-02818acc38961781e2e820d0d6b591fb (committed).
+- src/deepreason/verification/report.py:972 -- the else branch that emits it.
+- src/deepreason/workflow/models.py:160 -- DEFENDED_TRIAL_STEP, the kind with
+  no branch.
+- src/deepreason/informal/trial.py::_v6_transactional_trial_call -- what
+  actually prepares these transactions, and therefore what the missing branch
+  would have to authorize: role (defender/judge), contract id, seat.
+
+FROZEN SURFACE, read first and in full: verification/ is frozen surface 3
+(DR-INV-frozen-surfaces). Run tools/blast_radius.py on every target and paste
+its computed list. This is a WIDENING of what the security channel admits, so
+price it as one: a check that stops reporting something must be shown still to
+report the thing it was for. Mutation-prove BOTH directions -- a correctly
+authorized trial step passes, and a trial step whose role, seat or contract
+does NOT match its preparation is still reported. A change that only silences
+the 75 is worse than the defect.
+
+Settle first, because it decides the shape: which of the two verdicts is
+authoritative today. This run has terminal.continuation_authority=true and
+record_security_violations=[] while results --verify says valid=false with 76
+security findings. If continuation is meant to be gated on the security channel
+(the 2026-08-29 law reads that way), then the gate is currently open on records
+the instrument calls invalid, and that is a second finding inside this one.
+```
+
 ## Not parked here, because another tranche already owns them
 
 - `tools/blast_radius.py` reporting comment and string-literal occurrences as

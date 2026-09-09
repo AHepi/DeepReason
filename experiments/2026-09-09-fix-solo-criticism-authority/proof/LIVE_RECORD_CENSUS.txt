@@ -1,0 +1,8 @@
+warrants: 7 {'argumentative': 6, 'demonstrative': 1}
+attack edges: 15
+    8  trial-declined:defence-sustained
+    5  trial-declined:execution-backed
+    2  trial-declined:paraphrase-flip
+    1  trial-declined:referential-integrity
+   22  trial-gate-switched:single-judge-seat
+   22  trial-gate-switched:solo-road
