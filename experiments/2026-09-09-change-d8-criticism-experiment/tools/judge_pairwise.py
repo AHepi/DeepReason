@@ -125,57 +125,87 @@ def _arm0R_units() -> list[tuple[str, str]]:
     return out
 
 
-def _armR_units() -> list[tuple[str, str]]:
-    """ARM R's one composed unit -- refused when the run is not completed."""
+def _harness_arm_units(arm: str) -> list[tuple[str, str]]:
+    """One harness run's composed unit — refused unless the run is USABLE.
 
-    path = TRANCHE / "runs" / "armR" / "COMPOSED.txt"
+    Generalized from the organiser tranche's `_armR_units`, which named one
+    arm. BOTH of PREREG §5's refusals are kept exactly as Amendment 6 and
+    Amendment 9 left them, and neither is loosened:
+
+      * `state != completed` -> a FAILED arm has no usable unit;
+      * `REPLAY_VALIDATION.json` reporting `valid: false` or any violation ->
+        composition SUCCEEDS on a record that does not replay, so without this
+        check a run whose record failed validation would be scored as though it
+        stood. That is not hypothetical: it is what happened to the organiser
+        tranche's own ARM R (Amendment 9), and it is why that arm's verdict was
+        INCONCLUSIVE rather than a number.
+
+    A refusal returns no unit and says so; every pair the arm would have
+    entered is INCONCLUSIVE.
+    """
+
+    path = TRANCHE / "runs" / arm / "COMPOSED.txt"
     if not path.exists():
-        raise SystemExit(f"REFUSED: {path} does not exist; the arm has not reached its terminal")
-    composed = TRANCHE / "runs" / "armR" / "COMPOSED.json"
+        print(f"notice: {arm} has no COMPOSED.txt; the arm has not reached its "
+              f"terminal, and every pair it would have entered is INCONCLUSIVE")
+        return []
+    composed = TRANCHE / "runs" / arm / "COMPOSED.json"
     if composed.exists():
         root = pathlib.Path(json.loads(composed.read_text(encoding="utf-8"))["root"])
         status_path = root / "run-status.json"
         status = json.loads(status_path.read_text(encoding="utf-8")) if status_path.exists() else {}
         if status.get("state") != "completed":
             print(
-                "notice: armR is a FAILED arm "
+                f"notice: {arm} is a FAILED arm "
                 f"(state={status.get('state')!r}, stop_reason={status.get('stop_reason')!r}); "
-                "its unit is NOT harvested (PREREG §3), and every pair it would "
-                "have entered is INCONCLUSIVE (§7)"
+                "its unit is NOT harvested (PREREG §5), and every pair it would "
+                "have entered is INCONCLUSIVE"
             )
             return []
-        # PREREG §3's OTHER clause, implemented here for the same reason
-        # Amendment 6 implemented the state clause: a COMPLETE arm needs
-        # `state: completed` AND a verification carrying 0 violations. A run
-        # that reaches a clean stop over a record that does not replay is not
-        # a usable unit, and composition succeeds on it regardless, so
-        # without this check its positions would be scored as if the record
-        # stood. This is stricter than the instrument was, never looser, and
-        # it changes no rule (PREREG Amendment 9).
         validation = root / "REPLAY_VALIDATION.json"
         if validation.exists():
             report = json.loads(validation.read_text(encoding="utf-8"))
             violations = report.get("verification", {}).get("violations") or []
             if report.get("valid") is False or violations:
                 print(
-                    f"notice: armR's record does not verify "
+                    f"notice: {arm}'s record does not verify "
                     f"(valid={report.get('valid')!r}, violations={len(violations)}); "
-                    "its unit is NOT harvested (PREREG §3 requires 0 violations), "
-                    "and every pair it would have entered is INCONCLUSIVE (§7)"
+                    "its unit is NOT harvested (PREREG §5 requires 0 violations), "
+                    "and every pair it would have entered is INCONCLUSIVE"
                 )
                 for violation in violations:
                     print(f"    {violation}")
                 return []
-    return [("armR/COMPOSED.txt", path.read_text(encoding="utf-8"))]
+    return [(f"{arm}/COMPOSED.txt", path.read_text(encoding="utf-8"))]
+
+
+# The six harness runs, named RUN BY RUN rather than arm by arm. That naming is
+# not cosmetic: it is how R21's "reported per pair of runs, never pooled into a
+# win" is enforced. `reveal` buckets by the treatment's arm name, so two runs
+# carrying two names produce two verdicts and there is no code path that could
+# average them. E78 is why the rule exists — across three paired runs with every
+# input identical the control arm alone ranged 4.71 to 6.70 of 15, a spread
+# comparable to every between-arm difference the corpus reports.
+HARNESS_RUNS = ("armC-run1", "armC-run2", "armV-run1", "armV-run2",
+                "armA-run1", "armA-run2")
+
+# The five comparisons PREREG §7 registers, plus the arm each is measured
+# against. C-vs-V is the one that makes this a measurement of CRITICISM rather
+# than of a pipeline: the two arms differ only in whether the objections carry
+# content about their targets.
+COMPARISONS = (
+    ("armC", "ARM0-single-call", "C vs 0"),
+    ("armV", "ARM0-single-call", "V vs 0"),
+    ("armC", "armV", "C vs V"),
+    ("armA", "armC", "A vs C"),
+    ("armA", "ARM0-single-call", "A vs 0"),
+)
 
 
 def harvest() -> int:
     BLIND.mkdir(exist_ok=True)
-    arms = {
-        "ARMR-organiser": _armR_units(),
-        "ARM0-single-call": _arm0_units(),
-        "ARM0R-room-bare": _arm0R_units(),
-    }
+    arms = {run: _harness_arm_units(run) for run in HARNESS_RUNS}
+    arms["ARM0-single-call"] = _arm0_units()
     keymap: dict[str, dict] = {}
     units: dict[str, dict[str, str]] = collections.defaultdict(dict)
     for arm, items in arms.items():
@@ -184,23 +214,29 @@ def harvest() -> int:
             keymap[uid] = {"arm": arm, "source": ident, "chars": len(text)}
             units[arm][uid] = text
     pairs = []
-    # The measured comparisons (Amendment 7): every ARM R unit against every
-    # bare unit, and the CONTROL, every ARM 0R unit against every ARM 0 unit.
-    for left_arm, right_arm, role in (
-        ("ARMR-organiser", "ARM0-single-call", "measure"),
-        ("ARMR-organiser", "ARM0R-room-bare", "measure"),
-        ("ARM0R-room-bare", "ARM0-single-call", "control"),
-    ):
-        for left in units[left_arm]:
-            for right in units[right_arm]:
-                pairs.append(
-                    {
-                        "pair_id": str(uuid.uuid4()),
-                        "role": role,
-                        "left": left,
-                        "right": right,
-                    }
-                )
+    # Every treatment RUN against every control RUN, comparison by comparison.
+    # A comparison whose control is itself a harness arm (C vs V, A vs C) pairs
+    # run-to-run, so two runs a side give four pairs and four separately
+    # reported verdicts -- never one averaged one.
+    for treatment_arm, control_arm, label in COMPARISONS:
+        treatments = [r for r in units if r.startswith(treatment_arm)]
+        controls = ([control_arm] if control_arm == "ARM0-single-call"
+                    else [r for r in units if r.startswith(control_arm)])
+        for treatment in treatments:
+            for control in controls:
+                if treatment == control:
+                    continue
+                for left in units[treatment]:
+                    for right in units[control]:
+                        pairs.append(
+                            {
+                                "pair_id": str(uuid.uuid4()),
+                                "role": "measure",
+                                "comparison": label,
+                                "left": left,
+                                "right": right,
+                            }
+                        )
     pairs.sort(key=lambda p: p["pair_id"])  # position carries no origin signal
     texts = {uid: text for arm in units.values() for uid, text in arm.items()}
     PAIRS.write_text(
@@ -366,6 +402,7 @@ def reveal(as_json: str | None = None) -> int:
             {
                 "pair_id": pair_id,
                 "role": pair["role"],
+                "comparison": pair.get("comparison"),
                 "treatment_arm": units[pair["left"]]["arm"],
                 "control_arm": units[pair["right"]]["arm"],
                 "treatment_source": left["source"],
@@ -377,6 +414,9 @@ def reveal(as_json: str | None = None) -> int:
             }
         )
 
+    # The bucket key names both RUNS, never just the two arms. R21: with two
+    # runs per arm the verdict is reported per pair of runs, and there is no
+    # key under which two runs of one arm could be summed.
     for row in rows:
         key = f"{row['treatment_arm']} vs {row['control_arm']}"
         bucket = report.setdefault(

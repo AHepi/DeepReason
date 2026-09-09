@@ -1,0 +1,36 @@
+=== Step 19-20 proof: the two refusals, driven RED then GREEN ===
+
+--- green, as shipped ---
+.......                                                                  [100%]
+7 passed in 0.05s
+
+--- MUTATION 1: delete the state clause (Amendment 6's refusal) ---
+=========================== short test summary info ============================
+FAILED experiments/2026-09-09-change-d8-criticism-experiment/tests/test_judge_refusals.py::test_a_run_that_did_not_complete_is_refused
+1 failed, 6 passed in 0.09s
+
+--- MUTATION 2: delete the replay clause (Amendment 9's refusal) ---
+FAILED experiments/2026-09-09-change-d8-criticism-experiment/tests/test_judge_refusals.py::test_a_run_whose_record_does_not_replay_is_refused
+FAILED experiments/2026-09-09-change-d8-criticism-experiment/tests/test_judge_refusals.py::test_violations_alone_refuse_even_when_valid_is_not_false
+2 failed, 5 passed in 0.08s
+
+--- MUTATION 3: read only `valid` and ignore the violations list ---
+    (the organiser root's EXACT shape: valid not false, three violations)
+=========================== short test summary info ============================
+FAILED experiments/2026-09-09-change-d8-criticism-experiment/tests/test_judge_refusals.py::test_violations_alone_refuse_even_when_valid_is_not_false
+1 failed, 6 passed in 0.08s
+
+--- MUTATION 4: pool the two runs of an arm under one name (R21) ---
+=========================== short test summary info ============================
+FAILED experiments/2026-09-09-change-d8-criticism-experiment/tests/test_judge_refusals.py::test_two_runs_of_one_arm_cannot_be_pooled_into_one_verdict
+1 failed, 6 passed in 0.07s
+
+--- restored ---
+.......                                                                  [100%]
+7 passed in 0.06s
+
+Each mutation is a defect that has ACTUALLY OCCURRED or was actually
+guarded against in this repository: mutation 3 is the organiser tranche's
+own root, which reached 'completed' over a record carrying three stored
+attempt-validity violations. Reading only the 'valid' flag would have
+scored its positions as though the record stood.

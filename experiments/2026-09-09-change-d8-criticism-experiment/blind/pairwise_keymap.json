@@ -1,0 +1,20 @@
+{
+ "units": {
+  "b7d9ecda-3204-4388-b55d-1f40a05aa90d": {
+   "arm": "ARM0-single-call",
+   "source": "arm0/call-1@sha256:13fbff724bc51a1f55a635d928c40892f763562689959a3ef7a320c953339d08",
+   "chars": 7262
+  },
+  "4ebe5974-0bf2-45b6-ad9e-888f4fb8285b": {
+   "arm": "ARM0-single-call",
+   "source": "arm0/call-2@sha256:0de4306afcd807046f8365b1c1e49599ecb739d522def05a8f7e1f90b307c9e3",
+   "chars": 7688
+  },
+  "e6f6e5a7-f3a8-4bb1-8874-e233d8901f28": {
+   "arm": "ARM0-single-call",
+   "source": "arm0/call-3@sha256:21b0c63dbd38baed41a79ca979b49d92d0099e0ec9914b070e702e2c7caaaf71",
+   "chars": 7985
+  }
+ },
+ "pairs": []
+}

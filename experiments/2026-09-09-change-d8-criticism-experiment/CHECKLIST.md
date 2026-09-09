@@ -1,6 +1,6 @@
 # Checklist for: does criticism, once connected and allowed to bite, make the harness's output materially better than the plain model? — TRANCHE 1 (instruments, offline proofs, sealed pre-registration; NO LIVE CALL)
 
-State: next=18 blockers=none  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
+State: next=22 blockers=none  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
 Re-read REQUEST.md (with Amendment 1) + SPEC.md (with Amendment 1) before every
 step. Execute strictly in order. One step per dr-execute-step invocation.
 
@@ -313,26 +313,61 @@ nor `mini/`, so R36 is not touched.
        time, and a window that amends its own ceiling whenever it trips is a
        window with no ceiling.
 
-- [ ] 18. (S8 §6, R17) Prove the copied `tools/judge_pairwise.py`'s CRITERIA are
+- [x] 18. (S8 §6, R17) Prove the copied `tools/judge_pairwise.py`'s CRITERIA are
        byte-identical to the organiser tranche's, by `diff` AND by the tool's
        own `criteria-check`.
        done-when: `diff` is empty and `criteria-check` prints sha256
        `fab3fde2f3a2000bd5f7415e7a7ae3be013fd8b83b4fd52395eef4b18327df28`.
+       PROOF: `diff` against the organiser tranche's file reports NO difference
+       (the whole file, not only the CRITERIA block), and `criteria-check`
+       prints exactly that sha256.
+       DEVIATION, recorded: this step also copied `tools/judge_organiser.py`.
+       `criteria-check` READS the criteria from that module at run time rather
+       than carrying its own copy — which is the property the step exists to
+       verify — so without it the check cannot run at all. Copying it is what
+       keeps one authority for the criteria; retyping them into this tranche
+       would have defeated the check while appearing to satisfy it.
 
-- [ ] 19. (S8 §7, R20) Extend it to the five pairings (C vs 0, V vs 0, C vs V,
+- [x] 19. (S8 §7, R20) Extend it to the five pairings (C vs 0, V vs 0, C vs V,
        A vs C, A vs 0), keeping Amendment 9's refusals unchanged: a unit whose
        root is not `completed`, or whose `REPLAY_VALIDATION.json` reports any
        violation, is refused.
        done-when: a unit test in the tranche's own `tests/` drives BOTH
        refusals red-then-green against fixtures, output pasted.
+       PROOF (`proof/JUDGE_REFUSALS_RED.txt`), FOUR mutations, each a defect
+       that has actually occurred or was actually guarded against here:
+       ```
+       green, as shipped                                    7 passed
+       M1 state clause deleted                    1 failed, 6 passed
+       M2 replay clause deleted                   2 failed, 5 passed
+       M3 read only `valid`, ignore violations    1 failed, 6 passed
+       M4 pool the two runs of an arm             1 failed, 6 passed
+       restored                                             7 passed
+       ```
+       M3 is the organiser tranche's OWN root: `completed`, `valid` not false,
+       and three stored `attempt-validity` violations. An instrument reading
+       only the flag would have scored its positions as though the record
+       stood. A green control test ships beside the refusals so they cannot
+       pass by refusing everything.
+       The arms are generalized from the organiser's single hard-coded arm to
+       `_harness_arm_units(arm)`, and BOTH refusals are carried over
+       unchanged — stricter than the copy was, never looser.
 
-- [ ] 20. (S8 §8, R21) Prove the decision rule reports PER PAIR OF RUNS and
+- [x] 20. (S8 §8, R21) Prove the decision rule reports PER PAIR OF RUNS and
        cannot pool: a fixture with two runs per arm whose per-pair verdicts
        differ must print two verdicts, never one.
        done-when: the tranche test asserts exactly that and fails when the
        pooling line is reinstated (RED output pasted).
+       PROOF: mutation M4 above. R21 is enforced STRUCTURALLY rather than by a
+       check: the six harness runs are named run by run (`armC-run1`,
+       `armC-run2`, …) and `reveal` buckets by the treatment's own name, so
+       there is no key under which two runs of one arm could be summed.
+       Collapsing the names to three arms drives the test red. E78 is why the
+       rule exists — with every input identical the control arm alone ranged
+       4.71 to 6.70 of 15, a spread comparable to every between-arm difference
+       the corpus reports.
 
-- [ ] 21. (S8 §6-§9) [COMMIT] the judging instrument and its three proofs.
+- [x] 21. (S8 §6-§9) [COMMIT] the judging instrument and its three proofs.
        done-when: tree clean, head on origin.
 
 - [ ] 22. (S4, R8) Write `tools/critic_stub.py`: a loopback endpoint bound to
