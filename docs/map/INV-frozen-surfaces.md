@@ -389,6 +389,39 @@ assert [row['target'] for row in rows] == ['src/deepreason/run_manifest.py'], ro
 assert json.loads(out)['frozen_adjacent_contacts'] == []
 "`
 
+**Granted contact, 2026-09-06 — the criticism budget-denial policy's Config echo line.**
+Ledgered by the monitor at merge (commit c0a3302f07), because the window that
+took the grant recorded it in its own tranche and in the code comment but not
+here. The grant is the operator's instruction in that window, verbatim
+(`experiments/2026-09-06-defect-criticism-budget-denial-policy/GOAL.md`):
+"ok do P1. And ensure config is plugged in so that it can affect token
+allocation during a run." The second sentence is the authority for a new
+`Config` field, and the documented recipe ("Where authority is allowed to live
+instead") is not finished without its `data.pop(...)` line in
+`_versioned_source_config_data` — the CONTACT with this surface.
+
+What moved: ONE `data.pop("CRITICISM_BUDGET_DENIAL_POLICY", None)` statement at
+four spaces, unconditional, with the comment block its neighbours carry.
+Insertions only. The field is ONE flat scalar (`shrink-the-batch.v1` by
+default; the registered set is `runtime/criticism_budget_policy.py`), read at
+the criticism dispatch site, never written to the manifest, and its effect is
+recorded by the `criticism.dispatch.v1` declaration. A SPENT ceiling is not
+governed by it: that still ends the run `budget_exhausted` (the 2026-08-29
+law, put on its road by the same window's first tranche). The window's own
+proof that no qualification subject digest moved is in that tranche's VERIFY.md.
+
+`check: python -c "
+from deepreason.config import Config
+from deepreason.run_manifest import _versioned_source_config_data, config_from_run_manifest
+for version in (1, 2, 3, 4, 5, 6):
+    echoed = _versioned_source_config_data(Config(), version)
+    assert 'CRITICISM_BUDGET_DENIAL_POLICY' not in echoed, version
+import sys; sys.path.insert(0, '.')
+from tests.test_reusable_qualification import _manifest, _profile
+manifest = _manifest(_profile(), config_updates={'CRITICISM_BUDGET_DENIAL_POLICY': 'drop-the-batch.v1'})
+assert config_from_run_manifest(manifest).CRITICISM_BUDGET_DENIAL_POLICY == 'drop-the-batch.v1'
+" && test "$(grep -c 'data.pop(\"CRITICISM_BUDGET_DENIAL_POLICY\"' src/deepreason/run_manifest.py)" -eq 1`
+
 **Granted contact, 2026-08-27 — the sandbox attribute boundary (the escape fix).**
 The operator granted this contact IN CHAT, conditionally, after being shown the
 verdict it unblocks: "can you fix please. Frozen surface changes are permitted
