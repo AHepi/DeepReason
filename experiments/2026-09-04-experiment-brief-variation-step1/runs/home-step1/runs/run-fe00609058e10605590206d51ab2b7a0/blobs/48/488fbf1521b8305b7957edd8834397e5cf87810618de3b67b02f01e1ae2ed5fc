@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's evolutionary defense commits the naturalistic fallacy by reducing Popper's normative question ('ought we to prefer?') to a descriptive account of survival ('we do prefer'). Popper explicitly demanded a logical basis for scientific preference to distinguish science from mere biological adaptation or successful guessing. By replacing 'rational justification' with 'functional efficacy,' the target fails to answer whether the preference is defensible *on Popper's own terms* (which require avoiding induction and seeking logical coherence), instead offering an external sociological explanation that Popper would reject as irrelevant to the logic of discovery. The argument collapses because it addresses why scientists *do* act, not why they *should* act according to Popperian epistemology.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's problem specifically asks if the preference for corroborated theories is defensible on his own terms (logical/non-inductive), not whether it can be explained by evolutionary biology.",
+      "premise_evidence": null,
+      "successor_question": "Can an evolutionary explanation of scientific behavior satisfy Popper's requirement for a non-inductive, logical justification for theory preference, or does it merely sidestep the epistemological dilemma?"
+    }
+  ]
+}
