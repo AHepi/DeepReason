@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive methodological rule aimed at maximizing testability (severity), not probability; however, accepting this defense costs the scientist any rational assurance that the preferred theory is true or will survive future tests, reducing scientific progress to a game of surviving falsification without cumulative truth-approximation guarantees.",
+    "mechanism": "The argument distinguishes between 'rational preference for action' (choosing the theory that has withstood the severest tests because it offers the most informative potential for falsification) and 'inductive inference' (believing the theory is more likely to be true). Popper's mechanism relies on the logical asymmetry of falsification: while corroboration reports only past performance, choosing the best-corroborated theory is a strategic decision to subject the boldest conjecture to further risk, which aligns with the goal of eliminating error rather than confirming truth.",
+    "counterconditions": [
+      "If 'severity' implicitly assumes that nature is uniform enough that past resistance to falsification predicts future resistance, then the preference smuggles in induction.",
+      "If scientists practically act as if corroborated theories are more probable (e.g., in engineering bridges), then Popper's distinction is merely verbal and fails to describe actual rationality.",
+      "If the concept of 'verisimilitude' (truth-likeness) is required to explain why we prefer one unfalsified theory over another, and verisimilitude cannot be defined without inductive assumptions, the defense collapses."
+    ],
+    "typicality": 0.85,
+    "analogy": {
+      "source_memory_refs": ["evolutionary_selection_pressure", "survival_of_the_fittest_filter"],
+      "shared_structure": [
+        "Selection based on survival of past challenges does not guarantee future survival.",
+        "Preference for the 'fittest' current candidate is a strategic bet on robustness, not a prediction of eternal dominance.",
+        "The process eliminates the weak but does not confirm the absolute strength of the survivor."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of testing limits, whereas Popperian science explicitly seeks severe tests.",
+        "Organisms do not choose their environment, while scientists actively construct severe experimental conditions.",
+        "Evolutionary fitness is relative to a specific niche, while scientific corroboration aims for universal scope."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the fittest organism to survive the next season without knowing it will, we bet on the best-corroborated theory to solve the next problem without knowing it is true.",
+        "The lack of guarantee in evolution mirrors the lack of inductive certainty in Popperian preference."
+      ],
+      "overturn_conditions": [
+        "If biological fitness were proven to correlate perfectly with eternal survival, the analogy would imply induction is valid.",
+        "If scientists could prove a theory is true rather than just unfalsified, the evolutionary analogy would break down."
+      ]
+    },
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate origin with justification; it explicitly frames the preference as a forward-looking methodological rule (strategic choice) rather than a backward-looking psychological explanation (evolutionary habit). The justification rests on the logic of severity, not the history of the belief."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The candidate acknowledges Popper's argument for non-inductive rationality via severity but clarifies that this rationality is purely procedural (maximizing error detection) and does not constitute a 'third way' that grants epistemic probability. It rejects the false dichotomy by asserting the preference is rational *only* as a rule for guessing, not as a measure of truth."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'uniformity of nature' concern in the counterconditions: The move from 'others falsified' to 'choose this one' assumes only that the method of elimination is effective for finding errors, not that nature is uniform. If nature changes arbitrarily, the theory fails too, but the *method* of choosing the most tested one remains the best available strategy for exposing such changes."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "Severity is defined logically by the improbability of the evidence given the theory, not by an empirical assumption that passing tests predicts future success. The 'reliability' mentioned is reliability in exposing falsehoods, not reliability in predicting truths. The criticism mistakes the goal of the method (falsification) for a claim about predictive stability."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes Popper's methodological rules from Poincaré's conventionalism by emphasizing that Popper's rules are chosen specifically *because* they facilitate falsification (an objective logical relation), whereas conventionalism chooses rules for convenience. The 'arbitrariness' is limited to the decision to play the game of science at all; once playing, the rules are dictated by the logic of testing."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The candidate strictly separates 'methodological convention' (the rule to prefer severe tests) from 'pragmatic reliability' (the expectation that it works). It argues that Popper's defense holds only if we abandon the hope for pragmatic reliability regarding truth, accepting instead that the convention is useful solely for error elimination. Thus, it does not smuggle in induction but rather excises the desire for inductive comfort."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e871c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "departure_declared",
+        "note": "Departing from the reliance on 'verisimilitude' as a solved problem. This candidate accepts the cost that without a workable definition of verisimilitude, Popper cannot claim the preferred theory is 'closer to the truth,' only that it is the 'best guess' currently available. The defense survives by lowering the ambition from 'truth-approximation' to 'error-elimination.'"
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f0068bbde5f67",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for the 'smuggling induction' view in the counterconditions (specifically the first two) and resolves the conflict by concluding that the 'non-inductive' defense survives only at the high cost of abandoning claims to truth or predictive certainty, thereby satisfying the prompt's requirement for a resolution."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

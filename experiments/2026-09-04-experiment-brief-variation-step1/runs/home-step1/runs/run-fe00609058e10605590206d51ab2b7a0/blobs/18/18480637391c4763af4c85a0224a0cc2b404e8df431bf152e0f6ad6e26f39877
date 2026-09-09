@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails the prompt's requirement to 'say which one survives' by refusing to select a definitive resolution. Instead of choosing between the preference being defensible or indefensible, it proposes a 'Critical Dualism' that accepts both as simultaneously true (acting inductively while criticizing deductively). This evades the core philosophical conflict requested—whether the preference smuggles in induction—and replaces the required binary judgment with a compromise that the prompt explicitly asked to evaluate and potentially reject.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "The prompt demands a choice: 'Make the strongest case for each answer, then say which one survives.'",
+      "premise_evidence": null,
+      "successor_question": "Does accepting a 'tragic inconsistency' where logic and action fundamentally contradict each other actually resolve the problem, or does it merely describe the failure of Popper's system without providing the requested normative defense?"
+    }
+  ]
+}

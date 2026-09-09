@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive methodological rule of 'critical rationality,' but accepting this defense costs the scientist any claim to predictive reliability or increasing truth-probability, reducing the preference to a purely procedural commitment to keep error-elimination active.",
+    "mechanism": "The argument distinguishes between 'justification' (which implies induction) and 'rational preference' (which implies choosing the theory that has best withstood attempts at falsification). The mechanism is a disjunctive syllogism applied to methodology: since we must act, and since unfalsified theories are not equal in their exposure to risk, we prefer the one that has survived the severest tests. This is not an inference that the future will resemble the past (induction), but a decision to subject our current best guess to the highest possible risk of immediate refutation. The 'cost' is that this preference offers no guarantee of success, no probability assignment, and no assurance that the surviving theory is closer to the truth than a randomly chosen unfalsified one; it only assures us that we are following the most rigorous procedure for error detection available.",
+    "counterconditions": [
+      "If 'severity of test' implicitly assumes that passing such a test makes future passing more likely, then the definition of severity smuggles in induction.",
+      "If the choice to act on the better-corroborated theory is based on any expectation of practical success rather than mere procedural consistency, it collapses into pragmatic induction.",
+      "If Popper cannot distinguish his 'methodological rules' from the 'conventionalism' he rejected without appealing to the utility (and thus implied reliability) of those rules, the distinction fails."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate origin with justification; it explicitly frames the preference as a normative methodological rule ('critical rationality') adopted for the purpose of error elimination, distinct from any descriptive evolutionary account of why scientists behave as they do."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dichotomy by positing a third option: 'procedural rationality.' It argues Popper's defense is neither an arbitrary decree nor an inductive inference, but a logical requirement of the falsificationist method itself—if one seeks to falsify, one must test the riskiest claims."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "The move from 'others falsified' to 'choose this one' is defended here not as an assumption of nature's uniformity, but as a negative selection process. We do not choose it because it will work; we choose it because it is the only one left standing after attempted executions, and continuing to use eliminated options would be irrational."
+      },
+      {
+        "handle": "2118fcfb857250406462fc295532a5a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "revised",
+        "note": "Revised to explicitly concede that 'severity' is vulnerable to the charge of implicit induction if defined by predictive success. The candidate now defines severity strictly by 'logical improbability' and 'testability' prior to the outcome, attempting to decouple it from retrospective reliability."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes Popper's rules from Poincaré's conventionalism by noting that Popper's rules are not chosen for convenience or simplicity alone, but are constitutive of the attitude of critical scrutiny. They are not arbitrary because they are derived from the goal of error elimination, whereas conventionalism accepts rules that make theory preservation easier."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The candidate maintains a strict separation between 'methodological convention' (the rule to test severely) and 'pragmatic reliability' (the hope that it works). It argues the preference is defensible *only* as the former, and explicitly abandons the latter as a justification to avoid smuggling in induction."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e871c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "departure_declared",
+        "note": "Departing from defenses that rely on 'verisimilitude' as a knowable metric. This candidate accepts Popper's later admission that verisimilitude cannot be formally assessed and grounds the preference solely in the logic of falsification, not in any gradation of truth-likeness."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f006bbde5f67",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for the 'smuggling induction' view within its counterconditions and mechanism analysis, acknowledging that the 'cost' of the Popperian defense is the total surrender of predictive confidence, thereby resolving the conflict by showing the defense survives only by becoming practically hollow."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["evolutionary_selection_pressure"],
+      "shared_structure": [
+        "Selection operates on survival of the fittest (or most tested), not on the probability of future survival.",
+        "Preference for the survivor is a heuristic for continued testing, not a guarantee of adaptation.",
+        "The process eliminates the unfit but does not identify the optimal."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of error elimination; Popperian science does.",
+        "Survival in nature may involve luck; survival in severe testing is meant to be logically rigorous.",
+        "Evolution accumulates changes; Popperian science aims to refute and replace."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the organism that survived a plague without assuming it is immune to the next one, we bet on the corroborated theory without assuming it is probable.",
+        "The 'fitness' of a theory is its testability, not its truth."
+      ],
+      "overturn_conditions": [
+        "If biological survival is shown to imply probabilistic future fitness, the analogy supports induction.",
+        "If scientific testing cannot be decoupled from expectations of future performance."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive methodological rule aimed at maximizing verisimilitude (truth-likeness) through severe testing, but accepting this defense costs the scientist any claim to predictive certainty or probabilistic confidence, reducing rational action to a bold conjecture without inductive backing.",
+    "mechanism": "The argument proceeds by distinguishing between 'justification' (which implies induction) and 'critical preference' (which relies on the logical asymmetry of falsification). It posits that choosing the theory with the highest content that has survived the most severe tests is the only rational strategy if one's goal is to get closer to the truth, even if one cannot know that one has succeeded. The mechanism rejects the idea that past survival guarantees future success, instead framing the choice as the best available bet in a game where the odds are unknown but the potential payoff (truth) is maximized by high content and rigorous screening.",
+    "counterconditions": [
+      "If 'severity of test' implicitly assumes the uniformity of nature (that future conditions will resemble past testing conditions), then the preference smuggles in induction.",
+      "If the concept of 'verisimilitude' cannot be formally defined or assessed without inductive inference, then the rationale collapses into the very probabilistic thinking Popper rejected.",
+      "If the methodological rule is merely an arbitrary convention without rational force, it fails to explain why scientists *should* prefer corroborated theories rather than just noting that they *do*."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The criticism conflates explaining the psychological origin of preference with providing a rational justification. This candidate does not rely on evolutionary epistemology; it relies on the logical imperative to seek truth via high-content conjectures, which is a normative methodological stance, not a descriptive evolutionary account."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge Popper's argument for 'non-inductive rationality' based on verisimilitude, clarifying that the dichotomy was not between 'arbitrary decree' and 'induction,' but between 'inductive justification' and 'critical preference for truth-likeness'."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "The move from 'others are falsified' to 'choose this one' does not assume nature's uniformity; it assumes only that the unfalsified theory is logically preferable because it has not yet been shown false, whereas others have. The expectation of future performance is a hope, not a premise of the choice."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "Severity of tests is defined by the logical improbability of the passing result given background knowledge, not by an inductive assumption that passing predicts future success. The reliability is not assumed; the test is designed to be a risky attempt to falsify, and survival is merely the absence of refutation."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "revised",
+        "note": "Clarified that the methodological rule is not 'arbitrary' in the conventionalist sense (like Poincaré's geometry choices) but is rationally grounded in the aim of science: finding true theories. It is a rule derived from the objective of verisimilitude, not a mere convention."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The candidate strictly separates 'methodological convention' (the rule to choose the best-tested) from 'pragmatic reliability' (the belief that it will work). The defense holds that we follow the rule *because* it is the best path to truth, not because we assume it guarantees reliable prediction."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e871c873592ea578589e3038e5d345dada5f6d1",
+        "kind": "rebutted",
+        "note": "While Popper admitted difficulties in formally defining verisimilitude, he maintained it as a regulative ideal. The candidate argues that the *intent* to maximize verisimilitude justifies the preference, even if the metric is imperfect, avoiding the collapse into induction by refusing to assign probabilities."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f006bbde5f67",
+        "kind": "revised",
+        "note": "Expanded the argument to explicitly construct the 'strongest case' for the induction-smuggling view (via the counterconditions) before resolving the conflict, ensuring the prompt's requirement for a balanced dialectic is met."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["evolutionary_selection_process", "courtroom_adversarial_system"],
+      "shared_structure": [
+        "Survival of a candidate does not prove its intrinsic superiority, only its resilience against specific challenges.",
+        "Preference is given to the survivor not because it is guaranteed to be true/right, but because it is the only one remaining standing after rigorous attempts to eliminate it.",
+        "The process is eliminative rather than confirmatory."
+      ],
+      "disanalogies": [
+        "Evolution has no goal of 'truth,' whereas Popperian science explicitly aims at verisimilitude.",
+        "A courtroom verdict often carries a presumption of finality or probability ('beyond reasonable doubt'), whereas Popperian corroboration explicitly denies any increase in probability."
+      ],
+      "transfer_claims": [
+        "Just as a biologist prefers the fittest organism for study without claiming it is the 'perfect' species, a scientist prefers the best-corroborated theory without claiming it is probable.",
+        "The rationality of the choice lies in the rigor of the elimination process, not in the attributes of the survivor."
+      ],
+      "overturn_conditions": [
+        "If the 'survivor' status is shown to be purely accidental relative to the test conditions (luck rather than resilience).",
+        "If the goal of the system is redefined from 'truth-seeking' to 'prediction-accuracy,' rendering the non-probabilistic stance irrational."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
