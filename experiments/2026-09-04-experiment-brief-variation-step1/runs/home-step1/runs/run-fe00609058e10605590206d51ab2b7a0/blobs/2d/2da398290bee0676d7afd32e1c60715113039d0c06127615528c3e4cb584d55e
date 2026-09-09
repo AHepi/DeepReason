@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-probabilistic basis for preference, but this concept is untenable within Popper's own framework because it implicitly reintroduces induction. To claim a theory with higher verisimilitude is the 'best available approximation to truth' for *future* action assumes that the structural features which allowed it to survive *past* tests will continue to align with reality in *future* untested domains. Without this inductive bridge—the assumption that nature's behavior is uniform enough that past resilience predicts future accuracy—the preference becomes arbitrary. Popper explicitly rejected the idea that corroboration tells us anything about future performance; therefore, using verisimilitude to justify practical preference smuggles in the very inductive principle (the future will resemble the past) that the target claims to avoid.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Preferring a theory for future action based on past corroboration requires an inductive assumption that the future will resemble the past.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be measured without probabilistic assumptions or inductive leaps, does Popper's system leave scientists with no rational basis for choosing between unfalsified theories other than arbitrary guesswork?"
+    }
+  ]
+}
