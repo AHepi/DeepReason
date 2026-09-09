@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's evolutionary explanation fails to address the specific normative question posed in the problem context: whether the preference is 'defensible on Popper's own terms.' Popper's philosophy explicitly rejects biological or psychological explanations as substitutes for logical justification (the genetic fallacy). By reframing the scientist's rational preference as a mere 'hard-wired heuristic' selected for survival, the target sidesteps the core philosophical challenge of justifying theory choice without induction. It answers 'why do scientists do it?' (causal/descriptive) instead of 'is this preference defensible?' (normative/logical), thereby failing to engage with the problem's requirement to determine if this stance 'smuggles back in induction' or offers a valid non-inductive defense within Popper's epistemological framework.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguishes sharply between the context of discovery (psychological/biological causes) and the context of justification (logical validity), rejecting the former as a basis for the latter.",
+      "premise_evidence": null,
+      "successor_question": "If the preference is merely a survival heuristic and not logically justified, how can Popper claim science is rational rather than just a successful biological adaptation?"
+    }
+  ]
+}

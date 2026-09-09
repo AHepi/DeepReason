@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's analogy of 'betting on a horse' fails to distinguish Popperian corroboration from Humean induction because any rational preference for action based on past performance logically entails an expectation of future reliability. If the scientist prefers Theory A over Theory B for action solely because A survived severe tests, they are implicitly assigning a higher degree of confidence (probability) that A will not fail in the next instance. This collapses the distinction between 'corroboration' and 'probability,' forcing the admission that corroboration functions as a proxy for inductive probability, which contradicts Popper's core rejection of induction.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Rational action based on past success necessarily implies an expectation of future success.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration does not imply a higher probability of future success, on what non-inductive basis can a scientist rationally prefer one theory over another for practical application?"
+    }
+  ]
+}

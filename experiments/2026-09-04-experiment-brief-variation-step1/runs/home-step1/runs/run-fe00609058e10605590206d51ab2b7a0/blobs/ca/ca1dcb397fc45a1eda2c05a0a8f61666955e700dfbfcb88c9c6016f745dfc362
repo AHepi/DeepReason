@@ -1,0 +1,189 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'rule of action' based on verisimilitude (truth-likeness) rather than probability; we prefer the theory that has withstood the severest tests because it is currently the best approximation to truth, not because we predict it will survive future tests.",
+      "mechanism": "Differentiation between logical probability (which remains zero for universal laws) and verisimilitude (closeness to truth). Corroboration reports the severity of tests passed, acting as a marker for high verisimilitude. Acting on the best-corroborated theory is a rational choice to act on the current best estimate of reality, without asserting that past success guarantees future success.",
+      "counterconditions": [
+        "If Popper explicitly equates acting on a theory with assigning it a higher probability of future success.",
+        "If the concept of verisimilitude cannot be defined without relying on inductive assumptions about the structure of the world."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate explicitly distinguishes 'predicting future events' (which would require induction) from 'acting on current best truth-likeness' (which does not), directly addressing the conflation charge."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The 'betting' analogy is clarified: we bet on the horse not because its past record predicts future wins (induction), but because its past performance indicates it is currently the fastest horse (verisimilitude)."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Preferring high verisimilitude is an epistemic goal inherent to science, not a mere pragmatic justification; it aligns with Popper's aim of getting closer to the truth."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "The mechanism addresses the smuggling charge by grounding the preference in the logical concept of verisimilitude, not by redefining the conflict away."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "There is no dual-epistemology; the same principle (maximize verisimilitude) guides both testing (seeking falsification to refine truth-likeness) and acting (choosing the most truth-like theory)."
+        }
+      ],
+      "optional_refs": ["SRC_005", "SRC_007"]
+    },
+    {
+      "claim": "The preference unavoidably smuggles induction back in; any decision to act on a corroborated theory implicitly assumes the 'uniformity of nature' or that the future will resemble the past, rendering Popper's distinction between corroboration and probability practically null for the working scientist.",
+      "mechanism": "Decision-theoretic inevitability: To choose Theory A over Theory B for action implies an expectation that A will yield better outcomes. This expectation can only be derived from A's past performance if one assumes the future resembles the past (the principle of induction). Without this assumption, past corroboration is irrelevant to future action.",
+      "counterconditions": [
+        "If a non-inductive basis for practical action can be demonstrated (e.g., purely evolutionary selection of habits).",
+        "If Popper admits that his philosophy offers no guide for action, only for criticism."
+      ],
+      "typicality": 0.80,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to emphasize that even 'preferring for explanatory power' entails an expectation of future explanatory success, which is inductive."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Confirms that the 'betting' analogy fails precisely because betting requires an expectation of payout, which relies on induction."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Argues that 'risk management' is inherently pragmatic and relies on predicting risks, which contradicts Popper's anti-pragmatic stance on theory acceptance."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "Maintains that the problem is not a category error but a fundamental logical gap in Popper's system regarding action."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "Accepts the 'dual-epistemology' charge as evidence of the inconsistency: Popper demands non-induction logically but requires induction practically."
+        }
+      ],
+      "optional_refs": ["SRC_006", "SRC_008"]
+    },
+    {
+      "claim": "The preference is defensible not as induction nor as truth-likeness, but as an evolutionary adaptation: scientists prefer corroborated theories because those who didn't were eliminated; the 'rationality' is post-hoc biological survival, not logical justification.",
+      "mechanism": "Evolutionary Epistemology: Theory choice is analogous to natural selection. Organisms (scientists) that act on successful hypotheses survive. The 'preference' is a hard-wired heuristic selected for survival, requiring no logical bridge between past and future, only a causal history of survival.",
+      "counterconditions": [
+        "If evolutionary success does not correlate with truth or predictive accuracy.",
+        "If scientists can articulate a logical reason for their choice beyond 'it worked before'."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "departure_declared",
+          "note": "Departs from the requirement to justify the preference logically; instead explains it causally via evolution."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The 'betting' is not a conscious inductive inference but an instinctual drive shaped by evolution."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "revised",
+          "note": "Reframes 'risk management' as 'survival strategy' dictated by biology, bypassing Popper's normative constraints."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "Dissolves the 'smuggling' charge by removing the agent's logical intent entirely."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "Resolves the inconsistency by attributing the 'inductive habit' to biology and the 'anti-inductive logic' to culture."
+        }
+      ],
+      "optional_refs": ["SRC_002"]
+    },
+    {
+      "claim": "The tension is a pseudo-problem arising from a category mistake: 'corroboration' is a report of past test severity, while 'action' is a commitment to a specific context; preferring a theory for action is simply acknowledging it is the only one currently standing, which is a tautology, not an inductive leap.",
+      "mechanism": "Status Reporting: Corroboration functions solely as a status label ('Survivor'). Action requires a theory. If only one theory survives, it must be chosen. If multiple survive, the choice is arbitrary or based on non-scientific criteria. The 'preference' is just the recognition of the set of survivors.",
+      "counterconditions": [
+        "If there are always multiple surviving theories with different predictions.",
+        "If 'standing' implies a prediction of continued standing."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Clarifies that no prediction of future events is made, only a statement of current status."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Rejects the 'track record' analogy; it is not about the record predicting the future, but the record defining the present set of options."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Denies that this is a 'risk-management strategy'; it is a logical necessity of having to act with available tools."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "Affirms that the mechanism answers the smuggling charge by reducing the preference to a logical triviality."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "Eliminates the 'dual-epistemology' by showing the logic of testing and acting is identical: both rely on the current set of non-falsified theories."
+        }
+      ],
+      "optional_refs": ["SRC_007"]
+    },
+    {
+      "claim": "Popper's position survives only by accepting a tragic cost: the separation of 'scientific rationality' from 'practical rationality,' forcing scientists to live a schizophrenic existence where they know their actions are inductively justified while maintaining their theories are not.",
+      "mechanism": "Compartmentalized Rationality: The scientist operates in two modes. Mode A (Theoretical): Strict falsificationism, no induction. Mode B (Practical): Naive induction, assuming the sun will rise. The 'preference' is a psychological necessity that Popper's logic cannot support, creating an unbridgeable gap between knowing and doing.",
+      "counterconditions": [
+        "If a unified framework can be found that satisfies both theoretical rigor and practical needs.",
+        "If scientists do not actually feel this tension or compartmentalization."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "revised",
+          "note": "Refines the claim to state that the conflation is inevitable in practice despite theoretical distinctions."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Agrees that the 'betting' analogy reveals the hidden induction that Popper tries to deny."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Asserts that this 'schizophrenia' is the actual cost of Popper's view, contradicting the idea of a coherent risk strategy."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "Argues that the 'category error' is Popper's own failure to integrate action into his epistemology."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "Fully embraces the 'dual-epistemology' critique as the definitive refutation of Popper's completeness."
+        }
+      ],
+      "optional_refs": ["SRC_008", "SRC_006"]
+    }
+  ]
+}

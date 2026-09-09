@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target fails to address the core philosophical prompt which demands making the strongest case for BOTH answers (defensible preference vs. smuggling induction) before concluding. Instead, it immediately asserts a single negative conclusion ('tragic cost', 'schizophrenic existence') without fairly articulating the counter-argument that preferring corroborated theories is rational precisely because they have withstood falsification, not because they are probable. This violates the instruction to 'Make the strongest case for each answer'.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}
