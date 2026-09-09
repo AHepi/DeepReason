@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's evolutionary analogy fails to resolve the specific tension Popper identified regarding *action*. While the target explains why scientists might *prefer* a theory (methodological survival), it does not justify why acting on that preference is *rational* rather than merely biologically determined. Popper's problem asks if the preference is 'defensible on his own terms' (critical rationality); answering that it is just a 'survival trait' concedes that scientific rationality collapses into biological adaptation, which validates the countercondition that the view reduces scientific rationality to mere adaptation and fails to provide the normative defense the prompt requires.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "The prompt explicitly asks whether the preference for corroborated theories is 'defensible on Popper's own terms' or if it 'smuggles back in induction', requiring a normative justification for action, not just a descriptive causal mechanism.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is merely a 'survival trait' of the methodology as the target claims, how does this differ from the irrational instinct the target seeks to avoid, and what specific argument prevents this from being an admission that scientific rationality is reducible to biological adaptation?"
+    }
+  ]
+}

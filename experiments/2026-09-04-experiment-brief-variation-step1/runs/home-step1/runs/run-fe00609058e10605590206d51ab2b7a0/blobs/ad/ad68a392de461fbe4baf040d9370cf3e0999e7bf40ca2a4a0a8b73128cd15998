@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories in action is defensible on his own terms not as an inductive inference of future truth, but as a non-inductive 'conventional decision' grounded in the methodological rule that acting on the most severely tested theory maximizes the opportunity for future falsification, thereby accelerating verisimilitude without assigning probability.",
+    "mechanism": "The mechanism distinguishes between 'theoretical acceptance' (which Popper forbids as probabilistic) and 'practical preference' (which he allows as a convention). By choosing the theory with the highest corroboration, the agent selects the one that has survived the most stringent attempts at falsification. This choice does not imply the theory is 'more likely true' (induction), but rather that it is the 'best available target' for further critical testing. In practical action (e.g., building a bridge), this preference is justified because if the theory is false, acting on the most severely tested version ensures that any failure reveals a deeper error sooner, thus advancing knowledge faster than acting on a less tested or ad-hoc theory. The cost is accepting that this preference is a pragmatic postulate, not a logical derivation, meaning rational action rests on a voluntary commitment to the growth of knowledge rather than a guarantee of success.",
+    "counterconditions": [
+      "If corroboration is shown to logically entail a prediction of future success, the distinction collapses into induction.",
+      "If Popper's own actions in daily life rely on an implicit belief in the uniformity of nature rather than a conventional decision, the defense fails.",
+      "If the concept of 'verisimilitude' cannot be coherently applied to practical decision-making without quantitative probability, the non-inductive metric fails."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The criticism claims verisimilitude fails because it lacks formal definition. However, Popper's defense of action does not require a *calculated* degree of verisimilitude, only a qualitative ordering based on severity of tests passed. The candidate relies on this ordinal ranking (more severe tests = better candidate for action) which remains valid even if a precise metric is unavailable."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids conflating logical probability with practical preference. It argues that the 'expectation of future success' is not a logical entailment but a hoped-for byproduct of the methodological rule to maximize testability. The category error is avoided by strictly maintaining that the preference is a convention, not a logical deduction."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma by framing practical reliance as a high-stakes test. Acting on the best-corroborated theory is the ultimate 'severe test'; if it fails, we learn more than if a weaker theory fails. This directly answers why one must choose a specific theory for action: to subject it to the most consequential falsification attempt possible."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes 'willingness to criticize' from 'practical reliance' by asserting that practical reliance *is* the form criticism takes in the real world. Building the bridge is the test. Preferring the better-corroborated theory is simply choosing the most robust hypothesis to subject to this final, practical test."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is defended as consistent with his philosophy because he viewed the decision to act on the best-tested theory as a rational *convention*. The tension is resolved by acknowledging that while the decision is not logically compelled by probability, it is rationally mandated by the goal of scientific progress (maximizing falsifiability)."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The candidate strictly adheres to Popper's falsificationist framework and the concept of corroboration as defined in 'The Logic of Scientific Discovery' and 'Conjectures and Refutations'. It does not invoke Evolutionary Epistemology or external frameworks, relying solely on the internal logic of severe testing and conventional decision."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "The pragmatic contradiction is dissolved by rejecting the premise that rational action requires a belief in future success derived from past performance. Instead, rational action requires adherence to the method that best exposes error. Acting on the best-corroborated theory is rational because it is the most efficient way to discover if we are wrong, not because it guarantees we are right."
+      },
+      {
+        "handle": "2bb824986a07c70a152db1deb50653be633a98497dc1a927ef76e718b290d85f",
+        "kind": "revised",
+        "note": "Revised to clarify that the justification for *action* is identical to the justification for *preference*: both serve the single goal of maximizing the severity of tests. Action is merely the domain where the stakes of the test are highest. Therefore, the evolutionary analogy of survival is replaced by the methodological imperative of 'maximal risk-taking' in service of truth approximation."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

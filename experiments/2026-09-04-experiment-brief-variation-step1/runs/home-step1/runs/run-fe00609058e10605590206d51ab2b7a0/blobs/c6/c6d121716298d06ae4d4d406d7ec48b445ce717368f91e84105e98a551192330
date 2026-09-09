@@ -1,0 +1,62 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future truth, but as a non-inductive methodological rule for maximizing the content of our conjectures; however, accepting this defense costs us the ability to claim rational assurance that acting on such theories will succeed in practical applications (e.g., bridge building), reducing the preference to a bold gamble rather than a justified expectation.",
+    "mechanism": "The argument distinguishes between 'logical probability' (which Popper rejects as increasing with corroboration) and 'methodological utility' (choosing the theory with the highest empirical content and severest test survival). It posits that preferring the better-corroborated theory is rational because it offers the most informative potential falsification, not because it is likely true. The 'cost' is identified as the inability to bridge the gap between this methodological choice and pragmatic safety, forcing a concession that action based on corroboration remains logically indistinguishable from action based on any other unrefuted theory regarding future success.",
+    "counterconditions": [
+      "If corroboration can be shown to logically entail a higher degree of verisimilitude (truth-likeness) that is calculable, the 'gamble' characterization fails.",
+      "If Popper's own writings on 'acting on' theories explicitly invoke a principle of induction under a different name, the defense collapses into self-contradiction.",
+      "If a non-inductive metric for practical reliability (distinct from truth-content) can be derived strictly from falsificationist premises, the 'cost' of lacking assurance is paid."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on 'verisimilitude' as a calculated metric for rational choice. Instead, it grounds the preference in 'methodological utility' (maximizing testability/content), explicitly avoiding the formal definition problem of verisimilitude cited in the criticism."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "revised",
+        "note": "Clarified in the 'claim' and 'mechanism' that the preference entails no 'expectation of future success' (which would be inductive). The revision explicitly states the cost is the *lack* of such expectation, framing the choice as a 'bold gamble' to avoid the category error."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "rebutted",
+        "note": "The candidate addresses the 'acting on' dilemma by conceding that Popper's terms *cannot* justify practical reliance for safety (bridge building). It argues the defensibility lies only in the *selection* of the most informative target for criticism, not in the pragmatic guarantee of the action's outcome."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The distinction is maintained: 'willingness to criticize' is the rational basis for the preference. The candidate explicitly denies that this translates to 'practical reliance' in the sense of guaranteed safety, thereby addressing the core challenge by accepting the limitation rather than conflating the concepts."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "revised",
+        "note": "Added specific language regarding Popper's personal behavior: it is framed as a consistent adherence to the methodological rule of choosing the best testable theory, even if it offers no objective reason for expecting practical success, thus resolving the tension by accepting the 'conventional' nature of the decision postulate."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The argument strictly utilizes Popper's falsificationist framework (content and test severity) without substituting Evolutionary Epistemology. The term 'survival' is used only metaphorically for 'not yet falsified,' not as an evolutionary mechanism."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "The candidate embraces the 'pragmatic contradiction' as the necessary 'cost.' It argues that the distinction between logical probability and practical preference *does* fail to provide rational assurance for action, which is precisely the point: the preference is defensible methodologically, but not pragmatically."
+      },
+      {
+        "handle": "2bb824986a07c70a152db1deb50653be633a98497dc1a927ef76e718b290d85f",
+        "kind": "rebutted",
+        "note": "The analogy of 'bold gambling' replaces the evolutionary analogy. It resolves the tension by stating that acting on the theory is justified only as a commitment to the most severe test, not as a prediction of safety, directly addressing the specific tension regarding *action*."
+      }
+    ],
+    "analogy": null,
+    "evidence_refs": [],
+    "optional_refs": [],
+    "checker_specs": [],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

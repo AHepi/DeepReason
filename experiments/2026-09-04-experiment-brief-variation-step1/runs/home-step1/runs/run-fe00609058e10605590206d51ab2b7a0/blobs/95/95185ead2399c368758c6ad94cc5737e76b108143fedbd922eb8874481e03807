@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's deflationary account contradicts Popper's explicit distinction between the logical assessment of corroboration and the pragmatic decision to act. Popper defines corroboration as a report on how well a theory has withstood severe tests (a logical relation), which then informs the rational preference for action. By claiming 'better-corroborated' simply means 'currently preferred,' the target collapses this two-step process into a tautology, thereby failing to address the core philosophical problem: whether the *logical* status of surviving severe tests provides a *rational basis* for preference without invoking induction. The target dismisses the epistemic weight of testing rather than explaining how it functions non-inductively.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguishes between the logical concept of corroboration (reporting test survival) and the pragmatic decision to prefer a theory for action, arguing the former rationally guides the latter without implying increased probability.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration is merely a label for preference and not a report on test survival, how does Popper's criterion of 'severity' in testing retain any normative force in distinguishing science from non-science?"
+    }
+  ]
+}
