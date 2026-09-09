@@ -1,0 +1,77 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a 'critical preference' grounded in the logic of testing rather than inductive probability; it survives by accepting the cost that this preference offers no guarantee of future success or increased likelihood of truth, serving only as the most rational methodological rule for selecting which theory to subject to further falsification attempts.",
+    "mechanism": "The mechanism distinguishes between 'probabilistic support' (inductive) and 'corroborative status' (logical history of severe testing). Preference is justified not because the theory is likely true, but because it has withstood the most rigorous attempts to falsify it, making it the best available target for future critical scrutiny. Acting on it is a convention of rational inquiry, not an inference about the future.",
+    "counterconditions": [
+      "If corroboration is shown to logically entail a prediction of future success equivalent to induction.",
+      "If Popper's own actions in choosing theories cannot be described without invoking a hidden premise of uniformity.",
+      "If the distinction between 'acting on' and 'believing probable' collapses under the pressure of practical decision-making where stakes require probability estimates."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The criticism assumes acting requires a belief in future success. Rebuttal: Popper defines acting on a theory as adopting it for the purpose of testing and application while remaining fully aware it may fail tomorrow. The 'why' is methodological efficiency, not predictive confidence."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The claim conflates informational content with defensible preference. Rebuttal: The preference is defensible precisely because high content theories that survive severe tests provide more opportunities for learning (falsification), which is the goal of science, distinct from securing safe action."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'psychological vs conventional' gap. The argument now clarifies that the 'convention' is not arbitrary but derived from the logical asymmetry of verification/falsification, avoiding the need for a psychological leap of faith."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The criticism calls the 'uniformity' argument a straw man. Rebuttal: This candidate does not rely on a 'Principle of Uniformity' but on the 'Principle of Criticism.' The preference is for the theory that has been most thoroughly criticized, not the one assumed to be uniformly stable."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "rebutted",
+        "note": "The claim that action implies inductive prediction is rejected. Action implies a choice of instrument; choosing the best-tested instrument is rational even if one assigns zero probability to its indefinite reliability."
+      },
+      {
+        "handle": "270fdeb19c12b45908843bde3f158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "departure_declared",
+        "note": "Departure from relying on 'verisimilitude' as a positive measure. This candidate grounds preference strictly in the negative logic of survived falsification, avoiding the formal difficulties Popper faced with defining verisimilitude quantitatively."
+      },
+      {
+        "handle": "2b2b9f8685410277445fc083713971a8c5bf992ab5fbf0a1093b143dcfb45882",
+        "kind": "rebutted",
+        "note": "The criticism argues preference is rational due to reasons other than fiction. Rebuttal: Agreed, but those reasons are methodological (maximizing error detection), not epistemic (increasing truth probability). The candidate maintains this distinction is sufficient."
+      },
+      {
+        "handle": "4685bd2f65b86b20f04d65067f8fc4526a28a4375555eb78127f0f9de465ad93",
+        "kind": "revised",
+        "note": "Revised to clarify that 'decoupled from expectation of truth' refers to subjective degree of belief (probability), not the objective status of having survived tests. Scientists prefer the latter for action because it is the only objective metric available."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["bridge_engineering_safety_margins"],
+      "shared_structure": [
+        "Selection based on past stress tests rather than probability of future load.",
+        "Preference for the design that has failed least under extreme conditions.",
+        "Acknowledgment that past survival does not guarantee future integrity."
+      ],
+      "disanalogies": [
+        "Bridges are physical objects governed by static laws; theories are logical constructs subject to conceptual refutation.",
+        "Engineering often uses probabilistic risk assessment, which Popper explicitly rejects for theory choice."
+      ],
+      "transfer_claims": [
+        "Just as engineers use the most tested bridge design without claiming it will never collapse, scientists use the most corroborated theory without claiming it is probably true."
+      ],
+      "overturn_conditions": [
+        "If engineering practice is shown to rely fundamentally on inductive probability calculations for safety certification.",
+        "If the analogy fails to capture the normative force of scientific preference."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
