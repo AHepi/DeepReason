@@ -149,14 +149,51 @@ def review_infrastructure(harness, adapter, config, artifact_id: str):
     )
 
 
+# What a default configuration would have measured with. Read at emit time,
+# never captured at import: a run records the model ITS OWN code default names,
+# so a record written by one version is not read as a claim about another.
+def _default_embedder_model(config) -> str | None:
+    field = type(config).model_fields.get("EMBEDDER_MODEL")
+    return None if field is None else field.default
+
+
+_EMBEDDER_UNCONFIGURED_CAUSE = (
+    "no embedder model in the compiled run configuration, though a default "
+    "one names this model: it was dropped before the manifest "
+    "(run-manifest.json scratch_policy.embedder_model)"
+)
+
+_EMBEDDER_HASHING_IS_THE_DEFAULT = (
+    "no embedder model in the compiled run configuration, and no default one "
+    "names any: the hashing scale is this build's configured geometry"
+)
+
+
 def make_embedder(harness, config):
     """The embedder a run actually gets. EMBEDDER_MODEL unset => the
     zero-dependency hashing default (None: the Scheduler constructs it).
     Set but unavailable => hashing fallback with `embedder-fallback` on the
     log — degraded geometry must be visible to the post-hoc reader, never
     silent (the browser-oracle precedent records nothing because absence
-    disables a feature; here the run still embeds, just worse)."""
+    disables a feature; here the run still embeds, just worse).
+
+    Either way the log carries WHY, including when nothing asked for a neural
+    backend: `embedder-unconfigured` is a disclosure, not a fault, and it is
+    deliberately NOT `embedder-fallback` — the 2026-08-16 tranche's R3/R15
+    holds that taking the hashing escape is no degradation, and a run-time
+    builder cannot tell that escape from a host override, since both arrive
+    here as EMBEDDER_MODEL is None."""
     if not config.EMBEDDER_MODEL:
+        default = _default_embedder_model(config)
+        harness.record_measure(
+            inputs=[
+                "embedder-unconfigured",
+                default or "-",
+                _EMBEDDER_UNCONFIGURED_CAUSE
+                if default
+                else _EMBEDDER_HASHING_IS_THE_DEFAULT,
+            ]
+        )
         return None
     from deepreason.llm.embedder import EmbedderUnavailable, build_embedder
 

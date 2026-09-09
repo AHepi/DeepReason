@@ -81,6 +81,10 @@ _SIGNAL_LINES = {
     "embedder-fallback": ("setback",
                           "the configured embedding backend was unavailable, "
                           "so the run degraded to the hashing embedder"),
+    "embedder-unconfigured": ("progress",
+                              "the run named no embedding model, so it "
+                              "measured distances on the lexical scale and "
+                              "said so"),
 }
 
 _BLOCK_LINES = {

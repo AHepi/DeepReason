@@ -62,22 +62,38 @@ test that exists to catch exactly this is looking only at deviations from it.
 That is why the 2026-08-29 managed-path fix and the 2026-08-16 embedder fix
 both shipped green over a live defect.
 
-Post-fix expectation: the same command exits 1 with
+Post-fix expectation (AMENDED at `dr-propose-fix`, see FIX.md for why): the
+same command exits 1. The compile-stage half of the original expectation was
+written before the finding that ruled that road out — a carriage notice
+carrying the dropped model would RESTORE it at run time, and a notice under any
+other code would move every qualification subject digest. So the notice lands
+on the LOG, not on the manifest, and observation 1 keeps printing the drop with
+zero notices:
 
-    compile notices mentioning the embedder  : [{'code': <the disclosure code>,
-                                                 'pointer': '/engine_config/EMBEDDER_MODEL'}]
-      >> the value was dropped, and a notice names it. Defect absent.
+    1. ... the managed path DROPS the configured model at compile, with
+       0 notice(s) naming it. Out of scope here.
 
-    Measure records written                  : [['embedder-fallback',
-                                                 'nomic-ai/nomic-embed-text-v1.5',
-                                                 '<the cause>']]
+    2. Measure written                          : embedder-unconfigured
+         model it would have used               : nomic-ai/nomic-embed-text-v1.5
+         cause                                  : no embedder model in the
+           compiled run configuration, though a default one names this model:
+           it was dropped before the manifest
+           (run-manifest.json scratch_policy.embedder_model)
       >> a typed record names the cause. Defect absent.
 
     VERDICT: defect ABSENT
 
-Section 3 must keep printing `manifest byte-identical either way : True` after
-the fix. If a fix makes the compiled manifest depend on the cache location it
-has made run identity depend on the container, and that is a worse defect than
-the one being repaired.
+Observation 3 must keep printing `manifest byte-identical either way : True`
+after the fix. If a fix makes the compiled manifest depend on the cache
+location it has made run identity depend on the container, and that is a worse
+defect than the one being repaired.
+
+The script was amended in the same commit as the fix, in one respect only: its
+verdict now rests on observation 2 alone, and observation 1 prints the compile
+drop as an OBSERVATION rather than labelling it the defect. Observation 1 was
+never the thing this tranche set out to change; labelling it "DEFECT" after the
+scope was settled would have been the script disagreeing with its own tranche.
+The pre-fix output is preserved verbatim at `REPRO_OUTPUT.txt` and the post-fix
+output at `REPRO_OUTPUT_POSTFIX.txt`.
 
 Production code untouched by this phase.

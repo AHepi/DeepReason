@@ -55,3 +55,50 @@ End state: either a decision that the sealed readings stand as they are, or a
 new tranche with its own pre-registration. Note the noise floor finding
 (d_noise = 1.312 of 15) first: a scale change may not be the binding limit.
 ```
+
+## P3 — the managed path cannot USE a configured embedder at all
+
+**What.** This tranche makes the run SAY why its geometry is hashing. It does
+not make `deepreason reason` able to measure on the neural scale, because
+`preparation._config_for_profile` owns `EMBEDDER_MODEL` and forces it to None
+whatever the operator configured. The consequence is worth stating plainly for
+whoever picks this up: `deepreason embedder-warmup`, which CLAUDE.md's
+Environment section tells every session to run "in the setup phase of any
+session that will run the harness", buys a managed run nothing at all. The
+weights are fetched and never consulted. That is a decision with a stated
+reason in the code ("no optional neural dependency may decide public manifest
+identity") and it is the operator's to revisit, not a defect tranche's — the
+2026-08-26 modularity law ("every behavior a run can vary is reachable as
+CONFIGURATION ... never by editing code") and the 2026-08-28 ungated-seats law
+("no limits to what model you place where") both bear on it, and so does the
+manifest-identity reason for keeping it. Genuine fork, operator's call.
+
+```
+Route: dr-change-orchestrator (the operator suggests a change), not the defect
+family — nothing here is broken against a documented guarantee; a documented
+guarantee is unreachable, which is a design question.
+Goal: decide whether the managed `deepreason reason` path should be able to
+run on the neural embedder, and if so by which road.
+The three roads, priced:
+  A. Leave it. Cost: `embedder-warmup` stays a no-op for managed runs and
+     CLAUDE.md's Environment section should say so. Cheapest; the neural scale
+     stays unreachable from the path every live tranche actually uses.
+  B. Let the operator's EMBEDDER_MODEL through on the managed path. Cost: the
+     compiled manifest, and therefore public manifest identity, would depend
+     on an optional neural dependency — the exact thing the override's comment
+     forbids. Needs a decision about what manifest identity is allowed to
+     depend on before any code moves.
+  C. Carry it OUTSIDE the manifest, as a run-level switch the record stamps
+     but the manifest digest does not see. Cost: a new configuration surface
+     and an argument about whether geometry belongs in run identity at all.
+Evidence: src/deepreason/preparation.py:376-394 (the `owned` dict and its
+stated reason) and :505-508 (the disclosure exemption);
+docs/map/CON-seats.md:116 (the seven, already documented);
+docs/map/SUB-llm.md Traps, the 2026-09-09 entry, which records the finding;
+experiments/2026-09-09-neural-embedder-fallback/FIX.md, which records why the
+compile-notice roads were rejected for a defect tranche and what each would
+have cost.
+End state: an operator ruling ledgered in CLAUDE.md, and either a change
+tranche implementing it or a one-line correction to CLAUDE.md's Environment
+section saying `embedder-warmup` does not apply to managed runs.
+```

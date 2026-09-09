@@ -1,0 +1,37 @@
+========================================================================
+1. AN OPERATOR CONFIGURATION THAT NAMES THE NEURAL EMBEDDER
+========================================================================
+Config() default EMBEDDER_MODEL          : 'nomic-ai/nomic-embed-text-v1.5'
+operator's explicit EMBEDDER_MODEL       : 'nomic-ai/nomic-embed-text-v1.5'
+manifest scratch_policy.embedder_model   : None
+manifest scratch_policy.embedder_backend : 'deterministic_hashing'
+runtime Config.EMBEDDER_MODEL            : None
+compile notices, all codes               : []
+compile notices mentioning the embedder  : []
+
+  >> the managed path DROPS the configured model at compile, with 0 notice(s) naming it. Out of scope here.
+
+========================================================================
+2. WHAT THE RUN-TIME BUILDER DOES WITH THE COMPILED CONFIGURATION
+========================================================================
+make_embedder returned                   : None
+  (None means: the Scheduler constructs the zero-dependency hashing default)
+Measure written                          : embedder-unconfigured
+  model it would have used               : nomic-ai/nomic-embed-text-v1.5
+  cause                                  : no embedder model in the compiled run configuration, though a default one names this model: it was dropped before the manifest (run-manifest.json scratch_policy.embedder_model)
+
+  >> a typed record names the cause. Defect absent.
+
+========================================================================
+3. THE WEIGHTS ARE IRRELEVANT — NO BACKEND IS EVER BUILT
+========================================================================
+warmed cache location                    : /tmp/fastembed_cache
+  exists on disk                         : True
+manifest byte-identical either way       : True
+
+  >> The cache hypothesis is REFUTED: the compiled configuration
+     does not depend on the weights, because it never asks for them.
+
+========================================================================
+VERDICT: defect ABSENT
+========================================================================

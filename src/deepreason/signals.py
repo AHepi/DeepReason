@@ -445,6 +445,25 @@ DEAD_SEAT_STREAK_SIGNAL = "provider.dead-seat-streak.v1"
 
 
 _DECLARED: tuple[SignalDeclaration, ...] = (
+    # The third answer to "why is this run's geometry hashing?" (2026-09-09).
+    # The other two are already typed: the `embedder` stamp names a neural
+    # backend that built, `embedder-fallback` names one that was asked for and
+    # could not. Nothing named the case where nothing asked.
+    SignalDeclaration(
+        name="embedder-unconfigured",
+        unit="event",
+        semantics="the run's compiled configuration named no embedder model, "
+                  "so its distances are on the deterministic hashing scale "
+                  "(inputs: [signal, the model a default configuration would "
+                  "have used or '-', where the value was lost]). It says only "
+                  "which geometry the run measured with and why: not that "
+                  "anything failed, not that the hashing scale is wrong for "
+                  "this run, and never an input to any artifact's status. A "
+                  "consumer may conclude that distance readings from this run "
+                  "are comparable with other hashing-scale runs and with no "
+                  "neural-scale run",
+        staleness="run",
+    ),
     # Provider transport condition, disclosed per seat (2026-09-03).
     SignalDeclaration(
         name="provider.dead-seat-streak.v1",

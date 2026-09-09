@@ -15,6 +15,13 @@ one builder the managed `deepreason reason` path uses:
 
 Run: python -u experiments/2026-09-09-neural-embedder-fallback/repro_embedder_drop.py
 Exit 0 = the defect is PRESENT (pre-fix). Exit 1 = it is gone (post-fix).
+
+The VERDICT rests on observation 2 alone. Observations 1 and 3 are the
+diagnosis's evidence and stay printed after the fix: 1 shows the drop is real
+and still uncorrected at the compile stage, which is deliberate and parked; 3
+is the refutation of the cache hypothesis and must keep printing True, because
+a fix that made the compiled manifest depend on the cache location would have
+made run identity depend on the container.
 """
 
 from __future__ import annotations
@@ -97,14 +104,16 @@ def main() -> int:
     print(f"compile notices mentioning the embedder  : {embedder_notices}")
 
     dropped = operator.EMBEDDER_MODEL is not None and compiled.EMBEDDER_MODEL is None
-    if dropped and not embedder_notices:
-        print("\n  >> DEFECT: the value was dropped and NOTHING in the record says so.")
-    elif dropped:
-        print("\n  >> the value was dropped, and a notice names it. Defect absent.")
-        defect_present = False
-    else:
-        print("\n  >> the value survived into the run. Defect absent.")
-        defect_present = False
+    # OBSERVATION, not the verdict. The host override at
+    # `preparation._config_for_profile` stands by design and is out of this
+    # tranche's scope (GOAL.md; PARKED.md P3): the compile stage stays silent
+    # because both roads to a compile notice either re-arm the dropped model or
+    # move every qualification subject digest. What the tranche fixes is the
+    # RUN's silence, in section 2. Section 1 exists to prove the drop is real
+    # and to keep it visible if someone later closes it.
+    print(f"\n  >> the managed path {'DROPS' if dropped else 'keeps'} the "
+          f"configured model at compile, with "
+          f"{len(embedder_notices)} notice(s) naming it. Out of scope here.")
 
     print()
     print("=" * 72)
@@ -115,7 +124,10 @@ def main() -> int:
     print(f"make_embedder returned                   : {embedder!r}")
     print("  (None means: the Scheduler constructs the zero-dependency hashing"
           " default)")
-    print(f"Measure records written                  : {harness.measures}")
+    for record in harness.measures:
+        print(f"Measure written                          : {record[0]}")
+        print(f"  model it would have used               : {record[1]}")
+        print(f"  cause                                  : {record[2]}")
     if not harness.measures:
         print("\n  >> DEFECT: the geometry instrument changed and the log is silent.")
     else:
