@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The proposed 'stateless adapter' fails to provide the requested causal mechanism because stateless validation can only check syntax or static constraints, not the dynamic causal relationships between experimental parameters and outcomes which require stateful context to verify.
+
+TARGET:
+{"analogy":null,"claim":"The team should adopt an existing experiment tracker but enforce a 'Write-Once, Read-Many' gateway pattern: all data enters via a minimal, custom stateless adapter that validates against a strict schema before ingestion, decoupling the team's causal model from the tool's internal logic.","counterconditions":[{"case":"The existing tool lacks an API capable of accepting pre-validated external submissions.","checker_spec":null,"eval":"observation"},{"case":"The latency introduced by the synchronous validation gateway exceeds the real-time requirements of the active learning loop.","checker_spec":null,"eval":"observation"},{"case":"The team's definition of 'schema' is too volatile to stabilize even for the duration of a single experiment batch.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Insertion of a thin, stateless validation layer (the gateway) between the research scripts and the adopted tool. This layer enforces the 'Schema-First' contract (SRC_006) and handles the 'integration tax' by localizing the adaptation code to a single, replaceable module rather than hacking the core tool or building a full tracker.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}

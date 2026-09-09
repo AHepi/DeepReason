@@ -1,0 +1,83 @@
+{
+  "candidate": {
+    "claim": "The team should adopt an existing experiment tracker but enforce a 'Schema-First' contract where no data is logged until a formal schema is defined, while simultaneously running a 'Shadow Mode' period where a disposable script mirrors the formal tool's intake to validate the integration tax before full commitment.",
+    "mechanism": "Hybrid Validation via Schema Enforcement and Parallel Shadow Execution. This mechanism mitigates the 'integration tax' by proving the workflow fit in a low-stakes environment (Shadow Mode) while preventing 'unstructured noise' accumulation through strict schema gating (Schema-First). It addresses the 'causal fragility' of custom builds by relying on the robust infrastructure of existing tools for storage, while retaining causal control via the local script's logic during the shadow phase.",
+    "counterconditions": [
+      "The existing tool must support webhook or API-driven ingestion to allow the shadow script to push data without manual entry.",
+      "The team must have sufficient bandwidth to maintain two parallel logging systems for the defined trial period (e.g., 2 weeks).",
+      "The schema definition process must not become a bottleneck that halts exploratory experimentation entirely."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The proposal does not claim active learning loops *necessitate* a custom build; rather, it argues they necessitate a 'Shadow Mode' validation layer. The causal mechanism is that the disposable script acts as the active controller, while the existing tool serves as a passive, schema-gated archive. This separates the control loop (custom) from the record-keeping (existing), satisfying the need for control without rebuilding the entire tracker stack."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised to explicitly include 'Shadow Mode' (SRC_007) as the method for quantifying the 'integration tax'. Instead of assuming the tax is zero or insurmountable, the candidate mandates a time-boxed parallel run to measure the exact engineering effort required to map the novel workflow to the existing tool, making the 'build vs buy' decision empirical rather than theoretical."
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "rebutted",
+        "note": "The dichotomy is not between 'passive observation' and 'active control' in the tool itself, but between the 'controller' (the shadow script) and the 'observer' (the existing tool). The proposal leverages event-driven architectures (webhooks) to allow the existing tool to react to the shadow script's state changes, thereby integrating active control without requiring the tool to host the control logic natively."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "revised",
+        "note": "Revised to incorporate the 'Schema-First' contract (SRC_006) as a hard precondition. This directly addresses the 'migration cliff' by ensuring that even the disposable shadow script outputs data conforming to a versioned schema from day one, eliminating the risk of accumulating unstructured noise that cannot be migrated later."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The 'Separation of Concerns' here isolates the 'causal model' within the transient shadow script, not the permanent tracker. If the script fails, the team loses only the current experiment's automation, not the historical record or the tool's integrity. The existing tool remains a stable single source of truth for data, avoiding the fragility of a custom-built persistent store."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "aviation_prototype_testing",
+        "financial_ledger_dual_entry"
+      ],
+      "shared_structure": [
+        "Parallel operation of a high-flexibility prototype alongside a rigid compliance system.",
+        "Data flows from the flexible source to the rigid sink only after passing a validation gate.",
+        "The prototype is disposable; the compliance system is the record of truth."
+      ],
+      "disanalogies": [
+        "In aviation, physical safety is the primary driver; here, data integrity and engineering bandwidth are the drivers.",
+        "Financial ledgers require simultaneous dual entry by design; this proposal allows asynchronous mirroring."
+      ],
+      "transfer_claims": [
+        "Just as flight prototypes validate aerodynamics before certifying an airliner, the shadow script validates the workflow before certifying the existing tool.",
+        "The 'Schema-First' rule functions like a regulatory airworthiness certificate: no flight (data log) occurs without it."
+      ],
+      "overturn_conditions": [
+        "If the existing tool lacks any API for automated ingestion, forcing manual entry that breaks the shadow loop.",
+        "If the schema definition process takes longer than the expected lifetime of the research project."
+      ]
+    },
+    "evidence_refs": [
+      {
+        "block": "4e4e9dcbcafb2b6d828f5d05a420396c12dd2354c85f57420230caa045a0b419",
+        "quote": "Adopt an existing tracker but enforce a 'Schema-First' contract: no data is logged until a formal schema (JSON Schema or Protobuf) is defined and versioned"
+      },
+      {
+        "block": "0a5bd84458b8d1b8a2aae76319e4adaf0cffa9c60b2e788c9e29a24631924ec8",
+        "quote": "Adopt a flexible existing platform but implement a 'Shadow Mode' period where the team runs both a disposable script and the formal tool in parallel for 2 weeks"
+      }
+    ],
+    "optional_refs": [
+      "SRC_006",
+      "SRC_007"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

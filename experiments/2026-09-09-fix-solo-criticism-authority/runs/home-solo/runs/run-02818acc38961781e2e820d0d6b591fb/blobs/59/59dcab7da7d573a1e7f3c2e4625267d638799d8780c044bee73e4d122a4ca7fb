@@ -1,0 +1,46 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "essential_premise_aliases": {"items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}, "maxItems": 8, "title": "Essential Premise Aliases", "type": "array"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-f8d503b930a65e1a2cf5ff81777d4786) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Should a small team building a research tool write its own experiment tracker, or adopt an existing one?
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@59e815d8dbc0085d5639eb45: program:reasoning_observation_pending
+- reason-counter@be88f852bab8458f04d26848: program:reasoning_observation_pending
+- reason-counter@b0db0df287bfb5d300654384: program:reasoning_observation_pending
+- reason-counter@506122cfe4920a9b6a074f89: program:reasoning_observation_pending
+- reason-counter@42610dcebcc90063fb5b9840: program:reasoning_observation_pending
+- reason-counter@f448b91ed271a72e1220f3bd: program:reasoning_observation_pending
+- reason-counter@db6d07a9f38f9d5cb3bf641f: program:reasoning_observation_pending
+- reason-counter@5137cfc603153227cc197e6d: program:reasoning_observation_pending
+- reason-counter@c36b07102eccf5f4236ab97f: program:reasoning_observation_pending
+- reason-counter@1cdab0a54b0512db3669df3a: program:reasoning_observation_pending
+- reason-counter@ed72ee2aeff909e83c6429c7: program:reasoning_observation_pending
+- reason-counter@6bfda15bb5335ad8e993c517: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The team should adopt an existing experiment tracker but enforce a 'Schema-First' contract via a local middleware layer, rejecting the false dichotomy between building from scratch and accepting rigid tool constraints.","counterconditions":[{"case":"The team lacks the seniority to define a stable schema upfront, leading to analysis paralysis.","checker_spec":null,"eval":"observation"},{"case":"The chosen existing tool has no API or ingestion method compatible with a middleware injection.","checker_spec":null,"eval":"observation"},{"case":"The latency introduced by local schema validation breaks real-time active learning loops.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Implement a lightweight local adapter (middleware) that intercepts all logging calls. This adapter enforces a versioned JSON Schema (defined by the team) before data is passed to the external tool. If the data does not match the schema, the log is rejected locally. This decouples the team's causal model (the schema) from the storage backend (the tool), allowing the team to switch tools later without data migration issues while avoiding the engineering c
+commitments: reasoning-envelope-wf, reason-counter@59e815d8dbc0085d5639eb45, reason-counter@be88f852bab8458f04d26848, reason-counter@b0db0df287bfb5d300654384
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["In aviation, physical safety is the primary driver; here, data integrity and engineering bandwidth are the drivers.","Financial ledgers require simultaneous dual entry by design; this proposal allows asynchronous mirroring."],"overturn_conditions":["If the existing tool lacks any API for automated ingestion, forcing manual entry that breaks the shadow loop.","If the schema definition process takes longer than the expected lifetime of the research project."],"shared_structure":["Parallel operation of a high-flexibility prototype alongside a rigid compliance system.","Data flows from the flexible source to the rigid sink only after passing a validation gate.","The prototype is disposable; the compliance system is the record of truth."],"source_memory_refs":["aviation_prototype_testing","financial_ledger_dual_entry"],"transfer_claims":["Just as flight prototypes validate aerodynamics before certifying an airliner, the shadow script validates the workflow before certifying the existing tool.","The 'Schema-First' rule functions like a regulatory airworthiness certificate: no flight (data log) occurs without it."]},"claim":"The team should adopt an existing exp
+commitments: reasoning-envelope-wf, reason-counter@506122cfe4920a9b6a074f89, reason-coun

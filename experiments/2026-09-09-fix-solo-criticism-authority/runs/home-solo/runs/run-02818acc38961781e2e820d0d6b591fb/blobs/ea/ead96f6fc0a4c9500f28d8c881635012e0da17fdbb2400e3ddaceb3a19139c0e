@@ -1,0 +1,62 @@
+{
+  "candidate": {
+    "claim": "The team should adopt an existing experiment tracker but enforce a 'Control-Plane Separation' mechanism: the external tool serves strictly as a passive, append-only log store (the 'Data Plane'), while all logic governing experiment flow, active learning loops, and state transitions resides in a local, version-controlled orchestrator script (the 'Control Plane') that pushes finalized metrics to the tracker via its API.",
+    "mechanism": "Control-Plane Separation decouples the causal agency of the research loop from the storage infrastructure. By retaining the state machine locally, the team preserves the ability to implement novel active learning strategies without fighting the rigid workflow assumptions of off-the-shelf tools (addressing the 'integration tax'). Simultaneously, by forcing all data through the external tool's API only after local validation against a strict schema, the approach prevents the 'migration cliff' of unstructured noise and ensures the external tool remains a reliable, queryable archive rather than a fragile single point of failure for the team's cognitive model.",
+    "counterconditions": [
+      "The existing tool lacks an append-only API or forces interactive UI workflows that cannot be bypassed programmatically.",
+      "The latency introduced by the local orchestrator pushing to the remote tracker disrupts time-sensitive active learning feedback loops.",
+      "The team lacks the engineering bandwidth to maintain the local orchestrator's state machine correctness over time."
+    ],
+    "typicality": 0.45,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The criticism claims a lack of causal mechanism for why active learning necessitates a custom build. The proposed 'Control-Plane Separation' provides this mechanism: active learning requires tight, low-latency coupling between observation and action (state transition), which existing tools abstract away into rigid, human-centric workflows. By keeping the control plane local, we preserve the causal fidelity of the loop; by outsourcing only the data plane, we avoid rebuilding storage infrastructure. The mechanism is not 'building a tracker' but 'partitioning the tracker's responsibilities'."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "The criticism correctly identifies the 'integration tax' of hacking mismatched tools. The candidate is revised to explicitly reject 'wrapping' or 'plugin' approaches. Instead of adapting the external tool to the workflow, the proposal now mandates that the external tool be used ONLY as a dumb pipe (append-only log). The 'hack' effort is redirected entirely into the local orchestrator, which is under full team control, thereby eliminating the tax of fighting the external tool's internal logic."
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "rebutted",
+        "note": "The criticism argues that event-driven architectures in modern tools can trigger external controllers. While true for simple notifications, this fails for complex active learning loops where the 'next step' depends on high-dimensional state analysis that external tools are not designed to perform. Relying on webhooks creates a distributed state machine that is harder to debug and version than a centralized local orchestrator. The proposed separation keeps the complex state logic co-located with the code, reducing systemic fragility."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "revised",
+        "note": "To address the 'migration cliff' risk, the candidate now explicitly requires the local orchestrator to validate data against a formal schema (referencing SRC_006) BEFORE pushing to the external tool. This ensures that even if the local script is disposable, the data entering the permanent archive is already structured and clean, removing the cost of later migration."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The criticism fears the custom tracker becomes a single point of failure for the causal model. Under 'Control-Plane Separation,' the custom component is merely an orchestrator script, not a 'tracker' in the traditional sense. If the script fails, the team loses automation but retains the ability to run experiments manually and log results directly to the robust external tool. The causal model lives in the team's codebase (version controlled), not in a bespoke database, making it more resilient, not less."
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "4e4e9dcbcafb2b6d828f5d05a420396c12dd2354c85f57420230caa045a0b419",
+        "quote": "enforce a 'Schema-First' contract: no data is logged until a formal schema"
+      },
+      {
+        "block": "2bfc278ee88f576e1678a919e48541331b03bc62bc35b390653985c80b42b5c7",
+        "quote": "restrict its usage to 'Read-Only' archives; all active experimentation happens in local"
+      }
+    ],
+    "optional_refs": [
+      "SRC_006",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    },
+    "analogy": null,
+    "checker_specs": []
+  }
+}

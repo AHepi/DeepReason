@@ -1,0 +1,24 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The proposed 'stateless adapter' fails to provide the requested causal mechanism because stateless validation can only check syntax or static constraints, not the dynamic causal relationships between experimental parameters and outcomes which require stateful context to verify.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": "How can a stateless gateway enforce a causal model without access to the historical state of the experiment?"
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "Treating the external tool as a 'dumb storage backend' via a local wrapper creates a causal blind spot: if the tool internally mutates or rejects data based on its own hidden logic (despite the API acceptance), the local wrapper's record of 'causal control' diverges from the actual stored reality, breaking the causal chain.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": "What mechanism ensures the 'dumb storage' tool does not silently alter data in ways that invalidate the locally enforced causal schema?"
+    }
+  ]
+}
