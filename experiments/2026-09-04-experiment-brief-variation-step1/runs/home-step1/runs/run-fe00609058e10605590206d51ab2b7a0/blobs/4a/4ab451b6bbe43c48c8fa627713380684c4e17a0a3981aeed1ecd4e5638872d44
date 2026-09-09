@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a false dichotomy between 'probabilistic prediction' and 'methodological rule,' failing to address that the specific act of *preferring* one theory over another for action inherently assigns a higher pragmatic weight or expected utility to the preferred theory. By admitting the preference is for 'risk minimization,' the target concedes that the agent expects the better-corroborated theory to be *more reliable* (i.e., less likely to fail in future application) than the alternative. This expectation of differential future reliability based on past test survival is the precise definition of inductive inference Popper sought to reject; thus, the 'methodological rule' is not a non-inductive alternative but merely a semantic relabeling of an inductive bet.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Acting on a preference for Theory A over Theory B implies an expectation that A will perform better than B in future applications.",
+      "premise_evidence": null,
+      "successor_question": "If the preference is not based on an expectation of future success, what rational criterion distinguishes 'risk minimization' from arbitrary selection?"
+    }
+  ]
+}

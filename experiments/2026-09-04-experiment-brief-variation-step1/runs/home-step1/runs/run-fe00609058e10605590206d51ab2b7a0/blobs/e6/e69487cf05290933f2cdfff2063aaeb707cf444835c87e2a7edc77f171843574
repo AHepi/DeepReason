@@ -1,0 +1,231 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'methodological rule of action' that maximizes verisimilitude without assigning probability, accepting the cost that this preference remains a rational gamble rather than a justified prediction.",
+      "mechanism": "Critical Preference Rule: Scientists adopt the theory with the highest degree of corroboration not because it is likely true, but because it has withstood the most severe attempts at falsification, making it the best available approximation of truth (verisimilitude) for practical action.",
+      "counterconditions": [
+        "If verisimilitude cannot be formally defined without collapsing into probability (as Tichý argued).",
+        "If the act of preferring based on past tests logically entails an assumption about future uniformity.",
+        "If 'rational gamble' is indistinguishable from pragmatic induction in practice."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "The distinction holds because the strategy minimizes the risk of acting on a known-false theory (error elimination) rather than maximizing the probability of success; it assumes nothing about nature's uniformity, only that we should act on the least-refuted option."
+        },
+        {
+          "handle": "[SRC_018] against SRC_004",
+          "kind": "revised",
+          "note": "Revised to acknowledge Tichý's critique of formal verisimilitude; the defense now rests on 'critical preference' as a procedural heuristic rather than a logical measure of truth-likeness."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Preferring a theory for action does not assume it will continue to work; it acknowledges the risk while choosing the option that has survived the most rigorous testing, which is the only rational basis for action in a fallibilist framework."
+        },
+        {
+          "handle": "[SRC_011] against SRC_010",
+          "kind": "rebutted",
+          "note": "The criterion 'least error-prone known option' is descriptive of past performance, not a subjective probability assignment; it avoids induction by refusing to project this status into the future as a likelihood."
+        },
+        {
+          "handle": "[SRC_022] against SRC_020",
+          "kind": "rebutted",
+          "note": "Popper's 'rational action' is precisely this critical preference; it is not a false dichotomy but a third way between dogmatic assurance and irrational gambling."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "The methodological rule is Popper's explicit solution; claiming it leads to paralysis ignores his distinction between theoretical certainty and practical decision-making."
+        },
+        {
+          "handle": "[SRC_021] against SRC_019",
+          "kind": "rebutted",
+          "note": "Treating past resilience as a proxy for reliability is not assuming uniformity; it is acknowledging that a theory that has failed is definitely bad, while one that hasn't is merely not-yet-bad."
+        },
+        {
+          "handle": "[SRC_016] against SRC_013",
+          "kind": "rebutted",
+          "note": "Preference is dynamic, updating with every new test; it optimizes informational content relative to current knowledge, which is exactly what action requires."
+        }
+      ],
+      "optional_refs": ["SRC_004"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back in, as any decision to act on past test results functionally relies on the principle of the uniformity of nature, rendering Popper's distinction between corroboration and probability untenable for practical science.",
+      "mechanism": "Inductive Collapse Argument: The utility of corroboration for future action is zero unless one assumes that the future will resemble the past; thus, the 'preference' is a disguised inductive inference.",
+      "counterconditions": [
+        "If a non-inductive basis for action (e.g., conventionalism or pure gamble) can be shown to suffice.",
+        "If 'preference' can be decoupled from expectations of future success.",
+        "If Popper's 'verisimilitude' can be operationalized without temporal projection."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "The distinction collapses because any risk-minimization strategy based on past data implicitly assumes the relevance of that data to future risks, which is the definition of induction."
+        },
+        {
+          "handle": "[SRC_018] against SRC_004",
+          "kind": "rebutted",
+          "note": "Even if verisimilitude is flawed, the core issue is the temporal jump from 'survived tests' to 'choose for action,' which is inherently inductive."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "This candidate agrees that the defense fails to address the core challenge; the assumption of future continuity is unavoidable for action."
+        },
+        {
+          "handle": "[SRC_011] against SRC_010",
+          "kind": "rebutted",
+          "note": "Labeling it 'risk-management' does not remove the probabilistic assumption that the managed risk is calculable based on past frequency."
+        },
+        {
+          "handle": "[SRC_022] against SRC_020",
+          "kind": "rebutted",
+          "note": "Calling it 'rational action' does not change the fact that the rationality depends on an unjustified inductive leap."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "The methodological rule itself is an inductive habit codified as a rule; calling it a rule doesn't exempt it from the problem of induction."
+        },
+        {
+          "handle": "[SRC_021] against SRC_019",
+          "kind": "rebutted",
+          "note": "Exactly; treating past resilience as a proxy is the principle of uniformity, confirming that induction is smuggled in."
+        },
+        {
+          "handle": "[SRC_016] against SRC_013",
+          "kind": "rebutted",
+          "note": "Action inherently implies a bet on the future, which contradicts a static optimization of past informational content."
+        }
+      ],
+      "optional_refs": ["SRC_005"]
+    },
+    {
+      "claim": "The preference is defensible as an evolutionary adaptation where scientists prefer corroborated theories not due to logical justification but because such preferences have survival value, bypassing the need for induction or verisimilitude entirely.",
+      "mechanism": "Evolutionary Epistemology: Scientific methods are selected traits; preferring corroborated theories is a successful heuristic evolved for survival, not a logical derivation.",
+      "counterconditions": [
+        "If evolutionary success does not equate to truth or reliable action.",
+        "If the explanation merely shifts the problem from logic to biology without solving the normative 'ought'.",
+        "If Popper explicitly rejected biological reductionism of scientific method."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from the logical/risk framework; the preference is causal/biological, not a logical strategy requiring a distinction between risk and induction."
+        },
+        {
+          "handle": "[SRC_018] against SRC_004",
+          "kind": "departure_declared",
+          "note": "Departing from verisimilitude; the mechanism is survival fitness, not truth-likeness."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "departure_declared",
+          "note": "Departing from the need to justify the assumption of uniformity; the assumption is hardwired, not reasoned."
+        },
+        {
+          "handle": "[SRC_011] against SRC_010",
+          "kind": "departure_declared",
+          "note": "Departing from the 'risk-management' label; it is an instinctual drive, not a calculated probability."
+        },
+        {
+          "handle": "[SRC_022] against SRC_020",
+          "kind": "departure_declared",
+          "note": "Departing from the 'rational vs gamble' dichotomy; it is a naturalistic phenomenon."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "departure_declared",
+          "note": "Departing from the idea of a 'methodological rule'; it is a behavioral trait."
+        },
+        {
+          "handle": "[SRC_021] against SRC_019",
+          "kind": "departure_declared",
+          "note": "Departing from the charge of smuggling induction; evolution doesn't 'smuggle' logic, it embodies successful patterns."
+        },
+        {
+          "handle": "[SRC_016] against SRC_013",
+          "kind": "departure_declared",
+          "note": "Departing from the 'static optimization' critique; evolution is dynamically responsive to environmental feedback."
+        }
+      ],
+      "optional_refs": ["SRC_006"]
+    },
+    {
+      "claim": "The tension is a pseudo-problem arising from a category mistake: 'corroboration' reports past test severity, while 'action' is a commitment to a specific course; conflating the logical status of a theory with the psychological act of choosing creates the illusion of a contradiction.",
+      "mechanism": "Category Dissolution: Separating the logical domain (corroboration) from the pragmatic domain (action) dissolves the need for a bridge like induction.",
+      "counterconditions": [
+        "If scientists genuinely believe corroboration guides action logically.",
+        "If the 'choice' cannot be made without some bridging principle.",
+        "If Popper himself treated the preference as logically significant."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "The distinction doesn't collapse because they operate in different categories; one is a report, the other is a volition."
+        },
+        {
+          "handle": "[SRC_018] against SRC_004",
+          "kind": "rebutted",
+          "note": "Verisimilitude is irrelevant if the move from report to action is non-logical."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The core challenge vanishes if the demand for a logical bridge is a category error."
+        },
+        {
+          "handle": "[SRC_011] against SRC_010",
+          "kind": "rebutted",
+          "note": "No subjective probability is assigned; the choice is arbitrary relative to logic, guided only by the available report."
+        },
+        {
+          "handle": "[SRC_022] against SRC_020",
+          "kind": "rebutted",
+          "note": "It is not a false dichotomy but a recognition that action lies outside the scope of logical justification."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "The 'rule' is merely a description of behavior, not a logical prescription."
+        },
+        {
+          "handle": "[SRC_021] against SRC_019",
+          "kind": "rebutted",
+          "note": "Past resilience is not a proxy for future reliability in a logical sense; it is simply the only data point available for a non-logical choice."
+        },
+        {
+          "handle": "[SRC_016] against SRC_013",
+          "kind": "rebutted",
+          "note": "Action does not require optimization; it requires a trigger, which corroboration provides."
+        }
+      ],
+      "optional_refs": ["SRC_007"]
+    },
+    {
+      "claim": "Popper's position survives only by accepting a tragic cost: the separation of 'scientific rationality' from 'practical rationality,' forcing scientists to live a double life where they know their actions are logically unjustified but necessary.",
+      "mechanism": "Tragic Dualism: Accepting that scientific logic (falsification) cannot ground practical action, leading to a split in the concept of rationality.",
+      "counterconditions": [
+        "If a unified rationality can be restored.",
+        "If Popper intended such a split.",
+        "If 'tragedy' is an overstatement of a simple methodological limitation."
+      ],
+      "typicality": 0.20,
+      "discharges": [
+        {
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

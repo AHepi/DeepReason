@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a non-inductive methodological rule of 'risk minimization' rather than a probabilistic prediction; however, accepting this defense costs the agent any rational assurance that the future will resemble the past, reducing scientific action to a gamble where the 'best' choice is merely the one with the most exposed and surviving falsification attempts, not the one most likely to succeed.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which requires induction/probability) and 'criticism' (which relies on logical consistency and severity of tests). Preference is framed not as an expectation of truth or success, but as the selection of the theory that has withstood the most severe attempts at falsification, thereby offering the highest informational content and the clearest potential for future error detection. This avoids induction by refusing to claim the future will mirror the past, instead claiming only that the chosen theory is currently the least refuted.",
+    "counterconditions": [
+      "If the preference for the better-corroborated theory implicitly assumes that past test results are relevant to future performance, it smuggles in induction.",
+      "If Popper's concept of 'verisimilitude' (truth-likeness) cannot be formally defined without collapsing into probabilistic terms, the non-inductive basis fails.",
+      "If acting on a theory necessarily implies a belief in its future reliability, then the distinction between 'methodological rule' and 'inductive belief' is merely semantic."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism claims risk-minimization collapses into induction. Rebuttal: Risk-minimization here is defined logically as selecting the hypothesis with the highest empirical content that has not yet been falsified. It does not assume the future resembles the past; it assumes only that we should act on the theory that has survived the most stringent logical trials so far, acknowledging it may fail tomorrow. This is a rule of procedure, not a prediction of nature."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge Tichý's refutation of formal verisimilitude. The candidate now relies strictly on 'corroboration' (survival of severe tests) as a comparative metric for action, abandoning the claim that corroboration indicates proximity to truth (verisimilitude), thus sidestepping the formal failure while retaining the pragmatic rule."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "The criticism argues preferring for future action assumes continuity. Rebuttal: Popper's stance is that we *must* act, and acting without induction requires a rule. The rule is: 'Act on the theory that has best resisted our attempts to kill it.' This does not assume it will work; it accepts it might fail, but asserts it is the most rational bet *given our current ignorance*, not because we predict success."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The claim that 'least error-prone' implies subjective probability is rejected. In Popper's framework, 'least error-prone known option' means 'the option where errors have been most rigorously sought and failed to appear,' which is an objective historical fact about the testing process, not a subjective degree of belief in future outcomes."
+      },
+      {
+        "handle": "4cbbab057ec51a122476741bd3c2ff4172e6fa0617a24361597807f86f8c8cc7",
+        "kind": "rebutted",
+        "note": "The criticism suggests a false dilemma regarding paralysis. Rebuttal: The candidate agrees there is no paralysis because Popper offers a methodological rule. However, the candidate maintains that this rule is distinct from an 'inductive supplement' precisely because it refuses to justify the rule with probability, leaving the 'cost' of uncertainty fully intact."
+      },
+      {
+        "handle": "68d9af4a435acc1cd4234dc084ba218e221621e23b6343e1c10f7f2d559a8ebd",
+        "kind": "revised",
+        "note": "Revised to clarify that 'preference' in this context is a decision-theoretic move based on informational content (boldness of the theory) rather than static optimization. Action is justified by the need to expose the theory to further testing through application, not by an expectation of successful utility."
+      },
+      {
+        "handle": "6adc6f235071652cc2478de1b6b0f052155e8bf3e3db062aaa609a806ed1a6c6",
+        "kind": "rebutted",
+        "note": "The criticism rejects evolutionary explanations as outside Popper's normative terms. Rebuttal: The candidate does not rely on biological evolution. It relies on the 'evolution of knowledge' via conjecture and refutation, which is central to Popper's own normative epistemology. The preference is normative because it follows the logic of critical rationalism, not biology."
+      },
+      {
+        "handle": "77efe1d1a8b9cff338c677b7a94b08da082183a46242adc1917652b7c1a47798",
+        "kind": "rebutted",
+        "note": "The criticism claims preference fails if multiple theories survive. Rebuttal: Popper's methodology includes tie-breaking rules such as preferring the theory with greater empirical content (more falsifiable) or the one that has undergone more severe testing. Preference is not a tautology; it is a hierarchical sorting based on the severity and number of passed tests."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

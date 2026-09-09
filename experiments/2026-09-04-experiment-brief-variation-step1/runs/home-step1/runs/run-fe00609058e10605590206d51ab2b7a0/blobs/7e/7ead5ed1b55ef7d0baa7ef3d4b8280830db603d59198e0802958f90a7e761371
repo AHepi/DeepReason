@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a methodological rule of 'risk-minimization' rather than an inductive inference of probability; however, accepting this defense costs the agent any rational assurance that the future will resemble the past, reducing scientific action to a non-rational (though critical) gamble.",
+    "mechanism": "The argument distinguishes between 'justification' (which requires induction) and 'criticism' (which only requires logical falsifiability). It posits that preferring Theory A over Theory B is not a claim that A is more likely true, but a strategic decision that A has withstood tests that would have killed B, making A the 'least error-prone known option' relative to current knowledge. This shifts the ground from epistemic probability to pragmatic survival without assuming uniformity of nature.",
+    "counterconditions": [
+      "If the preference for the better-corroborated theory implicitly assigns a higher subjective probability of future success, it collapses into the induction Popper rejected.",
+      "If Popper's formal attempt to define verisimilitude (truth-likeness) logically fails, then 'survival of severe tests' cannot serve as a proxy for closeness to truth.",
+      "If acting on a theory inherently assumes it will continue to work, then any distinction between 'acting' and 'believing it probable' is merely semantic."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism claims risk-minimization collapses into induction. Rebuttal: Risk-minimization here is defined negatively (avoiding known errors) rather than positively (predicting future success). Choosing the theory that has not yet failed is a logical necessity for avoiding known falsehoods, not an inductive leap that it won't fail tomorrow."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge Tichý's refutation of Popper's quantitative verisimilitude. The candidate now relies solely on 'survival of severe tests' as a qualitative marker of non-falsification, abandoning the claim that corroboration measures degree of truth-likeness."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "The criticism argues action assumes future continuity. Rebuttal: Popper admits action involves a non-rational decision. The defense is not that action is logically guaranteed to succeed, but that the *choice* of which theory to bet on is rationally constrained by past falsifications, even if the outcome remains uncertain."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "Rejects the premise that 'least error-prone' implies 'higher subjective probability.' In Popper's framework, it implies 'not yet proven false,' which is a binary logical status, not a probabilistic gradient."
+      },
+      {
+        "handle": "4cbbab057ec51a122476741bd3c2ff4172e6fa0617a24361597807f86f8c8cc7",
+        "kind": "rebutted",
+        "note": "Agrees that paralysis is avoided by methodological rules, but clarifies that these rules are conventions adopted to facilitate criticism, not discoveries of nature's uniformity."
+      },
+      {
+        "handle": "68d9af4a435acc1cd4234dc084ba218e221621e23b6343e1c10f7f2d559a8ebd",
+        "kind": "revised",
+        "note": "Clarified that 'informational content' refers to empirical content (falsifiability), not static optimization. The preference is dynamic: we choose the theory that risks more and has survived, maximizing our exposure to potential falsification."
+      },
+      {
+        "handle": "6adc6f235071652cc2478de1b6b0f052155e8bf3e3db062aaa609a806ed1a6c6",
+        "kind": "rebutted",
+        "note": "The normative question is answered by Popper's own methodological norms. If Popper prescribes a rule, then following it is defensible 'on his own terms,' regardless of whether biological evolution explains why we have such rules."
+      },
+      {
+        "handle": "77efe1d1a8b9cff338c677b7a94b08da082183a46242adc1917652b7c1a47798",
+        "kind": "rebutted",
+        "note": "When multiple theories survive, Popper prefers the one with greater empirical content (more falsifiable). The 'status report' is not just survival, but survival despite higher risk of falsification."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

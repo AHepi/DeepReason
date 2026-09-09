@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms not as an inductive prediction of future success, but as a non-inductive methodological rule for 'risk-minimization' based on the logical content of theories: choosing the theory that has withstood the most severe tests is equivalent to choosing the theory that would be easiest to falsify if it were false, thereby minimizing the risk of acting on an easily refutable error, without assigning any probability to its truth.",
+    "mechanism": "The mechanism is a shift from 'justification by probability' (induction) to 'selection by severity' (deductive risk management). Popper argues that corroboration reports the past performance of a theory under severe testing conditions. Preferring the better-corroborated theory is a rational decision to act on the hypothesis that has survived the most stringent attempts at falsification. This does not assume the future will resemble the past (induction); rather, it acknowledges that among competing conjectures, the one that has survived the toughest deductive challenges offers the best chance of avoiding immediate error, simply because it has already proven more robust against known counter-evidence. The preference is a rule of procedure, not a statement of fact about the world's uniformity.",
+    "counterconditions": [
+      "If the preference implicitly assumes that the conditions making Theory A superior in the past will hold in the future, it collapses into induction.",
+      "If the concept of 'verisimilitude' (truth-likeness) required to justify this preference cannot be formally defined without circularity or failure, the defense crumbles.",
+      "If acting on a theory inherently requires a belief in its future reliability (subjective probability), then the distinction between Popperian preference and inductive pragmatism vanishes."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism claims the distinction collapses because preferring based on past results assumes future similarity. This rebuttal argues that Popper's preference is not based on the assumption that 'what worked will work,' but on the logical status of the theory: a severely tested theory has had more opportunities to be eliminated. Choosing it is a bet on its current robustness, not a prediction of its future permanence. It is a choice of the 'least bad' known option, not the 'most likely' true one."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "departure_declared",
+        "note": "Departing from the reliance on 'verisimilitude' as the primary justification. While Popper discussed verisimilitude, the stronger defense on his own terms relies strictly on the methodological rule of severity and risk minimization, avoiding the formal pitfalls of defining truth-likeness that Tichý identified. The defense stands on the procedural rationality of testing, not the ontological claim of closeness to truth."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "The criticism states that preferring for future action assumes continuity. The rebuttal is that Popperian action is not based on the expectation of continuity, but on the absence of a better alternative. We act on the best-tested theory because we have no knowledge of a better one, not because we believe it will continue to work. It is an admission of ignorance coupled with a strategy to minimize the impact of that ignorance."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The claim that 'least error-prone' implies subjective probability is rejected. In Popper's framework, 'error-prone' refers to logical falsifiability and past failure, not a probabilistic frequency. A theory that has survived severe tests is not 'probably true,' it is simply 'not yet false.' The preference is for the theory with the highest informational content that has not been eliminated, which is a deductive status, not a probabilistic one."
+      },
+      {
+        "handle": "4cbbab057ec51a122476741bd3c2ff4172e6fa0617a24361597807f86f8c8cc7",
+        "kind": "revised",
+        "note": "Revised to clarify that Popper's solution is indeed a methodological rule, but explicitly framed as a 'decision' rather than a 'logical derivation.' The candidate now emphasizes that the preference is a voluntary adoption of a rule to facilitate scientific progress and practical action, acknowledging that logic alone cannot dictate action without such a rule, thus avoiding the false dilemma of paralysis vs. induction."
+      },
+      {
+        "handle": "68d9af4a435acc1cd4234dc084ba218e221621e23b6343e1c10f7f2d559a8ebd",
+        "kind": "rebutted",
+        "note": "The criticism argues that redefining preference as static optimization contradicts action. The rebuttal posits that action in Popper's view is always tentative. Optimizing for 'informational content' and 'severity of test' is precisely how one acts rationally in a state of uncertainty. It is a dynamic process where the 'static' snapshot of current corroboration guides the next step of action, which is itself a test. Action is not a commitment to truth, but a commitment to further testing via application."
+      },
+      {
+        "handle": "6adc6f235071652cc2478de1b6b0f052155e8bf3e3db062aaa609a806ed1a6c6",
+        "kind": "rebutted",
+        "note": "The defense does not rely on biological evolution but on the logic of the situation. Popper's 'own terms' include the idea that rationality consists in learning from mistakes. The normative question is answered by showing that preferring the better-corroborated theory is the only rational way to learn from mistakes; ignoring past test results would be irrational regardless of biological origins. It is a logical imperative of critical rationalism, not a psychological description."
+      },
+      {
+        "handle": "77efe1d1a8b9cff333c677b7a94b08da082183a46242adc1917652b7c1a47798",
+        "kind": "rebutted",
+        "note": "When multiple theories survive, the preference goes to the one that has undergone the *most severe* tests, not just any tests. Severity is a comparative measure. If two theories survive, but one has faced more diverse and risky predictions, it is preferred. This is not a tautology; it is a ranking based on the degree of risk undertaken and survived. The 'status report' includes the intensity of the interrogation, not just the binary outcome of survival."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a non-inductive methodological rule of 'risk-minimization' rather than a probabilistic prediction; it costs the agent the assurance of future success, accepting instead that they are choosing the theory that has proved most resilient to error so far, without assuming this resilience guarantees future performance.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which requires induction to assert future truth) and 'criticism' (which uses past failures to eliminate error-prone options). By preferring the theory that has survived the severest tests, the scientist selects the option with the highest known informational content and the lowest known falsity, treating the preference as a strategic bet on the current state of knowledge rather than a prophecy of nature's uniformity.",
+    "counterconditions": [
+      "If the preference implicitly assumes that the conditions making Theory A superior in the past will hold in the future, it collapses into induction.",
+      "If the definition of 'verisimilitude' used to justify the preference relies on a logical formalism that Tichý and others have proven inconsistent.",
+      "If acting on a theory inherently requires assigning it a higher subjective probability of success, thereby smuggling in Bayesian assumptions."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism claims any preference based on past results assumes future continuity. This rebuttal argues that Popper's preference is not based on the assumption that 'what worked will work,' but on the logical asymmetry that 'what failed is false.' We prefer Theory A not because we assume it will continue to succeed, but because Theory B has been logically eliminated or shown to be less informative. The choice is between a known survivor and a known (or potential) casualty, which is a static assessment of current logical status, not a dynamic prediction."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "revised",
+        "note": "Revised to explicitly decouple the defense from formal 'verisimilitude.' The candidate now relies solely on 'corroboration' as a report of past test severity and survival, avoiding the contested logical definition of truth-likeness that Tichý attacked. The justification rests on the methodological rule itself, not on a metaphysical claim about the theory's proximity to truth."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "The criticism asserts that acting inherently assumes future continuity. The rebuttal clarifies that acting on the best-corroborated theory is an admission of ignorance regarding the future, not a denial of it. We act on it *because* it is the best we have, fully acknowledging it may fail tomorrow. This is distinct from induction, which claims the theory is *likely* to succeed. Popper's agent acts without the safety net of probability."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The claim that 'least error-prone' implies 'higher subjective probability' conflates epistemic caution with probabilistic calculation. In Popper's framework, 'least error-prone' means 'has withstood attempts to falsify it,' which is a historical fact, not a subjective degree of belief. One can choose the least error-prone option while maintaining that its objective probability of being true is zero or unknown."
+      },
+      {
+        "handle": "4cbbab057ec51a122476741bd3c2ff4172e6fa0617a24361597807f86f8c8cc7",
+        "kind": "rebutted",
+        "note": "The criticism suggests the target ignores Popper's explicit solution. This candidate adopts that solution directly: the preference is a methodological rule, not an inductive inference. The 'false dilemma' charge is rejected because the candidate demonstrates a third path: acting on critical preference without inductive justification."
+      },
+      {
+        "handle": "68d9af4a435acc1cd4234dc084ba218e221621e23b6343e1c10f7f2d559a8ebd",
+        "kind": "revised",
+        "note": "Revised to clarify that 'informational content' in this context refers to 'empirical content' and 'testability.' The preference is for the theory that says more about the world and has survived the attempt to show it wrong. This directly addresses the 'action' context: when building a bridge, one chooses the theory of statics that has survived the most severe stress tests, not because it is probable, but because the alternative has failed or said less."
+      },
+      {
+        "handle": "6adc6f235071652cc2478de1b6b0f052155e8bf3e3db062aaa609a806ed1a6c6",
+        "kind": "rebutted",
+        "note": "The criticism demands a purely normative defense within Popper's terms, rejecting evolutionary explanations. This candidate complies by grounding the preference strictly in the logic of falsification and the methodological rules of science, avoiding any appeal to biological fitness or psychological inevitability."
+      },
+      {
+        "handle": "77efe1d1a8b9cff333c677b7a94b08da082183a46242adc1917652b7c1a47798",
+        "kind": "rebutted",
+        "note": "Regarding multiple surviving theories: Popper's rule prefers the one that has undergone the *severe* tests. If two survive, the preference goes to the one that was riskier to test (higher empirical content) or has survived a broader range of attempts. If they are truly identical in corroboration, Popper admits there is no rational basis for preference yet, and further testing is required. The 'tautology' charge fails because the rule provides a discriminator based on test severity, not just survival."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'logical content' with 'predictive reliability.' Popper explicitly rejected verisimilitude as a quantifiable metric for choosing between false theories after the Tichý-Miller proofs showed it cannot be formally defined without contradiction. The target claims choosing the better-corroborated theory minimizes risk because it 'would be easiest to falsify if it were false,' but this assumes that past severity correlates with future testability—a uniformity of nature assumption that is itself inductive. Without a non-inductive bridge (which Popper failed to provide via verisimilitude), the preference for the better-corroborated theory implicitly assigns it a higher subjective probability of survival, smuggling induction back in as a pragmatic necessity rather than a logical deduction.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's rejection of verisimilitude as a formal basis for theory choice undermines the claim that corroboration offers a non-inductive risk-minimization strategy.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be formally defined, what specific non-probabilistic metric does Popper offer to distinguish the 'risk' of acting on a highly corroborated theory versus a less corroborated one?"
+    }
+  ]
+}
