@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's terms as a non-inductive, methodological decision to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing verisimilitude without assigning probability; however, this stance costs us any logical guarantee that the future will resemble the past, forcing us to accept that our preference is rational only relative to the aim of truth, not predictive success.",
+    "mechanism": "The mechanism is 'Critical Preferential Selection': agents treat corroboration reports not as inductive evidence of future truth (probability), but as a comparative metric of which theory has survived the most stringent tests. Action is guided by the methodological rule: 'In situations requiring action, choose the theory that is best tested,' because it aligns with the regulative idea of truth (verisimilitude). This avoids induction by refusing to infer 'will be true' from 'has been true,' instead inferring 'is the best available candidate for truth right now.'",
+    "counterconditions": [
+      "If corroboration is shown to logically entail a probabilistic increase in truth likelihood, the non-inductive defense collapses.",
+      "If Popper's formal definition of verisimilitude is proven incoherent (as per Tichý/Miller) such that no comparison of truth-content is possible without probability, the justification fails.",
+      "If the preference for action in novel domains cannot be distinguished from an implicit assumption of nature's uniformity, the charge of smuggling induction stands."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The criticism claims elimination doesn't address action in novel domains. Rebuttal: Popperian preference is not merely 'elimination of competitors' but the active selection of the survivor with the highest informational content and test severity. In novel domains, we act on the theory that explains the most including the novel case, not because we predict it will hold, but because it is the only one not yet falsified in that domain."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The criticism argues psychological expectation vs logical justification misses the point of action. Rebuttal: The defense does not rely on psychological expectation. It relies on a normative methodological rule: 'Act on the best-tested theory.' This is a logical imperative derived from the goal of science (truth), not a description of human psychology."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge the Tichý/Miller refutation of Popper's original verisimilitude definition. The claim now rests on a qualitative, non-formal notion of 'content and survival' rather than a calculable truth-likeness score, admitting that while formal verisimilitude failed, the intuitive guide of 'boldness + survival' remains the only non-inductive compass available."
+      },
+      {
+        "handle": "14b061678dda46e4dcf8f89237df4b4a56508f06d9d5b8c5b1275dfe729cd712",
+        "kind": "rebutted",
+        "note": "The criticism states Popper requires rational action, not just psychological expectation. Rebuttal: Agreed. The proposal defines the preference as rational precisely because it adheres to the methodological rule of selecting the best-tested theory to further the aim of truth. It is not a blind guess; it is a reasoned adherence to the critical method."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "revised",
+        "note": "Revised to concede that Popper's *formal* account of verisimilitude was refuted. The defense now pivots to 'methodological verisimilitude'—a heuristic principle rather than a logical metric—arguing that even without a formal proof, preferring the unfalsified over the falsified is the only rational strategy consistent with fallibilism."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "rebutted",
+        "note": "The criticism claims calling it 'non-rational' misrepresents Popper. Rebuttal: The proposal explicitly frames the preference as rational (aligned with the aim of truth), distinguishing it from 'inductively justified.' It rejects the label 'non-rational' in favor of 'non-inductively rational.'"
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "The criticism argues evolutionary selection doesn't justify preference for action. Rebuttal: The analogy is not meant to justify the action itself but to explain the *status* of the theory. The justification for action comes from the methodological decision to trust the survivor of the selection process (testing) as the best current map, even if we cannot prove the terrain hasn't changed."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The criticism conflates uniformity assumptions with methodological decisions. Rebuttal: The proposal strictly maintains the distinction: we do not assume nature is uniform (induction); we decide to *treat* it as stable enough to test theories (methodology). The preference is based on the latter, avoiding the former."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_004"],
+      "shared_structure": [
+        "Selection of a tool based on past durability rather than predicted future performance.",
+        "Rejection of probabilistic forecasting in favor of robustness checking.",
+        "Action taken on the basis of 'least bad option' rather than 'most likely true'."
+      ],
+      "disanalogies": [
+        "Scientific theories aim at truth, whereas hammers aim at utility; the teleology differs.",
+        "Nature can actively falsify theories, whereas wood does not actively break hammers to deceive.",
+        "Corroboration involves logical severity, while tool durability is often accidental."
+      ],
+      "transfer_claims": [
+        "Just as we use the hammer that hasn't broken yet without assuming it never will, we use the theory that hasn't failed yet without assuming it never will.",
+        "The rationality of the choice lies in the process of elimination, not in the prediction of success."
+      ],
+      "overturn_conditions": [
+        "If it is demonstrated that using the 'unbroken hammer' logically requires an assumption that the next strike will be like the previous ones.",
+        "If a superior method for action is found that does not rely on past survival data at all."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

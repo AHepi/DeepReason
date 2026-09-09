@@ -1,0 +1,59 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory in action is defensible without smuggling in induction if re-framed as a 'critical selection' of the most informative potential falsifier, where the cost is accepting that this preference offers no guarantee of future success or increased probability of truth, only a rational alignment with the aim of science (verisimilitude) despite the formal impossibility of measuring it.",
+    "mechanism": "The mechanism distinguishes between 'justification for belief' (which Popper rejects as inductive) and 'rational choice for action' based on the current state of critical discussion. By selecting the theory that has survived the severest tests, we select the one that currently best approximates truth (highest verisimilitude) not because past success predicts future success (induction), but because it is the only one not yet known to be false, making it the most informative starting point for further error elimination. This treats action as an extension of the critical method rather than a leap of faith.",
+    "counterconditions": [
+      "If the agent requires a probabilistic guarantee of success for action, Popper's framework fails.",
+      "If 'verisimilitude' cannot be coherently defined without probabilistic assumptions (per Tichý/Miller), the rational basis for preference collapses.",
+      "If the distinction between 'psychological expectation' and 'rational preference' is deemed insufficient to guide high-stakes action.",
+      "If the problem demands a positive justification for why the un-falsified theory will hold in novel domains, rather than just a negative justification of eliminating competitors."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses action in novel domains by framing the preference as selecting the 'most informative potential falsifier.' In novel domains, the theory with higher content and severe test survival provides more specific predictions to be tested, whereas a vague or less-tested theory offers less informational grip. The preference is for the tool best suited to expose error quickly, which is rational regardless of the domain's novelty."
+      },
+      {
+        "handle": "0baaf2a78ddc87e150a4bd9a2361836bc0158509dab5b8825decd20371ff9aa2",
+        "kind": "rebutted",
+        "note": "The candidate explicitly denies that survival implies future success (induction). Instead, it argues the selection is based on the *current* logical status: Theory A is falsified, Theory B is not. Acting on B is not a prediction that B will survive, but a recognition that B is the only remaining viable candidate for truth-seeking action. The 'smuggling' charge fails because the premise of the action is 'maximize error detection,' not 'maximize success probability.'"
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "revised",
+        "note": "Revised to clarify that Popper's 'rational action' is not about satisfying a psychological need for certainty but about adhering to the methodological rule of preferring the best-tested hypothesis as the basis for further criticism. The defense now explicitly states that the 'logical justification' is procedural (following the rules of critical rationalism) rather than evidential (accumulating support)."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate accepts the Tichý/Miller refutation of Popper's original quantitative definition of verisimilitude but argues that a qualitative notion of 'better-corroborated' still serves as a valid regulative ideal for action. It departs from the requirement that verisimilitude must be formally measurable to be rationally preferable; it suffices that it is a coherent aim."
+      },
+      {
+        "handle": "14b061678dda46e4dcf8f89237df4b4a56508f06d9d5b8c5b1275dfe729cd712",
+        "kind": "rebutted",
+        "note": "The candidate rebuts the claim that Popper requires 'justification' in the traditional sense. Popper's 'rationality' is defined negatively: it is irrational to act on a known falsehood when a non-falsified alternative exists. The preference is defensible because it avoids the known error, which is a rational constraint even if it doesn't positively justify the chosen theory's truth."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "rebutted",
+        "note": "While acknowledging the formal refutation of Popper's specific calculus of verisimilitude, the candidate argues that the *intuition* behind preferring bold, well-tested theories remains robust as a heuristic for scientific progress. The defense shifts from relying on the failed formal proof to relying on the pragmatic success of the critical method itself as a self-correcting process."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "revised",
+        "note": "Revised to explicitly align with Popper's view that the preference is rational because it aligns with the aim of science (finding truth), while clarifying that this 'rationality' is volitional and methodological, not epistemic in the sense of providing knowledge of truth. The distinction between 'non-rational' and 'methodologically rational' is sharpened."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "The evolutionary analogy is refined: just as an organism survives not because it is 'proven' to be fit forever, but because it has not yet been eliminated by selection, a theory is preferred for action because it has not been eliminated by criticism. This justifies the *preference* for action (using the surviving organism/theory) without claiming it guarantees future survival. The tension is resolved by accepting the fallibilist nature of all action."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's terms as a non-inductive, critical preference for the theory with the highest surviving informative content, but accepting this costs us any guarantee of future success or probability of truth, reducing rational action to a bold conjecture that the unrefuted parts of the theory will hold in the new domain.",
+    "mechanism": "The mechanism is 'Critical Preference via Informational Content': Corroboration reports the severity of tests survived relative to the theory's logical improbability (information content). We prefer the highly corroborated theory not because it is likely true (induction), but because it has withstood attempts to eliminate its high informational content. The preference is a methodological rule to act on the best-tested error-elimination candidate, acknowledging that this choice itself is falsifiable if the theory fails in the novel domain.",
+    "counterconditions": [
+      "If the preference relies on an assumption that the future will resemble the past (uniformity of nature), it smuggles in induction.",
+      "If the preference claims to increase the probability of the theory being true, it contradicts Popper's rejection of probabilistic confirmation.",
+      "If the preference cannot distinguish between a theory that survived trivial tests and one that survived severe tests, it fails to capture 'corroboration'.",
+      "If the preference implies we are justified in believing the theory will work, rather than just hoping it will, it reverts to justificationism."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses action in novel domains by framing the preference as a 'bold conjecture' that the specific errors eliminated in the past are not present in the new domain. It does not claim elimination guarantees success, only that it is the most critical stance available; acting on the less-corroborated theory would be ignoring known potential errors without reason."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes psychological expectation from logical justification by defining the preference as a 'methodological rule' rather than a logical proof of future success. It is defensible on Popper's terms precisely because it refuses logical justification (which requires induction) and instead offers a rational, critical basis for choice: maximizing exposure to potential falsification."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on 'verisimilitude' (truth-likeness) as a measurable quantity. Instead, it relies on 'informational content' and 'severity of tests,' which Popper maintained are logically distinct from probability and do not require the refuted formal account of verisimilitude."
+      },
+      {
+        "handle": "14b061678dda46e4dcf8f89237df4b4a56508f06d9d5b8c5b1275dfe729cd712",
+        "kind": "rebutted",
+        "note": "The candidate clarifies that 'rational action' for Popper does not mean 'justified belief in success.' Rationality consists in critically examining options and choosing the one that best survives criticism. Preferring the better-corroborated theory is rational because it is the result of the most rigorous critical process, not because it promises success."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "rebutted",
+        "note": "By grounding the preference in 'survival of severe tests' and 'informational content' rather than a formal calculus of verisimilitude, the candidate sidesteps the Tichý/Miller refutation. The argument is qualitative and methodological: we prefer the theory that has done more work (contained more information) and survived, not the one calculated to be 'truer'."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly state that the preference aligns with the 'aim of science' (finding truth/error elimination) as a volitional commitment, clarifying that this makes the action rational in a critical sense without claiming epistemic justification for the outcome."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "The candidate resolves the tension by arguing that evolutionary selection explains the *state* of the theory, but the *preference for action* is the scientist's critical decision to bet on the theory that has proven most resilient against error. The justification for the bet is the severity of the trials survived, not the biological mechanism of survival itself."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate maintains the distinction: it rejects the inductive assumption that nature *is* uniform, but accepts the methodological decision to *treat* specific test conditions as stable enough to attempt falsification. The preference is based on the latter (methodological rigor), not the former (metaphysical assumption)."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

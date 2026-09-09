@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a methodological decision to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing the content of potential error and aligning with the regulative idea of truth (verisimilitude) without claiming probabilistic justification.",
+    "mechanism": "The mechanism is 'Critical Preferential Selection': agents treat corroboration reports not as evidence of probability, but as a status marker indicating which theory currently offers the best opportunity for learning (highest falsifiability) and closest approximation to truth, given that all other competitors have been eliminated. The preference is a rational volitional act aligned with the aim of science, distinct from an inductive expectation of nature's uniformity.",
+    "counterconditions": [
+      "If corroboration reports are shown to logically entail a probability increase for future performance, the non-inductive defense collapses.",
+      "If Popper's concept of verisimilitude is proven formally incoherent (as per Tichý/Miller) such that it cannot guide preference even as a regulative ideal.",
+      "If the distinction between 'psychological expectation' and 'rational methodological choice' is demonstrated to be untenable in practical action scenarios."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses action in novel domains by framing preference as a bet on the theory with the highest informational content and survivability, not on its proven track record. The elimination of competitors leaves the corroborated theory as the only rational vehicle for action if one accepts the aim of finding truth, even in novelty."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The defense explicitly grounds the preference in Popper's 'methodological decision' rather than logical justification of truth. It argues that acting on the best-tested theory is the definition of rational action within Popper's framework, satisfying the prompt's requirement for defensibility 'on Popper's own terms' without smuggling in induction."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "revised",
+        "note": "Revised to clarify that verisimilitude is used strictly as a 'regulative idea' or aim, not as an assessable metric requiring probabilistic assumptions. The claim now emphasizes that we prefer the theory that *appears* closer to truth based on severe testing, acknowledging we cannot know the degree of verisimilitude, thus avoiding the induction trap."
+      },
+      {
+        "handle": "14b061678dda46e4dcf8f89237df4b4a56508f06d9d5b8c5b1275dfe729cd712",
+        "kind": "rebutted",
+        "note": "The candidate asserts that Popper's requirement for rational action is satisfied by the alignment with the aim of science (truth), not by a guarantee of success. The preference is rational because it is the only strategy consistent with fallibilism and the rejection of dogmatism, not because it promises safety."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "Departing from the reliance on Popper's specific formal definition of verisimilitude (which was refuted). Instead, the candidate adopts a pragmatic interpretation of verisimilitude as a guiding heuristic for preference that survives the formal refutation by abandoning the claim that it can be quantitatively assessed."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "rebutted",
+        "note": "The candidate agrees the preference is rational but clarifies that this rationality stems from the strategic alignment with the goal of error elimination, not from an inductive inference. It corrects the misrepresentation that 'non-rational' was claimed; rather, it is 'non-inductive' but fully rational within the critical framework."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "Evolutionary selection explains survival, but the candidate adds the layer of 'active preference' based on the severity of tests passed. We prefer the theory that survived the hardest tests because it offers the most rigorous platform for future criticism, directly addressing the justification for active preference in action."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e91706e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate maintains the distinction: assuming nature is uniform is an inductive metaphysical claim Popper rejects; assuming test conditions are stable for the sake of argument is a methodological necessity for falsification. The preference relies on the latter, not the former."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a critical methodological rule: we prefer the theory that has withstood the most severe tests because it offers the most informative potential falsifier for the next test, thereby maximizing the growth of knowledge even if the theory is ultimately false.",
+    "mechanism": "The mechanism is 'Critical Preferential Selection': Action is guided by the theory that currently best solves the problem at hand (has the highest verisimilitude content relative to known errors), not because it is probable to be true, but because it is the most rationally criticizable object available. Preference is a decision to expose the strongest available conjecture to new risks, which is the engine of scientific progress. This avoids induction by treating the preference as a voluntary commitment to the aim of truth-seeking rather than a logical derivation of safety.",
+    "counterconditions": [
+      "If the agent acts on the theory believing it is likely to succeed in novel domains based on past performance, they have smuggled in induction.",
+      "If the preference cannot distinguish between a theory that survived due to lenient tests versus severe tests, the defense fails.",
+      "If the 'aim of truth' itself requires an inductive assumption that nature is uniform enough for truth-seeking to be viable, the circle remains unbroken."
+    ],
+    "typicality": 0.72,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The criticism claims elimination doesn't address action in novel domains. The rebuttal is that Popperian action in novel domains is precisely the act of applying the most severely tested theory *as a conjecture* to see if it breaks there. The preference is for the tool best suited to reveal new errors, not the tool guaranteed to work."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The distinction between psychological expectation and logical justification is exactly the point. Popper defends the preference as a rational *decision* (methodological rule) aligned with the goal of science, not as a logical proof that the theory will work. The prompt asks if it is defensible; it is defensible as a consistent strategic choice within his system."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "revised",
+        "note": "Revised to explicitly avoid relying on 'verisimilitude' as a measurable quantity. Instead, the claim focuses on 'content' and 'severity of tests' which Popper argued could be logically assessed without probability. The preference is for the theory with the highest empirical content that has not yet been falsified."
+      },
+      {
+        "handle": "14b061678dda46e4dcf8f89237df4b4a56508f06d9d5b8c5b1275dfe729cd712",
+        "kind": "rebutted",
+        "note": "Popper's requirement for rational action is consistency with the aim of discovering truth. Acting on the best-tested theory is rational because it is the most efficient way to learn, regardless of whether we expect it to be true. The criticism confuses 'rationality' with 'instrumental success guarantee'."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "Departing from the need to defend Popper's specific formal definition of verisimilitude (which was indeed refuted). The defense rests solely on the methodological rule of preferring high-content, well-tested conjectures, which stands independent of the failed formal metric."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "rebutted",
+        "note": "The candidate agrees the preference is rational but clarifies that this rationality stems from the alignment with the *critical method*, not from an expectation of truth. It is rational to bet on the horse that has run the hardest races, not because it will win, but because running hard races is the only way to find a fast horse."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "Evolutionary selection explains survival, but the 'preference for action' is the conscious adoption of the survivor as the current best guess. The justification is that since we must act, and our goal is truth/error-elimination, acting on the survivor is the only non-arbitrary choice compatible with fallibilism."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate maintains the distinction: assuming uniformity for induction (predicting the future based on the past) is rejected. Assuming stability of test conditions for the purpose of attempting falsification is a methodological necessity, not an inductive belief about the world's ultimate nature."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
