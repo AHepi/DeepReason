@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to answer the specific question asked ('Is that preference defensible on Popper's own terms?') by substituting a descriptive evolutionary explanation for the required normative justification. Popper's framework demands a rational basis for action (choosing one theory over another), and answering that the preference is merely a 'brute fact of survival' explicitly concedes that there is no defense *on Popper's own rational terms*, thereby failing to make the case for defensibility as requested.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "The problem asks whether the preference for corroborated theories is 'defensible on Popper's own terms,' which requires a normative argument justifying the choice, not a descriptive account of why the choice occurs.",
+      "premise_evidence": null,
+      "successor_question": "If the preference is merely a brute fact of survival with no logical justification, does this not confirm the critic's charge that Popper smuggles in induction by acting *as if* corroboration matters without being able to say *why* it should matter?"
+    }
+  ]
+}

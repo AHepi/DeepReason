@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is a 'methodological fiction' based on 'strategic self-deception' contradicts Popper's explicit distinction between the logical context (justification) and the psychological context (discovery/motivation). Popper defended preferring better-corroborated theories as a rational critical choice based on past performance, not as a 'myth' or 'fiction' requiring scientists to knowingly believe a falsehood. By framing the preference as 'self-deception,' the target misrepresents Popper's solution as an irrational social construct rather than a consistent methodological rule, thereby failing to address whether the preference is defensible on his own terms without smuggling in induction.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguishes between the logical status of corroboration (which does not imply probability) and the rational decision to prefer corroborated theories for critical testing, rejecting the need for 'fiction' or 'myth'.",
+      "premise_evidence": null,
+      "successor_question": "If the preference is rational and not a fiction, how does Popper justify acting on it without implying that the future will resemble the past?"
+    }
+  ]
+}

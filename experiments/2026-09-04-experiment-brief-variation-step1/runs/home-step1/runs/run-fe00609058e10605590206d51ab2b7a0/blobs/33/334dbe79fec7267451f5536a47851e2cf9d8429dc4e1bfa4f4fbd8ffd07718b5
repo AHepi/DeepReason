@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation as required because it defines the connection between conn:092ff932d717 and its neighbors (SRC_006, SRC_004) merely as a 'hybrid mechanism' without specifying the kind of relation (e.g., dependence, reduction, integration). Furthermore, the 'REFUTED IF' condition describes scenarios where the hybrid model is unnecessary or flawed, rather than stating what specific claim would be refuted if the proposed relation were false, thus failing to define the relation's logical boundaries.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "A substantive relation must name its kind and state what is refuted if the relation holds; describing a 'hybrid mechanism' without categorizing the relation type or defining its falsification conditions constitutes a summary of endpoints, not a relation.",
+      "premise_evidence": null,
+      "successor_question": "Does the description of a 'hybrid mechanism' explicitly name one of the required relation kinds (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction) and clearly state the consequence of the relation being false?"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "candidates": [
+    {
+      "content": "The problem conn:092ff932d717 INTEGRATES with SRC_006 (risk-minimization) and SRC_004 (compartmentalized rationality) by proposing that the 'preference' is a hybrid mechanism: it is logically grounded in risk minimization (SRC_006) but psychologically experienced as compartmentalization (SRC_004). This relation is REFUTED IF it can be shown that risk minimization alone fully accounts for the psychological experience of scientists without needing a separate 'compartmentalized' mode, or if the risk-minimization strategy itself inherently requires an inductive assumption about future risks resembling past ones.",
+      "evidence_refs": [
+        {
+          "block": "fefa1d389d33",
+          "quote": "The preference inevitably smuggles induction back in; any decision to act on a corroborated theory for future applications logically entails an implicit premise that the future will resemble the past"
+        }
+      ],
+      "neighbours": [
+        "SRC_006",
+        "SRC_004"
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": "The problem conn:092ff932d717 CONTRADICTS SRC_009's claim of 'paralysis' by asserting that the preference is not indefensible but rather a necessary evolutionary heuristic that bypasses the need for logical justification entirely. This relation is REFUTED IF Popper's system is demonstrated to be purely descriptive of logical relations rather than prescriptive for action, meaning the 'paralysis' is only apparent to those mistakenly seeking a logical bridge where none was intended.",
+      "evidence_refs": [
+        {
+          "block": "2a45b7988522",
+          "quote": "The preference is indefensible on Popper's own terms; the only consistent Popperian stance is radical skepticism where NO theory is preferred for action, leading to paralysis."
+        }
+      ],
+      "neighbours": [
+        "SRC_009",
+        "SRC_001"
+      ],
+      "typicality": 0.45
+    },
+    {
+      "content": "The problem conn:092ff932d717 REDUCES to the mechanism described in SRC_002 and SRC_003: the 'smuggling of induction' is not a flaw but the defining feature of the preference relation. The relation is one of 'inevitable dependency' where practical action depends on the uniformity of nature. This relation is REFUTED IF a decision-theoretic framework can be constructed that justifies preferring corroborated theories based solely on their current informational content or logical structure, without any reference to future performance or the uniformity of nature.",
+      "evidence_refs": [
+        {
+          "block": "578e42df713e",
+          "quote": "The preference smuggles induction back in because any decision-theoretic justification for preferring corroborated theories inevitably relies on the uniformity of nature"
+        }
+      ],
+      "neighbours": [
+        "SRC_002",
+        "SRC_003"
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "The problem conn:092ff932d717 ABSTRACTS the conflict between SRC_005 (induction smuggling) and SRC_008 (logical compatibility) into a higher-order 'Semantic Duality' relation. It posits that the contradiction arises from equivocation on the term 'preference': in SRC_005 it means 'expectation of truth', while in SRC_008 it means 'selection for testing'. This relation is REFUTED IF the texts of SRC_005 and SRC_008 can be shown to use the term 'preference' with identical semantic scope regarding future action.",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_005",
+        "SRC_008"
+      ],
+      "typicality": 0.60
+    },
+    {
+      "content": "The problem conn:092ff932d717 SHARES MECHANISM with SRC_007 and SRC_004: both describe a collapse of Popper's distinction under the weight of practice. The shared mechanism is 'Pragmatic Collapse', where theoretical purity fails upon contact with real-world decision making. This relation is REFUTED IF Popper's distinction between corroboration and probability is shown to remain robust and useful for working scientists specifically because it prevents them from conflating high corroboration with high probability, thereby avoiding dogmatism.",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_007",
+        "SRC_004"
+      ],
+      "typicality": 0.78
+    },
+    {
+      "content": "The problem conn:092ff932d717 INHERITS the 'Schizophrenic Existence' from SRC_004 and extends it to a 'Methodological Schism' relation with SRC_006. It argues that the risk-minimization strategy (SRC_006) is the conscious rationale scientists adopt to mask the underlying schism (SRC_004). This relation is REFUTED IF historical analysis of scientific practice shows that scientists consistently apply risk-minimization principles without experiencing any psychological tension or need for compartmentalization.",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_004",
+        "SRC_006"
+      ],
+      "typicality": 0.55
+    }
+  ]
+}

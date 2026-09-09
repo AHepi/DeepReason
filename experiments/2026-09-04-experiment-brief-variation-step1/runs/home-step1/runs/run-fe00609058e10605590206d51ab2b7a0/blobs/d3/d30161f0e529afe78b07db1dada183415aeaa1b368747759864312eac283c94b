@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'evolutionary epistemology' defense fails to answer the specific question of whether the preference is defensible *on Popper's own terms*. Popper explicitly rejected naturalistic reductions of methodology (psychologism/biologism) as irrelevant to the logical problem of induction. By shifting the ground from logical justification (which the problem asks for) to causal explanation (why we *do* prefer), the target concedes that the preference lacks rational defensibility within Popper's critical rationalist framework, thereby failing to show it does not 'smuggle back in' induction via a backdoor naturalism.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguished sharply between the psychological/causal origins of belief and the logical validity of scientific methods, rejecting the former as a basis for the latter.",
+      "premise_evidence": null,
+      "successor_question": "If evolutionary success cannot provide the normative 'ought' required by Popper's critical rationalism, what non-inductive logical principle allows a scientist to prefer one unfalsified theory over another without assigning it higher probability?"
+    }
+  ]
+}

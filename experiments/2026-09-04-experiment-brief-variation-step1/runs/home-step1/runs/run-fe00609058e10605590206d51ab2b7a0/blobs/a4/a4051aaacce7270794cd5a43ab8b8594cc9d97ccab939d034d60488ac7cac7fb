@@ -1,0 +1,326 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'risk-management' strategy: we prefer the theory with the highest informational content that has survived severe tests, not because it is more likely true, but because it offers the greatest potential for future falsification and learning while currently being the least error-prone known option.",
+      "mechanism": "Corroboration reports the historical survival of high-content (improbable) theories. Preferring them maximizes the 'boldness' of our current stance without asserting probability. It is a rule of action based on the logical status of the theory (high content + survived) rather than an inductive inference about its future reliability.",
+      "counterconditions": [
+        "If the agent prefers the theory because they believe it will *continue* to work (future reliability), this collapses into induction.",
+        "If the definition of 'better corroborated' implicitly relies on a frequency count of past successes rather than the severity of tests passed."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_007"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "The defense does not rely on 'verisimilitude' (truth-likeness) as a positive measure of truth probability. It relies on 'informational content survived.' The preference is for the boldest surviving conjecture, which is a logical comparison of content and test severity, not an assumption of future continuity based on truth-likeness."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "The explanation is strictly normative within Popper's logic of scientific discovery. It appeals to the rationality of maximizing testability (content), a core Popperian value, not to biological evolution or psychological habits."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "When multiple theories survive, the preference rule selects the one with the *highest content* (most improbable prior to testing). This breaks the tie non-inductively by choosing the boldest conjecture, not by counting past wins."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The distinction is maintained: we prefer the theory for its current explanatory power and high content (logical status), explicitly denying that this predicts specific future events with higher probability. The 'preference' is a decision to use the best available tool for further testing, not a prediction of its eternal validity."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "The horse-race analogy holds only if the 'bet' is defined as 'which horse provides the most informative run should it fail?' rather than 'which horse will win?'. The rationality lies in selecting the most informative survivor, not expecting future wins."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Past performance (survival of severe tests) is used as a report of logical status (high content + not refuted), not as a statistical guide to future utility. The premise is that high content is desirable for science, not that survival implies future survival."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Popper's rejection of 'pragmatic justification' targets justifications that claim truth or probability. A 'risk-management strategy' that seeks to maximize falsifiability (learning potential) is consistent with his critical rationalism, as it serves the goal of truth-seeking without claiming to have found truth."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The mechanism addresses the smuggling charge directly by redefining the basis of preference from 'expected reliability' (inductive) to 'maximal informational content survived' (logical/non-inductive). It resolves the category error by shifting the ground of the preference."
+        }
+      ]
+    },
+    {
+      "claim": "The preference inevitably smuggles induction back in; any decision to act on a corroborated theory for future applications logically entails an implicit premise that the future will resemble the past (uniformity of nature), which Popper explicitly rejected as a basis for scientific rationality.",
+      "mechanism": "Action implies expectation. To choose Theory A over Theory B for a bridge construction is to expect Theory A to hold true in the future. This expectation cannot be derived from logical deduction alone (since the theory might be false) and thus rests on an inductive habit that past success indicates future reliability.",
+      "counterconditions": [
+        "If one can demonstrate a form of 'action without expectation' where the choice is purely tentative and carries no assumption of future validity.",
+        "If the 'preference' is shown to be merely a procedural rule for generating new tests rather than a guide for practical application."
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_006",
+        "SRC_008"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "This candidate argues that *any* attempt to use verisimilitude or content as a proxy for action fails because the act of preferring for *future* use inherently assumes the uniformity of nature, regardless of the specific non-inductive label attached to the preference."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "revised",
+          "note": "Clarification: While Popper rejects biological explanations as *normative* defenses, this candidate posits that the *failure* of his system forces him into an implicit reliance on such habits, making the inconsistency a feature of his actual practice if not his stated philosophy."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "Even if multiple theories survive, the act of picking one for action requires an inductive leap that the chosen one is 'safer' or 'more reliable' than the others, which contradicts the logical equality of unfalsified theories."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The distinction between 'predicting events' and 'preferring for action' is illusory. Action *is* a prediction that the action will succeed. Therefore, preferring a theory for action is functionally identical to predicting its success, which is inductive."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "The horse analogy fails precisely because a rational bettor *does* assume past performance indicates future results. If they didn't, the past record would be irrelevant. Thus, using corroboration (past record) to guide action *is* induction."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Agreed. The reliance on past performance as a guide to future utility is the definition of induction. Popper's attempt to sever this link while maintaining the preference creates the contradiction."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Calling it 'risk management' does not escape the charge. Managing risk regarding future outcomes requires assumptions about future probabilities or regularities, which brings induction back in through the back door."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Redefining the conflict as a category error does not solve the problem. The scientist still acts *as if* induction works. The 'smuggling' occurs in the praxis, regardless of the semantic framing."
+        }
+      ]
+    },
+    {
+      "claim": "The preference is defensible only if we accept a 'dual-epistemology': logically, corroboration is non-inductive (Popper's formal stance), but pragmatically, scientists must operate with a 'psychological induction' (a Humean habit) to function, rendering Popper's solution incomplete for the practicing scientist.",
+      "mechanism": "Cognitive compartmentalization. The scientist accepts Popper's logic in the context of justification (theory acceptance is never final) but reverts to Humean psychology in the context of application (acting as if the theory is reliable). This creates a stable but philosophically inconsistent equilibrium.",
+      "counterconditions": [
+        "If a unified account can be found that explains both testing and acting without switching epistemic frameworks.",
+        "If the 'psychological habit' can be recast as a rational evolutionary adaptation rather than an irrational induction."
+      ],
+      "typicality": 0.60,
+      "optional_refs": [
+        "SRC_008"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "departure_declared",
+          "note": "This candidate departs from the requirement to find a purely Popperian defense. It asserts that no such pure defense exists for action, necessitating a hybrid model."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "This candidate explicitly embraces the psychological/biological explanation as the *only* way to bridge the gap, arguing that Popper's own terms are insufficient for the normative question of action, thus requiring an external (evolutionary/psychological) supplement."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "In a dual-epistemology, the tie-breaking between multiple surviving theories is handled by the pragmatic/psychological layer (e.g., simplicity, familiarity), acknowledging that the logical layer alone cannot dictate action."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "This view concedes the critic's point: the 'preference' in action *is* inductive (psychological), even if the 'corroboration' in logic is not. The defense is that this duality is unavoidable for human agents."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "The horse analogy is accepted as a description of the psychological layer (inductive betting) which operates alongside the logical layer (non-inductive testing). The failure to distinguish them in Popper's writing is the source of the confusion."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Confirmed: the pragmatic preference relies on implicit induction. The 'defense' is that this is a necessary condition for agency, not a logical derivation from Popper's premises."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Risk management here is acknowledged as a pragmatic, quasi-inductive heuristic, distinct from the strict logical risk-assessment of theory content. The contradiction is admitted as the cost of doing science."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "revised",
+          "note": "Refined: The 'category error' is not in the question but in Popper's attempt to separate logic and praxis completely. This candidate proposes that the 'smuggling' is actually a necessary integration of two distinct modes of reasoning."
+        }
+      ]
+    },
+    {
+      "claim": "The preference is a 'methodological fiction' necessary for the progress of science: scientists act *as if* corroboration implies reliability to motivate the rigorous testing of bold theories, knowing full well that logically it implies nothing about the future.",
+      "mechanism": "Strategic self-deception or 'useful myth'. The scientific community maintains the norm of preferring corroborated theories to sustain the social and psychological momentum required for critical rationalism, even though the individual philosopher-scientist knows it lacks logical foundation.",
+      "counterconditions": [
+        "If the preference can be grounded in pure logic without recourse to fiction or myth.",
+        "If the 'fiction' leads to systematic errors that undermine the very progress it aims to support."
+      ],
+      "typicality": 0.45,
+      "optional_refs": [],
+      "discharges": [
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "This approach bypasses the need for verisimilitude. The 'fiction' is not that the theory is true-like, but that the *rule* of preferring it is effective for progress, a meta-level pragmatic stance."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "This is a normative claim about scientific methodology: the norm *should* be maintained for its utility, regardless of its logical purity. It addresses the 'defensibility' in terms of scientific survival, not logical consistency."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "When multiple theories survive, the 'fiction' allows the community to arbitrarily select one to attack next, preventing paralysis. The selection criterion can be anything (e.g., elegance), as the logical status is identical."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The conflation is intentional and strategic. Scientists *must* conflate prediction and preference to act, even if logicians must separate them to analyze. The defense is functional, not logical."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "The horse analogy is a perfect description of the fiction: we bet on the horse we know might lose, because the alternative (not betting/not acting) stops the game of science."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The smuggling is acknowledged as a feature of the 'fiction'. We pretend induction works to keep the engine of criticism running."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Pragmatic justification is exactly what this is. It admits Popper's logical rejection but argues for a higher-order pragmatic acceptance necessary for the system to function."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The mechanism reframes the 'smuggling' not as an error but as a necessary operational parameter of the scientific enterprise."
+        }
+      ]
+    },
+    {
+      "claim": "The preference is defensible via 'evolutionary epistemology': organisms (including scientists) who prefer hypotheses that have survived severe tests are more likely to survive and reproduce; thus, the preference is a selected trait, not a logical inference, escaping the charge of induction.",
+      "mechanism": "Natural selection of cognitive strategies. The tendency to trust corroborated theories is a hardwired or culturally selected heuristic that conferred survival advantages. Its validity comes from its evolutionary success, not from logical derivation or inductive proof.",
+      "counterconditions": [
+        "If the evolutionary explanation cannot account for the *normative* force scientists feel (i.e., why we *ought* to prefer them, not just why we *do*).",
+        "If evolution could have selected for maladaptive but comforting beliefs instead of true ones."
+      ],
+      "typicality": 0.55,
+      "optional_refs": [],
+      "discharges": [
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "Evolutionary epistemology replaces 'verisimilitude' with 'adaptive fit'. The preference is for theories that map well enough to reality to ensure survival, a biological fact, not a logical assumption of truth."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "This candidate explicitly uses the biological/evolutionary argument to answer the normative question: the 'defense' is that this is the only kind of defense available to natural beings. Normativity is reduced to adaptive success."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "In an evolutionary framework, if multiple theories survive, the organism picks one based on processing efficiency or other heuristic cues. The 'status report' is irrelevant; the 'survival value' of the decision process is what matters."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The distinction is dissolved: 'predicting future events' and 'preferring for action' are the same biological impulse. The 'smuggling' charge fails because induction is replaced by biological causation."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "The horse analogy is reinterpreted: we bet on the horse because our ancestors who bet on winners survived. It is a causal history, not a logical expectation of uniformity."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Past performance is a guide to future utility only because evolution made it so. The 'implicit premise' is a biological imperative, not a logical fallacy."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Pragmatic justification is validated by millions of years of trial and error (evolution), which is a stronger form of 'testing' than logical analysis."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The mechanism shifts the ground from logic to biology, answering the 'smuggling' charge by changing the definition of rationality to 'adaptive behavior'."
+        }
+      ]
+    },
+    {
+      "claim": "The problem is a pseudo-problem generated by a linguistic confusion between 'justification' (logical proof) and 'corroboration' (report of test history); once this distinction is rigorously held, the preference is seen as a simple reporting of the current state of play, implying no future guarantees.",
+      "mechanism": "Semantic disambiguation. 'Preference' is stripped of its probabilistic weight and treated as a shorthand for 'this is the theory currently standing after the most severe attempts to kill it.' No induction is smuggled because no claim about the future is made, only a statement of present survival.",
+      "counterconditions": [
+        "If scientists actually use the preferred theory to make high-stakes predictions, implying they do believe in future reliability.",
+        "If the concept of 'standing' implicitly carries a modal force of 'likely to continue standing'."
+      ],
+      "typicality": 0.70,
+      "optional_refs": [
+        "SRC_005",
+        "SRC_007"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "No appeal to verisimilitude is needed. The preference is purely descriptive: 'Theory A is the current champion.' Acting on the champion is a convention, not an inductive inference."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "This is a strictly logical/linguistic defense within Popper's own terms. It clarifies the definitions to show the contradiction vanishes when language is used precisely."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "If multiple theories stand, the report is 'A and B are standing.' Preference arises only when action forces a choice, at which point auxiliary criteria (not induction) are invoked, or the choice is acknowledged as arbitrary."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The conflation is exposed as the error of the observer, not the actor. The Popperian scientist prefers the theory *qua* survivor, not *qua* predictor. The moment they treat it as a predictor, they leave Popper's terms."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "The horse analogy is corrected: we don't bet on the horse because it will win; we bet on it because it is the only one left in the race. The expectation of winning is a separate, non-logical hope."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Past performance is cited only as the reason the theory is still in the game. The 'guide to future utility' is a misinterpretation of the report of past survival."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Risk management is redefined as 'avoiding known errors.' We prefer the survivor because we know the others have failed. This is deductive (Modus Tollens), not pragmatic induction."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The mechanism directly addresses the 'smuggling' by showing it results from a semantic drift where 'corroboration' is mistaken for 'confirmation.' Correcting the semantics removes the smuggled goods."
+        }
+      ]
+    }
+  ]
+}

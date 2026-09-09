@@ -1,0 +1,21 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes an 'inheritance' relation but fails to define the substantive mechanism of transfer. It asserts that conn:092ff932d717 'inherits' Schizophrenic Existence and extends it to Methodological Schism, yet it does not explain *how* a problem context inherits a psychological state or what structural feature allows this extension. The statement merely juxtaposes three concepts (Schizophrenic Existence, Methodological Schism, risk-minimization) without establishing the specific dependency, reduction, or shared mechanism required by the problem context. Furthermore, the 'REFUTED IF' condition describes a lack of psychological tension in scientists, which attacks the *truth* of the premise rather than the validity of the *relation* itself; a relation can be formally proposed even if its premises are empirically false. Thus, the target provides a summary of endpoints rather than a substantive relation.",
+      "premise": "The target claims an inheritance relation between conn:092ff932d717 and SRC_004/SRC_006 based on risk-minimization strategies masking psychological schisms.",
+      "premise_evidence": [
+        {
+          "block": "578e42df713e",
+          "quote": "The problem conn:092ff932d717 INHERITS the 'Schizophrenic Existence' from SRC_004 and extends it to a 'Methodological Schism' relation with SRC_006."
+        }
+      ],
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "counterexample": null,
+      "successor_question": "What specific structural feature or logical operator constitutes the 'inheritance' mechanism between a problem context and a psychological state in this framework?"
+    }
+  ]
+}
