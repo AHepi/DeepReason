@@ -280,3 +280,100 @@ this tranche that would remove a capability.
 
 Estimated diff, road (c): about 70 lines across 3 source files, 2 map
 documents, 1 new test file. Within budget. One commit.
+
+---
+
+# Amendment 1 — the operator's words, 2026-09-09
+
+Verbatim, complete:
+
+> The judge must remain optional. One seat, two seats, no seats. The default is
+> observe only. My mistake. Frozen surface modification approved
+
+## What each sentence decides
+
+**"The judge must remain optional. One seat, two seats, no seats."** This is a
+new requirement and it widens GOAL.md. Measured, of the three shapes the
+operator names, only two run today:
+
+| judge seats | today | required |
+|---|---|---|
+| none | the trial declines `no-judge-role`, the run continues | already compliant |
+| ONE | the solo trial declines `single-judge-seat`; the cross-family gate raises `JudgeEnsemblePolicyError` | must be a legal, runnable configuration |
+| two | runs | unchanged |
+
+So one sentence names one defect: a single judge seat is structurally locked
+out, and the 2026-08-28 law lists "judge invocation" among the gates that must
+be switchable per run, with a typed WARNING when switched, never a refusal and
+never silence.
+
+**"The default is observe only."** No default moves. Every change below is
+inert unless a run turns it on, and the tranche must prove that by digest
+rather than by assertion.
+
+**"My mistake."** Read as accepting the correction in this file's opening: the
+brief's road (a) would not have reached this goal. Recorded, not acted on.
+
+**"Frozen surface modification approved."** The grant for Q2. I am using it for
+ONE edit, not the whole of what it would permit — see below.
+
+## Questions the operator did not answer, and how I resolved them
+
+- **Q1 (which road).** Resolved as road **(c)**, since the grant arrived with
+  "my mistake" against a message whose only recommendation was (c) and whose
+  finding was that (a) misses the goal. Road (a) remains parked with its
+  pricing (`PARKED.md` P1).
+- **Q3 (delete the cross-school judge pair).** Resolved as **KEEP**. The
+  operator asked for the judge to remain optional at every seat count; deleting
+  the only ensemble a one-family two-model run could obtain moves in the
+  opposite direction. Nothing is deleted in this tranche.
+
+## The amended change, in full
+
+1. `src/deepreason/v6_policy.py::configured_criticism_policy` — when
+   `ADJUDICATION_STATUS_AUTHORITY_ENABLED` is on and
+   `ARGUMENTATIVE_AUTHORITY` is `single_family_trial`, the compiled criticism
+   authority is `defended_trial`. Deterministic resolution when
+   `ENGAGED_CRITICISM_AUTHORITY` also speaks: the trial-bearing value wins, and
+   the run's record says which knob decided.
+2. `src/deepreason/config.py` — a new field
+   `SINGLE_JUDGE_SEAT_PERMITTED: bool = False`, and a rewritten comment for
+   `ARGUMENTATIVE_AUTHORITY` naming what its third value now does.
+3. `src/deepreason/informal/trial.py` — the `< 2` seat lock becomes a
+   configured gate. Off (the default) the decline keeps its exact historical
+   spelling `single-judge-seat`, because `CON-schools.md`'s Traps forbid
+   renaming a typed decline reason: those spellings are compared against
+   recorded roots. On, the trial proceeds on one seat and records a typed
+   disclosure naming the measurement that makes it a caution.
+4. `src/deepreason/run_manifest.py` — **the approved frozen-surface contact,
+   and the only one taken**: one `data.pop("SINGLE_JUDGE_SEAT_PERMITTED", None)`
+   line in `_versioned_source_config_data`, joining the judge-knob block that
+   already holds `JUDGE_SEATS_ENABLED`, `JUDGE_SUMMONS_PER_CYCLE` and
+   `JUDGE_SUMMONS_COOLDOWN`. **Insertions only. No schema, validator, Pydantic
+   model, notice code or record format is touched.** Its effect is to PRESERVE
+   digests, not move them — the same shape as the 2026-08-23 and 2026-08-26
+   grants, and provable the same way, by re-deriving the committed fixture's
+   qualification subject digest and showing it unmoved. Setting the field then
+   produces the existing `ENGINE_CONFIG_FIELD_NOT_CARRIED` notice, which is the
+   manifest-side half of the warning the 2026-08-28 law requires — no new
+   notice code, so no new key for `qualification_subject_payload` to strip.
+5. Map: `docs/map/CON-schools.md` (Traps rewritten and a new one naming this
+   run), `docs/map/CON-authority.md` (a check that goes red if the road stops
+   reaching a run), `docs/map/INV-frozen-surfaces.md` (a dated "Granted
+   contact" entry carrying the operator's words and a `check:` for the pop
+   line), `docs/ERRATA.md`.
+
+Scope amended: `informal/trial.py` was NOT in scope under GOAL.md. The
+operator's sentence puts the judge-seat gate in scope, and that gate lives
+there. `capabilities/state.py`, `harness.py`, `invariants.py`,
+`verification/` and `qualification.py` remain untouched.
+
+## What must be proven, and would be a lie if asserted instead
+
+- `route_fingerprint` does not move — asserted over a fixture route.
+- The qualification subject digest over the committed fixture does not move —
+  asserted the way the seat-retirement grant asserted it.
+- A default `Config` produces byte-identical manifest bytes before and after.
+- One judge seat runs and mints a warrant ONLY with the switch on; with it off,
+  the decline is byte-identical to today, including its spelling.
+- Mutation-proven both ways: revert each behaviour and the new test goes red.
