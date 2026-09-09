@@ -142,3 +142,26 @@ finding, no `verification/` file, no digest input. Insertions and one modified
 branch, ~10 lines. The safety argument is the census above: four calls in two
 roots, both already reporting violations, and a strictly-more-permissive
 predicate so nothing currently clean can move.
+
+## Grant — given 2026-09-09
+
+The monitor put road A to the operator with its price stated. The sentence the
+operator answered, verbatim:
+
+> Road A is recommended … This is your decision.
+
+The operator's answer, verbatim, 2026-09-09:
+
+> do it
+
+Scope of what was granted, as this document asked for it above: contact with
+frozen surface 3, `src/deepreason/invariants.py` ONLY — the classification
+branch inside `_controller_v3_history`, and the folding of
+`_is_patch_repair_semantic_rejection` into the widened predicate. No record
+format, no new field, no new check name, no `_EPISTEMIC_CHECKS` entry, no
+`verification/` file, no digest input. Transport failures and the
+proposal-receipt / legacy-chain precedence stay exactly as they are.
+
+Ledgered in `docs/map/INV-frozen-surfaces.md` under surface 3 as
+**Granted contact, 2026-09-09**, in the same commit as the code, per the
+documented recipe.
