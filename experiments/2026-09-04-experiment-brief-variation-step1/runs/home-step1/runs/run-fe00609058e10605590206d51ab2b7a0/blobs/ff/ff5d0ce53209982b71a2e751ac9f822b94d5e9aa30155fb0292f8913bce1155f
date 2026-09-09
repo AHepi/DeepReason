@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories in practical action is defensible on his own terms not as an inductive inference of future success, but as a non-inductive 'conventional decision' to act on the theory that has withstood the most severe attempts at falsification, thereby minimizing the risk of known error without asserting increased probability.",
+    "mechanism": "Severity-Based Risk Mitigation: The mechanism distinguishes between 'expectation of truth' (inductive, rejected) and 'preference for the best-tested' (methodological, accepted). When acting (e.g., building a bridge), the agent adopts the theory that has survived the most stringent tests because it offers the highest degree of objective corroboration regarding its current reliability, treating the choice as a rational convention to avoid known falsities rather than a prediction of future verification.",
+    "counterconditions": [
+      "If corroboration is shown to logically entail a probabilistic increase in the theory's truth, the defense collapses into induction.",
+      "If Popper's own practical actions cannot be distinguished from inductive betting behavior even under the 'conventional decision' framework.",
+      "If the 'severity' of tests cannot be objectively defined without appealing to past success rates (induction)."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'verisimilitude' with 'corroboration.' This candidate explicitly relies on Popper's concept of 'corroboration' (degree of test severity passed) as the metric for rational choice, avoiding the formal definition problems of verisimilitude which Popper admitted. The defense does not require calculating truth-likeness, only comparing test severity."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The candidate strictly maintains the category distinction: preferring a theory for action is a pragmatic convention based on current critical status, not a logical entailment of future success. It rejects the 'broader concept' of probability in favor of 'risk avoidance' based on known falsifications."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma by framing the choice as a 'conventional decision' to minimize known error risks in practical scenarios (like bridge building), rather than merely a testing strategy. The mechanism now clarifies that practical reliance is a distinct epistemic stance from theoretical acceptance."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The defense does not conflate willingness to criticize with practical reliance; it posits that practical reliance IS the act of choosing the least-criticized (most severely tested) option available. This is consistent with Popper's view that we must act, and when we do, we should act on the theory that has best survived our attempts to destroy it."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is defended as consistent with his philosophy if viewed as a rational convention. The tension dissolves if one accepts that 'rationality' in action does not require 'probability' but only the best available critical scrutiny. The candidate argues this is precisely what Popper meant by a 'conventional decision'."
+      },
+      {
+        "handle": "2116bf4d6b856c4733930a702b792937dca2166147675dc886115c8804a7b37a",
+        "kind": "rebutted",
+        "note": "Severity Maximization separates Popperian preference from induction by focusing on the logical structure of the tests passed (falsifiability), not the frequency of past successes. Relying on a corroborated theory is rational because it is the one we know least to be wrong, not because we expect it to be right inductively."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The argument remains strictly within Popper's falsificationist framework, utilizing his specific concepts of 'corroboration' and 'conventional decision.' It does not invoke Evolutionary Epistemology or external frameworks, but rather interprets Popper's own admissions about practical action."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "The pragmatic contradiction is resolved by denying that acting on a theory implies believing it is probably true. One can act on the best-tested theory while maintaining it is likely false, simply because it is the 'least bad' option currently available. This preserves the anti-inductive stance."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_005"],
+      "shared_structure": [
+        "Selection based on elimination of failed candidates rather than confirmation of winners.",
+        "Decision made under uncertainty without assigning probabilities.",
+        "Preference driven by robustness against known attacks rather than positive evidence."
+      ],
+      "disanalogies": [
+        "Scientific theories are abstract and universal, whereas bridge materials are concrete and particular.",
+        "Falsification in science is logical and final, whereas structural failure in engineering is often gradual and probabilistic in practice.",
+        "The cost of error in bridge building is immediate physical collapse, while scientific error is often theoretical revision."
+      ],
+      "transfer_claims": [
+        "Just as an engineer chooses the material with the most rigorous stress-test history without assuming it will never fail, a scientist chooses the most corroborated theory without assuming it is probable.",
+        "The rationality of the choice lies in the thoroughness of the testing process, not in the prediction of a specific outcome."
+      ],
+      "overturn_conditions": [
+        "If it is demonstrated that selecting the 'least bad' option inevitably requires an inductive assumption about the uniformity of nature.",
+        "If the distinction between 'logical probability' and 'practical preference' is shown to be semantically empty in the context of action."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

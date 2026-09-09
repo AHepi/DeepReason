@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'conventionalist stratagem' fails to resolve the dilemma because it conflates the logical status of a theory with the pragmatic necessity of action. Popper explicitly rejected treating theories as 'true for the sake of argument' if that treatment implies relying on their predictive success for practical decisions (like building bridges or launching rockets). The problem asks if the preference is defensible *on Popper's own terms*; by admitting the preference is merely a strategic gamble to accelerate falsification, the target concedes that acting on the 'best-tested' theory offers no rational guarantee of safety or success in the immediate future. This leaves the scientist in the exact position the problem highlights: they must act *as if* induction holds (expecting the future to resemble the past) to avoid disaster, while the target's explanation provides no non-inductive justification for why the 'most ripe for falsification' theory is the safest bet for action rather than the most dangerous. Thus, the target smuggles in induction by relying on the unproven assumption that the theory most likely to be falsified next is nonetheless the one we should trust with our lives today.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper held that corroboration reports only past performance and implies nothing about future reliability; therefore, preferring a theory for action based solely on its 'readiness for falsification' provides no rational basis for expecting it to work, forcing the agent to rely on an unjustified inductive leap to bridge the gap between 'best tested' and 'safe to use'.",
+      "premise_evidence": null,
+      "successor_question": "If the 'best-tested' theory is logically just as likely to fail tomorrow as any other, what specific non-inductive principle allows a Popperian to prefer it for life-critical applications without contradicting the core tenet that the future is open and unpredictable?"
+    }
+  ]
+}

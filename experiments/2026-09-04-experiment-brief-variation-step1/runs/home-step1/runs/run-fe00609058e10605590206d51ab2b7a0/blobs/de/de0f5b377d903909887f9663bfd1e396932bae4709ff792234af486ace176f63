@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (closeness to truth) as the metric for preferring theories, but Popper's own formal definition of verisimilitude was proven logically incoherent by Tichý and Miller (1974), who demonstrated that under Popper's criteria, a false theory with more content cannot be compared to another false theory without collapsing into probabilistic measures or requiring inductive assumptions about which errors are 'closer' to the truth.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's qualitative definition of verisimilitude fails because it implies that any false theory with greater empirical content is closer to the truth than a less content-rich false theory, which leads to contradictions where obviously worse theories are deemed 'better' unless one assumes an inductive probability distribution over possible states of affairs.",
+      "premise_evidence": null,
+      "successor_question": "Given the collapse of Popper's qualitative verisimilitude, can a non-inductive preference rule be formulated using quantitative verisimilitude without reintroducing the probabilistic concepts Popper explicitly rejected?"
+    }
+  ]
+}

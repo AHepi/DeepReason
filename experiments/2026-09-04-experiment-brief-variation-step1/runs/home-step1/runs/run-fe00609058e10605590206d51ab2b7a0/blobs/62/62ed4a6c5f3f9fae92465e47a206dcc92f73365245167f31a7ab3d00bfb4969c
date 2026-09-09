@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's evolutionary analogy fails to answer the specific question of whether the preference is defensible on 'Popper's own terms.' Popper explicitly rejected evolutionary epistemology as a solution to the problem of induction (arguing that biological adaptation explains success but not rational justification), so grounding the defense in an analogy he deemed insufficient constitutes a failure to meet the prompt's constraint, rather than a successful defense within his framework.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguished between the biological survival of a species (evolutionary success) and the logical/rational justification of scientific theories, maintaining that the former does not solve the latter.",
+      "premise_evidence": null,
+      "successor_question": "Does Popper's rejection of evolutionary epistemology as a justification for induction invalidate the target's core mechanism?"
+    }
+  ]
+}
