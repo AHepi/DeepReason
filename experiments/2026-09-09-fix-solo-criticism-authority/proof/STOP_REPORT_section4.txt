@@ -1,0 +1,23 @@
+## 4. THE STOP, CLASSIFIED
+
+Stop message: `(none recorded)`
+
+Boxes ranked by evidence:
+
+### 1. HARNESS — NO EVIDENCE EITHER WAY
+
+- note: not claimable:  still holds evidence. A harness verdict requires the other three to be ruled out.
+
+### 2. CONFIGURATION — RULED OUT
+
+- evidence RULING IT OUT: no ENGINE_CONFIG_FIELD_NOT_CARRIED notice was recorded; no run-config was supplied to diff against the manifest, so a mismatch there cannot be ruled out — re-run with --config to close that gap
+- note: no manifest: nothing to compare
+
+### 3. ENVIRONMENT — RULED OUT
+
+- evidence RULING IT OUT: no HTTP 429, no transport-fault streak, and no qualification case carrying an environment failure code
+
+### 4. MODEL — RULED OUT
+
+- evidence RULING IT OUT: no qualification failure, no schema rejection and no truncation recorded against the implicated seats
+
