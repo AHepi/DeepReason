@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is defensible 'only if' we accept an ethical duty creates a false dilemma by ignoring Popper's explicit pragmatic justification. Popper argued that preferring the better-corroborated theory is rational not because it is more likely true (induction) nor solely due to moral duty, but because it offers the greatest 'verisimilitude' (truth-likeness) and has withstood the most severe attempts at falsification. By framing the defense exclusively as an 'Ethical Imperative' and asserting it is the 'only' path, the target misrepresents Popper's actual solution, which relies on the logical asymmetry between verification and falsification to justify preference without invoking induction or shifting entirely to ethics.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly justifies preferring better-corroborated theories on pragmatic and verisimilitude grounds, not exclusively on ethical duties.",
+      "premise_evidence": null,
+      "successor_question": "Does Popper's concept of verisimilitude provide a non-inductive, non-ethical basis for preferring better-corroborated theories that the target's 'only if' condition incorrectly excludes?"
+    }
+  ]
+}

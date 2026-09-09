@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference for corroborated theories is a 'non-rational, volitional act' misrepresents Popper's specific solution to this problem. Popper explicitly argues that preferring the better-corroborated theory is rational because it is the one that has withstood the most severe tests and thus possesses the highest 'verisimilitude' (truth-likeness) among competitors, not because of an existential leap. The target constructs a false dilemma between 'logical compulsion' (induction) and 'irrational decisionism,' ignoring Popper's middle ground: rational preference based on critical discussion and test severity without assigning probability. By framing the choice as a 'wager' outside reason, the target fails to engage with Popper's actual argument that such preference is defensible *on his own terms* precisely because it relies on deductive test outcomes rather than inductive probability.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguishes between 'probability' (which he rejects for theories) and 'degree of corroboration' (which reflects past test performance), arguing that choosing the highly corroborated theory is rational because it is the best tested, not because it is likely true.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is based on their survival of severe tests rather than a non-rational wager, how does this distinction specifically avoid the charge of smuggling in induction?"
+    }
+  ]
+}
