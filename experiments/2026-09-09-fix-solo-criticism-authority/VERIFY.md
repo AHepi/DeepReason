@@ -122,6 +122,60 @@ Nothing here changes what counts as evidence: the seats-generate-never-evidence
 law is untouched, and the criticism pack, admission, rank and the record are
 byte-identical.
 
+## 6. The boundary instruments, and the two defects they caught in this tranche
+
+Both are recorded because a verification report that only lists green is not
+one. Neither was found by reading the diff; each was found by an instrument
+this repo runs precisely so that a change like this cannot ship on its author's
+confidence.
+
+**`docs_verify`, run 1: 10 failed.** Three were MINE and identical in cause —
+`SUB-harness.md:143`, `SUB-rules.md:134` and `SUB-scheduler.md:151` all run
+`tests/test_signals.py`, and `test_every_emitted_signal_is_registered` went red
+on `unregistered signals emitted by the source tree: ['trial-gate-switched']`.
+The new disclosure was a string a consumer invented rather than a declared
+interface, which is exactly what the modularity law's architecture test exists
+to catch. Fixed by declaring it; all three checks re-run green.
+
+The other seven are pre-existing and none is this tranche's. Six match
+`docs/AUDIT_BASELINES.md`'s expected list: three `CON-run-identity.md`
+git-history rows a shallow clone cannot resolve (`unknown revision`), the
+`transport_failure` census, the judge-canary row that needs an unfetched
+branch, and the unparseable `SEAM-llm-x-rules.md:54` check. The seventh is NOT
+on that list, so it is a delta and a finding — `INV-frozen-surfaces.md`'s
+record-claims check names a run root a later tranche retired by rename, and
+fails with a JSON decode error three layers from its cause. Proven pre-existing
+rather than assumed: the named directory does not exist, `record_claims` says
+so directly, and this tranche touches nothing under that path. Parked as P3.
+
+**The full gate, run 1: 1 failed, 5185 passed, 6 skipped (19:59). Run 2, after
+the fix: 5186 passed, 0 failed, 6 skipped (18:23).** The failure
+was mine and was the first fix's own shortcut:
+`test_the_migration_debt_can_only_shrink`, `85 unspecified declarations, was
+84`. Registering the signal in the pre-contract migration dict gave it unit and
+staleness `unspecified`, and the 2026-08-14 signal-contract law says a signal
+DECLARES name, unit, producer-agnostic semantics and a staleness bound —
+`REC-add-signal.md` states in so many words that `unspecified` is not available
+to a new signal. Re-declared properly: unit `event`, staleness `permanent`,
+semantics saying what the signal is NOT evidence of. Mutation-proven: renaming
+the emitted tag turns the AST scan red.
+
+**`docs_verify`, run 2: 7 failed** — the six baseline rows plus the parked P3,
+and none of mine. The three signal checks are green.
+
+**On the `Verified-at:` stamps.** `CON-schools.md`, `CON-authority.md` and
+`SUB-rules.md` are advanced to this tranche's commit: every check in each ran
+and passed. `INV-frozen-surfaces.md` is deliberately LEFT STALE at `a36fc8abb`
+even though its new granted-contact entry is this tranche's own, because three
+of its checks are red for reasons that predate this work. A fresh stamp there
+would claim the document was verified when a third of what it says about
+itself could not be. `SCHEMA.md`'s rule, taken literally: a stale stamp is
+honest, a false one is not.
+
+The honest reading of both: this tranche twice reached for the cheap version of
+a declared interface, and the repo's own instruments refused it twice. That is
+the modularity law working, not incidental noise, and it is worth the paragraph.
+
 ## Residue — what remains unproven
 
 - **No live provider run.** Every figure above is from deterministic stubs. The

@@ -1,5 +1,5 @@
 <!-- DR-SUB-rules -->
-Verified-at: b41c5cf10
+Verified-at: dfc5ea88b
 Verify: python -m pytest tests/test_relapse_domains.py tests/test_criticism_authority.py tests/test_crit_batch.py tests/test_act.py tests/test_vision.py -q
 Owns: src/deepreason/rules/
 Seams: DR-SEAM-adjudication-x-rules, DR-SEAM-calculus-x-rules, DR-SEAM-capabilities-x-rules, DR-SEAM-evaluation-x-rules, DR-SEAM-llm-x-rules, DR-SEAM-ontology-x-rules, DR-SEAM-packs-and-token-economy-x-rules, DR-SEAM-rules-x-scratch, DR-SEAM-rules-x-workflow, DR-SEAM-scheduler-x-rules
