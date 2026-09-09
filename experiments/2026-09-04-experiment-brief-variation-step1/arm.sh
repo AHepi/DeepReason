@@ -56,12 +56,32 @@ print('template ->', armrig.write_template(pathlib.Path(os.environ['DEEPREASON_H
 " || exit 5
 fi
 
-# The arm rig, proved in THIS process before the run spends anything.
-python - <<'PY' || exit 5
+# The arm rig, proved in a CLEAN process before the run spends anything.
+#
+# `env -u DR_ARM` plus an explicit arm, and that is not cosmetic. With DR_ARM
+# set, `sitecustomize` installs the arm at interpreter start and this block
+# would then install it a SECOND time in the same process. For A0-A2 that is
+# harmless (the layout registration is guarded by an id check), but A3 also
+# loads the operator template, and the registry correctly refuses a duplicate:
+#
+#   SEAT_SECTION_PLUGIN_CONFLICT: plugin 'op.neighbourhood.v1' version
+#   '1.0.0' is already registered
+#
+# which armrig turns into ARM RIG REFUSED. That is the guard working, on a
+# self-inflicted wound: `install()` is idempotent for the layout and NOT for
+# the plugin load. Measured 2026-09-09 when arm A3 ran for the first time --
+# the soak never hit it, because there nothing calls install() twice. Nothing
+# was spent; the arm refused before its first provider call.
+#
+# The real run is unaffected either way: `deepreason reason` installs the arm
+# exactly once, through sitecustomize, and nothing calls install() again. The
+# proof is equally strong in a clean interpreter -- it still proves this rig
+# can install this arm and load its template on this machine, now.
+env -u DR_ARM DR_ARM_PROOF="$ARM" python - <<'PY' || exit 5
 import os, sys, json
 sys.path.insert(0, os.environ["PYTHONPATH"].split(":")[0])
 import armrig
-receipt = armrig.install()
+receipt = armrig.install(arm=os.environ["DR_ARM_PROOF"])
 print("ARM RIG RECEIPT " + json.dumps(receipt, sort_keys=True))
 assert receipt["installed"], receipt
 PY
