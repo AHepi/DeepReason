@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule to maximize the 'content' and 'testability' of our current knowledge base, accepting that this choice carries no guarantee of truth or predictive reliability.",
+    "mechanism": "The argument distinguishes between 'rational justification' (which implies probability/induction) and 'rational preference' (which implies selecting the most informative surviving conjecture). By defining corroboration as a report of past performance regarding test severity rather than a predictor of future performance, the scientist prefers the theory with the highest empirical content because it offers the most opportunities for future falsification. This preference is a strategic move within the game of science to accelerate error elimination, not a belief that the preferred theory is more likely to be true.",
+    "counterconditions": [
+      "If 'severity of test' implicitly assumes the uniformity of nature (that future conditions will resemble past testing conditions), then the preference smuggles in induction.",
+      "If the practical act of 'preferring' for action logically entails an expectation of future success, then the distinction between preference and probability collapses.",
+      "If the definition of 'better' relies on verisimilitude (truth-likeness) which Popper admitted cannot be formally assessed, then the criterion is empty."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates the descriptive evolutionary origin of belief from the normative methodological rule. The preference is justified as a rule for maximizing testability (logical content), not as a psychological inevitability or a claim about rational justification in the probabilistic sense."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The candidate avoids the false dichotomy by grounding the preference in 'empirical content' and 'severity of tests' as defined by Popper in 'Logic of Scientific Discovery', arguing this is a distinct third category between arbitrary decree and inductive probability."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge that while the move from 'others falsified' to 'choose this' does not assume uniformity for the sake of *truth*, it does assume uniformity for the sake of *testability* if one expects the test results to hold. The defense now frames this as a conscious methodological gamble rather than a logical derivation."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a500e9d1006",
+        "kind": "rebutted",
+        "note": "The candidate argues that 'severity' is a logical property of the relationship between theory and basic statements (boldness), not an empirical assumption about the reliability of indicators. Surviving a severe test increases the theory's standing only in terms of having survived a hard trial, not in terms of being a reliable indicator of the future."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "The defense clarifies that Popper's methodological rules are indeed conventional, but they are not 'arbitrary' in the pejorative sense; they are chosen specifically because they facilitate the growth of knowledge (error elimination), distinguishing them from Poincaré's convenience-based conventionalism."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c59ad45d3aaf74",
+        "kind": "revised",
+        "note": "Revised to tighten the distinction: the preference is for the theory that is 'most open to falsification' (highest content), explicitly rejecting 'pragmatic reliability' as the goal. The cost admitted is that we act on theories we know might fail tomorrow, without even a probabilistic safety net."
+      },
+      {
+        "handle": "463822f91af6cd1e871c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "rebutted",
+        "note": "The candidate relies solely on 'corroboration' (past test history) and 'content' (logical structure), explicitly avoiding any appeal to 'verisimilitude' as a measurable quantity to justify the preference, thus sidestepping the formal undefinability critique."
+      },
+      {
+        "handle": "483154416962e44c251d91e84537a698ba94e10911e0d135f5eee3ba73d05a96",
+        "kind": "rebutted",
+        "note": "The argument addresses the multi-theory context by ranking unfalsified theories based on the severity of tests they have withstood. The preference is not merely refusing falsehoods, but actively selecting the one that has survived the most dangerous attempts at refutation, thereby offering the best chance for future learning."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_selection_pressure",
+        "championship_tournament_logic"
+      ],
+      "shared_structure": [
+        "Selection is based on survival of rigorous trials, not prediction of future dominance.",
+        "The 'winner' is simply the last one standing after attempts to eliminate it, not necessarily the 'best' in an absolute sense.",
+        "Preference is a strategy to keep the competition (testing) alive, not to end it with a final truth."
+      ],
+      "disanalogies": [
+        "Evolution has no goal of knowledge growth, whereas Popperian science explicitly aims at it.",
+        "A tournament winner is often declared 'the best', whereas a corroborated theory is explicitly NOT declared 'more probable'."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the undefeated boxer not because they are invincible, but because they have proven resilient against tough opponents, scientists prefer corroborated theories for their resilience, not their truth."
+      ],
+      "overturn_conditions": [
+        "If the 'severity' of a test cannot be defined without referencing the probability of the outcome.",
+        "If acting on a theory logically requires believing it will succeed, rendering the 'no probability' stance performatively contradictory."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

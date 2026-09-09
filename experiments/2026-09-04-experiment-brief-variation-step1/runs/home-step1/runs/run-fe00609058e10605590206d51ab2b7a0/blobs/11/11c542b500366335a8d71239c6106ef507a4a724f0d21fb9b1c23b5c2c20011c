@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule to maximize the 'degree of falsifiability' (testability) of our current knowledge base, thereby accelerating error elimination; however, accepting this costs us any rational assurance that the chosen theory is practically reliable for action, reducing scientific preference to a game of maximizing informational content rather than securing survival.",
+    "mechanism": "The mechanism reinterprets 'preference' not as a belief in truth or probability, but as a strategic selection criterion within the 'game of science' to keep the system of theories as open to refutation as possible. By choosing the theory that has survived the severest tests (and thus has the highest empirical content), scientists maximize the potential for future falsification. This avoids induction because it makes no claim that the future will resemble the past; it only claims that this strategy best serves the logical goal of science (error elimination) in the present moment. The 'smuggling' of induction is rejected by strictly separating the context of discovery/action (where we must choose) from the context of justification (where no choice is logically compelled by past data).",
+    "counterconditions": [
+      "If surviving severe tests does not correlate with higher empirical content or testability, the mechanism fails.",
+      "If Popper explicitly endorsed pragmatic reliability as a goal equal to falsifiability, the distinction collapses into induction.",
+      "If the choice of which theory to 'act on' inherently requires an assumption of nature's uniformity, the non-inductive defense is void."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The criticism alleges a category error between evolutionary origin and justification. This candidate does not rely on evolutionary epistemology or descriptive claims about why scientists *do* prefer theories. It relies entirely on Popper's normative methodological rules regarding falsifiability and content, addressing the justification directly without conflating it with causal origins."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The criticism claims a false dichotomy regarding 'arbitrary decree.' This candidate argues the preference is neither arbitrary nor inductive, but derived from the definitional goal of science (maximizing falsifiability). It is a reasoned methodological choice based on logical content, not a mere decree, thus escaping the alleged dichotomy."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "The criticism asserts that choosing the 'only standing candidate' assumes uniformity. This candidate rejects the premise that we choose because others are falsified; we choose the *best-tested* among unfalsified ones specifically to *invite* future falsification. The move does not assume the future resembles the past; it assumes only that high-content theories offer more opportunities to be wrong, which is a logical, not inductive, property."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "The criticism states that 'severity' implies reliability. This candidate clarifies that 'severity' in Popper's sense measures the logical improbability and testability of a theory, not its statistical reliability. Preferring severe tests is a preference for boldness, not a bet on success, thus avoiding the inductive assumption of reliability."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "The criticism argues that 'arbitrary though useful' conventions fail Popper's demarcation. This candidate does not defend the preference as 'arbitrary'; it defends it as logically necessitated by the aim of maximizing error elimination. It distinguishes itself from Poincaré's conventionalism by grounding the rule in the logical structure of falsifiability, not mere convenience."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The criticism claims a conflation of convention and pragmatic reliability. This candidate explicitly severs this link: the preference is a methodological convention aimed at *logical* goals (falsifiability), explicitly disavowing *pragmatic* reliability as a justification. By admitting the cost (no assurance of reliability), it avoids smuggling in induction."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e861c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "rebutted",
+        "note": "The criticism suggests reliance on verisimilitude smuggles in induction. This candidate grounds the preference solely in 'degree of falsifiability' and 'empirical content,' concepts Popper defined logically. It avoids verisimilitude as a measurable quantity for decision-making, sticking strictly to the history of tests passed and the logical structure of the theory."
+      },
+      {
+        "handle": "483154416962e44c251d91e84537a698ba94e10911e0d135f5eee3ba73d05a96",
+        "kind": "rebutted",
+        "note": "The criticism argues the heuristic fails when multiple unfalsified theories exist. This candidate addresses this by specifying the criterion: prefer the one with the *highest degree of corroboration* (survived most severe tests), which correlates with highest content. This provides a discriminating rule for multiple candidates, unlike a simple refusal to act on falsehoods."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_004"
+      ],
+      "shared_structure": [
+        "Selection based on vulnerability rather than strength",
+        "Goal is system improvement via removal, not accumulation of certainty",
+        "Preference rule is procedural, not predictive"
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of error elimination; Popperian science does.",
+        "Natural selection operates over generations; scientific preference acts in immediate decision contexts.",
+        "Survival in nature implies fitness for environment; survival of tests in Popper implies only non-falsification so far."
+      ],
+      "transfer_claims": [
+        "Just as we select the most mutated organism to test environmental limits, we select the most corroborated theory to test logical limits.",
+        "The 'fitness' of a theory is its capacity to be proven wrong, analogous to an organism's exposure to predators."
+      ],
+      "overturn_conditions": [
+        "If biological selection is shown to optimize for stability rather than variation, the analogy breaks.",
+        "If Popper explicitly rejects the comparison of science to evolutionary selection in his later works."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

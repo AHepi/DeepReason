@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule to maximize the severity of potential falsification; however, accepting this defense costs the scientist any rational assurance that the chosen theory is likely true or practically reliable, reducing scientific action to a game of 'survival of the boldest' without epistemic probability.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which implies increasing probability/truth-likeness via induction) and 'selection criteria' (which are procedural rules for testing). By framing the preference as a rule to subject theories to the hardest possible tests (severity), the choice of the best-corroborated theory is simply the choice of the theory that has survived the most stringent attempts at destruction. This avoids induction because it makes no claim about the future; it only states that if we want to learn fast (falsify errors quickly), we must pick the theory that has already withstood the most severe attacks, as it offers the greatest exposure to future refutation.",
+    "counterconditions": [
+      "If the goal of science is defined as finding 'likely true' theories rather than 'fast-falsifiable' ones, the Popperian preference becomes indefensible without smuggling in induction.",
+      "If 'severity' itself implicitly assumes that past resistance to falsification correlates with future resistance, the mechanism collapses into circular induction.",
+      "If practical action (e.g., building a bridge) requires a belief in reliability rather than just a willingness to test, the Popperian account fails to guide real-world decisions."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate evolutionary origin with justification; it explicitly frames the preference as a normative methodological rule ('if we want to learn fast...') derived from the logic of falsification, not a descriptive claim about why scientists psychologically prefer certain theories."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dichotomy by proposing a third option: the preference is based on 'maximizing test severity' rather than 'arbitrary decree' or 'inductive probability.' This aligns with Popper's explicit arguments in 'Conjectures and Refutations' regarding the rationality of choosing the best-tested theory for the purpose of criticism."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "The move from 'others are falsified' to 'choose this one' in this argument does not assume uniformity of nature. It assumes only the logical rule: 'To falsify error quickly, test the theory that has survived the hardest tests so far.' If nature changes uniformly or non-uniformly, the strategy of seeking high-severity tests remains the optimal method for detecting error, regardless of whether the theory turns out to be 'true' in the long run."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "The candidate clarifies that 'severity' is a measure of logical content and testability, not a probabilistic indicator of future performance. Surviving a severe test shows the theory is robust against current known errors, making it the best target for *future* errors, not the most likely to be correct. Thus, no inductive reliability is assumed."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "The defense distinguishes Popper's methodological rules from Poincaré's conventionalism by grounding the rule in the objective aim of science (error elimination) rather than mere convenience. The rule is not 'arbitrary' in the sense of being unmotivated; it is strictly entailed by the definition of science as falsificationism."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates 'methodological convention' (the rule to test the best-corroborated theory) from 'pragmatic reliability' (the belief that it will work). It argues that Popper defends the former while rejecting the latter as an inductive smuggle. The cost admitted in the claim confirms this separation."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e871c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "rebutted",
+        "note": "The argument deliberately avoids relying on 'verisimilitude' as a defined metric of truth-likeness. Instead, it relies on 'corroboration' as a report of past test performance used solely to select the next target for criticism. The inability to formally define verisimilitude does not invalidate the procedural rule of selecting the most severely tested theory for further testing."
+      },
+      {
+        "handle": "483154416962e44c251d91e84537a698ba94e10911e0d135f5eee3ba73d05a96",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address the scenario of multiple unfalsified theories. The preference is not just refusing known falsehoods, but actively selecting the theory with the highest 'empirical content' among the unfalsified set, as this maximizes the potential information gain (falsification) from the next test."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_004"
+      ],
+      "shared_structure": [
+        "Selection based on survival of stress tests rather than prediction of future success.",
+        "Distinction between procedural optimality and outcome certainty.",
+        "Rejection of probabilistic weighting in favor of binary survival status."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of error elimination, whereas Popperian science does.",
+        "Natural selection acts on reproduction rates, not on the logical content of genetic codes.",
+        "Evolutionary fitness is relative to a specific environment, while Popperian corroboration aims at universal logical consistency."
+      ],
+      "transfer_claims": [
+        "Just as we study the organism that survived the harshest winter to understand resilience, not to guarantee it will survive the next one, we choose the best-corroborated theory to test its limits, not to bet on its truth.",
+        "The 'fittest' in science is the most falsifiable, not the most adaptable, distinguishing the analogy from standard evolutionary epistemology."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that 'severity' cannot be assessed without assuming the uniformity of nature.",
+        "If practical action is proven to logically require a degree of belief (probability) rather than just a methodological rule."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

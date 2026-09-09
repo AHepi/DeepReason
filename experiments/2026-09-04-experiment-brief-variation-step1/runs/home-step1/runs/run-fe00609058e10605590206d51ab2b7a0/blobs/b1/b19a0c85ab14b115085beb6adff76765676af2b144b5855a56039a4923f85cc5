@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the dilemma 'dissolves' via evolutionary selection commits a category error by conflating descriptive survival with normative defensibility. Popper's problem explicitly asks if the preference is 'defensible on Popper's own terms,' which requires a rational or logical justification for acting on a theory, not merely a causal explanation of why scientists do so. By reducing the normative 'ought' to a descriptive 'is' (survival fitness), the target fails to address the core philosophical challenge: whether acting on the best-corroborated theory is rational without assuming induction. The target's own counterconditions acknowledge this gap (e.g., 'If the normative question... cannot be reduced to a descriptive one'), yet the main claim asserts the dilemma is dissolved rather than highlighting this unresolved tension.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's problem demands a normative justification ('defensible') for preferring corroborated theories, not just a descriptive account of why such preferences exist.",
+      "premise_evidence": null,
+      "successor_question": "Can an evolutionary explanation of scientific behavior provide the normative 'defensibility' Popper requires, or does it merely sidestep the logical problem of induction?"
+    }
+  ]
+}
