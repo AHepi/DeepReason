@@ -1,7 +1,9 @@
 # CLAUDE.md — operating DeepReason
 
 DeepReason is a Popperian reasoning harness: it drives a provider model
-(currently glm-5.2 on Ollama Cloud) through conjecture–criticism cycles
+(qwen3.5:397b on Ollama Cloud for every committed launch since
+2026-08-25; glm-5.2 wrote most of the earlier corpus and remains a
+registered choice) through conjecture–criticism cycles
 over an append-only, replay-verifiable record. Everything meaningful is
 TYPED — stops, denials, refusals, capability lifecycles — and the record
 is the only admissible evidence about what a run did. Model prose is
