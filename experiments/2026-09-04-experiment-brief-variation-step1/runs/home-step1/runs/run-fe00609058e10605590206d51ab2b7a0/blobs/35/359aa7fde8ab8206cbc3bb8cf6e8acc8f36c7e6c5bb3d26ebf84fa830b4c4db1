@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation between the problem (conn:1618aeb08330) and its neighbourhood as required. Instead of connecting the problem to an external entity or concept in its neighbourhood, the target constructs a relation between the problem and 'SRC_003', which is neither defined in the provided input nor established as part of the problem's immediate neighbourhood. Furthermore, the 'REFUTED IF' condition describes a hypothetical logical definition of severity rather than stating what specific observation or state of affairs would refute the proposed relation itself, violating the requirement to state what the relation is refuted if.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

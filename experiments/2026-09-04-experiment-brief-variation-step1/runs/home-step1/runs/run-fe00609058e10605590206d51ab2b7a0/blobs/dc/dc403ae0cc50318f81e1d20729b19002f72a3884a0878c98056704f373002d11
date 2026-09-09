@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation between the specific endpoints defined in problem 1618aeb08330 ('Semantic Decoupling' and 'Contextual Dependency'). Instead, it constructs a relation between 'descriptions' and 'prescriptions' based on 'severe tests' and 'inductive premises', which are not the named endpoints of the source problems. Furthermore, the 'REFUTED IF' condition addresses the nature of psychological habits (evolutionary vs. logical), which is irrelevant to verifying the proposed integration of the specific source concepts, leaving the core claim of integration unsupported and disconnected from the required terms.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

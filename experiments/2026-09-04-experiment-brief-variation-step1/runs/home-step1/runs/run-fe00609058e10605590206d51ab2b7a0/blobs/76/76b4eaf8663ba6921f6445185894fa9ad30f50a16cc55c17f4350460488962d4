@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule aligned with the aim of science (truth), provided one accepts the cost of abandoning any guarantee that this preference yields practical success in novel domains.",
+    "mechanism": "The mechanism distinguishes between 'logical justification' (which requires induction and is rejected) and 'rational preference' (which is volitional and aim-relative). By defining the aim of science as finding true theories, preferring the theory that has best withstood falsification attempts becomes the only rational strategy to pursue that aim, even if we cannot know it will succeed. This avoids smuggling in induction because it makes no claim about the probability of the theory being true or working in the future; it merely states that if truth is the goal, the unrefuted theory is the best available candidate.",
+    "counterconditions": [
+      "If the agent's aim shifts from 'finding truth' to 'maximizing predictive success in novel domains,' the Popperian preference loses its rational force without an inductive bridge.",
+      "If the Tichý-Miller refutation of verisimilitude holds strictly, then we cannot rationally claim the better-corroborated theory is 'closer to truth,' undermining the link between corroboration and the aim of truth.",
+      "If the stability of test conditions in the future cannot be assumed even as a methodological decision, the relevance of past corroboration to present choice evaporates."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses action in novel domains by reframing 'preference' not as a prediction of success (which fails in novelty) but as the only logical move consistent with the aim of truth. It admits this offers no comfort for practical success if nature changes radically, thus meeting the challenge by accepting the limitation rather than solving it via elimination alone."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "revised",
+        "note": "Revised to explicitly separate 'psychological expectation' from 'methodological rationality.' The candidate now argues that Popper's defense rests on the definition of rationality relative to an aim (truth), not on a logical derivation of safety, directly addressing the 'defensible on Popper's own terms' constraint."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on assessing verisimilitude as a known quantity. Instead, it posits preference for the better-corroborated theory as a heuristic rule: since we seek truth and cannot identify truth directly, we choose the theory that has survived the most severe tests. This avoids the probabilistic assumption criticized by claiming we are not measuring closeness to truth, but selecting the best available means to the end."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate acknowledges the Tichý-Miller refutation of Popper's formal verisimilitude content but argues that a qualitative, non-formal notion of 'survival of the fittest' in theory space remains a valid methodological guide without requiring the failed formal metric."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "revised",
+        "note": "Revised to clarify that the preference is 'rational' specifically because it aligns with the constitutive aim of science (truth), correcting the potential misrepresentation that it is merely a blind volitional act. It is a reasoned choice given the constraints of fallibilism."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "The evolutionary analogy is used only to illustrate the selection process, not to justify the preference. The justification provided is deontological/methodological: if you want X (truth), and Y (corroboration) is the only indicator compatible with anti-induction, you must choose Y. This resolves the tension regarding action by grounding it in the agent's stated goals."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate maintains the distinction: assuming uniformity is an inductive claim about the world (rejected); assuming stability of test conditions is a methodological rule for testing (accepted). The preference relies on the latter as a rule of procedure, not a belief about nature's constitution."
+      },
+      {
+        "handle": "3c53ccc6097abc1e8dc882b486987fbf9904e44fc375759cbd2aa401e1e8ce37",
+        "kind": "revised",
+        "note": "Revised to explicitly construct the 'strongest case' for the opposing view (that it smuggles induction) within the counterconditions and mechanism analysis, demonstrating that without the 'aim of truth' premise, the preference collapses into irrationality or hidden induction, thereby fulfilling the prompt's requirement to weigh both sides before concluding."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

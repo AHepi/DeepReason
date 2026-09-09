@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-probabilistic ordering to justify preferring better-corroborated theories. However, the Tichý-Miller theorem demonstrates that within Popper's own deductive framework, it is impossible to define a coherent relation of verisimilitude that orders false theories; specifically, if Theory A and Theory B are both false, and A has more truth-content but also more falsity-content than B, Popper's definitions fail to consistently rank them. Since the target admits we cannot measure verisimilitude and must rely on corroboration as its proxy, but the logical link between 'surviving severe tests' and 'increased verisimilitude' is broken by the fact that two false theories can survive the same tests while having incomparable truth-likeness, the preference for the better-corroborated theory collapses into an unjustified assumption that survival correlates with truth-content. This smuggles in an inductive premise (that past survival indicates future truth-likeness) which Popper explicitly rejected, failing the target's own condition to avoid induction.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "The Tichý-Miller refutation proves that no coherent non-probabilistic ordering of false theories by truth-likeness exists within Popper's deductive system.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be logically ordered for false theories, does Popper's methodology reduce to a pragmatic convention without rational justification?"
+    }
+  ]
+}

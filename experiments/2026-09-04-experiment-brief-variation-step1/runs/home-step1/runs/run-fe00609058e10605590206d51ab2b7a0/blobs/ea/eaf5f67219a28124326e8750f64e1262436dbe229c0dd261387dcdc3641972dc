@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a critical methodological rule: acting on the theory that has withstood the severest tests maximizes our exposure to potential falsification, thereby accelerating the growth of knowledge even if it offers no guarantee of practical safety or truth.",
+    "mechanism": "The mechanism is 'Severe Test Maximization': by choosing the theory that makes the boldest, most precise predictions (and thus has survived the hardest attempts to refute it), we place our bets where error is most easily detected. If the theory fails in action, we learn more than if we had chosen a vague, untested, or already-falsified competitor. This aligns with the aim of science (truth-seeking) without assuming the uniformity of nature.",
+    "counterconditions": [
+      "If the domain of action requires absolute certainty of survival rather than maximal learning potential (e.g., building a bridge vs. testing a hypothesis).",
+      "If the 'severe test' history is an artifact of lucky background conditions that are known to have changed.",
+      "If the cost of being wrong is infinite or catastrophic, rendering the 'learning from error' strategy ethically impermissible."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses novel domains by reframing preference not as a prediction of success in the new domain, but as a heuristic for selecting the theory with the highest informational content and thus the highest capacity to reveal its own falsity quickly if the novel domain differs from the old."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The distinction is defended as logical justification for the *method* of inquiry, not psychological expectation. The justification is that this preference best serves the rational aim of science (error elimination), which is a non-inductive, normative claim about how scientists ought to behave to achieve their specific goal."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "rebutted",
+        "note": "The argument explicitly avoids verisimilitude as a measurable quantity. It relies solely on the logical relation of 'surviving severe tests,' which Popper defines without probabilistic assumptions. We prefer the survivor not because it is 'more likely true' (verisimilitude), but because it is the only one not yet known to be false."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde0908a85caccd757a",
+        "kind": "departure_declared",
+        "note": "This candidate departs from any reliance on Popper's formal definition of verisimilitude (which was indeed refuted). Instead, it grounds the preference strictly in the pre-formal concept of 'corroboration' as reported survival of severe tests, sidestepping the Tichý/Miller critique entirely."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "revised",
+        "note": "Revised to clarify that the preference is 'rational' specifically relative to the aim of error elimination, countering the claim that it is merely volitional. The note now explicitly ties rationality to the efficiency of falsification rather than an alignment with truth per se."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "The evolutionary analogy is not used to justify the preference directly but to illustrate the logic of elimination. The justification for *preference* remains the methodological rule: we choose the fittest (most tested) theory because it provides the best platform for the next round of critical testing, which is the core of Popperian action."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate maintains the distinction: we do not assume nature is uniform (induction); we merely decide methodologically to treat the immediate future as similar enough to the past to allow the test to be meaningful. If nature changes radically, the theory will be falsified immediately, which is the desired outcome of the method."
+      },
+      {
+        "handle": "3c53ccc6097abc1e8dc882b486987fbf9904e44fc375759cbd2aa401e1e8ce37",
+        "kind": "revised",
+        "note": "The claim has been strengthened to implicitly acknowledge the opposing view (that it smuggles induction) by framing the defense strictly around 'maximizing falsifiability' rather than 'predicting success,' thereby addressing the tension between the two answers required by the prompt."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["bridge_engineering_safety_factors", "evolutionary_fitness_proxies"],
+      "shared_structure": [
+        "Selection of an option based on past survival under stress rather than predicted future performance.",
+        "Acceptance that the selected option may still fail, but failure yields high-information feedback.",
+        "Rejection of probabilistic guarantees in favor of robustness checks."
+      ],
+      "disanalogies": [
+        "In engineering, safety factors often rely on statistical distributions of material strength (inductive), whereas Popperian corroboration rejects such statistics for single-case severity.",
+        "Evolutionary fitness is retrospective and blind, while scientific preference is prospective and critically guided by human intent."
+      ],
+      "transfer_claims": [
+        "Just as engineers prefer materials with a history of surviving stress tests despite no guarantee they won't fail tomorrow, scientists prefer corroborated theories.",
+        "The value of the preference lies in the speed of detecting failure, not the assurance of success."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that a less-corroborated theory consistently leads to fewer catastrophic errors in practice.",
+        "If the definition of 'severe test' is proven to be inherently circular or dependent on inductive background assumptions."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

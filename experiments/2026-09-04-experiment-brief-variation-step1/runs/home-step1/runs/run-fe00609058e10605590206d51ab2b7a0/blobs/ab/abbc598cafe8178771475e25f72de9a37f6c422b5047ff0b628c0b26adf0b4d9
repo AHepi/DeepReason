@@ -1,0 +1,30 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "essential_premise_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "maxItems": 8, "title": "Essential Premise Aliases", "type": "array"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@fee60c41394c55fd69d8478d: program:reasoning_observation_pending
+- reason-counter@d8b93494f8d1e68ea190a2c5: program:reasoning_observation_pending
+- reason-counter@937ca662b62c72130012ba75: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, methodological decision to act on the theory that has withstood the most severe attempts at falsification, provided one accepts that 'rationality' in action refers to adherence to the aim of science (truth) rather than probabilistic calculation of success; however, this defense costs Popper the ability to guarantee that acting on the best-corroborated theory is more likely to succeed in novel domains than acting on a refuted one, leaving the preference as a rational gamble rather than a logically secured bet.","counterconditions":[{"case":"If the critic demonstrates that any appeal to 'past survival' as a guide for 'future action' necessarily entails a uniformity-of-nature premise that Popper explicitly rejects.","checker_spec":null,"eval":"observation"},{"case":"If the Tich\u00fd-Miller refutation of verisimilitude proves that no coherent non-probabilistic ordering of theories by truth-likeness is possible, rendering the 'closer to truth' justification incoherent.","checker_spec":null,"eval":"observation"},{"case":"If the distinction between 'psychological expectation' and 'logical justification' collapses when the agent must bet resources on a specific outcome in a novel domain.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The argument proceeds by distinguishing between the logical status of a theory (which remains unproven) and the methodological rule for action (which selects the theory that currently best satisfies the aim of science). It posits that preferring the better-corroborated theory is not an inference that the theory is true or probable (induction), but a volitional commitment to the strategy that has historically eliminated error most effectively. The mechanism relies on the concept of 'verisimilitude' (truth-likeness) as a regulative ideal: while we cannot measure it, we rationally assume the theory that survives severe tests is closer to the truth than one that has failed, without assigning a probability to this assumption. This avoids smuggling in induction by treating the preference as a definition of rational action within the critical framework, not as a prediction derived from past uniformity.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@fee60c41394c55fd69d8478d, reason-counter@d8b93494f8d1e68ea190a2c5, reason-counter@937ca662b62c72130012ba75
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
