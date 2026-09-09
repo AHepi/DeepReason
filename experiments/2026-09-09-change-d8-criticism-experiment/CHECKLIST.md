@@ -1,6 +1,6 @@
 # Checklist for: does criticism, once connected and allowed to bite, make the harness's output materially better than the plain model? — TRANCHE 1 (instruments, offline proofs, sealed pre-registration; NO LIVE CALL)
 
-State: next=8 blockers=none  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
+State: next=11 blockers=none  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
 Re-read REQUEST.md (with Amendment 1) + SPEC.md (with Amendment 1) before every
 step. Execute strictly in order. One step per dr-execute-step invocation.
 
@@ -143,19 +143,45 @@ nor `mini/`, so R36 is not touched.
 - [x] 7. (S9) [COMMIT] the coupling instrument and its two proofs.
       done-when: tree clean for the tranche, head on origin.
 
-- [ ] 8. (S10, R23) Write `tools/record_census.py`: per root, attack edges
+- [x] 8. (S10, R23) Write `tools/record_census.py`: per root, attack edges
       minted; warrants split demonstrative / argumentative; refutations;
       evidence states read from `deepreason results --json`, never re-derived.
       done-when: `python tools/record_census.py --help` exits 0.
 
-- [ ] 9. (S10) Prove the evidence-state row is a READ and not a second
+- [x] 9. (S10) Prove the evidence-state row is a READ and not a second
       derivation, on a committed root.
       done-when: the census's evidence-state row equals that root's
       `results --json` `evidence_states.counts` byte-for-byte, both pasted to
       `proof/CENSUS_AGREES.txt`.
 
-- [ ] 10. (S10) [COMMIT] the census instrument and its proof.
+- [x] 10. (S10) [COMMIT] the census instrument and its proof.
        done-when: tree clean, head on origin.
+
+- [x] 10a. (S10, R23) [inserted at step 10] A fixture positive control for the
+       argumentative warrant column, with a mutation proof — because a corpus
+       scan in step 9/10 measured 1 141 warrants across the 20 most
+       criticism-heavy committed roots and ZERO argumentative among them, so
+       no committed root can drive that branch and a zero from ARM A could not
+       be told from a broken instrument.
+       done-when: `tests/test_record_census.py` passes on both roads, and
+       collapsing the two roads drives it RED.
+       PROOF (`proof/ARGUMENTATIVE_COLUMN_LIVE.txt`):
+       ```
+       corpus scan: warrants by road {'demonstrative': 1141}
+                    roots with ANY argumentative warrant: NONE
+
+       $ pytest tests/test_record_census.py -q      ->  3 passed
+       --- with the roads collapsed (mutation) ---
+       FAILED ...test_the_argumentative_column_moves...   1 failed, 2 passed
+       --- restored ---                                   3 passed
+       ```
+       Registered now so it is not decided later: if ARM A terminates cleanly
+       with 0 argumentative warrants, that is a FINDING about granted
+       authority, not a broken instrument.
+       A second symbol collision was fixed in this step for the reason step 6
+       fixed the first: `render` matched words in `invariants.py` and
+       `run_manifest.py` and made the gate report frozen-surface CONTACT.
+       Renamed; the gate re-reads CLEAR.
 
 - [ ] 11. (S2, R5, A3) Edit the copied `tools/arm0.py` in exactly one place: `K`
        becomes a required argument. Nothing else moves.

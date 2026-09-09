@@ -1,0 +1,42 @@
+=== Step 10a: the census's argumentative column can move — and why the proof
+    has to come from a fixture ===
+
+THE MEASUREMENT THAT MADE THIS STEP NECESSARY (2026-09-09, over the 20 most
+criticism-heavy committed roots, ranked by W2's own roots.json):
+
+    warrants by road: {'demonstrative': 1141}
+    roots with ANY argumentative warrant: NONE
+
+Not one argumentative warrant has ever been minted in this repository's
+committed corpus. The 2026-09-08 audit reported this shape for the two roots
+it examined closely; this scan says it holds across the twenty heaviest, and
+step 9 found it again on the organiser tranche's own terminal root (1 attack
+edge, 1 demonstrative warrant, 0 argumentative).
+
+WHY THAT IS A PROBLEM FOR THIS TRANCHE SPECIFICALLY. ARM A exists to find out
+whether a granted authority lets a model's case move a status. Its answer is
+read off exactly the column that has never, in this repository's history,
+returned anything but zero. A zero from ARM A would therefore be
+indistinguishable from an instrument that cannot return anything else — which
+is not a measurement.
+
+THE POSITIVE CONTROL, on a fixture, since no committed root can provide one:
+
+    $ python -m pytest tests/test_record_census.py -q
+    ...                                                                  [100%]
+    3 passed
+
+MUTATION PROOF — the tests can fail, and fail for the reason they claim.
+Collapsing the two roads into one (the exact defect that would make the
+corpus's 1 141 demonstrative warrants read as criticism that moved a status):
+
+    --- with the roads collapsed ---
+    FAILED tests/test_record_census.py::test_the_argumentative_column_moves_when_an_argumentative_warrant_exists
+    1 failed, 2 passed
+    --- restored ---
+    3 passed
+
+REGISTERED FOR TRANCHE 2, so it is not decided after the fact: if ARM A
+terminates cleanly and its argumentative warrant count is 0, that is a
+FINDING about granted authority on this configuration — not a broken
+instrument and not a failed arm. This proof is what licenses that reading.

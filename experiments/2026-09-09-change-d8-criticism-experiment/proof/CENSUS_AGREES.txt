@@ -1,0 +1,19 @@
+=== Step 9 proof: the census's evidence-state row is a READ of the one
+    retrieval surface, not a second derivation of it ===
+
+Root: the organiser tranche's ARM R terminal root (committed).
+
+--- what the census reports ---
+| Arm | Attack edges | Warrants: demonstrative | Warrants: argumentative | Refutations | open | supported | refuted | contested |
+|---|---|---|---|---|---|---|---|---|
+| ARM R | 1 | 1 | **0** | 1 | 55 | 32 | 1 | 0 |
+
+The argumentative column is bold because it is the one that answers the question: a zero there means no status in this arm was moved by anything a critic seat wrote, however many edges the run minted.
+
+--- what deepreason results --json reports for the same root ---
+{"contested": 0, "open": 55, "refuted": 1, "supported": 32}
+
+--- byte-for-byte comparison of the four states ---
+census :  {"contested": 0, "open": 55, "refuted": 1, "supported": 32}
+surface:  {"contested": 0, "open": 55, "refuted": 1, "supported": 32}
+IDENTICAL
