@@ -1,0 +1,7 @@
+B0       n= 12  chars min=    6853  max=    8873
+harness  n=236  chars min=     128  max=     843
+
+harness candidates longer than B0's SHORTEST answer : 0 of 236
+B0 answers shorter than the harness's LONGEST claim  : 0 of 12
+
+OVERLAP: none. The shortest B0 answer is 8.1x the longest harness candidate.
