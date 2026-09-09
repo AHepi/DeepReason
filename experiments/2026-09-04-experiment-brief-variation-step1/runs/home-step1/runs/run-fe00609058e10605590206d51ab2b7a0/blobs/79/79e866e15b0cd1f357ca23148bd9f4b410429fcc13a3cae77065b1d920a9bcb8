@@ -1,0 +1,77 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory for action is defensible on Popper's terms not as an inductive inference that the theory is true or probable, but as a non-inductive, critical decision to act on the hypothesis that has withstood the most severe attempts at falsification, thereby minimizing the risk of known error while accepting that future falsification remains possible.",
+    "mechanism": "Severity-Based Risk Mitigation: The preference is grounded in the logical asymmetry between verification and falsification. While corroboration does not increase probability (induction), it identifies the theory that is currently the 'best tested' and least likely to be false based on available evidence. Acting on this theory is a rational convention to avoid acting on theories already known to be flawed, without claiming the chosen theory will succeed.",
+    "counterconditions": [
+      "If corroboration is interpreted as assigning a higher logical probability of future success, the defense collapses into induction.",
+      "If the agent claims certainty that the corroborated theory will not fail in the specific application (e.g., the bridge will not fall).",
+      "If the preference relies on verisimilitude (truth-likeness) as a calculable metric rather than a regulative ideal."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on 'verisimilitude' as a calculated metric. Instead, it grounds the preference in 'severity of testing,' which Popper defined formally. The claim admits verisimilitude is a regulative ideal but argues practical choice requires only the negative knowledge of what has not yet been falsified."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The mechanism strictly separates 'logical probability' (rejected) from 'practical risk mitigation' (accepted). The rebuttal clarifies that expecting future success is not a logical entailment of corroboration, but a pragmatic gamble on the theory that has survived the most rigorous attempts to destroy it."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma by framing the choice as a 'critical decision' to minimize known error (falsified theories) rather than a prediction of safety. The text now emphasizes that building a bridge on a falsified theory is irrational, whereas building on a corroborated one is the only non-arbitrary option left."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes 'willingness to criticize' (theoretical stance) from 'practical reliance' (decision to act). It argues that practical reliance on the best-tested theory is the operationalization of the critical method: we act on what we cannot yet refute, while remaining ready to revise if it fails."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is defended as consistent with his 'conventionalist' solution: the decision to prefer the better-corroborated theory is a rational convention adopted to facilitate progress and avoid known errors, not an inductive leap. The candidate asserts this convention is defensible precisely because it acknowledges its own non-justificatory status."
+      },
+      {
+        "handle": "2116bf4d6b856c4733930a702b792937dca2166147675dc886115c8804a7b37a",
+        "kind": "revised",
+        "note": "Clarified that 'Severity Maximization' does not imply future success is guaranteed or probable. The revision states that relying on a corroborated theory is rational because it represents the current limit of our critical knowledge, not because it induces a law of nature."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The argument remains strictly within Popper's falsificationist framework (Logic of Scientific Discovery) and does not invoke Evolutionary Epistemology. The preference is derived from the logic of testing, not biological selection mechanisms."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "The pragmatic contradiction is resolved by denying that the rationality of the act depends on the truth of the theory. The act is rational because it is the only non-arbitrary choice available after eliminating falsified options; it accepts the cost that the theory may still be false."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["nav_system_update"],
+      "shared_structure": [
+        "Preference for the most recently validated map despite no guarantee it covers new terrain.",
+        "Rejection of older maps known to contain errors.",
+        "Action taken without inductive certainty of the map's total accuracy."
+      ],
+      "disanalogies": [
+        "Navigation maps are often corrected by induction (averaging errors), whereas Popperian theory choice rejects error averaging.",
+        "A map error leads to getting lost; a theory error in bridge building leads to physical collapse, raising the stakes of the 'convention'."
+      ],
+      "transfer_claims": [
+        "Just as a driver rationally chooses the updated GPS over a known-wrong paper map without believing the GPS is infallible, a scientist rationally chooses the corroborated theory without believing it is probable."
+      ],
+      "overturn_conditions": [
+        "If the GPS system itself was shown to rely on inductive generalizations from past traffic data to predict route viability, the analogy would fail to support a non-inductive basis.",
+        "If the 'updated map' was chosen because it felt more intuitive rather than because it incorporated recent falsifications of old routes."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

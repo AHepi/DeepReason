@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's own terms not as an inductive inference of future truth, but as a non-inductive 'conventional decision' to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing the potential for learning (verisimilitude) even if probability remains unchanged.",
+    "mechanism": "Severity-Based Conventionalism: The preference is a methodological rule (a convention) rather than a logical derivation. It selects the theory that offers the highest 'potential content' and has survived the strictest tests, treating corroboration as a report of past performance that informs a rational gamble on future error-elimination, distinct from assigning higher logical probability.",
+    "counterconditions": [
+      "If corroboration is shown to logically entail a prediction of future success (induction), the defense fails.",
+      "If Popper's reliance on 'verisimilitude' is proven to be formally incoherent within his own system such that no rational choice can be made.",
+      "If the preference for corroborated theories in practical action (e.g., bridge building) cannot be distinguished from relying on probabilistic safety margins."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The criticism conflates the formal definition of verisimilitude with its function as a regulative ideal. Popper admits verisimilitude cannot be calculated, but argues it serves as a non-inductive goal; we prefer the theory that *appears* closer to truth based on severe testing, without claiming to know it is so."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The claim does not entail an expectation of future success in the inductive sense (probability > 0.5), but rather an expectation of faster error elimination. The category error is avoided by strictly maintaining the distinction between 'logical probability' (rejected) and 'rational preference for boldness' (accepted)."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma: In practical decisions like bridge building, the engineer chooses the best-tested theory not because it is 'safe' (probable), but because it is the one most likely to reveal its flaws if false, thus offering the best chance to avoid catastrophic error through prior falsification attempts."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "Willingness to criticize is precisely the mechanism of practical reliance. We rely on the theory that has been most vigorously criticized and survived, as this process eliminates the most dangerous errors. This is not a conflation but the core of the Popperian practical stance."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is consistent with his philosophy if viewed as a consistent application of his own conventional decision rule. He acts on the best-tested theory because he has decided that this is the rational way to proceed in the absence of certainty, not because he secretly believes it is probable."
+      },
+      {
+        "handle": "2116bf4d6b856c4733930a702b792937dca2166147675dc886115c8804a7b37a",
+        "kind": "revised",
+        "note": "Clarified that 'Severity Maximization' separates preference from induction by focusing on the *quality* of tests passed (severity) rather than the *quantity* of positive instances. Acting on a theory is a bet on its informational content and resilience, not its statistical likelihood."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The argument remains strictly within Popper's falsificationist framework. While Evolutionary Epistemology complements it, the core defense relies solely on the logic of falsification and the conventional decision to prefer the theory with the highest surviving empirical content."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "The pragmatic contradiction is resolved by accepting that 'rationality' in Popper's system does not mean 'maximizing probability of truth' but 'maximizing the opportunity for critical growth.' Acting on the best-corroborated theory is rational because it is the most efficient path to learning, even if it carries no guarantee of success."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_004"],
+      "shared_structure": [
+        "Selection based on survival of stress tests rather than accumulation of positive confirmations.",
+        "Decision making under uncertainty without probabilistic assignment.",
+        "Preference for the option with the highest demonstrated resilience."
+      ],
+      "disanalogies": [
+        "Natural selection has no conscious agent making a 'conventional decision,' whereas the scientist actively chooses.",
+        "Biological survival implies reproductive fitness (a form of success), whereas scientific corroboration implies only non-falsification."
+      ],
+      "transfer_claims": [
+        "Just as an organism surviving extreme cold is preferred for colonization not because it is 'probably' fit everywhere, but because it has proven resilient to a severe test, a corroborated theory is preferred for action because it has proven resilient to severe criticism."
+      ],
+      "overturn_conditions": [
+        "If the analogy requires assuming that survival indicates a high probability of future survival, it collapses into induction.",
+        "If the 'stress test' in science cannot be mapped to a genuine risk of falsification."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

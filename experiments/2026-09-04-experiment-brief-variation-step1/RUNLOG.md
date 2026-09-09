@@ -59,6 +59,31 @@ control is the shipped default and the rig registered nothing.
 
 Root: `roots/A0-run-fe00609058e10605590206d51ab2b7a0`.
 
+## B0 — the no-harness baseline: 12 independent calls, no brief at all
+
+Ran 08:12-08:20Z alongside A1, not after it: only two processes call the
+provider (`deepreason reason` and `baseline_b0.py`), inside R22's ceiling of
+three, and the container's ~2-hour restart window is what binds six arms.
+
+| | |
+|---|---|
+| calls | 12 of 12, **0 empty answers** (the reasoning-effort failure this model has on this endpoint did not occur) |
+| characters per answer | mean **7,775.5**, median 7,693.5, range 6,853-8,873 |
+| tokens | **21,284 total**, 1,774 per call (prompt 1,260, completion 20,024) |
+
+**PREREG §8 P5 is already looking right**, and it is why the length control is
+load-bearing rather than decorative: a B0 answer averages 7,776 characters
+because one call answers the whole question, while a harness candidate is one
+`claim` field. The panel's known appetite for length (Spearman +0.797 in the
+parent tranche) would hand B0 the comparison on raw scores alone. No verdict
+is stated on a raw figure; §5's length-adjusted figure decides.
+
+**B0's spend is the comparison floor** (R30): 21,284 tokens for 12 answers,
+against A0's 417,053 for one arm. That ratio is itself a result and RESULTS.md
+reports it beside the quality numbers, because the law asks whether the
+harness is materially better than the plain call — not whether it is better at
+any price.
+
 ## A1 — history really rendered (`include_refuted=true`, `refuted_n=3`)
 
 Launched 08:04:53Z. Rig receipt:
