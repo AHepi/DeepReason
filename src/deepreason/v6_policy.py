@@ -25,6 +25,7 @@ from collections.abc import Mapping
 from pathlib import Path
 
 from deepreason import channels
+from deepreason.authority import solo_trial_requested
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.capabilities.policy import (
@@ -309,14 +310,38 @@ def configured_criticism_policy(
         )
     return engaged_criticism_policy(
         endpoint_id,
-        authority=(
-            config.ENGAGED_CRITICISM_AUTHORITY
-            if config.ADJUDICATION_STATUS_AUTHORITY_ENABLED
-            else "observe_only"
-        ),
+        authority=compiled_criticism_authority(config),
         seat_map=seat_map,
         school_count=config.N_SCHOOLS,
     )
+
+
+def compiled_criticism_authority(config: Config) -> str:
+    """Which manifest authority this configuration compiles to, and why.
+
+    Two Config knobs can ask for a trial and the manifest field holds one
+    value, so the resolution is stated rather than discovered
+    (all-configurations law, 2026-08-12: two parts of one configuration that
+    conflict get a deterministic rule, never a stop). The trial-bearing value
+    wins, because a run that asked for a trial on either knob asked for a
+    trial.
+
+    `ENGAGED_CRITICISM_AUTHORITY` still passes through untranslated -- its
+    value-space IS `CriticismPolicyV1.authority`'s, and a configuration that
+    leaves `ARGUMENTATIVE_AUTHORITY` alone compiles byte-identically to before
+    this function existed. The translation is `ARGUMENTATIVE_AUTHORITY`'s
+    alone: `single_family_trial` is a Config-only word naming the road the
+    manifest calls `defended_trial`, so it is spelled into the manifest's own
+    vocabulary here rather than admitted to it (`CriticismPolicyV1.authority`
+    stays a closed two-value Literal, which is what
+    `DR-INV-frozen-surfaces` requires).
+    """
+
+    if not config.ADJUDICATION_STATUS_AUTHORITY_ENABLED:
+        return "observe_only"
+    if solo_trial_requested(config):
+        return "defended_trial"
+    return config.ENGAGED_CRITICISM_AUTHORITY
 
 
 # One fixed public identity for the single frozen local simulation

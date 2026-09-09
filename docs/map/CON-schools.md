@@ -241,11 +241,41 @@ but the plan refuses to advertise that as route diversity.
   correct only for a manifest that authors judge bindings, which the validator
   does not permit (DELIVERY.md, A10). The guarantee that actually runs is
   cross-school *criticism* in `informal/trial.py`.
-- **`ARGUMENTATIVE_AUTHORITY=single_family_trial` cannot complete a trial.**
-  The `Config` direct-helper path passes no `critic_school_id`, so a school can
-  only arrive through the v4 envelope, and that envelope demands a
-  manifest-bound authority value. Parked as dead weight, not removed
-  (DELIVERY.md, Parked 1).
+- **`ARGUMENTATIVE_AUTHORITY=single_family_trial` names a road; it does not
+  travel one.** REWRITTEN 2026-09-09
+  (`experiments/2026-09-09-fix-solo-criticism-authority/`). The sentence this
+  replaces read: "cannot complete a trial. The `Config` direct-helper path
+  passes no `critic_school_id`, so a school can only arrive through the v4
+  envelope, and that envelope demands a manifest-bound authority value. Parked
+  as dead weight, not removed." Both halves were true and the conclusion was
+  wrong. The direct-helper path still passes no critic school and still
+  declines `no-critic-school` — measured, ten times over four episodes on a
+  one-model stub root, minting zero argumentative warrants
+  (that tranche's `proof/REPRO_A_config_path.txt`). What changed is that the
+  value no longer tries to travel as itself: `v6_policy::
+  compiled_criticism_authority` spells it into the manifest's own
+  `defended_trial` at compile, and the school-routed scheduler path then
+  supplies the critic school the solo branch asks for. The manifest vocabulary
+  is UNWIDENED — `CriticismPolicyV1.authority` is still the closed two-value
+  Literal `DR-INV-frozen-surfaces` forbids extending. The trap that survives:
+  reading the `Config` Literal still does not tell you which values reach a
+  trial, because `trial_required` reaches one only through the school-free
+  legacy circuit and `single_family_trial` needs
+  `LEGACY_CRITICISM_ENABLED=False` besides.
+`check: python -c "from deepreason.config import Config; from deepreason.v6_policy import compiled_criticism_authority as a; assert a(Config()) == 'observe_only'; assert a(Config(ARGUMENTATIVE_AUTHORITY='single_family_trial')) == 'observe_only'; assert a(Config(ARGUMENTATIVE_AUTHORITY='single_family_trial', ADJUDICATION_STATUS_AUTHORITY_ENABLED=True)) == 'defended_trial'" && python -m pytest tests/test_solo_criticism_authority.py -q -k "compiles_to_the_manifests_own_word or mints_an_argumentative_warrant"`
+- **Two judge seats is a DEFAULT, not a structure.** The argumentative trial's
+  solo branch declined `single-judge-seat` unconditionally below two seats
+  until 2026-09-09, when the operator ruled the judge optional at every count:
+  "The judge must remain optional. One seat, two seats, no seats. The default
+  is observe only." One seat now rules when `SINGLE_JUDGE_SEAT_PERMITTED` says
+  so, and the run's record carries a `trial-gate-switched` Measure naming the
+  gate — a single seat is the looser regime the amended judge law measures at
+  47-60% over-conviction, so the disclosure is not optional even though the
+  gate is. Zero seats never consults the switch and never could: the guard is
+  load-bearing, because a judge ROLE configured with an empty seat list would
+  otherwise dispatch seat 0 into an empty ensemble. The decline reason keeps
+  its historical spelling for the reason the Traps entry below gives.
+`check: python -m pytest tests/test_solo_criticism_authority.py -q -k "judge_seat"`
 - **Assuming the criticism prompt is school-blind in both directions.** It is
   blind to the target's school; it deliberately names the CRITIC's own school
   and stance in a prefix assembled outside the pack renderer, and that prefix

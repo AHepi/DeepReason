@@ -2778,3 +2778,76 @@ a note there would assert a citation the document does not make. The
 day it happened, and "and others" was never a closed list. Recorded 2026-09-09,
 `experiments/2026-09-09-change-audit-part-6-corrections/`. Related finding:
 `experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §6.1.
+
+**E85 — "`ARGUMENTATIVE_AUTHORITY=single_family_trial` cannot complete a
+trial" was true of the value and false of the road; and the solo law's road
+already ran under another name.** Three committed documents said the mode was
+dead weight: `docs/map/CON-schools.md`'s Traps, `docs/map/SUB-rules.md:253`,
+and `experiments/2026-09-09-change-d8-criticism-experiment/SPEC.md` M6, which
+attributed the blockage to three judge-binding gates
+(`V4_SCHOOL_ROLE_UNSUPPORTED`, `V4_CRITICISM_ROLE_UNSUPPORTED`,
+`SCHOOL_ROUTE_ROLE_UNSUPPORTED`, plus `build_adapter` never populating
+`school_judge_bindings`). `docs/HANDOVER_2026-08-02.md:68`,
+`docs/HANDOVER_MONITOR_2026-08-10.md:88` and
+`docs/HIDDEN_LEGACY_INVENTORY.md:76` carry the same reading.
+
+**What the record shows.** Two corrections, both measured on stub roots that
+replay with zero violations
+(`experiments/2026-09-09-fix-solo-criticism-authority/proof/`):
+
+1. **The three named gates are not on that road.** `informal/trial.py`'s
+   single-model branch never calls `_select_judge_ensemble` and never consults
+   a judge binding; it asks for a CRITIC SCHOOL. A one-model stub with both
+   switches on reached the trial and declined `no-critic-school` ten times
+   without any judge binding being examined. The three gates are real and
+   guard a DIFFERENT road — a single-FAMILY, MULTI-model run, whose
+   else-branch is the only caller of the cross-school ensemble. That road is
+   still unreachable and is parked with its pricing (that tranche's
+   `PARKED.md` P1).
+2. **The 2026-08-09 solo law was never actually unserved.** On the same
+   one-model shape — one model id in every seat, two judge seats, a defender,
+   two schools — a configuration with `LEGACY_CRITICISM_ENABLED=False`,
+   `ADJUDICATION_STATUS_AUTHORITY_ENABLED=True` and
+   `ENGAGED_CRITICISM_AUTHORITY=defended_trial` compiled a clean v6 manifest
+   and minted an ARGUMENTATIVE warrant that became an attack edge and a
+   REFUTED status. No cross-family ensemble was needed: the criticism
+   validator's same-model substitute (two judge seats, one model) already
+   admits a solo run, so `V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED` never
+   fired. So the defect was never "solo runs are locked out of
+   status-changing criticism"; it was that one declared value promised a road
+   it could not take, and no document said which of the three values worked.
+
+**Where corrected.** `single_family_trial` is not retired. Since 2026-09-09 it
+is TRANSLATED at compile into the manifest's own `defended_trial`
+(`v6_policy::compiled_criticism_authority`), so the value the operator's law
+asked for now names the road that runs; the manifest vocabulary is unwidened.
+`CON-schools.md`'s Traps entry and `CON-authority.md` were rewritten in the
+same commit, each carrying the sentence it replaced. The earlier handover and
+inventory documents are NOT edited: they are accurate records of what was
+believed on their own dates, and this entry is where a reader learns otherwise.
+Recorded 2026-09-09, `experiments/2026-09-09-fix-solo-criticism-authority/`.
+
+**E86 — "two frozen judge seats" was written as a structural requirement and
+is a default.** `docs/map/CON-schools.md` stated that in a single-model run
+"the argument trial demands two frozen judge seats", and the trial declined
+`single-judge-seat` below two unconditionally. The operator ruled otherwise on
+2026-09-09, verbatim: "The judge must remain optional. One seat, two seats, no
+seats. The default is observe only."
+
+**What the record shows.** Of the three shapes, two already ran: no judge role
+declines `no-judge-role` and the run continues; two seats rule. Exactly one
+seat was structurally refused, on a path where nothing had failed.
+
+**Where corrected.** `SINGLE_JUDGE_SEAT_PERMITTED` (default `False`) decides
+the count-of-one case only, and switching it records a typed
+`trial-gate-switched` Measure on the run's own record — the 2026-08-28 law's
+warning, which is not optional even though the gate is. Zero seats never
+consults the switch: the count guard is load-bearing, because a judge role
+configured with an empty seat list would otherwise dispatch seat 0 into an
+empty ensemble. The default is unchanged at every seat count, proven by
+digest rather than asserted
+(`tests/test_solo_criticism_authority.py::test_the_granted_contact_moves_no_digest`).
+The judge law as amended still binds what a warrant is worth: a single seat is
+the looser regime measured at 47-60% over-conviction, so this is a capability
+the solo law requires, not a setting to leave on. Recorded 2026-09-09,
+`experiments/2026-09-09-fix-solo-criticism-authority/`.

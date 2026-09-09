@@ -99,6 +99,29 @@ def argumentative_authority_mode(config) -> str:
     return value
 
 
+def solo_trial_requested(config) -> bool:
+    """True when this run asks for the solo road by its Config-side name.
+
+    `single_family_trial` is the only `ARGUMENTATIVE_AUTHORITY` value whose
+    guarantee is carried by SCHOOL rather than by model family, and the only
+    caller that can supply a critic school is the manifest-bound one. So the
+    value cannot travel as itself: it names a road, and the road is the
+    manifest's own `defended_trial`. This predicate is the single place that
+    reads that intent, so the compile site that translates it and the run
+    site that discloses the translation cannot drift apart.
+
+    The master gate applies here, not at `argumentative_authority_mode`: that
+    function returns the DECLARED value for preflight, while this one answers
+    whether the run will actually take the road.
+    """
+
+    if not _adjudication_status_authority_enabled(config):
+        return False
+    return _value(_get(config, "ARGUMENTATIVE_AUTHORITY", "observe_only")) == (
+        "single_family_trial"
+    )
+
+
 def trial_authority_for(
     config,
     workload_profile: str | None,

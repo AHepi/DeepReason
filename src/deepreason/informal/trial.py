@@ -17,7 +17,7 @@ import json
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from deepreason.authority import TrialAuthority
+from deepreason.authority import TrialAuthority, solo_trial_requested
 from deepreason.informal.standards import precedent_slice, resolve_standard, standard_body
 from deepreason.llm.contracts import (
     ArgumentativeCriticOutput,
@@ -953,6 +953,42 @@ def run_argument_trial_from_case(
         harness.record_llm_calls(calls, "trial-llm")
 
 
+def _disclose_gate(harness, target_id: str, gate: str) -> None:
+    """Say on the record that a gate was switched, and which one.
+
+    The 2026-08-28 ungated-seats law: every gate is switchable per run, and
+    switching one produces a typed WARNING -- never a refusal, and never
+    silence. A run whose trial ruled under a weaker guarantee than the
+    default must be readable as such from its own record, without the
+    configuration that produced it.
+    """
+
+    harness.record_measure(inputs=["trial-gate-switched", target_id, gate])
+
+
+def _single_seat_rules(config, seats: int) -> bool:
+    """Whether ONE frozen judge seat may rule this trial.
+
+    Seat count is route topology, not permission: none, one and two are all
+    configurations a run may hold (operator, 2026-09-09: "The judge must
+    remain optional. One seat, two seats, no seats."). Zero seats can rule
+    nothing whatever the switch says, so only a count of exactly one consults
+    it. Default False, so a run that configures nothing declines exactly as it
+    did before this switch existed.
+
+    A single seat is a caution, not a preference: the measured 0-2.5%
+    false-conviction regime is the unanimous cross-independent pair, and every
+    looser configuration measured over-convicts at 47-60%
+    (docs/RESEARCH_JUDGE_BLINDING_2026-08-22.md; the amended judge law,
+    2026-08-28). Hence the disclosure at the call site, which is not optional
+    even though the gate is. PURE on purpose: a predicate that recorded as it
+    answered would stamp "a lone seat ruled" on a trial that went on to
+    decline for a different reason.
+    """
+
+    return seats == 1 and bool(getattr(config, "SINGLE_JUDGE_SEAT_PERMITTED", False))
+
+
 def _argument_trial_steps(
     harness, adapter, config, target_id: str, case_text: str, diagnostics,
     calls: list, *, critic_school_id: str | None = None,
@@ -969,8 +1005,10 @@ def _argument_trial_steps(
     if target is None:
         return _decline(harness, target_id, "unknown-target", diagnostics)
     # Normative policy is a process preflight, not a model decision, and it
-    # runs before any seat spends. Which guarantee is demanded depends on which
-    # one the run's route topology can supply, never on configuration.
+    # runs before any seat spends. WHICH guarantee is demanded depends on which
+    # one the run's route topology can supply, never on configuration; whether
+    # a lone seat may carry it is configuration, and says so on the record
+    # (`_single_seat_rules`).
     if adapter.is_single_model():
         # One model in every position cannot supply cross-FAMILY independence:
         # the ensemble gate is unsatisfiable by construction, so the trial was
@@ -979,12 +1017,28 @@ def _argument_trial_steps(
         # authored the target. It is a weaker guarantee than two model families
         # and is deliberately confined to the runs where the stronger one does
         # not exist.
-        if len(adapter.leases.get("judge", ())) < 2:
+        seats = len(adapter.leases.get("judge", ()))
+        lone_seat = _single_seat_rules(config, seats)
+        if seats < 2 and not lone_seat:
+            # Historical spelling, deliberately unchanged: this reason is
+            # compared against recorded roots, so renaming it would change
+            # what those roots mean (DR-CON-schools, Traps).
             return _decline(harness, target_id, "single-judge-seat", diagnostics)
         if not critic_school_id:
             return _decline(harness, target_id, "no-critic-school", diagnostics)
         if critic_school_id == target.provenance.school:
             return _decline(harness, target_id, "same-school-critic", diagnostics)
+        # Both disclosures land HERE, past every check this branch can decline
+        # on, so a gate notice means the trial actually proceeded under the
+        # weaker arrangement rather than merely being allowed to.
+        if lone_seat:
+            _disclose_gate(harness, target_id, "single-judge-seat")
+        if solo_trial_requested(config):
+            # The run asked for this road by its Config-side name and the
+            # compile site spelled it into the manifest's own word. Recorded
+            # where the road is actually taken, so the record shows the
+            # translation without the configuration that produced it.
+            _disclose_gate(harness, target_id, "solo-road")
     else:
         adapter.require_cross_family_judges()
     if formally_backed(harness, target_id):

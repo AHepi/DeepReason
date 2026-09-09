@@ -577,6 +577,20 @@ class Config(BaseModel):
     # JUDGE_SEATS_ENABLED and a nonzero rate are set.
     JUDGE_SUMMONS_PER_CYCLE: int = Field(default=0, ge=0)
     JUDGE_SUMMONS_COOLDOWN: int = 4
+    # Whether ONE frozen judge seat may rule in the argumentative trial.
+    # The seat COUNT is a route topology fact, not a permission: none, one
+    # and two are all configurations a run may hold. This switch decides
+    # only what the trial does when the count is one, and it is a caution
+    # rather than a preference -- the measured 0-2.5% false-conviction
+    # regime is the unanimous cross-independent pair, and every looser
+    # configuration measured over-convicts at 47-60%
+    # (docs/RESEARCH_JUDGE_BLINDING_2026-08-22.md; the amended judge law,
+    # 2026-08-28). Default False: the trial declines `single-judge-seat`
+    # exactly as it did before this switch existed. True: the single seat
+    # rules and the run's record carries a typed disclosure saying so.
+    # Zero seats needs no switch and never did -- the trial declines
+    # `no-judge-role` and the run continues.
+    SINGLE_JUDGE_SEAT_PERMITTED: bool = False
     # Master gate for the schools opt-in (Part E, S2d/R5): when False,
     # byte-identical to today -- neither shipped v6 control-plane preset
     # ever requests route_bound school execution. Shared prerequisite for
