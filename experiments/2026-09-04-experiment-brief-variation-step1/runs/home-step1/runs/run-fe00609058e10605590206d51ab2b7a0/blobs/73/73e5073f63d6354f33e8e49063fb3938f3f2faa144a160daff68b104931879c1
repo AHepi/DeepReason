@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target conflates 'predicting specific future events' (which requires induction) with 'preferring a theory for its explanatory power in the present' (which does not). Popper's defense rests on the idea that we prefer the better-corroborated theory not because we expect it to be true or to yield successful predictions tomorrow, but because it has withstood the most severe criticism to date, making it the best available candidate for truth right now. The target asserts that any preference entails a prediction of utility regarding future stability; however, one can prefer Theory A over Theory B simply because Theory B has been falsified while Theory A has not, without assuming Nature will remain uniform. This is a logical choice based on past performance records, not an inductive leap about future regularity. By failing to distinguish between acting on the hope of future success (inductive) and acting on the current status of non-falsification (methodological), the target constructs a straw man of Popper's pragmatic solution.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": "Can a scientist prefer a non-falsified theory over a falsified one solely as a methodological rule for current inquiry, without making any claim about the probability of future successes?"
+    }
+  ]
+}

@@ -130,6 +130,49 @@ history. RESULTS.md states this beside the verdict rather than under it.
 
 ## A1P — history plugin removed entirely (an identical-brief arm)
 
-Launched by the chain 08:56:38Z.
+Launched by the chain 08:56:38Z, finished 09:41:21Z.
+
+| | A1P | A0 (byte-identical brief) |
+|---|---|---|
+| state / stop_reason | **completed / `budget_exhausted`** | same |
+| cycles | 4 of 4 | 4 of 4 |
+| tokens | **474,282** of 600,000 | **417,053** |
+| accepted / refuted | 98 / **0** | 104 / **2** |
+| survivors | 54 | 50 |
+| criticism rounds | 9 of 9 | 9 of 9 |
+| evidence states | 48 untested, 54 came through, **0 fell** | 58 / 50 / **2** |
+
+Root: `roots/A1P-run-fe00609058e10605590206d51ab2b7a0` (run id `221d4987…`).
+
+### The noise floor is already visible, and it is not small
+
+A0 and A1P were shown the SAME BRIEF, byte for byte — that is not an
+assumption, it is `PROVE_ARMS.txt` re-measured on this head, and the receipts
+above confirm neither arm rendered history. Same question, same configuration,
+same model, same settings. What they produced:
+
+- spend differs by **57,229 tokens (+13.7%)**;
+- one arm refuted **2** artifacts and the other refuted **0**;
+- accepted counts differ by 6, survivors by 4.
+
+This is `docs/ERRATA.md` E78's warning reproducing itself in a new tranche
+before any judged score exists: *"a run-to-run spread comparable to every
+between-arm difference the experiment has reported."* It is precisely why
+PREREG §3.3 registered three identical-brief arms and §7 defined `d_noise`,
+and it is why no arm gap will be called real on its size alone.
+
+Stated plainly so the final result cannot be over-read: **if the judged gaps
+turn out to be the size of this spread, the honest answer is that this design
+cannot separate them — and the audit's own question is answered with "not on
+this n" rather than with a direction.**
+
+## A2 — `claim_chars` 200 → 800 (the second identical-brief arm)
+
+Launched by the chain 09:41:29Z. PREREG §3.2 predicted this arm cannot differ:
+`dr.active-properties` renders the docstring claims of accepted
+`code:python-prop` artifacts, and the receipts from A0 and A1 show that
+section rendering **zero bytes** in this question's runs. The falsifiable
+clause stands — an accepted `code:python-prop` artifact with a claim over 200
+characters would make A2 a real treatment.
 
 *(in flight)*
