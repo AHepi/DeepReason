@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible without smuggling in induction if re-framed as a 'critical risk-management' strategy rather than a probabilistic prediction; however, this defense survives only by accepting the cost that rational action becomes purely negative (avoiding known falsehoods) and cannot positively justify expectations of future success, leaving the agent with no basis to believe the chosen theory will work, only that it has not yet been proven to fail.",
+    "mechanism": "Reconstruct the preference as a decision rule under ignorance: since all theories are equally unproven regarding the future (induction is invalid), the only differentiating factor is the set of known errors. Choosing the theory with fewer or less severe known errors (better corroboration) minimizes the risk of acting on a known falsehood. This relies on the logical asymmetry between verification and falsification, not on the assumption that the future resembles the past.",
+    "counterconditions": [
+      "If the agent must assign any non-zero subjective probability of success to act rationally, the distinction collapses into pragmatic induction.",
+      "If 'risk minimization' implicitly assumes that past falsification conditions are relevant to future contexts, it smuggles in an inductive premise about the stability of nature.",
+      "If the goal of action is positive achievement (success) rather than merely avoiding known failure, the negative justification of corroboration is insufficient."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0aea4507c15f624018da4ca9ca280efa3ba862dc8b1dcce5cbe82f0cf873baa4",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'rational preference' with 'prediction of success.' The rebuttal is that rational preference can be based solely on the elimination of known error options (negative knowledge) without assuming future success. Minimizing known errors is rational because acting on a known falsehood is logically indefensible, regardless of future outcomes."
+      },
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "revised",
+        "note": "Revised to explicitly state that the strategy does not assume conditions making A superior in the past will hold, but rather that A is the *only* option not currently known to be false in a specific way B might be. The preference is based on the current logical status (falsified vs. unfalsified), not a projection of past performance."
+      },
+      {
+        "handle": "10d458d5ba5df5b51b41f157dbd7e3ca6a57c55a4ae8258055f2e2bab7b067",
+        "kind": "rebutted",
+        "note": "The dichotomy is not false but essential. 'Elimination of danger' (known falsity) is the only epistemic gain Popper allows. The claim is that rational action requires only this negative gain to proceed, rejecting the premise that one needs a positive prediction of safety to act rationally."
+      },
+      {
+        "handle": "12d85bc51c9af81516a777b5d4dc2339261479c247c63e2c28fd89918ef5ac05",
+        "kind": "departure_declared",
+        "note": "Departing from the requirement that rational preference must guide towards 'future success.' The proposed stance accepts that rationality in a Popperian framework guides only towards 'avoiding known failure,' even if this leaves the agent agnostic about success."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "rebutted",
+        "note": "The defense does not rely on verisimilitude (truth-likeness) which indeed failed formally. It relies strictly on the binary status of 'falsified' vs 'not yet falsified.' Corroboration reports the severity of tests survived, not a degree of truth-likeness."
+      },
+      {
+        "handle": "2b9769e65d28f5f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "revised",
+        "note": "Clarified that the basis for action is not that the theory 'will continue to work' (which is inductive), but that it is the least irrational option available *now* given the set of known errors. The temporal projection is rejected; the choice is instantaneous based on current critical status."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The criterion 'least error-prone known option' does not assign subjective probability of success. It assigns a certainty of failure to the falsified options and leaves the unfalsified option as merely 'possible.' Rationality dictates choosing the possible over the impossible, not the probable over the improbable."
+      },
+      {
+        "handle": "350db731d51a09f1568348da67e40e50c3417a7e7bde9c041860ce74daf212ec",
+        "kind": "departure_declared",
+        "note": "Declaring departure from the view that acting requires assigning higher subjective probability of success. The candidate argues that acting requires only the absence of a known prohibition (falsification), not a positive expectation."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["bridge_collapse_known_defects", "medical_triage_known_allergies"],
+      "shared_structure": [
+        "Decision made under total uncertainty of future performance.",
+        "Differentiation based solely on known negative attributes (defects/allergies/falsifications).",
+        "Preference for the option with the fewest/severe known negatives, without assuming it will succeed."
+      ],
+      "disanalogies": [
+        "In engineering/medicine, we often implicitly trust laws of physics/biology to hold (induction), whereas Popper explicitly forbids this trust.",
+        "Surviving a test in science is not equivalent to lacking a defect; a theory can be unfalsified yet completely wrong in ways not yet tested."
+      ],
+      "transfer_claims": [
+        "Just as a surgeon avoids a patient with a known allergy even if other drugs might also fail, a scientist avoids a falsified theory even if corroborated ones might also fail.",
+        "Rationality in both cases is defined negatively: avoiding the known disaster, not guaranteeing the cure."
+      ],
+      "overturn_conditions": [
+        "If it is shown that avoiding known errors necessarily implies an expectation that unknown errors are less likely (hidden induction).",
+        "If the context requires positive assurance of success (e.g., life-critical systems) where mere 'non-falsification' is insufficient for action."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
