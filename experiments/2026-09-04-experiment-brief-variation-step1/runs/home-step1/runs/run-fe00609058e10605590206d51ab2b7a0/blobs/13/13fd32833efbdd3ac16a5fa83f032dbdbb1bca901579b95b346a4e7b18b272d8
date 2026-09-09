@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's terms not as an inductive inference that the theory is true or probable, but as a critical rationalist methodological decision to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing our proximity to truth (verisimilitude) without violating the prohibition on induction.",
+    "mechanism": "The mechanism distinguishes between the logical status of a theory (which remains conjectural and unproven) and the pragmatic rationality of action. By defining 'rational preference' as the alignment of action with the current best-tested guess rather than a prediction of future success based on past frequency, the agent avoids the inductive leap. The preference is a volitional commitment to the critical method itself: if we seek truth, we must act on the theory that has survived the most rigorous testing, even if we cannot assign it a higher probability.",
+    "counterconditions": [
+      "If the preference implies a belief that the future will resemble the past (uniformity of nature), it smuggles in induction.",
+      "If 'verisimilitude' cannot be defined without probabilistic assumptions, the justification collapses into induction.",
+      "If the choice is merely psychological habit rather than a reasoned methodological rule, it fails to be 'defensible' in a philosophical sense."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses action in novel domains by framing preference as a methodological rule for maximizing verisimilitude, not as an elimination of competitors that guarantees safety. The 'novelty' of the domain does not invalidate the rule that one should act on the best-tested hypothesis available, as doing so is the only non-arbitrary way to pursue truth."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The distinction between psychological expectation and logical justification is central. The candidate argues the preference is logically justified as a means to the aim of science (truth), distinct from a psychological feeling of certainty. This directly answers whether the preference is defensible 'on Popper's own terms' by adhering to his separation of context of discovery vs. context of justification."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "revised",
+        "note": "Revised to clarify that verisimilitude is used here as a comparative qualitative concept (Theory A has survived tests that Theory B failed) rather than a quantitative measure requiring probability. The reliance is on the logical content of surviving severe tests, not on assessing a numerical degree of truth-likeness which Popper admitted was problematic."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "Departing from the strict formal definition of verisimilitude refuted by Tichý and Miller. The candidate adopts a 'methodological verisimilitude' where the *preference* is justified by the process of severe testing, regardless of whether a perfect formal metric for truth-content exists. The defense rests on the rationality of the process, not the computability of the metric."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "rebutted",
+        "note": "The candidate explicitly affirms the preference is rational because it aligns with the aim of science (finding truth), countering the claim that calling it 'volitional' misrepresents Popper. It is a rational volition: a deliberate choice to follow the critical method, which is the essence of Popper's solution."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "Evolutionary selection explains the survival of theories, but the candidate justifies the *preference* for action by linking it to the normative goal of science. We prefer the survivor not just because it survived, but because its survival indicates it has higher potential truth-content relative to falsified rivals, making it the rational choice for an agent seeking truth."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e91706e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate maintains the distinction: it does not assume nature is uniform (inductive assumption) but makes a methodological decision to treat test conditions as stable for the purpose of the current action. This is a rule of procedure, not a metaphysical claim about the universe."
+      },
+      {
+        "handle": "390289f4c8a5d1e8b2d60805600b375478729748d6dbad2f7d4fb826d8f1f369",
+        "kind": "rebutted",
+        "note": "The candidate integrates the pragmatic justification via verisimilitude as the core of the 'critical rationalist axiom.' It is not a false dilemma; the axiom IS that we should act on the theory with the highest corroboration as our best guess at truth, which is precisely Popper's pragmatic solution."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

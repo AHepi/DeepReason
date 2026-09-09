@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's own terms not as an inductive inference of future success, but as a critical methodological decision to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing our current proximity to truth (verisimilitude) while explicitly acknowledging the risk of error.",
+    "mechanism": "The mechanism is 'Critical Preferential Selection': agents treat corroboration reports not as probability scores but as comparative records of survival. When action is required, the agent voluntarily adopts the theory with the highest degree of corroboration because it is the one that has been most rigorously tested and not yet eliminated. This preference is a non-cognitive, volitional commitment to the aim of science (truth), distinguishing the logical status of the theory (still conjectural) from the pragmatic necessity of choosing the best available option without invoking induction.",
+    "counterconditions": [
+      "If the agent treats the survival of past tests as a probabilistic guarantee of future performance, the preference becomes inductive and violates Popper's core tenet.",
+      "If the concept of verisimilitude is invoked as a measurable quantity rather than a regulative ideal, the Tichý-Miller refutation renders the justification invalid.",
+      "If the preference is framed as a logical deduction that the better-corroborated theory is 'more likely true,' it smuggles in the very induction Popper rejected."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses action in novel domains by framing preference as a 'critical methodological decision' rather than an elimination-only logic. It argues that in novel domains, we lack positive reasons; thus, acting on the theory that has survived the most severe tests in *related* domains is the only non-arbitrary choice consistent with the aim of truth, without claiming it will succeed."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The candidate explicitly distinguishes between 'logical justification' (which is denied for any theory) and 'methodological defensibility.' The defense rests on the rationality of aligning action with the goal of truth-seeking via the best-tested available instrument, which is a defensible stance on Popper's terms even without logical certainty."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "revised",
+        "note": "Revised to clarify that verisimilitude is treated strictly as a 'regulative ideal' and 'comparative record of survival' rather than an assessable metric requiring probabilistic assumptions. The claim now emphasizes that we cannot *know* which theory is closer to truth, only that preferring the most tested one is the most rational *guess* aligned with scientific aims."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate accepts the Tichý-Miller refutation of Popper's *formal* definition of verisimilitude but argues that a *qualitative* notion of 'having withstood more severe tests' remains a valid heuristic for preference without needing the failed formal calculus."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "rebutted",
+        "note": "The candidate aligns with Popper's view that the preference is rational because it serves the aim of science (truth), but clarifies this is a 'volitional rationality' (choosing the best means to an end) rather than an epistemic rationality that claims higher probability of truth."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "The evolutionary analogy is refined: survival explains the *state* of the theory, but the *preference* is justified by the agent's conscious adoption of the 'survivor' as the best available tool for the specific aim of truth, bridging the gap between passive survival and active selection."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate maintains the distinction: assuming nature is uniform is an inductive metaphysical claim (rejected), whereas treating test conditions as stable for the purpose of a specific falsification attempt is a methodological decision (accepted). Preference relies on the latter."
+      },
+      {
+        "handle": "390289f4c8a5d1e8b2d60805600b375478729748d6dbad2f7d4fb826d8f1f369",
+        "kind": "rebutted",
+        "note": "The false dilemma is resolved by showing that the 'pragmatic justification via verisimilitude' *is* the specific critical rationalist axiom in question. Accepting that we should act on the best-tested theory *is* the pragmatic move; there is no hidden second option outside this framework."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

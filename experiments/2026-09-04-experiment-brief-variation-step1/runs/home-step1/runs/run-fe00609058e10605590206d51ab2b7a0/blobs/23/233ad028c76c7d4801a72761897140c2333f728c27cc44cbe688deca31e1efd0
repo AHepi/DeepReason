@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule aligned with the aim of verisimilitude (truth-likeness), where 'preference' signifies the rational selection of the theory that has withstood the most severe attempts at falsification, thereby offering the best current guess at truth without assigning it higher probability.",
+    "mechanism": "The mechanism operates by redefining 'rational preference' away from probabilistic expectation (induction) and toward critical selection: scientists prefer Theory A over Theory B not because A is likely true, but because B has been eliminated or A has survived tests that would have killed B, making A the only remaining viable candidate for the aim of science (truth). This avoids induction by treating corroboration as a historical report of test severity, not a predictor of future performance.",
+    "counterconditions": [
+      "If verisimilitude cannot be defined without probabilistic assumptions (as argued by Tichý and Miller), then the non-inductive foundation collapses.",
+      "If the preference for action in novel domains implicitly assumes the uniformity of nature, then the solution smuggles in induction.",
+      "If 'rationality' in Popper's system requires a bridge to future success that corroboration cannot provide without induction, then the preference is merely psychological, not logical."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The criticism claims elimination doesn't justify action in novel domains. Rebuttal: Popper's justification for action is not that the theory will succeed, but that it is the best available guess based on critical scrutiny; acting on a falsified theory is irrational, while acting on the best-tested one is the only rational option left, even if success isn't guaranteed."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The criticism argues the psychological/logical distinction fails. Rebuttal: The distinction holds because the 'logic' is negative (elimination of error) while the 'preference' is a methodological decision to act on the survivor; this decision is rational within the critical framework without requiring positive inductive justification."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "rebutted",
+        "note": "Rebuttal: While Tichý and Miller refuted Popper's *quantitative* definition of verisimilitude, Popper's *qualitative* intuition—that a theory surviving severe tests is closer to truth than a falsified one—remains a regulative ideal that guides preference without needing probabilistic assessment."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "rebutted",
+        "note": "Rebuttal: The formal refutation of verisimilitude definitions does not invalidate the methodological rule of preferring theories that have survived more severe tests; the preference rests on the history of criticism, not on a calculated degree of truth-likeness."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "revised",
+        "note": "Revised to clarify that Popper views the preference as rational *because* it aligns with the aim of truth via critical elimination, correcting the potential misrepresentation that it is merely volitional or non-rational."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "Rebuttal: Evolutionary selection explains the survival of theories, but the *preference* for action is justified by the critical rationalist stance that we must act on the best-tested hypothesis to further the growth of knowledge, even if the analogy doesn't guarantee success."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "Rebuttal: The candidate explicitly distinguishes between the rejected inductive assumption of nature's uniformity and the methodological decision to treat test conditions as stable for falsification; the latter is a prerequisite for testing, not an inductive leap about the future."
+      },
+      {
+        "handle": "390289f4c8a5d1e8b2d60805600b375478729748d6dbad2f7d4fb826d8f1f369",
+        "kind": "rebutted",
+        "note": "Rebuttal: The candidate does not ignore verisimilitude but centers the argument on it as the non-probabilistic aim that justifies preference; the 'false dilemma' charge fails because the argument integrates verisimilitude as the core justification rather than an alternative."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

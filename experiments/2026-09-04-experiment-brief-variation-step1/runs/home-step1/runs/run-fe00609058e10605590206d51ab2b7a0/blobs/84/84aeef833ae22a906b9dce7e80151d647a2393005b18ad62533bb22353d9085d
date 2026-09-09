@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule aligned with the aim of science (verisimilitude) and a pragmatic decision to act on the theory that has withstood the most severe attempts at falsification, acknowledging that this preference carries no guarantee of truth or future survival.",
+    "mechanism": "The argument proceeds by distinguishing between 'justification' (which implies probability/induction) and 'rational preference' (which implies alignment with goals). It posits that while corroboration reports only past performance, the rational agent whose goal is truth (or high verisimilitude) prefers the theory that has survived severe tests because it is the only one not known to be false, whereas competitors may have been eliminated. This relies on the concept of 'verisimilitude' (truth-likeness) as a regulative ideal rather than a calculable probability, and frames the choice as a 'critical preference' rather than an 'inductive expectation'.",
+    "counterconditions": [
+      "If verisimilitude cannot be defined without probabilistic assumptions (as argued by Tichý and Miller), then the appeal to truth-likeness collapses into the very induction Popper rejects.",
+      "If the stability of test conditions in the future requires an inductive assumption about the uniformity of nature, then the preference for action smuggles in induction despite methodological denials.",
+      "If 'rational preference' implicitly assumes that past survival is a reliable guide to future utility, then the distinction between psychological expectation and logical justification is merely semantic."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses action in novel domains by framing preference as a 'critical selection' based on current error-elimination status rather than a prediction of novelty. The defense is that in the absence of positive knowledge, acting on the least-refuted option is the only rational move consistent with fallibilism, even if the domain is novel."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates 'logical justification' (impossible without induction) from 'rational preference' (possible via goal-alignment). It argues Popper defends the latter: we prefer the better-corroborated theory not because it is logically proven true, but because it best serves the critical aim of science at this moment."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "revised",
+        "note": "Revised to clarify that 'verisimilitude' is invoked strictly as a qualitative, regulative ideal (the aim of science) rather than a quantifiable metric requiring probabilistic assessment. The claim now emphasizes that we act *as if* the better-corroborated theory is closer to the truth, without claiming we can calculate that distance."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate acknowledges the Tichý/Miller refutation of Popper's formal definition of verisimilitude but argues that a revised, informal notion of 'content-based truth-likeness' remains sufficient for a pragmatic preference rule, departing from the requirement for a rigorous formal calculus of verisimilitude."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "rebutted",
+        "note": "The candidate aligns with Popper's view that the preference is rational because it aligns with the aim of finding truth, rejecting the characterization of it as merely 'non-rational' or purely 'volitional'. It asserts the rationality lies in the consistency of the action with the critical method."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "The candidate counters that evolutionary selection explains the survival of the theory, but the 'preference for action' is justified by the agent's conscious adoption of the critical method. The justification for action is not the evolutionary process itself, but the agent's rational decision to trust the outcome of that process (error elimination) over untested alternatives."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate maintains the distinction: the 'inductive assumption' of uniformity is rejected as a justification for truth, while the 'methodological decision' to treat conditions as stable is accepted as a necessary precondition for testing. Preference relies on the latter (a rule of procedure), not the former (a claim about the world)."
+      },
+      {
+        "handle": "390289f4c8a5d1e8b2d60805600b375478729748d6dbad2f7d4fb826d8f1f369",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dilemma by arguing that the 'pragmatic justification via verisimilitude' IS the specific critical rationalist axiom. There is no conflict; the pragmatic choice is derived directly from the axiom that our goal is truth and we must act on the best available error-free option."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
