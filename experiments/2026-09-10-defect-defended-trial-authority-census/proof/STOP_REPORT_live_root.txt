@@ -1,0 +1,126 @@
+# Stop report
+
+- source: `experiments/2026-09-09-fix-solo-criticism-authority/runs/home-solo/runs/run-02818acc38961781e2e820d0d6b591fb` (root)
+- run id: 2e1b324bbe2e927c953c8b0881fc17ad21e8df341066ee56f2059d1504d9a5ec
+
+This report is derived from the record alone. It ranks four boxes by evidence and never asserts a defect.
+
+## 1. WHAT ACTUALLY RAN
+
+| seat | model | profile | reasoning | max_tokens | timeout_s | split |
+|---|---|---|---|---|---|---|
+| argumentative_critic#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| conjecturer#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| defender#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| grounding_reviewer#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| judge#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| property_designer#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| summarizer#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| synthesizer#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| thesis#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| variator#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| vision_critic#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+
+- embedder as compiled: **hashing**
+
+Gates NOT carried by the compiled manifest (restored at run time from notice):
+
+- `/engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED` = true — restored at run time from notice
+- `/engine_config/LEGACY_CRITICISM_ENABLED` = false — restored at run time from notice; resolution `/criticism_policy`
+- `/engine_config/SINGLE_JUDGE_SEAT_PERMITTED` = true — restored at run time from notice
+
+Every compile notice, verbatim:
+
+- `CALIBRATION_RECEIPT_REQUIRED` text prose status authority requires CALIBRATION_RECEIPT
+- `ENGINE_CONFIG_FIELD_NOT_CARRIED` ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+- `ENGINE_CONFIG_FIELD_NOT_CARRIED` LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config and is restored at run time from this notice; carrying this value engages the criticism policy, which changes the qualification subject; this home requalifies once (~14 minutes)
+- `ENGINE_CONFIG_FIELD_NOT_CARRIED` SINGLE_JUDGE_SEAT_PERMITTED=True is not carried by this manifest's engine config and is restored at run time from this notice
+- `V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED` defended_trial requires two frozen judge seats from distinct families
+
+## 2. PRE-RUN CHECK
+
+| seat | form | first-pass | eventual | repairs | qualified |
+|---|---|---|---|---|---|
+| argumentative_critic#0 | batch-critic.v2 | 20/20 | 20 | 0 | True |
+| argumentative_critic#0 | critic.atomic-target.v1 | 20/20 | 20 | 0 | True |
+| conjecturer#0 | conjecturer.atomic-candidate.v1 | 20/20 | 20 | 0 | True |
+| conjecturer#0 | conjecturer.turn.v6 | 20/20 | 20 | 0 | True |
+| conjecturer#0 | scratch.block.compact.v1 | 20/20 | 20 | 0 | True |
+| conjecturer#0 | scratch.block.minimal.v1 | 20/20 | 20 | 0 | True |
+| defender#0 | defender.direct.v1 | 20/20 | 20 | 0 | True |
+| judge#0 | groundingverdictwirev1.direct.v1 | 20/20 | 20 | 0 | True |
+| judge#0 | judgeruling.direct.v1 | 20/20 | 20 | 0 | True |
+| summarizer#0 | bridge.ledger-batch.v1 | 20/20 | 20 | 0 | True |
+| summarizer#0 | bridge.ledger.v3 | 20/20 | 20 | 0 | True |
+| summarizer#0 | scratch.cluster-guide.compact.v1 | 20/20 | 20 | 0 | True |
+| summarizer#0 | scratch.cluster-guide.minimal.v1 | 20/20 | 20 | 0 | True |
+| synthesizer#0 | scratch.link.compact.v1 | 20/20 | 20 | 0 | True |
+| synthesizer#0 | scratch.link.minimal.v1 | 20/20 | 20 | 0 | True |
+| thesis#0 | bridge.composition-batch.v1 | 20/20 | 20 | 0 | True |
+| thesis#0 | bridge.composition.v2 | 20/20 | 20 | 0 | True |
+| variator#0 | variator.direct.v1 | 20/20 | 20 | 0 | True |
+
+
+## 3. PROVIDER HEALTH
+
+| seat | endpoint | attempts | invalid | zero-token | faults |
+|---|---|---|---|---|---|
+| argumentative_critic#0 | provider-profile-2d98e2449d89c77c7993b59f | 20 | 1 | 0 | none |
+| conjecturer#0 | provider-profile-2d98e2449d89c77c7993b59f | 38 | 8 | 0 | none |
+| defender#0 | provider-profile-2d98e2449d89c77c7993b59f | 17 | 0 | 0 | none |
+| judge#0 | provider-profile-2d98e2449d89c77c7993b59f | 33 | 0 | 0 | none |
+| variator#0 | provider-profile-2d98e2449d89c77c7993b59f | 26 | 2 | 0 | none |
+
+
+## 4. THE STOP, CLASSIFIED
+
+Stop message: `(none recorded)`
+
+Boxes ranked by evidence:
+
+### 1. CONFIGURATION — RULED OUT
+
+- evidence RULING IT OUT: the run reached a clean terminal (state='completed', stop_reason='budget_exhausted'); there is no failure to attribute. Section 5 reports whether it can be continued.
+
+### 2. ENVIRONMENT — RULED OUT
+
+- evidence RULING IT OUT: the run reached a clean terminal (state='completed', stop_reason='budget_exhausted'); there is no failure to attribute. Section 5 reports whether it can be continued.
+
+### 3. MODEL — RULED OUT
+
+- evidence RULING IT OUT: the run reached a clean terminal (state='completed', stop_reason='budget_exhausted'); there is no failure to attribute. Section 5 reports whether it can be continued.
+
+### 4. HARNESS — RULED OUT
+
+- evidence RULING IT OUT: the run reached a clean terminal (state='completed', stop_reason='budget_exhausted'); there is no failure to attribute. Section 5 reports whether it can be continued.
+
+## 5. CONTINUABILITY
+
+- state: completed
+- stop_reason: budget_exhausted
+- terminal_lifecycle_refusal: (none)
+- verify_root: {"checks": [], "source": "stored", "violations": 0}
+- continue: **ACCEPTED** — the run is at a terminal and carries no lifecycle refusal
+- amend: **ACCEPTED** — the run is at a terminal and carries no lifecycle refusal
+
+## 6. EVIDENCE STATES
+
+| what happened to it | artifacts |
+|---|---|
+| nothing has been brought against it yet | 46 |
+| it came through an attack, or a trial that ruled and did not sustain | 8 |
+| it fell | 3 |
+| the evidence points both ways | 12 |
+
+- rounds of criticism that ran to the end: **0** of 8, covering 0 artifacts
+- every round's outcome: {"cut:foreign": 8}
+
+| episode | untested | came through | fell | both ways |
+|---|---|---|---|---|
+| pre-cycle | 2 | 0 | 0 | 0 |
+| 0 | 6 | 4 | 1 | 9 |
+| 1 | 1 | 0 | 0 | 0 |
+| 2 | 8 | 0 | 1 | 0 |
+| 3 | 9 | 3 | 0 | 3 |
+| 4 | 7 | 0 | 0 | 0 |
+| 5 | 13 | 1 | 1 | 0 |

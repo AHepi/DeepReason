@@ -1,0 +1,22 @@
+## 4. THE STOP, CLASSIFIED
+
+Stop message: `(none recorded)`
+
+Boxes ranked by evidence:
+
+### 1. CONFIGURATION — RULED OUT
+
+- evidence RULING IT OUT: the run reached a clean terminal (state='completed', stop_reason='budget_exhausted'); there is no failure to attribute. Section 5 reports whether it can be continued.
+
+### 2. ENVIRONMENT — RULED OUT
+
+- evidence RULING IT OUT: the run reached a clean terminal (state='completed', stop_reason='budget_exhausted'); there is no failure to attribute. Section 5 reports whether it can be continued.
+
+### 3. MODEL — RULED OUT
+
+- evidence RULING IT OUT: the run reached a clean terminal (state='completed', stop_reason='budget_exhausted'); there is no failure to attribute. Section 5 reports whether it can be continued.
+
+### 4. HARNESS — RULED OUT
+
+- evidence RULING IT OUT: the run reached a clean terminal (state='completed', stop_reason='budget_exhausted'); there is no failure to attribute. Section 5 reports whether it can be continued.
+
