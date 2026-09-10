@@ -1,0 +1,25 @@
+$ python tools/blast_radius.py --files src/deepreason/verification/report.py   # (pre-fix tree)
+{"result_type": "BLAST_RADIUS_RESULT_V1", "targets": {"files": ["src/deepreason/verification/report.py"], "symbols": []}, "base": null, "frozen_surface_contacts": [], "frozen_adjacent_contacts": [], "reachability": [], "consumers": {"tests": [{"target": "src/deepreason/verification/report.py", "hits": ["tests/test_wire_contract_id_map.py:156"]}], "map_checks": [{"target": "src/deepreason/verification/report.py", "hits": ["docs/map/CON-warrants-and-attacks.md:56", "docs/map/INV-frozen-surfaces.md:128", "docs/map/INV-frozen-surfaces.md:158", "docs/map/INV-frozen-surfaces.md:248", "docs/map/INV-frozen-surfaces.md:645", "docs/map/INV-frozen-surfaces.md:654", "docs/map/SEAM-adjudication-x-rules.md:237", "docs/map/SEAM-evaluation-x-scheduler.md:117", "docs/map/SEAM-llm-x-manifest.md:330", "docs/map/SEAM-llm-x-verification.md:76", "docs/map/SEAM-llm-x-verification.md:77", "docs/map/SEAM-llm-x-verification.md:78", "docs/map/SEAM-llm-x-verification.md:79", "docs/map/SEAM-llm-x-verification.md:80", "docs/map/SEAM-llm-x-verification.md:81", "docs/map/SEAM-scheduler-x-workflow.md:346", "docs/map/SUB-adjudication.md:151", "docs/map/SUB-scheduler.md:544", "docs/map/SUB-verification.md:65", "docs/map/SUB-verification.md:134", "docs/map/SUB-verification.md:154", "docs/map/SUB-verification.md:305", "docs/map/SUB-verification.md:330", "docs/map/SUB-verification.md:360", "docs/map/SUB-verification.md:366", "docs/map/SUB-verification.md:424"]}], "qualification_digest": [], "wheel_smoke_pins": []}, "disclosure_summary": "This change touches none of the five frozen surfaces. 1 test file(s) and 1 map document(s) assert on the touched targets today.", "frozen_surface_verdict": "CLEAR"}
+
+=== Per-module census, every module under src/deepreason/verification/ (pre-fix tree) ===
+src/deepreason/verification/__init__.py       CLEAR
+src/deepreason/verification/_sandbox.py       CLEAR
+src/deepreason/verification/brokered.py       CLEAR
+src/deepreason/verification/code.py           CLEAR
+src/deepreason/verification/contained.py      CLEAR
+src/deepreason/verification/lean.py           CLEAR
+src/deepreason/verification/llm_broker.py     CLEAR
+src/deepreason/verification/models.py         CLEAR
+src/deepreason/verification/registry.py       CLEAR
+src/deepreason/verification/report.py         CLEAR
+src/deepreason/verification/runner.py         CLEAR
+src/deepreason/verification/simulation.py     CLEAR
+
+=== Control: the five registry paths named directly (pre-fix tree) ===
+DIRECT :: src/deepreason/capabilities/state.py :: capabilities/state.py digests and event application
+DIRECT :: src/deepreason/harness.py :: harness.py event application and well-formedness
+DIRECT :: src/deepreason/invariants.py :: replay-validation record formats (invariants.py)
+DIRECT :: src/deepreason/run_manifest.py :: manifest schemas and validators (run_manifest.py)
+DIRECT :: src/deepreason/qualification.py :: qualification subject digests (qualification.py)
+DIRECT :: src/deepreason/llm/firewall.py :: route_fingerprint serialization (llm/firewall.py)
+verdict: CONTACT
