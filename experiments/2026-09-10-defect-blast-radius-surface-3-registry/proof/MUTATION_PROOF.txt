@@ -1,0 +1,30 @@
+Mutation proof for the directory-scope self-test case (tools/blast_radius.py --self-test).
+Each mutation is applied to the FIXED tree, measured, then reverted.
+
+=== MUTATION 1: surface 3 loses its verification/ half (the E88 defect, reintroduced) ===
+self-test exit=1
+    assert data["frozen_surface_verdict"] == "CONTACT", data
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'result_type': 'BLAST_RADIUS_RESULT_V1', 'targets': {'files': ['src/deepreason/verification/report.py'], 'symbols': []}, 'base': None, 'frozen_surface_contacts': [], 'frozen_adjacent_contacts': [], 'reachability': [], 'consumers': {'tests': [], 'map_checks': [], 'qualification_digest': [], 'wheel_smoke_pins': []}, 'disclosure_summary': 'This change touches none of the five frozen surfaces. 0 test file(s) and 0 map document(s) assert on the touched targets today.', 'frozen_surface_verdict': 'CLEAR'}
+FAILED tests/test_blast_radius.py::test_frozen_surface_direct_contact_on_a_file_inside_a_directory_scoped_surface
+FAILED tests/test_blast_radius.py::test_symbol_indirect_contact_reaches_inside_a_directory_scoped_surface
+FAILED tests/test_blast_radius.py::test_self_test_mode_passes - AssertionErro...
+FAILED tests/test_blast_radius.py::test_real_registry_reports_contact_for_every_path_of_frozen_surface_3[src/deepreason/verification/report.py]
+FAILED tests/test_blast_radius.py::test_real_registry_reports_contact_for_every_path_of_frozen_surface_3[src/deepreason/verification/contained.py]
+5 failed, 22 passed in 7.29s
+
+=== MUTATION 2: directory match loosened to a bare string prefix ===
+self-test exit=1
+    assert data["frozen_surface_verdict"] == "CLEAR", (near_miss, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('src/deepreason/verification_notes.py', {'result_type': 'BLAST_RADIUS_RESULT_V1', 'targets': {'files': ['src/deepreason/verification_notes.py'], 'symbols': []}, 'base': None, 'frozen_surface_contacts': [{'surface': 'replay-validation record formats (invariants.py, verification/)', 'tier': 'DIRECT', 'target': 'src/deepreason/verification_notes.py', 'detail': 'target file is inside surface path src/deepreason/verification/'}], 'frozen_adjacent_contacts': [], 'reachability': [], 'consumers': {'tests': [], 'map_checks': [], 'qualification_digest': [], 'wheel_smoke_pins': []}, 'disclosure_summary': 'This change touches 1 of the five frozen surfaces (locked-down files that a change can silently corrupt old, already-recorded runs by touching): replay-validation record formats (invariants.py, verification/). 0 test file(s) and 0 map document(s) assert on the touched targets today.', 'frozen_surface_verdict': 'CONTACT'})
+=========================== short test summary info ============================
+FAILED tests/test_blast_radius.py::test_directory_scoped_surface_matches_only_on_a_path_boundary
+FAILED tests/test_blast_radius.py::test_self_test_mode_passes - AssertionErro...
+2 failed, 25 passed in 6.74s
+
+=== RESTORED (fixed tree) ===
+SELF-TEST PASS
+self-test exit=0
+...........................                                              [100%]
+27 passed in 7.51s

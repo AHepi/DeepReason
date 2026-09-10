@@ -1,0 +1,43 @@
+$ python tools/blast_radius.py --files src/deepreason/verification/report.py   # (fixed tree)
+{
+  "frozen_surface_contacts": [
+    {
+      "surface": "replay-validation record formats (invariants.py, verification/)",
+      "tier": "DIRECT",
+      "target": "src/deepreason/verification/report.py",
+      "detail": "target file is inside surface path src/deepreason/verification/"
+    }
+  ],
+  "frozen_adjacent_contacts": [],
+  "disclosure_summary": "This change touches 1 of the five frozen surfaces (locked-down files that a change can silently corrupt old, already-recorded runs by touching): replay-validation record formats (invariants.py, verification/). 1 test file(s) and 1 map document(s) assert on the touched targets today.",
+  "frozen_surface_verdict": "CONTACT"
+}
+
+=== Per-module census, every module under src/deepreason/verification/ (fixed tree) ===
+src/deepreason/verification/__init__.py       CONTACT
+src/deepreason/verification/_sandbox.py       CONTACT
+src/deepreason/verification/brokered.py       CONTACT
+src/deepreason/verification/code.py           CONTACT
+src/deepreason/verification/contained.py      CONTACT
+src/deepreason/verification/lean.py           CONTACT
+src/deepreason/verification/llm_broker.py     CONTACT
+src/deepreason/verification/models.py         CONTACT
+src/deepreason/verification/registry.py       CONTACT
+src/deepreason/verification/report.py         CONTACT
+src/deepreason/verification/runner.py         CONTACT
+src/deepreason/verification/simulation.py     CONTACT
+
+=== Every registry path named directly (fixed tree) ===
+DIRECT :: src/deepreason/capabilities/state.py :: capabilities/state.py digests and event application
+DIRECT :: src/deepreason/harness.py :: harness.py event application and well-formedness
+DIRECT :: src/deepreason/invariants.py :: replay-validation record formats (invariants.py, verification/)
+DIRECT :: src/deepreason/verification/report.py :: replay-validation record formats (invariants.py, verification/)
+DIRECT :: src/deepreason/run_manifest.py :: manifest schemas and validators (run_manifest.py)
+DIRECT :: src/deepreason/qualification.py :: qualification subject digests (qualification.py)
+DIRECT :: src/deepreason/llm/firewall.py :: route_fingerprint serialization (llm/firewall.py)
+verdict: CONTACT
+
+=== Not-everything-is-CONTACT control (fixed tree) ===
+src/deepreason/scheduler/scheduler.py         CLEAR
+src/deepreason/rules/conj.py                  CLEAR
+src/deepreason/config.py                      CLEAR

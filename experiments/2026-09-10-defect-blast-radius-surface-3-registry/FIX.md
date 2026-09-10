@@ -138,3 +138,67 @@ Class `defect` per GOAL.md; estimate under 150 lines; **no frozen surface is
 touched** — `tools/` is outside all five, stated by the operator in this
 tranche's brief and true of the change sites above. Proceeds to
 `dr-implement-fix` without an operator grant.
+
+---
+
+## Amendment 1 — the diff budget gate says EXCEEDED, and this is the stop
+
+Run before the commit, as `dr-implement-fix` step 8 requires
+(`proof/DIFF_BUDGET.txt`, verbatim):
+
+    {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "9607fba6f",
+     "areas": {"tools/blast_radius.py": 109,
+               "docs/map/INV-frozen-surfaces.md": 63,
+               "docs/ERRATA.md": 30,
+               "tests/test_blast_radius.py": 108},
+     "total_insertions": 310, "ceiling": 150, "verdict": "EXCEEDED"}
+
+**The decision.** 310 insertions against a 150 ceiling, so the ceiling is
+missed by more than double. Recorded here, before the commit, because the
+recorded failure this gate exists to prevent is a diff going over quietly:
+2026-08-05, 193 insertions against the same ceiling with no stop written
+anywhere. The size is not the finding — the missing stop was.
+
+**Where the estimate was wrong, per area.** My estimate said "~85 lines across
+2 code/doc files plus `docs/ERRATA.md`, on top of the ~70 test lines already
+committed", i.e. it under-counted three ways at once:
+
+  - `tools/blast_radius.py` 109 against ~50 assumed. Changing an entry's shape
+    from `"path": <str>` to `"paths": [<str>]` rewrites all six entries, and
+    `git` counts a rewritten line as an insertion plus a deletion. 28 of those
+    109 have a matching deletion; the true new-code figure is 81.
+  - `docs/ERRATA.md` 30 against ~15 assumed. The ledger's own rule forbids
+    rewriting E88, so the correction is a full new entry rather than three
+    words changed in place.
+  - `tests/` 108 against the ~70 I had already committed and stopped counting.
+    Two real-tree tests and a six-line fixture addition landed after that count
+    was written.
+
+**Priced options.**
+
+  A. **Accept the diff as it stands.** Cost: the tranche closes over budget on
+     the record, and this amendment is what a later reader finds. Buys: the
+     evidence stays whole — four regression tests, two of them against the real
+     tree (the only kind that could have caught this defect), the self-test case
+     the goal explicitly requires, and a ledger entry that does not lie about
+     where E88 was corrected.
+  B. **Trim to fit 150.** The only areas with slack are prose: the map's inline
+     check block (~18 lines) and E89 (~30). Cutting both to the bone recovers
+     roughly 35 and still lands near 275. Reaching 150 means deleting either
+     the real-tree tests or the errata entry. Cost: the instrument goes back to
+     being pinned only by fixture tests — which is precisely how this defect
+     survived from the gate's construction to 2026-09-10, since a fixture
+     registry was green throughout.
+  C. **Split into two tranches** — mechanism now, record and map next. Cost:
+     violates the map rule this repo states in the imperative ("the map moves
+     in the SAME COMMIT as the code — a separate 'update docs' commit is the
+     commit that gets dropped") to satisfy a line count.
+
+**Recommendation: A, and the ceiling was the wrong instrument here.** The 150
+ceiling guards against a fix quietly becoming a redesign. This one did not: the
+mechanism is 81 net new lines in one file, one helper and one comparison, and
+the census in DIAGNOSIS.md checked all six registry rows so no surface was
+widened beyond the one the finding names. The other 229 lines are test, map and
+ledger — the three things this repo's rules require to move WITH a fix, and the
+three the ceiling counts as if they were risk. Recorded as EXCEEDED rather than
+argued away; the operator decides whether to trim.
