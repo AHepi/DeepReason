@@ -1,0 +1,117 @@
+..F.F..................FF..                                              [100%]
+=================================== FAILURES ===================================
+_ test_frozen_surface_direct_contact_on_a_file_inside_a_directory_scoped_surface _
+
+repo = (PosixPath('/tmp/pytest-of-root/pytest-1/test_frozen_surface_direct_con1'), 'd235765e0e8400d36ccdd4cbe6d2665bb8253a2a')
+
+    def test_frozen_surface_direct_contact_on_a_file_inside_a_directory_scoped_surface(repo):
+        """Regression (docs/ERRATA.md E88): frozen surface 3 is spelled
+        "Replay-validation record formats -- `invariants.py`, `verification/`" by
+        its owning document, and CLAUDE.md states the arithmetic -- five surfaces,
+        seven paths, because surface 3 covers both. A registry that can hold only
+        one exact-match file per surface reports CLEAR for every module under
+        `src/deepreason/verification/`, which is the disclosure gate telling a
+        window there is no frozen surface to edit while it edits one."""
+        tmp_path, _base = repo
+        result = _run(tmp_path, "--files", "src/deepreason/verification/report.py")
+        assert result.returncode == 0, result.stderr
+        data = json.loads(result.stdout)
+>       assert data["frozen_surface_verdict"] == "CONTACT", data
+E       AssertionError: {'result_type': 'BLAST_RADIUS_RESULT_V1', 'targets': {'files': ['src/deepreason/verification/report.py'], 'symbols': []}, 'base': None, 'frozen_surface_contacts': [], ...}
+E       assert 'CLEAR' == 'CONTACT'
+E         
+E         - CONTACT
+E         + CLEAR
+
+tests/test_blast_radius.py:143: AssertionError
+____ test_symbol_indirect_contact_reaches_inside_a_directory_scoped_surface ____
+
+repo = (PosixPath('/tmp/pytest-of-root/pytest-1/test_symbol_indirect_contact_r0'), '2026064a1dbd216d27a100753ed7d5a18e9daade')
+
+    def test_symbol_indirect_contact_reaches_inside_a_directory_scoped_surface(repo):
+        """The SYMBOL_INDIRECT half of a directory-scoped surface: a symbol
+        referenced by a file INSIDE the directory is contact on that surface, at
+        the same grep-based tier a single-file surface reports. Without this, a
+        change declared only by symbol takes no contact on surface 3 at all."""
+        tmp_path, _base = repo
+        data = json.loads(_run(tmp_path, "--symbols", "_transaction_findings").stdout)
+        hits = [c for c in data["frozen_surface_contacts"] if c["target"] == "_transaction_findings"]
+>       assert hits and all(h["tier"] == "SYMBOL_INDIRECT" for h in hits), data
+E       AssertionError: {'result_type': 'BLAST_RADIUS_RESULT_V1', 'targets': {'files': [], 'symbols': ['_transaction_findings']}, 'base': None, 'frozen_surface_contacts': [], ...}
+E       assert ([])
+
+tests/test_blast_radius.py:173: AssertionError
+_ test_real_registry_reports_contact_for_every_path_of_frozen_surface_3[src/deepreason/verification/report.py] _
+
+path = 'src/deepreason/verification/report.py'
+
+    @pytest.mark.parametrize(
+        "path",
+        [
+            "src/deepreason/verification/report.py",
+            "src/deepreason/verification/contained.py",
+            "src/deepreason/invariants.py",
+        ],
+    )
+    def test_real_registry_reports_contact_for_every_path_of_frozen_surface_3(path):
+        """Runs the tool against the REAL tree, not a fixture, because the defect
+        E88 records was in the registry's contents rather than in its computation
+        -- a fixture registry would have been green throughout. Surface 3's owning
+        document (docs/map/INV-frozen-surfaces.md §3) names `invariants.py` AND
+        `verification/`; all three paths must report CONTACT."""
+        result = subprocess.run(
+            [sys.executable, str(TOOL), "--files", path],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0, result.stderr
+        data = json.loads(result.stdout)
+>       assert data["frozen_surface_verdict"] == "CONTACT", data
+E       AssertionError: {'result_type': 'BLAST_RADIUS_RESULT_V1', 'targets': {'files': ['src/deepreason/verification/report.py'], 'symbols': []}, 'base': None, 'frozen_surface_contacts': [], ...}
+E       assert 'CLEAR' == 'CONTACT'
+E         
+E         - CONTACT
+E         + CLEAR
+
+tests/test_blast_radius.py:408: AssertionError
+_ test_real_registry_reports_contact_for_every_path_of_frozen_surface_3[src/deepreason/verification/contained.py] _
+
+path = 'src/deepreason/verification/contained.py'
+
+    @pytest.mark.parametrize(
+        "path",
+        [
+            "src/deepreason/verification/report.py",
+            "src/deepreason/verification/contained.py",
+            "src/deepreason/invariants.py",
+        ],
+    )
+    def test_real_registry_reports_contact_for_every_path_of_frozen_surface_3(path):
+        """Runs the tool against the REAL tree, not a fixture, because the defect
+        E88 records was in the registry's contents rather than in its computation
+        -- a fixture registry would have been green throughout. Surface 3's owning
+        document (docs/map/INV-frozen-surfaces.md §3) names `invariants.py` AND
+        `verification/`; all three paths must report CONTACT."""
+        result = subprocess.run(
+            [sys.executable, str(TOOL), "--files", path],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0, result.stderr
+        data = json.loads(result.stdout)
+>       assert data["frozen_surface_verdict"] == "CONTACT", data
+E       AssertionError: {'result_type': 'BLAST_RADIUS_RESULT_V1', 'targets': {'files': ['src/deepreason/verification/contained.py'], 'symbols': []}, 'base': None, 'frozen_surface_contacts': [], ...}
+E       assert 'CLEAR' == 'CONTACT'
+E         
+E         - CONTACT
+E         + CLEAR
+
+tests/test_blast_radius.py:408: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_blast_radius.py::test_frozen_surface_direct_contact_on_a_file_inside_a_directory_scoped_surface
+FAILED tests/test_blast_radius.py::test_symbol_indirect_contact_reaches_inside_a_directory_scoped_surface
+FAILED tests/test_blast_radius.py::test_real_registry_reports_contact_for_every_path_of_frozen_surface_3[src/deepreason/verification/report.py]
+FAILED tests/test_blast_radius.py::test_real_registry_reports_contact_for_every_path_of_frozen_surface_3[src/deepreason/verification/contained.py]
+4 failed, 23 passed in 6.80s

@@ -49,12 +49,24 @@ def repo(tmp_path):
     script, and a wheel-smoke stand-in with a pinned MCP tool name."""
     (tmp_path / "src" / "deepreason" / "cli").mkdir(parents=True)
     (tmp_path / "src" / "deepreason" / "rules").mkdir(parents=True)
+    (tmp_path / "src" / "deepreason" / "verification").mkdir(parents=True)
     (tmp_path / "tests").mkdir()
     (tmp_path / "docs" / "map").mkdir(parents=True)
     (tmp_path / "scripts").mkdir()
 
     (tmp_path / "src" / "deepreason" / "harness.py").write_text("class Harness:\n    pass\n")
     (tmp_path / "src" / "deepreason" / "unrelated.py").write_text("VALUE = 1\n")
+    (tmp_path / "src" / "deepreason" / "verification" / "report.py").write_text(
+        "def _transaction_findings(root):\n    return []\n"
+    )
+    # Two near-misses for the directory-scoped surface, both of which must stay
+    # CLEAR: a sibling file whose path merely STARTS WITH the directory name,
+    # and a same-named directory under a different parent.
+    (tmp_path / "src" / "deepreason" / "verification_notes.py").write_text("NOTE = 1\n")
+    (tmp_path / "src" / "deepreason" / "rules" / "verification").mkdir(parents=True)
+    (tmp_path / "src" / "deepreason" / "rules" / "verification" / "report.py").write_text(
+        "OTHER = 1\n"
+    )
     (tmp_path / "src" / "deepreason" / "cli" / "main.py").write_text(
         "from deepreason.rules.experiment import live_func\n\n\ndef main():\n    live_func()\n"
     )
@@ -114,6 +126,52 @@ def test_frozen_surface_clear_when_no_target_matches(repo):
     data = json.loads(result.stdout)
     assert data["frozen_surface_verdict"] == "CLEAR"
     assert data["frozen_surface_contacts"] == []
+
+
+def test_frozen_surface_direct_contact_on_a_file_inside_a_directory_scoped_surface(repo):
+    """Regression (docs/ERRATA.md E88): frozen surface 3 is spelled
+    "Replay-validation record formats -- `invariants.py`, `verification/`" by
+    its owning document, and CLAUDE.md states the arithmetic -- five surfaces,
+    seven paths, because surface 3 covers both. A registry that can hold only
+    one exact-match file per surface reports CLEAR for every module under
+    `src/deepreason/verification/`, which is the disclosure gate telling a
+    window there is no frozen surface to edit while it edits one."""
+    tmp_path, _base = repo
+    result = _run(tmp_path, "--files", "src/deepreason/verification/report.py")
+    assert result.returncode == 0, result.stderr
+    data = json.loads(result.stdout)
+    assert data["frozen_surface_verdict"] == "CONTACT", data
+    direct = [c for c in data["frozen_surface_contacts"] if c["tier"] == "DIRECT"]
+    assert direct and direct[0]["target"] == "src/deepreason/verification/report.py", data
+    assert "verification/" in direct[0]["detail"], data
+
+
+def test_directory_scoped_surface_matches_only_on_a_path_boundary(repo):
+    """Permanent mutation companion to the test above: a directory entry must
+    match on a path BOUNDARY, not as a bare string prefix and not on the
+    directory's name alone. `verification_notes.py` sits beside the surface and
+    `rules/verification/report.py` shares its last two segments; a mutation to
+    plain `startswith(name)` or to a basename comparison flags one or both."""
+    tmp_path, _base = repo
+    for near_miss in (
+        "src/deepreason/verification_notes.py",
+        "src/deepreason/rules/verification/report.py",
+    ):
+        data = json.loads(_run(tmp_path, "--files", near_miss).stdout)
+        assert data["frozen_surface_verdict"] == "CLEAR", (near_miss, data)
+        assert data["frozen_surface_contacts"] == [], (near_miss, data)
+
+
+def test_symbol_indirect_contact_reaches_inside_a_directory_scoped_surface(repo):
+    """The SYMBOL_INDIRECT half of a directory-scoped surface: a symbol
+    referenced by a file INSIDE the directory is contact on that surface, at
+    the same grep-based tier a single-file surface reports. Without this, a
+    change declared only by symbol takes no contact on surface 3 at all."""
+    tmp_path, _base = repo
+    data = json.loads(_run(tmp_path, "--symbols", "_transaction_findings").stdout)
+    hits = [c for c in data["frozen_surface_contacts"] if c["target"] == "_transaction_findings"]
+    assert hits and all(h["tier"] == "SYMBOL_INDIRECT" for h in hits), data
+    assert any("verification/report.py" in h["detail"] for h in hits), data
 
 
 def test_frozen_surface_symbol_indirect_contact_is_tier_tagged(repo):
@@ -315,3 +373,53 @@ def test_self_test_mode_passes():
     )
     assert result.returncode == 0, result.stderr
     assert "SELF-TEST PASS" in result.stdout
+
+
+# ---------------------------------------------------------------------
+# The registry against the real tree
+# ---------------------------------------------------------------------
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "src/deepreason/verification/report.py",
+        "src/deepreason/verification/contained.py",
+        "src/deepreason/invariants.py",
+    ],
+)
+def test_real_registry_reports_contact_for_every_path_of_frozen_surface_3(path):
+    """Runs the tool against the REAL tree, not a fixture, because the defect
+    E88 records was in the registry's contents rather than in its computation
+    -- a fixture registry would have been green throughout. Surface 3's owning
+    document (docs/map/INV-frozen-surfaces.md §3) names `invariants.py` AND
+    `verification/`; all three paths must report CONTACT."""
+    result = subprocess.run(
+        [sys.executable, str(TOOL), "--files", path],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stderr
+    data = json.loads(result.stdout)
+    assert data["frozen_surface_verdict"] == "CONTACT", data
+    assert any(c["tier"] == "DIRECT" for c in data["frozen_surface_contacts"]), data
+
+
+def test_real_registry_still_reports_clear_for_a_file_outside_every_surface():
+    """The other half: widening the registry must not make everything CONTACT.
+    `scheduler.py` is a registered entry point and sits under no frozen
+    surface."""
+    result = subprocess.run(
+        [sys.executable, str(TOOL), "--files", "src/deepreason/scheduler/scheduler.py"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stderr
+    data = json.loads(result.stdout)
+    assert data["frozen_surface_verdict"] == "CLEAR", data
+    assert data["frozen_surface_contacts"] == [], data
