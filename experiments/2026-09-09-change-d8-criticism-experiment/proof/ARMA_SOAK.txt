@@ -1,0 +1,54 @@
+=== Step 36 proof: ARM A's shape drives — and exactly what that does NOT show ===
+
+ARM A is the only arm carrying a granted authority and a two-family judge panel,
+and therefore the one most likely to fail offline. It does not.
+
+  cycles requested       8
+  qualification          rc=0 (4.8s)
+  drive                  272.0s, 11 progress events
+  [PASS] A1-typed-terminal      state='completed' stop_reason='budget_exhausted'
+  [PASS] A2-no-operational-failure
+  [PASS] A3-verify-root-clean   0 violation(s)
+  [PASS] A4-cycles-reached      reached cycle 8 of 8
+  [PASS] A7-record-fully-read   0 unparseable records
+  [N/A ] A5, A6                 not carried by this case
+  ** a green exit describes the 5 that ran, never the 7
+  [soak] exit 0 (clean)
+
+Note the qualification line: the two-family route table qualified in 4.8 s
+against the stub, so the cross-family judge ensemble is not merely compilable
+but bindable through the production-contract doctor.
+
+--- AND HERE IS WHAT THE SOAK DOES NOT SHOW, stated before anything is sealed ---
+
+The record census over all three stub roots:
+
+| Arm | Attack edges | Warrants: demonstrative | Warrants: argumentative | Refutations |
+|---|---|---|---|---|
+| stub ARM C | 1 | 1 | **0** | 1 |
+| stub ARM V | 1 | 1 | **0** | 1 |
+| stub ARM A | 1 | 1 | **0** | 1 |
+
+Adjudication events: ARM C 0, ARM V 0, **ARM A 0**.
+
+**Offline, ARM A is INDISTINGUISHABLE from ARM C.** No judge fired, no
+argumentative warrant minted, and the three roots' censuses are identical row
+for row. The cause is the fixture, not the configuration: the shared stub
+answers the batch-critic contract with `{"target_alias": …, "attack": false,
+"case": ""}`, so no sustained prose case ever exists for a trial to try. The
+authority road is ARMED and never TRAVELLED here.
+
+So the soak establishes that ARM A's SHAPE drives to a clean terminal, and
+nothing whatever about whether granted authority does anything. That the road is
+REACHABLE was established separately and statically (step 28,
+`proof/ARM_A_ROUTE_IDENTITY.txt`): `_authority` over ARM A's own compiled
+manifest returns `trial_required` rather than `observe_only`;
+`require_cross_family_judge_ensemble` returns two seats of two families; and ARM
+C — single-family — is REFUSED, which is the control proving that check can say
+no.
+
+Whether the road is TRAVELLED is what tranche 2 measures, and PREREG §12 already
+registers what a zero there would mean: a finding about granted authority, not a
+broken instrument. This proof is part of why that reading is licensed — the
+instrument's ability to report a non-zero argumentative count is proved on a
+fixture with a mutation, because no root in this repository can prove it.

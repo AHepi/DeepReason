@@ -1,6 +1,6 @@
 # Checklist for: does criticism, once connected and allowed to bite, make the harness's output materially better than the plain model? — TRANCHE 1 (instruments, offline proofs, sealed pre-registration; NO LIVE CALL)
 
-State: next=36 blockers=none  (steps 33-35 and 30-31 done; ARM A's soak is the last one running)  (PLAN CORRECTION at step 30: steps 30-31 read a stub root, and the soaks at 33-36 are what produce one, so 33-36 run FIRST and 30-32 follow. Order changed, nothing dropped; recorded rather than improvised, per dr-execute-step's rule for a step the tree contradicts.)  (second budget stop RESOLVED by the operator: "raise." -- ceiling 8300, SPEC Amendment 5, itemized from a measured 6798 base with a larger margin because three of the last four misses were items no itemization contained)  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
+State: next=41 blockers=none  (all three soaks green; PREREG sealed at step 40)  (PLAN CORRECTION at step 30: steps 30-31 read a stub root, and the soaks at 33-36 are what produce one, so 33-36 run FIRST and 30-32 follow. Order changed, nothing dropped; recorded rather than improvised, per dr-execute-step's rule for a step the tree contradicts.)  (second budget stop RESOLVED by the operator: "raise." -- ceiling 8300, SPEC Amendment 5, itemized from a measured 6798 base with a larger margin because three of the last four misses were items no itemization contained)  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
 Re-read REQUEST.md (with Amendment 1) + SPEC.md (with Amendment 1) before every
 step. Execute strictly in order. One step per dr-execute-step invocation.
 
@@ -568,7 +568,7 @@ nor `mini/`, so R36 is not touched.
        arm), and adding a provenance field to `OpenCriticism` (the field whose
        ABSENCE is the guarantee). `src/` restored and verified byte-clean.
 
-- [ ] 32. (S3, S4, S5) [COMMIT] the manifest builder, the three configurations
+- [x] 32. (S3, S4, S5) [COMMIT] the manifest builder, the three configurations
        and the five proofs.
        done-when: tree clean, head on origin.
 
@@ -602,15 +602,28 @@ nor `mini/`, so R36 is not touched.
        done-when: green; `runs/soak-v.log` committed.
        PROOF: `[soak] exit 0 (clean)`, same five assertions PASS, drive 266.7s.
 
-- [ ] 36. (S12) Soak ARM A's shape — the one carrying a granted authority and a
+- [x] 36. (S12) Soak ARM A's shape — the one carrying a granted authority and a
        two-seat ensemble, so the one most likely to fail offline.
        done-when: green; `runs/soak-a.log` committed. A RED here is a finding
        for SPEC, not a step to retry blind.
+       PROOF (`proof/ARMA_SOAK.txt`): `[soak] exit 0 (clean)`, five assertions
+       PASS, cycle 8 of 8, `verify_root` 0 violations, and the two-family route
+       table QUALIFIED in 4.8s through the production-contract doctor — so the
+       cross-family ensemble is bindable, not merely compilable.
+       AND WHAT IT DOES NOT SHOW, recorded before sealing because the flattering
+       over-reading is available: offline, ARM A is INDISTINGUISHABLE from ARM
+       C. The census over all three stub roots is identical row for row (1 edge,
+       1 demonstrative warrant, **0 argumentative**, 1 refutation) and
+       adjudication events are 0 in all three. The shared stub answers the
+       batch-critic contract with empty cases, so no sustained prose case exists
+       for a trial to try: ARM A's authority road is ARMED and never TRAVELLED
+       here. That it is REACHABLE was established statically at step 28
+       instead. Registered in PREREG §12a.
 
-- [ ] 37. (S12) [COMMIT] the three cases and the three soak logs.
+- [x] 37. (S12) [COMMIT] the three cases and the three soak logs.
        done-when: tree clean, head on origin.
 
-- [ ] 38. (S8, R15) Write `PREREG.md`: §0 what is fixed for every arm (by
+- [x] 38. (S8, R15) Write `PREREG.md`: §0 what is fixed for every arm (by
        digest) and WHICH values are rules awaiting a measurement (ARM V's bank,
        ARM 0's K) rather than fixed numbers; §0's own disclosure row for R35's
        one-model deviation; §1-§4 the arms; §5 the unit and its two refusals;
@@ -619,13 +632,25 @@ nor `mini/`, so R36 is not touched.
        §11 the predictions.
        done-when: every section present; every digest in §0 re-derived by
        command in the same step and pasted.
+       PROOF: 14 numbered sections plus §0a (the two values that are RULES here
+       and NUMBERS in tranche 2), §0b (the notice ARM A will carry that means
+       nothing about whether it acts) and §12a (what the soaks do not show).
+       Digests re-derived at step 12 and step 18 respectively: the question
+       `e8e720d2…` independently from the frozen input, the criteria
+       `fab3fde2…` by the instrument's own `criteria-check`.
 
-- [ ] 39. (S11, R24) Write `claims.json` — every §11 prediction a claim, each
+- [x] 39. (S11, R24) Write `claims.json` — every §11 prediction a claim, each
        with a falsifier and "not shown able to fail" standing.
        done-when: `python tools/record_claims.py <claims.json>` exits 0 and no
        claim lacks a standing or a falsifier.
+       PROOF: exits 0 against a committed root; 10 claims, every one with a
+       falsifier and a standing. Two are CONTROLS pointing against the
+       prediction they guard — if ARM C or ARM V minted an argumentative
+       warrant, the authority gate leaked and A-vs-C would be uninterpretable.
+       `D8-AUTHORITY-ARGUMENTATIVE-01` already reads SHOWN_ABLE_TO_FAIL,
+       because its refuting condition holds on the organiser root.
 
-- [ ] 40. (S8, R15) [COMMIT] PREREG.md and claims.json, SEALED: the commit
+- [x] 40. (S8, R15) [COMMIT] PREREG.md and claims.json, SEALED: the commit
        message carries `sha256sum PREREG.md` verbatim.
        done-when: the pushed commit message contains the digest, and
        `sha256sum -c` against the committed file passes.

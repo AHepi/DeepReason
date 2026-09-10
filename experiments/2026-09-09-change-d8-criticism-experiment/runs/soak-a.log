@@ -7,3 +7,60 @@ NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SEATS_ENABLED=True is not carried 
 [soak] qualified in 4.8s
 [soak] driving 8 cycles …
 NOTICE CALIBRATION_RECEIPT_REQUIRED: text prose status authority requires CALIBRATION_RECEIPT
+
+========================================================================
+CYCLE SOAK -- case d8-armA
+========================================================================
+  manifest sha256        bbba10c8b7b60d683ad3f43bcc4398032ae603350c3c732ee5917bcb103f84db
+  criteria               
+  attached evidence      False
+  cycles requested       8
+  qualification          rc=0 (4.8s)
+  drive                  272.0s, 11 progress events
+
+-- S1 run assertions ---------------------------------------------------
+  [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
+  [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+  [PASS] A3-verify-root-clean         0 violation(s)
+  [PASS] A4-cycles-reached            reached cycle 8 of 8 requested; the deepest recorded death was cycle 2
+  [PASS] A7-record-fully-read         0 record(s) under objects/ could not be parsed by this instrument's own readers
+  [N/A ] A5-in-run-checker-fired      not carried by case d8-armA -- only pc2, pc2b arm the in-run checker
+  [N/A ] A6-discharge-channel-carried-them not carried by case d8-armA -- only pc2, pc2b arm the in-run checker
+  ** 7 assertions declared, 5 EVALUATED, 2 not applicable to this case -- a green exit describes the 5 that ran, never the 7
+
+-- S2/S4 seam coverage -------------------------------------------------
+  [PART] D1-seat-contract         seat contracts with repairs
+         reason: seat contracts exercised, but zero repair tasks recorded: an un-induced stub always returns a schema-valid response, so no repair is ever requested. Re-run with --induce-repairs N (and --induce-repair-kind unparseable, or alternate, to reach whole_object_syntax as well as patch)
+         reached: {'workflow-contract-decomposition-transition-v1': 0, 'workflow-provider-attempt-v1': 48}
+  [PASS] D2-route-lease           lease-checked routes with tuning
+         reached: {'workflow-provider-attempt-v1': 48}
+  [PASS] D3-budget-auth           budget authorization
+         reached: {'workflow-dispatch-authorization-v1': 48}
+  [PASS] D4-reservation-bound     reservation/dispatch bounds
+         reached: {'workflow-token-reservation-v2': 48}
+
+-- record census -------------------------------------------------------
+      13  artifact
+       5  commitment
+       3  problem
+       1  warrant
+      48  workflow-context-exposure-v2
+      48  workflow-context-pack-plan-v1
+      25  workflow-context-section-plan-v1
+      48  workflow-dispatch-authorization-v1
+       1  workflow-lifecycle-decision
+       1  workflow-lifecycle-snapshot
+       1  workflow-model-classification-binding-v1
+      48  workflow-provider-attempt-v1
+       1  workflow-route-seat-model-classification-plan-v1
+       1  workflow-run-terminal-commitment-v1
+       1  workflow-run-terminal-result-draft-v1
+      46  workflow-semantic-admission-v1
+       1  workflow-stop-metrics-observation
+      48  workflow-token-reservation-v2
+     236  workflow-work-lifecycle-transition-v1
+      48  workflow-work-preparation-v1
+      46  workflow-work-terminal-v1
+
+[soak] report /tmp/soak-a/soak-report.json
+[soak] exit 0 (clean)

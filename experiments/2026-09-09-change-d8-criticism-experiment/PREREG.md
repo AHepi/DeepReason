@@ -211,6 +211,27 @@ terminates cleanly with 0 argumentative warrants, that is a FINDING about
 granted authority on this configuration — not a broken instrument and not a
 failed arm.**
 
+## 12a. What the OFFLINE soaks establish, and what they do not
+
+Registered before sealing, because the natural over-reading is available and
+would be flattering. All three arms soak green to cycle 8 against the
+deterministic stub — clean typed terminals, `verify_root` 0 violations, every
+record parsed. That establishes that the three SHAPES DRIVE.
+
+It establishes nothing about criticism or authority, and the record says so
+plainly: over the three stub roots the census is IDENTICAL row for row — 1
+attack edge, 1 demonstrative warrant, **0 argumentative**, 1 refutation each —
+and adjudication events are 0 in all three, ARM A included. The shared stub
+answers the batch-critic contract with empty cases, so no sustained prose case
+ever exists for a trial to try, and ARM A's authority road is armed but never
+travelled offline.
+
+That the road is REACHABLE was established statically instead (step 28):
+`_authority` over ARM A's compiled manifest returns `trial_required`;
+`require_cross_family_judge_ensemble` returns two seats of two families; and ARM
+C, being single-family, is REFUSED — the control proving that check can say no.
+Whether the road is TRAVELLED is exactly what tranche 2 measures.
+
 ## 13. Predictions
 
 Every one is a claim in `claims.json`, each with a falsifier and "not shown able
