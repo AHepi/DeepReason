@@ -337,3 +337,99 @@ None of this changes the code in §1, the grant asked for in §6, or the roads i
 §4. It changes only what the tranche must PROVE, and it makes the ask more
 honest rather than less: the fix repairs the instrument going forward and
 leaves every past run's own testimony exactly as that run recorded it.
+
+## 10. THE GRANT — the operator's words, verbatim (2026-09-10)
+
+> Granted: Road A on frozen surface 3 (verification/report.py), the
+> defended-trial authority arm, ~40 insertions, zero deletions, as priced in
+> experiments/2026-09-10-defect-defended-trial-authority-census/FIX.md §6.
+> Record these words verbatim in FIX.md and as a dated "Granted contact,
+> 2026-09-10" entry in docs/map/INV-frozen-surfaces.md, in the same commit as
+> the code, with a check: that goes red if a trial step is again reported as
+> work of an unknown kind. Continue with dr-implement-fix and
+> dr-verify-outcome. Proof means a trial-bearing run completed after the fix
+> verifies valid; the before/after census over the five committed roots goes in
+> proof/. Full gate at the boundary. Commit and push to your branch; do not
+> merge to main.
+
+Operational reading, so the grant's boundary is written down rather than
+remembered: it covers Road A's arm in `verification/report.py` and nothing
+else on any frozen surface. "Proof means a trial-bearing run completed after
+the fix verifies valid" is §9's criterion 1a — the TERMINALIZED stub, whose
+stored summary must read `security_valid: true`; it is not a claim about the
+five already-committed roots, which keep their own stored testimony (§9
+consequence 1). The before/after census over those five goes in `proof/`.
+
+## 11. Amendment after implementation — the measured diff, against my own estimate
+
+`tools/diff_budget.py HEAD --ceiling 40 --paths src/deepreason/verification/report.py`:
+
+    {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "HEAD",
+     "areas": {"src/deepreason/verification/report.py": 63},
+     "total_insertions": 63, "ceiling": 40, "verdict": "EXCEEDED"}
+
+**63 insertions and 1 deletion, against the "~40 insertions, zero deletions"
+§5 estimated and the grant quoted back.** Recorded rather than absorbed, and
+recorded as EXCEEDED rather than as a footnote — the by-eye version of this
+check let a 193-line diff land under a 150-line ceiling once
+(`DR-INV-frozen-surfaces`, the diff budget gate).
+
+What the 63 are: **45 code and import lines, 17 comment lines, 1 blank.** The
+single deletion is `from deepreason.run_manifest import MANIFEST_NAME,
+load_run_manifest` reformatted into a four-name multi-line import — a line
+changed, not a behaviour removed. Nothing else was deleted, and the arm itself
+is insertions only.
+
+Why it was not trimmed to the number: the 17 comment lines each state a
+constraint the code cannot show — why `criticism_policy.authority` is the
+authority read rather than route presence, why the contract is re-derived
+rather than named, why the derivation is guarded on the declared role matching
+the lease, and why a placeholder alias table is safe. CLAUDE.md's own comment
+rule asks for exactly those and forbids narration; deleting them to reach a
+plan-time estimate would trade a real property for a number. The estimate was
+mine and it was low; the semantics are the ones granted, and 63 sits well
+inside the tranche's 150-line stop condition. Flagged in the delivery report,
+not settled quietly.
+
+## 12. Amendment — a change site §5 missed: `DR-SEAM-llm-x-verification`
+
+Found by `python tools/docs_verify.py`, not by me, which is the point of that
+instrument. Recorded before the fix is applied to the document, per
+`dr-implement-fix`'s rule 1: a needed site FIX.md missed is a STOP and an
+amendment, never silent scope growth.
+
+**What I got wrong.** GOAL.md's map preflight listed
+`DR-SEAM-llm-x-verification` among the documents to read in order, and
+`INDEX.md`'s one ordering rule is to read the SEAM before the subsystems. I
+read `INV-frozen-surfaces` and `SUB-verification` and did not read that seam
+before designing. Had I read it, §5's change-site list would have carried it
+from the start: the document pins the crossings from the verification side into
+`deepreason.llm` **exactly**, and says so in as many words — "A legitimate
+eighth crossing therefore turns this check red. That is the design (`SCHEMA.md`:
+counts are claims): widen the set in the same commit that adds the import, and
+add a row above saying what the new crossing re-derives. Do not delete the check
+to make it quiet."
+
+**What the arm adds.** Five new symbol crossings, all function-local inside
+`_transaction_findings`, across two new import statements in
+`verification/report.py`: `DefenderOutput`, `JudgeRuling`, `VariatorOutput`
+from `llm/contracts.py`, and `AliasTable`, `wire_contract_for` from
+`llm/wire.py`. So the pinned set goes from SEVEN crossings across six import
+statements to TWELVE across eight. The module-level count is UNCHANGED at one
+— `INDEX.md`'s matrix score of 1 for this pair still holds, and that number is
+separately pinned by the same check.
+
+The sixth import the arm adds, `resolve_route_seat_base_profile` from
+`run_manifest.py`, is not an `llm` crossing and does not enter this check.
+
+**Added change site:** `docs/map/SEAM-llm-x-verification.md` — the two counts
+in the opening paragraph, one new row in the crossings table saying what the
+new crossing re-derives, and the `expected` set inside the check. ~12 lines. It
+is a map document, not a frozen surface: no further grant.
+
+**Direction of travel is unchanged and worth stating,** because the seam's
+whole point is the asymmetry: this adds traffic only from the verification side
+INTO `llm`, and the reverse direction stays empty. A reader re-deriving a value
+with the writer's own function is the pattern this table already documents
+three times; a writer that could see its validator would be marking its own
+paper.

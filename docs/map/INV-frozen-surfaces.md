@@ -562,6 +562,123 @@ road compiles to the manifest's own `defended_trial`, and the trial mints an
 ARGUMENTATIVE warrant that becomes an attack edge.
 `check: python -m pytest tests/test_solo_criticism_authority.py -q`
 
+**Granted contact, 2026-09-10 — the defended trial's own task kind.**
+Requested at
+`experiments/2026-09-10-defect-defended-trial-authority-census/FIX.md` §6
+before a line of code existed, with the roads priced and the disclosure gate's
+own output pasted, and stopped there. The operator granted it the same day, and
+their words are recorded verbatim at that FIX.md §10; the first sentence is the
+grant:
+
+> Granted: Road A on frozen surface 3 (verification/report.py), the
+> defended-trial authority arm, ~40 insertions, zero deletions, as priced in
+> experiments/2026-09-10-defect-defended-trial-authority-census/FIX.md §6.
+> Record these words verbatim in FIX.md and as a dated "Granted contact,
+> 2026-09-10" entry in docs/map/INV-frozen-surfaces.md, in the same commit as
+> the code, with a check: that goes red if a trial step is again reported as
+> work of an unknown kind. […] Proof means a trial-bearing run completed after
+> the fix verifies valid; the before/after census over the five committed roots
+> goes in proof/.
+
+What moved: ONE `elif task == "defended_trial_step"` arm in
+`_transaction_findings`'s task-kind chain, inserted BEFORE the closing `else`
+and never in place of it, plus three constants beside that function's existing
+lazy imports. **63 insertions, 1 deletion** — 45 code and import lines, 17
+comment lines, 1 blank; the deletion is one import line reformatted into a
+four-name multi-line import, not a behaviour removed. No record format, no
+field, no check name, no `_EPISTEMIC_CHECKS` entry, no channel, no digest
+input, no writer, and `invariants.py` was not opened. The measured diff is
+larger than the "~40" the grant quotes; that is my plan-time estimate having
+been low, recorded as `EXCEEDED` at that FIX.md §11 rather than trimmed by
+deleting constraint comments.
+
+Why the reader had to change at all: `WorkflowTaskKind.DEFENDED_TRIAL_STEP` was
+added by the 2026-08-13 defended-trial wiring — the same commit that retired the
+`V6_DEFENDED_TRIAL_TRANSACTION_CONTRACT_REQUIRED` refusal as moot — and no arm
+came with it, so every trial step fell to `unknown v6 task kind` and became a
+`security :: transaction-authority` finding. Because `VerificationReportV2.valid`
+is integrity AND security, ONE trial made a completed, replay-clean run report
+`valid: false`. Live root
+`run-02818acc38961781e2e820d0d6b591fb`: 75 such findings, `verify_root`
+violations 0.
+
+**This is a WIDENING, so additivity carries none of the safety argument and
+none is claimed.** Two things carry it instead, both measured. First, the arm
+reads the SAME condition the manifest's own grant reads —
+`criticism_policy.authority == "defended_trial"`, which is exactly what
+`_route_seat_behavioral_contract_assignments` uses to hand the
+defender/judge/variator seats their trial contracts — and re-derives the
+authorised contract through the same `wire_contract_for` that grant uses rather
+than naming a literal, resolved per seat because a route seat's own
+presentation profile decides the direct/compact shape. Verified against every
+committed root before the code was written: across all 721 trial steps in the
+five roots that carry the kind, the derivation reproduces the recorded
+`contract_id` **721 of 721, zero mismatches**, and the payload's declared role
+equals the route lease's role on every one
+(`.../proof/CONTRACT_DERIVATION_PROOF.txt`,
+`.../proof/TRIAL_STEP_SHAPE_CENSUS.txt`). Second, four forgery shapes stay
+reported and each is mutation-proved by a test that goes green — wrongly — if
+the arm is replaced by an unconditional accept: a trial on an `observe_only`
+run; a payload naming `judge` on a `defender` lease; a payload naming a role
+outside the three; and a contract swap WITHIN one seat's own granted set
+(`judge[0]` also holds `groundingverdictwirev1.direct.v1`, which is why
+membership in the seat's frozen plan is not a sufficient test). A `task_kind`
+outside the enum still reports exactly as before.
+
+**The cost, recorded because it is real.** A committed COMPLETED run does not
+become `valid: true`, and must not: `terminalize_text_run` asked this same
+reader for a verification summary at the terminal and froze
+`security_valid: false` into `run-result.json`, which the report re-reports as a
+`run-result-verification` finding. Each of the five roots therefore keeps
+exactly ONE security finding — its own testimony about what the reader said at
+the time — while its `transaction-authority` findings go to zero. Editing that
+stored summary is forbidden and would be the worse defect. What the fix makes
+true is that a run completed ON the fixed code stores `security_valid: true`.
+
+`frozen_adjacent_contacts` is EMPTY and nothing else takes contact:
+`route_fingerprint` is untouched, no `Route` field moves, and
+`capabilities/state.py`, `harness.py`, `invariants.py`, `run_manifest.py` and
+`qualification.py` take no contact at all.
+
+**Disclosed with the grant, because the gate could not disclose it:**
+`tools/blast_radius.py` returns `frozen_surface_verdict: CLEAR` for
+`--files src/deepreason/verification/report.py`, because its `FROZEN_SURFACES`
+registry spells this surface as the single path `src/deepreason/invariants.py`
+while this document's own §3 heading and CLAUDE.md both include
+`verification/`. The CLEAR is a registry gap, not a verdict — proved by a
+control run naming the five registry paths, which returns all five as `DIRECT`
+(`.../proof/BLAST_RADIUS.txt`). Parked for its own tranche at that tranche's
+`PARKED.md` P2. Until it is fixed, this document outranks that tool for any
+path under `src/deepreason/verification/`.
+
+`check: grep -q 'elif task == "defended_trial_step":' src/deepreason/verification/report.py && python -m pytest tests/test_defended_trial_transaction_authority.py -q`
+`check: python -c "
+from pathlib import Path
+from deepreason.verification.report import _transaction_findings
+# A COMMITTED root carrying 26 trial steps, not a fixture: this goes RED with
+# 26 unknown-kind findings if the arm is removed (measured on the pre-fix tree).
+root = Path('experiments/2026-09-02-live-p-a2-corrected/failed-epoch3-run-1b89ed64e050c354')
+findings = _transaction_findings(root)
+unknown = [f.detail for f in findings if 'unknown v6 task kind' in f.detail]
+assert not unknown, unknown
+authority = [f.detail for f in findings if f.check == 'transaction-authority']
+assert not authority, authority
+"`
+`check: python -c "
+import inspect
+from deepreason.verification import report
+src = inspect.getsource(report._transaction_findings)
+# The arm reads the manifest OWN grant condition and re-derives the contract;
+# a regression to a literal, or to an unconditional accept, fails here. The
+# closing else must survive: a kind outside the enum still reports as unknown.
+assert 'policy.authority' in src
+assert 'trial_schemas' in src
+assert 'wire_contract_for(' in src
+assert 'resolve_route_seat_base_profile(' in src
+assert 'unknown v6 task kind' in src
+assert src.index('defended_trial_step') < src.index('unknown v6 task kind')
+"`
+
 **Granted contact, 2026-08-27 — the sandbox attribute boundary (the escape fix).**
 The operator granted this contact IN CHAT, conditionally, after being shown the
 verdict it unblocks: "can you fix please. Frozen surface changes are permitted

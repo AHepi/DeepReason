@@ -2922,3 +2922,42 @@ that tranche's `FIX.md`) are NOT edited: they record what those phases
 concluded on the evidence they had, and this entry is how the record says the
 price was later found lower. Recorded 2026-09-10,
 `experiments/2026-09-10-defect-managed-path-host-owned-overrides/VERIFY.md`.
+
+## 2026-09-10
+
+**E88 — `tools/blast_radius.py` says its frozen-surface list is "verbatim from
+`docs/map/INV-frozen-surfaces.md`", and it is not.** The comment above
+`FROZEN_SURFACES` (line 110) reads `# The five frozen surfaces, verbatim from
+docs/map/INV-frozen-surfaces.md.` The registry beneath it spells surface 3 as
+the single path `src/deepreason/invariants.py`. That document's own §3 heading
+is "Replay-validation record formats — `invariants.py`, `verification/`", and
+CLAUDE.md states the arithmetic explicitly: five surfaces spanning SEVEN paths,
+"because surface 3 covers both `invariants.py` and `verification/`".
+
+What the record shows: `python tools/blast_radius.py --files
+src/deepreason/verification/report.py` returns `"frozen_surface_contacts": []`,
+`"frozen_surface_verdict": "CLEAR"` and a `disclosure_summary` reading "This
+change touches none of the five frozen surfaces" — for a file inside a frozen
+surface. A control run naming the five registry paths returns all five as
+`DIRECT`, so the CLEAR is the registry's spelling and not the computation
+(`experiments/2026-09-10-defect-defended-trial-authority-census/proof/BLAST_RADIUS.txt`,
+both commands).
+
+Why it is more than a comment. The gate exists because a tranche once found
+surface contact in its own prose and committed anyway (its module docstring's
+2026-08-09 incident). A window that trusts this tool over the owning document
+will edit a frozen surface believing it was told there was none to edit — the
+failure the gate was built to prevent, arriving through the gate. Six modules
+sit under `src/deepreason/verification/`, including the two whose containment
+boundary needed an explicit operator grant on 2026-08-27.
+
+**Where corrected: NOWHERE YET, deliberately.** Found mid-defect, and fixing an
+instrument inside a defect tranche is the cross-routing
+`deepreason-orchestrator` forbids. It is PARKED with a ready-to-send prompt at
+`experiments/2026-09-10-defect-defended-trial-authority-census/PARKED.md` P2,
+and disclosed twice in that tranche instead — in the grant request the operator
+read before granting (that tranche's `FIX.md` §3) and in the "Granted contact,
+2026-09-10" entry in `docs/map/INV-frozen-surfaces.md`, which states that until
+this is fixed the document outranks the tool for any path under
+`src/deepreason/verification/`. Recorded 2026-09-10,
+`experiments/2026-09-10-defect-defended-trial-authority-census/VERIFY.md`.

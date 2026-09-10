@@ -11,8 +11,8 @@ Seams-undocumented:
 
 `DR-SUB-llm` WRITES provider evidence. `DR-SUB-verification` READS it back and
 decides whether the run is replayable. The import traffic between them is
-**one-directional**: the verification side names `deepreason.llm` at SEVEN
-symbol crossings across six import statements — one at module level, five
+**one-directional**: the verification side names `deepreason.llm` at TWELVE
+symbol crossings across eight import statements — one at module level, seven
 inside the functions that use them — while `llm/` names
 `deepreason.invariants`, `deepreason.verification` and
 `deepreason.signals_read` NOWHERE, in any form, absolute or relative. The
@@ -26,9 +26,10 @@ would be marking its own paper.
 |---|---|---|
 | `route_fingerprint` — the one module-level crossing, in `invariants.py`, and again function-local in `verification/report.py` | `llm/firewall.py` | The record carries `route_sha256` on a render receipt and on a v6 work lease. The reader recomputes the digest from the route the frozen manifest granted and compares. The recorded value is the thing under test, so it cannot also be the authority. |
 | `ConjecturerOutput`, `AliasTable`, `wire_contract_for`, `ReferenceFreeConjecturerWireContract` | `llm/contracts.py`, `llm/wire.py` | `verify_root` re-derives WHICH contract ids a manifest's (role, output model, transport profile) tuples actually authorize, instead of trusting the `contract_id` the record announces. |
+| `DefenderOutput`, `JudgeRuling`, `VariatorOutput`, `AliasTable`, `wire_contract_for` — function-local in `verification/report.py`'s transaction-authority census | `llm/contracts.py`, `llm/wire.py` | The census re-derives WHICH contract id a defended-trial step's route seat was frozen to render — through the same `wire_contract_for` the manifest's own behavioral grant used, against that seat's own presentation profile — instead of trusting the `contract_id` the preparation announces. Same reason as the row above, one layer out: the announced value is the thing under test. Added 2026-09-10 under the surface-3 grant at `DR-INV-frozen-surfaces`. |
 | `HashingEmbedder` | `llm/embedder.py` | The `detection-total` check runs `raw_flags` over the replayed harness and must not fail for an environmental reason; the hashing backend is deterministic and needs no downloaded weights. |
 
-None of the seven touches `attempt_trace` or `split_legs`. The substantive
+None of the twelve touches `attempt_trace` or `split_legs`. The substantive
 agreement — what the fields of `LLMAttempt` (`DR-SUB-ontology`) MEAN — travels
 inside one record and is carried by no import at all, which is why the
 crossings above are a poor guide to what breaking this seam costs.
@@ -72,7 +73,12 @@ expected = {
     ('src/deepreason/invariants.py', 'deepreason.llm.wire', 'AliasTable', False),
     ('src/deepreason/invariants.py', 'deepreason.llm.wire', 'ReferenceFreeConjecturerWireContract', False),
     ('src/deepreason/invariants.py', 'deepreason.llm.wire', 'wire_contract_for', False),
+    ('src/deepreason/verification/report.py', 'deepreason.llm.contracts', 'DefenderOutput', False),
+    ('src/deepreason/verification/report.py', 'deepreason.llm.contracts', 'JudgeRuling', False),
+    ('src/deepreason/verification/report.py', 'deepreason.llm.contracts', 'VariatorOutput', False),
     ('src/deepreason/verification/report.py', 'deepreason.llm.firewall', 'route_fingerprint', False),
+    ('src/deepreason/verification/report.py', 'deepreason.llm.wire', 'AliasTable', False),
+    ('src/deepreason/verification/report.py', 'deepreason.llm.wire', 'wire_contract_for', False),
 }
 assert forward == expected, sorted(forward ^ expected)
 assert len([c for c in forward if c[3]]) == 1, sorted(c for c in forward if c[3])
@@ -82,7 +88,13 @@ assert back == set(), sorted(back)
 
 The set is pinned EXACTLY, in both directions, and the empty direction is
 pinned too — an assertion that something stays absent is the only thing that
-keeps it absent. A legitimate eighth crossing therefore turns this check red.
+keeps it absent. A legitimate thirteenth crossing therefore turns this check
+red. It has already worked once as designed: the 2026-09-10 defended-trial
+census arm added five crossings, this check went red, and the row above is
+what the tranche had to write to make it green again
+(`experiments/2026-09-10-defect-defended-trial-authority-census/FIX.md` §12,
+where the executor records that it had not read this seam before designing —
+which is the failure the ordering rule exists to prevent).
 That is the design (`SCHEMA.md`: counts are claims): widen the set in the same
 commit that adds the import, and add a row above saying what the new crossing
 re-derives. Do not delete the check to make it quiet.

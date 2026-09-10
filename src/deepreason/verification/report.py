@@ -718,8 +718,28 @@ def _transaction_findings(root: Path) -> tuple[VerificationFindingV2, ...]:
     """
 
     from deepreason.harness import Harness
+    from deepreason.llm.contracts import DefenderOutput, JudgeRuling, VariatorOutput
     from deepreason.llm.firewall import route_fingerprint
-    from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+    from deepreason.llm.wire import AliasTable, wire_contract_for
+    from deepreason.run_manifest import (
+        MANIFEST_NAME,
+        load_run_manifest,
+        resolve_route_seat_base_profile,
+    )
+
+    # One task kind, one writer, two payload schemas: informal/trial.py's own
+    # steps and measures/hv.py's variation sampler, which reaches the same
+    # bracket through v6_transactional_phase_call.
+    trial_schemas = {"defended-trial-step.v1", "hv-variation-step.v1"}
+    trial_models = {
+        "defender": DefenderOutput,
+        "judge": JudgeRuling,
+        "variator": VariatorOutput,
+    }
+    # Alias content never enters a contract id -- role, seat profile and output
+    # model fix it -- so the table below is a placeholder, matching the one
+    # run_manifest.py's own grant computation uses.
+    trial_aliases = AliasTable({"K_001": "placeholder"})
 
     try:
         harness = Harness(root, read_only=True)
@@ -968,6 +988,48 @@ def _transaction_findings(root: Path) -> tuple[VerificationFindingV2, ...]:
                     )
             else:
                 differences.append("repair work has an unrecognized authority payload")
+        elif task == "defended_trial_step":
+            # The manifest grants these three roles their trial contracts
+            # exactly when criticism_policy.authority == "defended_trial"
+            # (run_manifest.py::_route_seat_behavioral_contract_assignments),
+            # so that is the authority read here rather than route presence.
+            # The contract is re-derived through the same wire_contract_for
+            # that grant uses instead of being named as a literal: a route
+            # seat's own presentation profile, not the manifest-wide default,
+            # decides between the direct and compact shapes.
+            policy = manifest.criticism_policy
+            schema = payload.get("schema") if payload is not None else None
+            declared = payload.get("role") if payload is not None else None
+            if schema not in trial_schemas:
+                differences.append("defended trial work has no recognized trial task")
+            elif policy is None or policy.authority != "defended_trial":
+                differences.append(
+                    "defended trial work is not authorized by the manifest"
+                )
+            elif declared not in trial_models:
+                differences.append(
+                    "defended trial work names a role the trial cannot seat"
+                )
+            else:
+                expected_role = declared
+                # Derive only once the declared role and the seat it actually
+                # spent are the same route: resolving a profile for a role the
+                # lease did not use raises rather than answering.
+                if declared == lease.role and route is not None:
+                    try:
+                        expected_contract = wire_contract_for(
+                            declared,
+                            trial_models[declared],
+                            resolve_route_seat_base_profile(
+                                manifest,
+                                role=declared,
+                                seat=lease.seat,
+                                endpoint_id=lease.endpoint_id,
+                            ),
+                            trial_aliases,
+                        ).contract_id
+                    except ValueError as error:
+                        differences.append(str(error))
         else:
             differences.append(f"unknown v6 task kind {task!r}")
 

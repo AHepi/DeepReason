@@ -1,0 +1,33 @@
+{
+  "completion": 0,
+  "integrity": 0,
+  "operational": 2,
+  "root": "/tmp/claude-0/-home-user-DeepReason/b918c772-54f3-5777-8bfc-07ab07aa50e0/scratchpad/after_term",
+  "security": 0,
+  "security_checks": {},
+  "state": "completed",
+  "stored_run_result_verification": {
+    "completion_satisfied": true,
+    "epistemic_checks_passed": true,
+    "finding_counts": {
+      "completion": 0,
+      "epistemic": 0,
+      "integrity": 0,
+      "operational": 1,
+      "security": 0
+    },
+    "integrity_valid": true,
+    "operational_checks_passed": false,
+    "schema": "verification.summary.v2",
+    "security_valid": true,
+    "valid": true
+  },
+  "task_kinds": {
+    "conjecture": 3,
+    "criticism": 1,
+    "defended_trial_step": 3
+  },
+  "unknown_task_kinds": {},
+  "valid": true,
+  "verify_root_violations": 0
+}

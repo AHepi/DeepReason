@@ -434,3 +434,43 @@ assert derived == {'adjudication-blindness', 'bridge-epistemic', 'bridge-groundi
   rule-driven creation — and the uniqueness and dependence demands are
   unchanged. The agreement is documented in `DR-SEAM-periphery-x-verification`.
 `check: grep -q "artifact.provenance.role == \"import\"" src/deepreason/invariants.py && grep -q "Regression (stress-triplet run-0a3e93d6)" tests/test_attached_evidence_citation.py`
+- **The authority census walks an `if/elif` chain over task kinds, so a kind
+  added anywhere else is silently a security finding.** `_transaction_findings`
+  asks each v6 work transaction whether the frozen manifest granted the
+  authority it agreed on, arm by arm over `WorkflowTaskKind`, ending in
+  `else: unknown v6 task kind`. `DEFENDED_TRIAL_STEP` was added by the
+  2026-08-13 defended-trial wiring — in `workflow/models.py`, three packages
+  away — and no arm came with it. Because `VerificationReportV2.valid` is
+  integrity AND security, ONE trial step made a completed, replay-clean run
+  report `valid: false`: solo run
+  `run-02818acc38961781e2e820d0d6b591fb` reported 75 such findings against
+  ZERO `verify_root` violations, and the identical finding appeared at 3 on an
+  offline stub of the older `ENGAGED_CRITICISM_AUTHORITY=defended_trial` road,
+  which is how the gap was shown to predate the solo tranche
+  (`experiments/2026-09-10-defect-defended-trial-authority-census/`, DIAGNOSIS
+  and REPRO). FIXED 2026-09-10 under the frozen-surface grant recorded at
+  `DR-INV-frozen-surfaces` surface 3. **verification × workflow has no seam
+  document** — it is in this file's own `Seams-undocumented:` line — and that
+  absence is the defect's whole cause: nothing states that a kind declared in
+  `workflow/models.py` obliges an arm here. Two things a later reader should
+  not undo. The arm reads `criticism_policy.authority`, the SAME condition
+  `run_manifest.py::_route_seat_behavioral_contract_assignments` uses to grant
+  the trial roles their contracts, so the census and the compiler cannot drift
+  on what "authorized" means; and it RE-DERIVES the contract through
+  `wire_contract_for` rather than naming a literal, because the seat's own
+  presentation profile picks the direct/compact shape and because a
+  membership test against the seat's granted set would pass a `judge` step
+  carrying `groundingverdictwirev1.direct.v1`. The cost is recorded with the
+  grant: a committed COMPLETED run stays `valid: false`, because
+  `terminalize_text_run` froze the defective reader's own summary into its
+  `run-result.json` and that record is not editable.
+`check: python -m pytest tests/test_defended_trial_transaction_authority.py -q && python -c "
+import inspect
+from deepreason.verification import report
+from deepreason.workflow.models import WorkflowTaskKind
+src = inspect.getsource(report._transaction_findings)
+# Every member of the enum needs an arm; this fails when the next kind is
+# added to workflow/models.py and this chain is not extended with it.
+missing = [k.value for k in WorkflowTaskKind if k.value not in src]
+assert not missing, missing
+"`
