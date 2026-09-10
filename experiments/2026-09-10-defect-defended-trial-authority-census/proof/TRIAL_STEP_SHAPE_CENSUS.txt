@@ -1,0 +1,43 @@
+Every git-tracked run root carrying a defended_trial_step preparation.
+Shape = (payload schema, payload role, lease role, lease seat, contract id).
+Read straight off objects/workflow-work-preparation-v1/*.json; nothing edited.
+
+experiments/2026-08-12-live-grounded-extension-expansion/run  ->  494 trial steps, criticism_policy.authority='defended_trial'
+    171  ('defended-trial-step.v1', 'judge', 'judge', 1, 'judgeruling.direct.v1')
+    171  ('defended-trial-step.v1', 'judge', 'judge', 0, 'judgeruling.direct.v1')
+    122  ('defended-trial-step.v1', 'defender', 'defender', 0, 'defender.direct.v1')
+     30  ('defended-trial-step.v1', 'variator', 'variator', 0, 'variator.direct.v1')
+experiments/2026-09-01-live-all-modules-p-a1/run  ->  10 trial steps, criticism_policy.authority='defended_trial'
+      6  ('defended-trial-step.v1', 'defender', 'defender', 0, 'defender.direct.v1')
+      2  ('defended-trial-step.v1', 'judge', 'judge', 1, 'judgeruling.direct.v1')
+      2  ('defended-trial-step.v1', 'judge', 'judge', 0, 'judgeruling.direct.v1')
+experiments/2026-09-02-live-p-a2-corrected/failed-epoch3-run-1b89ed64e050c354  ->  26 trial steps, criticism_policy.authority='defended_trial'
+      9  ('defended-trial-step.v1', 'judge', 'judge', 0, 'judgeruling.direct.v1')
+      9  ('defended-trial-step.v1', 'judge', 'judge', 1, 'judgeruling.direct.v1')
+      7  ('defended-trial-step.v1', 'defender', 'defender', 0, 'defender.direct.v1')
+      1  ('defended-trial-step.v1', 'variator', 'variator', 0, 'variator.direct.v1')
+experiments/2026-09-02-live-p-a2-corrected/run  ->  116 trial steps, criticism_policy.authority='defended_trial'
+     31  ('hv-variation-step.v1', 'variator', 'variator', 0, 'variator.direct.v1')
+     29  ('defended-trial-step.v1', 'judge', 'judge', 1, 'judgeruling.direct.v1')
+     29  ('defended-trial-step.v1', 'judge', 'judge', 0, 'judgeruling.direct.v1')
+     25  ('defended-trial-step.v1', 'defender', 'defender', 0, 'defender.direct.v1')
+      2  ('defended-trial-step.v1', 'variator', 'variator', 0, 'variator.direct.v1')
+experiments/2026-09-09-fix-solo-criticism-authority/runs/home-solo/runs/run-02818acc38961781e2e820d0d6b591fb  ->  75 trial steps, criticism_policy.authority='defended_trial'
+     33  ('defended-trial-step.v1', 'judge', 'judge', 0, 'judgeruling.direct.v1')
+     17  ('defended-trial-step.v1', 'defender', 'defender', 0, 'defender.direct.v1')
+     17  ('hv-variation-step.v1', 'variator', 'variator', 0, 'variator.direct.v1')
+      8  ('defended-trial-step.v1', 'variator', 'variator', 0, 'variator.direct.v1')
+
+TOTAL across the five roots: 721
+    244  ('defended-trial-step.v1', 'judge', 'judge', 0, 'judgeruling.direct.v1')
+    211  ('defended-trial-step.v1', 'judge', 'judge', 1, 'judgeruling.direct.v1')
+    177  ('defended-trial-step.v1', 'defender', 'defender', 0, 'defender.direct.v1')
+     48  ('hv-variation-step.v1', 'variator', 'variator', 0, 'variator.direct.v1')
+     41  ('defended-trial-step.v1', 'variator', 'variator', 0, 'variator.direct.v1')
+
+   payload schemas: ['defended-trial-step.v1', 'hv-variation-step.v1']
+   payload roles  : ['defender', 'judge', 'variator']
+   lease roles    : ['defender', 'judge', 'variator']
+   seats          : [0, 1]
+   contracts      : ['defender.direct.v1', 'judgeruling.direct.v1', 'variator.direct.v1']
+   payload role == lease role on every one: True

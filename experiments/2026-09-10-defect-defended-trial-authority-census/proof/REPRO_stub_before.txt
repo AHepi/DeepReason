@@ -1,0 +1,20 @@
+{
+  "completion": 0,
+  "integrity": 0,
+  "operational": 3,
+  "root": "/tmp/claude-0/-home-user-DeepReason/b918c772-54f3-5777-8bfc-07ab07aa50e0/scratchpad/repro",
+  "security": 3,
+  "security_checks": {
+    "transaction-authority": 3
+  },
+  "task_kinds": {
+    "conjecture": 3,
+    "criticism": 1,
+    "defended_trial_step": 3
+  },
+  "unknown_task_kinds": {
+    "'defended_trial_step'": 3
+  },
+  "valid": false,
+  "verify_root_violations": 0
+}

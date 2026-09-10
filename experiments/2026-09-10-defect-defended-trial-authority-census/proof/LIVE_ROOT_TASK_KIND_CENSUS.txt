@@ -1,0 +1,14 @@
+root: experiments/2026-09-09-fix-solo-criticism-authority/runs/home-solo/runs/run-02818acc38961781e2e820d0d6b591fb
+task kinds over transaction_work: {'conjecture': 34, 'criticism': 18, 'defended_trial_step': 75, 'repair': 7}
+
+defended_trial_step shapes (payload schema, payload role, lease role, lease seat, contract):
+   33  defended-trial-step.v1   judge     judge     0  judgeruling.direct.v1
+   17  defended-trial-step.v1   defender  defender  0  defender.direct.v1
+   17  hv-variation-step.v1     variator  variator  0  variator.direct.v1
+    8  defended-trial-step.v1   variator  variator  0  variator.direct.v1
+
+criticism_policy.authority: defended_trial
+frozen behavioral grants for the trial roles:
+  defender[0] -> ['defender.direct.v1']
+  judge[0] -> ['groundingverdictwirev1.direct.v1', 'judgeruling.direct.v1']
+  variator[0] -> ['variator.direct.v1']

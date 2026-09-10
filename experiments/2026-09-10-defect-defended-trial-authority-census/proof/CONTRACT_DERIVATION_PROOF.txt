@@ -1,0 +1,29 @@
+Does the proposed derivation reproduce what the live calls recorded?
+
+Road A's only real risk: if `wire_contract_for` under a placeholder alias table
+does not reproduce the `contract_id` the live trial call recorded, the new arm
+would invent findings on committed roots. Measured over every trial step in
+every committed root carrying the kind. Read-only.
+
+experiments/2026-08-12-live-grounded-extension-expansion/run
+   criticism_policy.authority = 'defended_trial'
+   trial steps: 494   derivation matches: 494   mismatches: 0
+   payload role == lease role on every step: True
+experiments/2026-09-01-live-all-modules-p-a1/run
+   criticism_policy.authority = 'defended_trial'
+   trial steps: 10   derivation matches: 10   mismatches: 0
+   payload role == lease role on every step: True
+experiments/2026-09-02-live-p-a2-corrected/failed-epoch3-run-1b89ed64e050c354
+   criticism_policy.authority = 'defended_trial'
+   trial steps: 26   derivation matches: 26   mismatches: 0
+   payload role == lease role on every step: True
+experiments/2026-09-02-live-p-a2-corrected/run
+   criticism_policy.authority = 'defended_trial'
+   trial steps: 116   derivation matches: 116   mismatches: 0
+   payload role == lease role on every step: True
+experiments/2026-09-09-fix-solo-criticism-authority/runs/home-solo/runs/run-02818acc38961781e2e820d0d6b591fb
+   criticism_policy.authority = 'defended_trial'
+   trial steps: 75   derivation matches: 75   mismatches: 0
+   payload role == lease role on every step: True
+
+TOTAL  matches 721   mismatches 0
