@@ -1,0 +1,69 @@
+docs_verify — the failing set, and which one was this tranche's
+
+Command: python tools/docs_verify.py            (full run, ~15 min)
+Result:  11 failed  (first run, before the seam document was updated)
+         10 failed  (--failed re-run, list below; the eleventh was a
+                     duplicate row for the same seam check)
+
+The ten, verbatim from `python tools/docs_verify.py --failed`:
+
+  FAIL SEAM-llm-x-rules.md:54: unparseable check: a column-0 `check: opener must close with a trailing backtick
+  FAIL CON-run-identity.md:213: git log -1 --format=%s 1637e808 | grep -qi retire
+  FAIL CON-run-identity.md:215: test -z "$(git show -M --diff-filter=R ... f304fec1)" && git log -1 ... | grep -qi "retire..."
+  FAIL CON-run-identity.md:211: git log -M --diff-filter=R --name-status --format= -- experiments/live_research_2026-07-29/selfstudy/runs/ | ...
+  FAIL INV-frozen-surfaces.md:206: test "$(find experiments runs -path '*workflow-provider-attempt-v1/*.json' -exec grep -l 'transport_failure' ...)" -eq 0
+  FAIL INV-frozen-surfaces.md:1531: python tools/record_claims.py --claims .../claims.json --root .../run-36d9a22c...
+  FAIL CON-successor-questions.md:305: test "$(for f in $(grep -rl harness --include=*.py src/deepreason); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 62 && ...
+  FAIL SEAM-llm-x-verification.md:36: python -c " ... crossings ... "
+  FAIL SEAM-scratch-x-workflow.md:51: test "$(for f in $(grep -rl scratch src/deepreason --include=*.py); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 50 && ...
+  FAIL INV-frozen-surfaces.md:1166: python experiments/2026-09-01-defect-judge-canary-compile-gap/price_compile_gap.py --expect fixed ...
+
+ONE was this tranche's: SEAM-llm-x-verification.md:36. That check pins the
+exact symbol crossings from the verification side into `deepreason.llm`, and
+the arm added five. The seam document's own prose says this is the design and
+says what to do about it, so it was widened in the same commit as the import
+with a row saying what the new crossing re-derives (FIX.md §12). It PASSES on
+the current tree — run standalone:
+
+    $ python <the check's own body, extracted from lines 37-87>
+    SEAM CHECK PASSES
+
+The other NINE were failing before this tranche touched anything, and that is
+measured rather than argued. A git worktree was created at the tranche base
+(`9c99965f6`, the commit this branch forked from) and each failing check's own
+command was run inside it:
+
+    CON-run-identity:213           FAIL at base
+    CON-run-identity:215           FAIL at base
+    CON-run-identity:211           FAIL at base   (the document's exact command,
+                                                   extracted with sed -- a
+                                                   hand-shortened version of it
+                                                   PASSES, which is why the
+                                                   exact text was used)
+    INV-frozen:transport_failure   FAIL at base
+    INV-frozen:record_claims       FAIL at base
+    INV-frozen:judge-canary        FAIL at base
+    SEAM-llm-x-rules:54            unparseable at base (a parse error in a
+                                                   document this tranche never
+                                                   opened)
+    SEAM-scratch-x-workflow:51     the count is 51 at base and 51 now, against
+                                   an expected 50 -- identical, so not this
+                                   tranche's
+    CON-successor-questions:305    the count is 62 at base and 62 now, and the
+                                   check's FIRST half passes; its failure is in
+                                   the second half, unchanged by this tranche
+
+The two count checks were the only ones where the answer was not obvious from
+the diff, so they were measured directly rather than reasoned about: the one
+source file this tranche changed (`verification/report.py`) already contained
+every word both greps look for, before and after, so its membership in both
+sets is unchanged.
+
+OBSERVATION, not this tranche's finding: `docs/AUDIT_BASELINES.md` records 5 OR
+6 expected docs_verify failures on a shallow clone (re-baselined 2026-08-30).
+Nine pre-existing failures were measured here. That is a delta from the
+recorded baseline and an audit should explain it; four of the nine are the
+git-history and branch-ref rows the baseline already names as environment
+preconditions on this kind of container, and one is the parked P3 of
+`experiments/2026-09-09-fix-solo-criticism-authority/`. This tranche neither
+fixed nor parked them: the audit family owns baseline deltas.
