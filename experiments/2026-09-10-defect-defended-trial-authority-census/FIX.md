@@ -16,7 +16,7 @@ boundary as for the seven task kinds the census already knows.
 One `elif` arm added to `_transaction_findings`'s task-kind chain in
 `src/deepreason/verification/report.py`, immediately before the closing `else`
 at line 972, plus three constants beside the function's existing lazy imports
-(lines 720-723). Proposed text, verbatim, so the grant is over the code and not
+(lines 720-722). Proposed text, verbatim, so the grant is over the code and not
 over a description of it:
 
     # beside the existing lazy imports at the top of _transaction_findings
@@ -73,7 +73,7 @@ over a description of it:
                     differences.append(str(error))
 
 The arm sets `expected_role` and `expected_contract` and lets the chain's
-shared tail (report.py:975-995) do the comparing, which is how every sibling
+shared tail (report.py:974-989) do the comparing, which is how every sibling
 arm works. `expected_seat` and `expected_endpoint` stay unset deliberately: the
 judge ensemble's seats are legitimately 0..n, and a seat outside the frozen
 roster is already reported by the route check above the chain
@@ -205,7 +205,7 @@ Recommendation: **Road A.**
 
 ## 5. Change sites (exhaustive, if the grant is given)
 
-  - `src/deepreason/verification/report.py:720-723, 971` — the three constants
+  - `src/deepreason/verification/report.py:720-722, 971` — the three constants
     beside the lazy imports and the one `elif` arm. ~40 insertions, 0
     deletions. **FROZEN SURFACE 3 — needs the grant.**
   - `tests/test_defended_trial_transaction_authority.py` — NEW. The
