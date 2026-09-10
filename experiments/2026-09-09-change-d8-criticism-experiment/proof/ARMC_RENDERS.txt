@@ -1,0 +1,67 @@
+=== Steps 30, 34, 35 proof: criticism reaches the seat that writes the next
+    candidate, on the arms' OWN shapes, driven offline ===
+
+WHY THIS IS THE CHECK THAT MATTERS. The 2026-09-08 audit's §2.3a: across the two
+newest and largest committed roots, 0 of 196 model-written attacks were ever
+exposed to a later conjecture dispatch. Not a low rate -- zero. So "every
+statement in this report about what criticism did or did not achieve should be
+read as a statement about criticism that could not have achieved anything."
+An arm whose criticism never reaches the writer measures nothing, however
+carefully the rest is built.
+
+PLANNED IS NOT RENDERED. Each section-plan receipt carries, per section, a
+plugin_id, a disposition and a rendered_bytes. A section can be NAMED in a plan
+and still be dropped by the allocator or render empty. The two numbers are
+reported side by side and never one.
+
+--- the committed organiser root, as the calibration of this instrument ---
+
+| Root | plans | naming dr.open-criticisms | RENDERED | bytes |
+|---|---|---|---|---|
+| run-c3f3bf10bc57d63e224a9f1c68bf1057 | 11 | 11 | **9** | 32620 |
+  dispositions: {'rendered': 9, 'absent': 2}
+
+NINE OF ELEVEN is the figure the monitor's brief cited for this run. The
+instrument reproduces it exactly, and the gap between eleven and nine is
+precisely the distinction the brief's word "rendered" was carrying: two plans
+named the section and did not carry it.
+
+--- ARM C's own shape, driven to cycle 8 against the deterministic stub ---
+
+  [PASS] A1-typed-terminal      state='completed' stop_reason='budget_exhausted'
+  [PASS] A2-no-operational-failure
+  [PASS] A3-verify-root-clean   0 violation(s)
+  [PASS] A4-cycles-reached      reached cycle 8 of 8
+  [PASS] A7-record-fully-read   0 unparseable records
+  [soak] exit 0 (clean)
+
+| Root | plans | naming dr.open-criticisms | RENDERED | bytes |
+|---|---|---|---|---|
+| soak-c/run | 25 | 25 | **4** | 2868 |
+  dispositions: {'rendered': 4, 'absent': 21}
+
+n > 0: criticism REACHES the seat that writes the next candidate on ARM C's
+configuration, established before any live call.
+
+READ THE 4 AS A FLOOR, NOT A RATE. The shared stub answers the batch-critic
+contract with EMPTY cases (`{"target_alias": …, "attack": false, "case": ""}`,
+`wheel_operational_smoke.response_for_schema`), so there is very little
+criticism for the channel to carry. That is a property of the fixture, not of
+the arm, and the live rate is not predicted from it.
+
+--- ARM V's own shape, same drive ---
+
+  [PASS] A1 through A4, A7; [soak] exit 0 (clean)
+  drive 266.7s, 11 progress events
+
+| Root | plans | naming dr.open-criticisms | RENDERED | bytes |
+|---|---|---|---|---|
+| soak-v/run | 25 | 25 | **4** | 2868 |
+
+IDENTICAL to ARM C's, and expectedly so: the soak's own `_loopback_config`
+redirects EVERY role to its stub, including ARM V's already-loopback critic, so
+both arms received the same objections. What this soak establishes is that ARM
+V's SHAPE drives to a clean terminal -- not that the vacuous bank was served.
+That the bank's objections travel the same route is proved separately and
+structurally in `proof/ARMV_SAME_PATH.txt`, where it can be proved outright
+rather than sampled.

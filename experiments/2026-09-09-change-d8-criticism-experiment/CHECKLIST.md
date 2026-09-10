@@ -1,6 +1,6 @@
 # Checklist for: does criticism, once connected and allowed to bite, make the harness's output materially better than the plain model? — TRANCHE 1 (instruments, offline proofs, sealed pre-registration; NO LIVE CALL)
 
-State: next=33 blockers=none  (PLAN CORRECTION at step 30: steps 30-31 read a stub root, and the soaks at 33-36 are what produce one, so 33-36 run FIRST and 30-32 follow. Order changed, nothing dropped; recorded rather than improvised, per dr-execute-step's rule for a step the tree contradicts.)  (second budget stop RESOLVED by the operator: "raise." -- ceiling 8300, SPEC Amendment 5, itemized from a measured 6798 base with a larger margin because three of the last four misses were items no itemization contained)  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
+State: next=36 blockers=none  (steps 33-35 and 30-31 done; ARM A's soak is the last one running)  (PLAN CORRECTION at step 30: steps 30-31 read a stub root, and the soaks at 33-36 are what produce one, so 33-36 run FIRST and 30-32 follow. Order changed, nothing dropped; recorded rather than improvised, per dr-execute-step's rule for a step the tree contradicts.)  (second budget stop RESOLVED by the operator: "raise." -- ceiling 8300, SPEC Amendment 5, itemized from a measured 6798 base with a larger margin because three of the last four misses were items no itemization contained)  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
 Re-read REQUEST.md (with Amendment 1) + SPEC.md (with Amendment 1) before every
 step. Execute strictly in order. One step per dr-execute-step invocation.
 
@@ -525,37 +525,82 @@ nor `mini/`, so R36 is not touched.
        The spec's open question is therefore CLOSED, and closed by reading the
        gate rather than by assuming a default.
 
-- [ ] 30. (S3, R6) [RUNS AFTER 36 — see the plan correction in State] Prove the
+- [x] 30. (S3, R6) [RUNS AFTER 36 — see the plan correction in State] Prove the
        open-criticisms rendering on an OFFLINE stub root of
        ARM C's shape: criticism reaches the seat that writes the next candidate.
        done-when: the section-plan receipts naming `dr.open-criticisms` are
        counted `n of m` (the `armR.sh:33-35` shape), n > 0, pasted to
        `proof/ARMC_RENDERS.txt`.
+       PROOF: on ARM C's own shape driven to cycle 8 offline, the section
+       RENDERED in **4 of 25** plans carrying 2 868 bytes. n > 0.
+       The step also built `tools/render_census.py`, an instrument the plan did
+       not name, because the receipts distinguish NAMED from RENDERED and the
+       distinction turned out to be the whole point: on the committed organiser
+       root, 11 of 11 plans NAME the section and only **9 RENDERED** it (2
+       absent). Nine of eleven is the figure the brief cited, so the instrument
+       reproduces it exactly — and a census counting names would have reported
+       a channel as live while it carried nothing.
+       The 4 is a FLOOR, not a rate: the shared stub answers the batch-critic
+       contract with empty cases, so there is little criticism to carry. That
+       is the fixture's property, not the arm's.
 
-- [ ] 31. (S4, R9) [RUNS AFTER 36] Prove ARM V's objections reach the next
+- [x] 31. (S4, R9) [RUNS AFTER 36] Prove ARM V's objections reach the next
        candidate EXACTLY as ARM C's do: same section, same priority, same
        disposition.
        done-when: the two stub roots' section-plan receipts for that section
        differ only in the objection text, `diff` output pasted to
        `proof/ARMV_SAME_PATH.txt`.
+       PROOF, and the METHOD CHANGED for a reason worth recording. The planned
+       comparison cannot work: the soak's `_loopback_config` redirects EVERY
+       role to its own stub, including ARM V's already-loopback critic, so both
+       stub roots receive the SAME objections and their receipts are identical
+       (25/25/4/2868 on both) — which shows the route matches but says nothing
+       about the bank, because the bank was never served.
+       So the claim is proved STRUCTURALLY instead, which the mechanism allows:
+       `discharge/channel.py::_open_with_total` reads the scrutiny Measures and
+       the attack edges, takes the criticism's TEXT, and carries no field naming
+       who wrote it — its own comment says a provenance field "would be a
+       number-shaped invitation to treat the two as differently weighty". Five
+       tests in `tests/test_vacuous_route_identity.py` hold it to that on the
+       `observe_only` record shape both arms produce, and TWO MUTATIONS drive
+       them red: skipping a criticism whose text is short (the shape of a defect
+       that would silently drop bank objections and make ARM V a no-criticism
+       arm), and adding a provenance field to `OpenCriticism` (the field whose
+       ABSENCE is the guarantee). `src/` restored and verified byte-clean.
 
 - [ ] 32. (S3, S4, S5) [COMMIT] the manifest builder, the three configurations
        and the five proofs.
        done-when: tree clean, head on origin.
 
-- [ ] 33. (S12, R25) Add three `CASES` rows to `scripts/cycle_soak.py` — data
+- [x] 33. (S12, R25) Add three `CASES` rows to `scripts/cycle_soak.py` — data
        only, `config_path` pointing at this tranche's committed configurations.
        Also add `build(root)` to `tools/build_manifest.py`, which step 26
        deferred as "26b": a soak case delegating to a builder needs one, and
        the soaks are what produce the roots steps 30-31 read.
        done-when: `python -u scripts/cycle_soak.py --list` shows the three new
        ids and every pre-existing id, unchanged.
+       PROOF: all eleven pre-existing ids present and unchanged, three new ones
+       registered (`d8-armC`, `d8-armV`, `d8-armA`).
+       The builder's contract with the soak was discovered by RUNNING it, one
+       failure at a time, rather than by reading: module-level `QUESTION` and
+       `CRITERIA`, a `config_path` parameter, and three report keys. The
+       `config_path` one is load-bearing rather than tidy — the soak hands its
+       LOOPBACK-REDIRECTED config, and compiling from the committed file
+       instead would have built a manifest pointing at the real provider: an
+       offline instrument reaching the network, which is exactly what the
+       soak's redirect exists to prevent.
 
-- [ ] 34. (S12) Soak ARM C's shape to cycle 8 against the stub.
+- [x] 34. (S12) Soak ARM C's shape to cycle 8 against the stub.
        done-when: the run ends green; log committed to `runs/soak-c.log`.
+       PROOF: `[soak] exit 0 (clean)`; A1 typed terminal
+       `completed`/`budget_exhausted`, A2 no operational failure, A3
+       `verify_root` 0 violations, A4 cycle 8 of 8, A7 every record parsed.
+       Two of the seven declared assertions are N/A for this case and the soak
+       says so itself: "a green exit describes the 5 that ran, never the 7".
 
-- [ ] 35. (S12) Soak ARM V's shape.
+- [x] 35. (S12) Soak ARM V's shape.
        done-when: green; `runs/soak-v.log` committed.
+       PROOF: `[soak] exit 0 (clean)`, same five assertions PASS, drive 266.7s.
 
 - [ ] 36. (S12) Soak ARM A's shape — the one carrying a granted authority and a
        two-seat ensemble, so the one most likely to fail offline.

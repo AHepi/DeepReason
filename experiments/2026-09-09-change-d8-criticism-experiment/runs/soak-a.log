@@ -1,0 +1,9 @@
+[soak] stub provider on 127.0.0.1:38909 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/soak-a
+NOTICE CALIBRATION_RECEIPT_REQUIRED: text prose status authority requires CALIBRATION_RECEIPT
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+[soak] built root: manifest bbba10c8b7b60d68…  criteria []
+[soak] qualified in 4.8s
+[soak] driving 8 cycles …
+NOTICE CALIBRATION_RECEIPT_REQUIRED: text prose status authority requires CALIBRATION_RECEIPT
