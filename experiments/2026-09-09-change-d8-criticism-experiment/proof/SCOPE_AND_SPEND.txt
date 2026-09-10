@@ -1,0 +1,56 @@
+=== Step 41 proof: tranche 1 spent NOTHING (C9, R38) ===
+
+--- 1. the credential was never committed, in any commit on any branch ---
+$ git log --all --stat | grep -c 'd8-criticism-experiment/env'
+0
+0
+(0 = never committed)
+
+$ git check-ignore -v <the env file>
+.gitignore:50:experiments/**/env	experiments/2026-09-09-change-d8-criticism-experiment/env
+
+--- 2. the credential was never READ by anything this tranche ran ---
+Its access time, against the moment it was written at capture:
+atime 2026-09-09 03:38:58.444776905 +0000
+mtime 2026-09-09 03:38:58.444776905 +0000
+A read would move atime past mtime.
+
+--- 3. no tranche-1 artifact carries a provider response ---
+Every arm's committed run directory:
+config-a.yaml
+config-c.yaml
+config-v.yaml
+soak-a.log
+soak-c.log
+soak-v.log
+(soak logs and configurations only -- no COMPOSED.txt, no call-N.json,
+ no run root: those are tranche 2's artifacts and do not exist yet)
+
+--- 4. every endpoint any instrument actually TALKED TO was loopback ---
+experiments/2026-09-09-change-d8-criticism-experiment/runs/soak-a.log:127.0.0.1:38909
+experiments/2026-09-09-change-d8-criticism-experiment/runs/soak-c.log:127.0.0.1:43335
+experiments/2026-09-09-change-d8-criticism-experiment/runs/soak-v.log:127.0.0.1:34199
+(the three soaks' stub providers; ollama.com appears in the committed
+ CONFIGURATIONS, which were compiled and never dialled)
+
+=== Step 42 proof: the scope held (R30, R36, S16) ===
+
+$ git diff --stat origin/main..HEAD -- src/ mini/ tests/
+(EMPTY = src/, mini/ and the repository's own tests/ are byte-identical
+ to main. This is also the proof that the full gate and docs_verify are
+ NOT OWED: R31 makes the gate conditional on a file under tests/ changing,
+ and no map document changed.)
+
+--- and the frozen surfaces, the one mechanical tripwire ---
+$ git diff --stat origin/main..HEAD -- <the five surfaces>
+(EMPTY = no frozen surface touched)
+
+--- what DID change outside the tranche directory, and why it is in scope ---
+ scripts/cycle_soak.py | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+scripts/cycle_soak.py: three CASES rows. SoakCase is a frozen dataclass
+whose config_path READS this tranche's own committed configurations and
+whose builder is a module this tranche owns; nine committed cases set the
+precedent, no test pins the case set, and no executable map check reads
+it (grep '^`check:.*cycle_soak' over docs/map/ returns nothing).
+scripts/ is neither src/ nor mini/, so R36 is untouched.

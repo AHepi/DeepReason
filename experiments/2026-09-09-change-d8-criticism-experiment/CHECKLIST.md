@@ -1,6 +1,6 @@
 # Checklist for: does criticism, once connected and allowed to bite, make the harness's output materially better than the plain model? — TRANCHE 1 (instruments, offline proofs, sealed pre-registration; NO LIVE CALL)
 
-State: next=41 blockers=none  (all three soaks green; PREREG sealed at step 40)  (PLAN CORRECTION at step 30: steps 30-31 read a stub root, and the soaks at 33-36 are what produce one, so 33-36 run FIRST and 30-32 follow. Order changed, nothing dropped; recorded rather than improvised, per dr-execute-step's rule for a step the tree contradicts.)  (second budget stop RESOLVED by the operator: "raise." -- ceiling 8300, SPEC Amendment 5, itemized from a measured 6798 base with a larger margin because three of the last four misses were items no itemization contained)  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
+State: next=DONE — all 43 steps checked; routing to dr-validate-change. blockers=none  (all three soaks green; PREREG sealed at step 40)  (PLAN CORRECTION at step 30: steps 30-31 read a stub root, and the soaks at 33-36 are what produce one, so 33-36 run FIRST and 30-32 follow. Order changed, nothing dropped; recorded rather than improvised, per dr-execute-step's rule for a step the tree contradicts.)  (second budget stop RESOLVED by the operator: "raise." -- ceiling 8300, SPEC Amendment 5, itemized from a measured 6798 base with a larger margin because three of the last four misses were items no itemization contained)  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
 Re-read REQUEST.md (with Amendment 1) + SPEC.md (with Amendment 1) before every
 step. Execute strictly in order. One step per dr-execute-step invocation.
 
@@ -655,17 +655,42 @@ nor `mini/`, so R36 is not touched.
        done-when: the pushed commit message contains the digest, and
        `sha256sum -c` against the committed file passes.
 
-- [ ] 41. (C9, R38) Prove tranche 1 spent nothing.
+- [x] 41. (C9, R38) Prove tranche 1 spent nothing.
        done-when: no tranche-1 artifact carries a provider response; the
        credential file's atime/mtime are unchanged since capture; and
        `git log --all --stat | grep -c "d8-criticism-experiment/env"` is 0.
+       PROOF (`proof/SCOPE_AND_SPEND.txt`), four ways:
+       ```
+       git log --all --stat | grep -c '.../env'   -> 0
+       git check-ignore -v .../env                -> .gitignore:50
+       atime 2026-09-09 03:38:58.444776905 +0000
+       mtime 2026-09-09 03:38:58.444776905 +0000   (identical: never read)
+       endpoints actually dialled: 127.0.0.1:38909, :43335, :34199 only
+       ```
+       The atime equalling the mtime to the nanosecond is the load-bearing
+       one: a single read would have moved it. `ollama.com` appears in the
+       committed CONFIGURATIONS, which were compiled and never dialled.
 
-- [ ] 42. (S16, R36) Prove the scope held.
+- [x] 42. (S16, R36) Prove the scope held.
        done-when: `git diff --stat origin/main -- src/ mini/ tests/` is EMPTY.
        This is also the proof that the full gate and `docs_verify` are not
        owed; both are therefore not run (R31, and CLAUDE.md's MANDATORY block).
+       PROOF: EMPTY for `src/`, `mini/` and the repository's own `tests/`, and
+       EMPTY for the five frozen surfaces — the one mechanical tripwire on the
+       path, pasted rather than asserted.
+       ONE FILE changed outside the tranche directory: `scripts/cycle_soak.py`,
+       +49 lines, three `CASES` rows. In scope: `SoakCase` is a frozen
+       dataclass whose `config_path` READS this tranche's own committed
+       configurations and whose `builder` is a module this tranche owns; nine
+       committed cases set the precedent; no test pins the case set; no
+       executable map check reads it (`grep '^\`check:.*cycle_soak'` over
+       `docs/map/` returns nothing); and `scripts/` is neither `src/` nor
+       `mini/`.
+       DECISION on `docs_verify`, recorded rather than omitted: the map gate is
+       run once in validation anyway, on an idle box, because it costs little
+       and proves the map is not asserting something untrue about the tree.
 
-- [ ] 43. (all) [COMMIT] push and confirm clean.
+- [x] 43. (all) [COMMIT] push and confirm clean.
        done-when: `git status --porcelain` is empty AND the branch head is on
        origin.
 
