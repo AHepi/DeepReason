@@ -467,18 +467,15 @@ def test_a_run_on_the_neural_backend_records_neither_cause(tmp_path):
 
 
 def test_the_managed_path_configuration_records_its_dropped_embedder(tmp_path):
-    """Regression, the arms' exact condition end to end: an operator `Config`
-    that EXPLICITLY names the neural model, compiled through the one builder
-    the managed `deepreason reason` path uses, produces a runtime configuration
-    naming no embedder model at all — and the run that configuration starts
-    must record that.
+    """Regression: a managed run whose configuration names no embedder model
+    still records WHICH scale it measured on and why.
 
-    `preparation._config_for_profile` takes `EMBEDDER_MODEL` as one of seven
-    values the host owns whatever the operator configured, and those seven are
-    the stated exception to the compiler's own
-    `ENGINE_CONFIG_FIELD_NOT_CARRIED` disclosure. Whether the host SHOULD own
-    it is not this test's business; that the run says which scale it ended up
-    on, and why, is.
+    Since 2026-09-10 an operator who STATES a model gets it — the managed path
+    carries `EMBEDDER_MODEL` when `model_fields_set` says the operator asked
+    (`tests/test_managed_path_host_owned_values.py`). This test now covers the
+    condition that remains: an operator who states nothing keeps the host's
+    hashing default, and the run must still say so rather than leaving a
+    reader to infer the scale from a distance number.
     """
     from datetime import datetime, timezone
 
@@ -502,12 +499,14 @@ def test_the_managed_path_configuration_records_its_dropped_embedder(tmp_path):
         compiled_at=datetime(2026, 7, 23, tzinfo=timezone.utc).strftime(
             "%Y-%m-%dT%H:%M:%SZ"
         ),
-        config=Config(EMBEDDER_MODEL=DEFAULT_NEURAL_MODEL),
+        # States nothing about the embedder: `model_fields_set` is empty, so
+        # the host default stands. A `Config(EMBEDDER_MODEL=...)` here would
+        # now be CARRIED, which is a different test.
+        config=Config.model_validate({}),
     )
     compiled = config_from_run_manifest(manifest)
     assert compiled.EMBEDDER_MODEL is None, (
-        "fixture precondition: the managed path still drops the value. If this "
-        "fails the drop was fixed elsewhere and this regression is obsolete"
+        "fixture precondition: an unstated embedder keeps the host default"
     )
 
     harness = Harness(tmp_path / "run")

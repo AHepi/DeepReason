@@ -248,3 +248,38 @@ three map entries. Under the 150-line budget.
 
 Class `defect` per GOAL.md, diff estimate <=150 lines, no frozen surface, no
 grant required. Proceeds to `dr-implement-fix`.
+
+## Amendment 1 (2026-09-10, during implementation) — a smaller shape, same sites
+
+The first implementation extracted two helpers, `_host_owned_values` and
+`_role_routes`, so the notice builder could see the host's own dictionary. It
+worked and was mutation-proven, and `tools/diff_budget.py` refused it:
+**176 insertions against the 150 ceiling, verdict EXCEEDED**. Roughly 43 of
+those were code MOVED out of `_config_for_profile` rather than written, which
+the gate cannot see and which is not an argument — the ceiling is the ceiling.
+
+What replaced it, and why it is better rather than merely smaller: the notice
+builder compares the operator's stated fields against the RESOLVED
+configuration `_config_for_profile` already returns, so neither helper is
+needed and `_config_for_profile`'s body is untouched apart from the embedder
+line. The comparison is also more correct. The first shape compared a stated
+`ScratchpadConfig` model against the host's `engaged_scratchpad_source()`
+mapping — different shapes, never equal, so the row passed for the wrong
+reason. Comparing model against model makes "the host took your value" mean
+what it says.
+
+Change sites, superseding the list above (the FILES are unchanged):
+
+- `src/deepreason/preparation.py` — the `owned` dict's `EMBEDDER_MODEL` entry
+  becomes conditional on `base.model_fields_set`; a new
+  `_HOST_OWNED_CARRIERS` table and `_host_override_notices(base, resolved)`;
+  `build_preparation_manifest` keeps the operator's configuration under a
+  second name, builds the notices from the resolved one, and returns the
+  compiled manifest re-validated with them appended (untouched when there are
+  none).
+- `src/deepreason/application/stop_report.py` — unchanged from the list above.
+
+Measured after the change: `diff_budget.py --ceiling 150 --paths
+src/deepreason` reports **121 insertions, verdict WITHIN**, and
+`tools/blast_radius.py` reports `frozen_surface_verdict: CLEAR` for both files
+(`probe/blast_radius.out`).

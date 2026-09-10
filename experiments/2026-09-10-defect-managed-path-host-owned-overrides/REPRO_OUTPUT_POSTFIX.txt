@@ -1,0 +1,33 @@
+## 1. THE SEVEN
+compile notices on the manifest: 6
+    ENGINE_CONFIG_FIELD_NOT_CARRIED /engine_config/engine_profile
+    ENGINE_CONFIG_FIELD_NOT_CARRIED /engine_config/model_profile
+    ENGINE_CONFIG_FIELD_NOT_CARRIED /engine_config/scratchpad
+    ENGINE_CONFIG_FIELD_NOT_CARRIED /engine_config/bridge
+    ENGINE_CONFIG_FIELD_NOT_CARRIED /engine_config/CHANNELS_DISABLED
+    ENGINE_CONFIG_FIELD_NOT_CARRIED /engine_config/roles
+value                carried   disclosed  the operator stated
+engine_profile       False     True       'mini'
+model_profile        False     True       'frontier'
+scratchpad           False     True       'enabled=True max_blocks_per_pack=24 max_guid'
+bridge               False     True       "mode='grounded_two_stage' allow_partial=True"
+EMBEDDER_MODEL       True      False      'nomic-ai/nomic-embed-text-v1.5'
+CHANNELS_DISABLED    False     True       "('simulation',)"
+roles                False     True       "{'conjecturer': {'provider': 'openai', 'mode"
+neither carried nor disclosed: 0 of 7 -> []
+
+## 2. THE GEOMETRY
+compiled scratch policy: backend='neural' model='nomic-ai/nomic-embed-text-v1.5'
+engine_config EMBEDDER_MODEL (what the run rebuilds): 'nomic-ai/nomic-embed-text-v1.5'
+Measure kinds on the log: ['embedder']
+deepreason results would print: embedder: neural (nomic-ai/nomic-embed-text-v1.5)
+
+## 3. THE CONTROL (the same rebuild, EMBEDDER_MODEL put back)
+deepreason results would print: embedder: neural (nomic-ai/nomic-embed-text-v1.5)
+
+## VERDICT
+the operator asked for 'nomic-ai/nomic-embed-text-v1.5'
+the run measured with 'nomic-ai/nomic-embed-text-v1.5' (backend 'neural')
+the run asked the neural backend for it at all: True
+the same rebuild with the field restored measured with 'nomic-ai/nomic-embed-text-v1.5' (backend 'neural')
+DEFECT ABSENT: every host-owned value is carried or disclosed, and the configured embedder reached the run.

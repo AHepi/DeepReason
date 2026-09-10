@@ -1,0 +1,4 @@
+=== src/deepreason/preparation.py ===
+CLEAR | This change touches none of the five frozen surfaces. 0 test file(s) and 1 map document(s) assert on the touched targets today.
+=== src/deepreason/application/stop_report.py ===
+CLEAR | This change touches none of the five frozen surfaces. 0 test file(s) and 1 map document(s) assert on the touched targets today.
