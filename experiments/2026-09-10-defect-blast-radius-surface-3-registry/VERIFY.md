@@ -103,10 +103,14 @@ whole subject is a static analysis over the tree.
 
   - **The diff budget says EXCEEDED and stands recorded as such.** 310
     insertions against the 150 ceiling, accounted per area at FIX.md
-    Amendment 1 with three options priced. The recommendation there is to
+    Amendment 1 with three options priced. The recommendation there was to
     accept, on the ground that 81 lines are net new mechanism and the other 229
-    are test, map and ledger — but that is a recommendation, and the operator
-    has not ruled. Until they do, this tranche is over budget on the record.
+    are test, map and ledger. **The operator ruled the same day — "approved" —
+    so road A stands: the diff is un-trimmed and the EXCEEDED verdict stays on
+    the record rather than being retro-fitted into a WITHIN.** The disposition
+    is ledgered with their verbatim word at FIX.md's closing section. What the
+    approval does not cover is stated there too: not a merge, not a grant, and
+    not a commission of either parked finding.
   - **The five surfaces are still named by three hand-maintained lists, and
     only one of them is now checked.** This fix makes the blast-radius registry
     right and pins it with a check on the tool's ANSWER. The map document's own

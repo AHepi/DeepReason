@@ -57,11 +57,14 @@ disagree. A sixth surface added to the document tomorrow and not to the
 registry still reads CLEAR; the new checks would not catch it, and the module
 docstring now says so in the tool's own voice.
 
-**The tranche is over its diff budget on the record.** `tools/diff_budget.py`
-returned `EXCEEDED` — 310 insertions against 150 — and it is recorded as a stop
-at FIX.md Amendment 1 with three options priced, not argued away. 81 of those
-lines are net new mechanism; the rest are test, map and ledger. Accepted does
-not mean true, and over budget does not mean wrong: the operator rules.
+**The tranche is over its diff budget on the record, and stays there.**
+`tools/diff_budget.py` returned `EXCEEDED` — 310 insertions against 150 —
+recorded as a stop at FIX.md Amendment 1 with three options priced, not argued
+away. 81 of those lines are net new mechanism; the rest are test, map and
+ledger. The operator ruled on the same day, in one word — "approved" — so the
+diff is un-trimmed and the EXCEEDED verdict stands as written. Worth keeping
+straight: an approved over-budget diff is still an over-budget diff. The
+approval disposes of the stop; it does not move the measurement.
 
 **`docs_verify` is four rows above its baseline for reasons that predate this
 tranche.** Ten failed where the baseline predicts five or six. Six match; four

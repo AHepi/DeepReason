@@ -202,3 +202,18 @@ widened beyond the one the finding names. The other 229 lines are test, map and
 ledger — the three things this repo's rules require to move WITH a fix, and the
 three the ceiling counts as if they were risk. Recorded as EXCEEDED rather than
 argued away; the operator decides whether to trim.
+
+### Disposition, 2026-09-10 — the operator accepted
+
+The operator's reply to the stop above, in full: **"approved"**.
+
+Read against what was put to them: the EXCEEDED verdict with three roads priced
+and A recommended. So the disposition is **A — the diff stands at 310
+insertions against the 150 ceiling, un-trimmed**, and the EXCEEDED verdict
+stays on the record rather than being retro-fitted into a WITHIN.
+
+What this approval does NOT cover, stated so a later reader does not stretch
+it: it is not a merge, and this branch is not merged (the tranche brief:
+"commit and push to your branch; do not merge to main"). It is not a grant on
+any frozen surface — none was touched or requested. And it does not commission
+either parked finding; both remain parked prompts in `PARKED.md`.
