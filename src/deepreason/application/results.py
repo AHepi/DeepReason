@@ -385,6 +385,7 @@ def embedder_summary(harness) -> dict[str, Any]:
     configured: Any = None
     reason: Any = None
     fell_back = False
+    unconfigured = False
     stamp: list[str] | None = None
     for event in harness.log.read():
         inputs = [str(value) for value in (event.inputs or ())]
@@ -395,6 +396,13 @@ def embedder_summary(harness) -> dict[str, Any]:
         elif inputs[0] == "embedder-fallback":
             fell_back = True
             configured = inputs[1] if len(inputs) > 1 else None
+            reason = inputs[2] if len(inputs) > 2 else None
+        elif inputs[0] == "embedder-unconfigured":
+            unconfigured = True
+            named = inputs[1] if len(inputs) > 1 else None
+            # "-" is the record's way of saying no default named a model; it is
+            # not a model id and must not reach the reader as one.
+            configured = None if named in (None, "-") else named
             reason = inputs[2] if len(inputs) > 2 else None
     if stamp is None:
         return _absent("NO_EMBEDDER_RECORD")
@@ -409,6 +417,9 @@ def embedder_summary(harness) -> dict[str, Any]:
         "version": stamp[2] if len(stamp) > 2 else None,
         "fingerprint": stamp[3] if len(stamp) > 3 else None,
         "fallback": fell_back,
+        # A run that asked for nothing did not fall back. The two are separate
+        # facts because only one of them means something went wrong.
+        "unconfigured": unconfigured and not fell_back,
         "configured_model": configured,
         "fallback_reason": reason,
     }
@@ -746,13 +757,20 @@ def embedder_line(embedder: dict[str, Any]) -> str:
     if _is_absent(embedder):
         return "not recorded (this run predates the embedder stamp)"
     backend, model = embedder["backend"], embedder["model"]
+    recorded = embedder.get("fallback_reason")
     if not embedder["fallback"]:
+        if embedder.get("unconfigured") and recorded:
+            # The recorded cause is quoted, never paraphrased: a fresh sentence
+            # here would drift from the record it claims to report.
+            return f"{backend} ({model}) — {recorded}"
         return f"{backend} ({model})"
     configured = embedder["configured_model"] or "a neural model"
+    because = f" ({recorded})" if recorded else ""
     return (
         f"{backend} (fallback) — this run was configured for {configured} "
-        f"but could not build it, so it measured with {model} instead; "
-        f"distance readings are on the lexical scale, not the configured one"
+        f"but could not build it{because}, so it measured with {model} "
+        f"instead; distance readings are on the lexical scale, not the "
+        f"configured one"
     )
 
 

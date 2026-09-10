@@ -1,0 +1,41 @@
+Root-level verification, offline, against the deterministic stub.
+Driver: verify_root_level.py (soak case pc1, --cycles 2 --token-budget 200000).
+Both roots are throwaway working directories, not committed roots.
+
+The two roots differ in ONE value, the engine config's EMBEDDER_MODEL.
+Everything else -- case, stub, cycles, budget, policies -- is identical.
+
+== treatment ==
+  engine_config.EMBEDDER_MODEL  : None
+  scratch_policy.embedder_model : None  <- null in BOTH
+  log seq 6 : embedder-unconfigured
+        nomic-ai/nomic-embed-text-v1.5
+        no embedder model in the compiled run configuration, though a default one names this model: it was dropped before the manifest (run-manifest.json scratch_policy.embedder_model)
+  log seq 12 : embedder
+        hashing-128
+        1
+        4226e035204776db
+  deepreason results            : hashing (hashing-128) — no embedder model in the compiled run configuration, though a default one names this model: it was dropped before the manifest (run-manifest.json scratch_policy.embedder_model)
+  verify_root violations        : 0
+
+== control ==
+  engine_config.EMBEDDER_MODEL  : 'nomic-ai/nomic-embed-text-v1.5'
+  scratch_policy.embedder_model : None  <- null in BOTH
+  log seq 11 : embedder
+        nomic-ai/nomic-embed-text-v1.5
+        fastembed-0.8.0+onnxruntime-1.29.0
+        d6e3599ce0377000
+  deepreason results            : neural (nomic-ai/nomic-embed-text-v1.5)
+  verify_root violations        : 0
+
+VERDICT: PASS.
+
+The treatment root says which scale it measured on AND why. The control,
+which kept its model, reached the neural backend with the fingerprint this
+session's own `deepreason embedder-warmup` printed (d6e3599ce0377000) and
+recorded nothing extra. The treatment's hashing sentinel 4226e035204776db is
+the same one all five brief-variation arms carry.
+
+The `scratch_policy.embedder_model` line is why this pair matters beyond the
+verdict: it is null in the neural root and in the hashing root alike, so it
+cannot be the field a reader checks. That is ERRATA E87.

@@ -376,3 +376,168 @@ def test_neural_calibration_separates_the_gate(neural, tmp_path):
         assert distance(neural.embed(left), neural.embed(right)) < eps
     # ...and admits typical same-problem siblings.
     assert result["within_problem"]["median"] > eps
+
+
+def _measures(harness, signal):
+    return [
+        event
+        for event in harness.log.read()
+        if event.rule == Rule.MEASURE and event.inputs and event.inputs[0] == signal
+    ]
+
+
+def test_a_run_that_configured_no_embedder_says_so_on_its_own_log(tmp_path):
+    """Regression (the five brief-variation arms,
+    experiments/2026-09-04-experiment-brief-variation-step1/roots/
+    {A0,A1,A1P,A2,A3}-run-fe00609058e10605590206d51ab2b7a0): each stamped
+    ["embedder", "hashing-128", "1", "4226e035204776db"], carried zero
+    `embedder-fallback` events and zero compile notices, and so could not say
+    why it measured on the lexical scale after that session's own
+    `deepreason embedder-warmup` had returned the neural fingerprint.
+
+    "Nobody asked for the neural backend" is a legitimate answer and an
+    inadmissible silence: a measurement scale that changes between runs with
+    nothing in the record to attribute it to makes every distance reading in
+    the corpus unattributable.
+    """
+    harness = Harness(tmp_path / "run")
+
+    assert make_embedder(harness, Config(EMBEDDER_MODEL=None)) is None
+
+    said = _measures(harness, "embedder-unconfigured")
+    assert len(said) == 1, "the run must say WHY its geometry is hashing, once"
+    assert said[0].inputs[1] == Config.model_fields["EMBEDDER_MODEL"].default, (
+        "the record names the model the shipped default would have used, "
+        "which is the fact an operator who warmed that model needs"
+    )
+    assert said[0].inputs[2], "a cause with no text is the silence again"
+    assert "engine_config" in said[0].inputs[2], (
+        "the cause must send a reader to the field that DECIDES the embedder. "
+        "`scratch_policy.embedder_model` does not: two soak roots differing "
+        "only in the engine config carried it as null while one measured "
+        "neural and the other hashing "
+        "(experiments/2026-09-09-neural-embedder-fallback/VERIFY.md)"
+    )
+
+    # R3/R15 of tranche 2026-08-16-change-embedder-auto-install: the deliberate
+    # hashing escape is not a degradation. Saying why must not reclassify it.
+    assert not _measures(harness, "embedder-fallback")
+
+
+def test_the_two_hashing_causes_never_both_fire(monkeypatch, tmp_path):
+    """A backend that was asked for and could not be built is a different fact
+    from one nobody asked for, and a reader that saw both would not know which
+    happened."""
+    import sys
+
+    monkeypatch.setitem(sys.modules, "fastembed", None)
+    harness = Harness(tmp_path / "run")
+
+    assert make_embedder(harness, Config(EMBEDDER_MODEL="BAAI/bge-small-en-v1.5")) is None
+
+    assert len(_measures(harness, "embedder-fallback")) == 1
+    assert not _measures(harness, "embedder-unconfigured")
+
+
+def test_a_run_on_the_neural_backend_records_neither_cause(tmp_path):
+    """The stamp alone is the answer when the run got what it asked for."""
+
+    class Fixed:
+        model = "fixture-neural"
+
+        def embed(self, texts):
+            return [[0.0, 1.0] for _ in texts]
+
+        def fingerprint(self):
+            return {"model": self.model, "version": "fixture", "sentinel": "0" * 16}
+
+    from deepreason.llm import embedder as embedder_module
+
+    harness = Harness(tmp_path / "run")
+    built = Fixed()
+    original = embedder_module.build_embedder
+    embedder_module.build_embedder = lambda _model: built
+    try:
+        assert make_embedder(harness, Config(EMBEDDER_MODEL="fixture-neural")) is built
+    finally:
+        embedder_module.build_embedder = original
+
+    assert not _measures(harness, "embedder-unconfigured")
+    assert not _measures(harness, "embedder-fallback")
+
+
+def test_the_managed_path_configuration_records_its_dropped_embedder(tmp_path):
+    """Regression, the arms' exact condition end to end: an operator `Config`
+    that EXPLICITLY names the neural model, compiled through the one builder
+    the managed `deepreason reason` path uses, produces a runtime configuration
+    naming no embedder model at all — and the run that configuration starts
+    must record that.
+
+    `preparation._config_for_profile` takes `EMBEDDER_MODEL` as one of seven
+    values the host owns whatever the operator configured, and those seven are
+    the stated exception to the compiler's own
+    `ENGINE_CONFIG_FIELD_NOT_CARRIED` disclosure. Whether the host SHOULD own
+    it is not this test's business; that the run says which scale it ended up
+    on, and why, is.
+    """
+    from datetime import datetime, timezone
+
+    from deepreason.preparation import build_preparation_manifest
+    from deepreason.provider_profile import ProviderProfileV1
+    from deepreason.run_manifest import config_from_run_manifest
+
+    profile = ProviderProfileV1.create(
+        provider="openai",
+        endpoint="https://api.example.com/v1",
+        model_id="model-a",
+        model_revision="rev-a",
+        family="family-a",
+        context_window_tokens=262144,
+        maximum_completion_tokens=4096,
+        credential_env="DEEPREASON_TEST_KEY",
+    )
+    manifest = build_preparation_manifest(
+        profile,
+        question="Why is the sky blue?",
+        compiled_at=datetime(2026, 7, 23, tzinfo=timezone.utc).strftime(
+            "%Y-%m-%dT%H:%M:%SZ"
+        ),
+        config=Config(EMBEDDER_MODEL=DEFAULT_NEURAL_MODEL),
+    )
+    compiled = config_from_run_manifest(manifest)
+    assert compiled.EMBEDDER_MODEL is None, (
+        "fixture precondition: the managed path still drops the value. If this "
+        "fails the drop was fixed elsewhere and this regression is obsolete"
+    )
+
+    harness = Harness(tmp_path / "run")
+    assert make_embedder(harness, compiled) is None
+
+    said = _measures(harness, "embedder-unconfigured")
+    assert len(said) == 1
+    assert said[0].inputs[1] == DEFAULT_NEURAL_MODEL
+
+
+def test_results_says_why_a_run_measured_on_the_lexical_scale(tmp_path):
+    """The half that reaches the operator. A typed record read by nobody is
+    the 2026-08-16 trap's own lesson repeating: `deepreason results` is where
+    an operator already looks, so the cause has to arrive there."""
+    from deepreason.application.results import embedder_line, embedder_summary
+
+    harness = Harness(tmp_path / "run")
+    make_embedder(harness, Config(EMBEDDER_MODEL=None))
+    harness.record_measure(inputs=["embedder", "hashing-128", "1", "0" * 16])
+
+    summary = embedder_summary(harness)
+    assert summary["backend"] == "hashing"
+    assert summary["fallback"] is False, "nothing fell back; nothing was asked"
+    assert summary["unconfigured"] is True
+    assert summary["configured_model"] == DEFAULT_NEURAL_MODEL
+    assert summary["fallback_reason"]
+
+    line = embedder_line(summary)
+    assert "hashing" in line
+    assert summary["fallback_reason"] in line, (
+        "the line must carry the recorded cause, not a fresh sentence that "
+        "could drift from it"
+    )

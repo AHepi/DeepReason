@@ -510,6 +510,51 @@ assert 'request_logprobs' in src and 'stream_options' in src
   at it — arm the default by install, and surface the fallback where the
   operator already looks.
 `check: python -c "import tomllib,pathlib; d=tomllib.loads(pathlib.Path('pyproject.toml').read_text()); core=[r for r in d['project']['dependencies'] if r.split('[')[0].split('>')[0].split('<')[0].split('=')[0].strip()=='fastembed']; assert core, ('fastembed must stay in the CORE dependency list', d['project']['dependencies']); assert d['project']['optional-dependencies'].get('embed') == [], 'the [embed] extra must stay declared and empty'" && grep -q "\"embedder-warmup\"" src/deepreason/cli/main.py && python -m pytest tests/test_embedder.py::test_fastembed_is_a_core_dependency -q`
+- **THE SAME TRAP, ONE STAGE EARLIER: the managed path throws the armed
+  default away before anything can fall back.** The entry above armed the
+  neural default by install and surfaced the fallback in `deepreason results`.
+  Both halves work and neither reaches `deepreason reason`, because
+  `preparation._config_for_profile` sets `EMBEDDER_MODEL=None` as one of seven
+  values the host owns whatever the operator configured, and those seven are
+  the stated exception to the compiler's own
+  `ENGINE_CONFIG_FIELD_NOT_CARRIED` disclosure (`preparation.py:505-508`). So
+  the manifest compiles `engine_config.EMBEDDER_MODEL = null`,
+  `ops.make_embedder` returned on its `if not config.EMBEDDER_MODEL` branch
+  BEFORE the `embedder-fallback` record below it, and nothing anywhere said
+  which scale the run measured on or why. The five brief-variation arms
+  (`experiments/2026-09-04-experiment-brief-variation-step1/roots/{A0,A1,A1P,A2,A3}-run-fe00609058e10605590206d51ab2b7a0`)
+  each carry the byte-identical stamp `["embedder","hashing-128","1",
+  "4226e035204776db"]`, zero `embedder-fallback` events and zero compile
+  notices of any code — after that session's own `deepreason embedder-warmup`
+  had returned the nomic-embed-text-v1.5 fingerprint. FIXED 2026-09-09: a
+  third declared signal, `embedder-unconfigured`, records the cause on the
+  branch that used to return silently, and `deepreason results` quotes it.
+  Deliberately NOT `embedder-fallback` — R3/R15 of the 2026-08-16 tranche
+  holds that the deliberate hashing escape is no degradation, and a run-time
+  builder cannot tell that escape from a host override, since both arrive as
+  `EMBEDDER_MODEL is None`. **Read `engine_config`, never
+  `scratch_policy.embedder_model`, when asking which embedder a manifest
+  compiled**: two soak roots differing only in the engine config carried
+  byte-identical `scratch_policy.embedder_model = null` while one measured
+  neural and the other hashing, so that field answers a different question and
+  a reader who checks it concludes the opposite of the truth half the time.
+  STILL OPEN, and parked rather than fixed: the
+  managed path cannot USE a configured embedder at all, so
+  `deepreason embedder-warmup` buys a managed run nothing. The general lesson,
+  and the reason this entry sits beside its predecessor rather than replacing
+  it: a fix that arms a default does not reach a path that overrides the
+  default, and the stage a value is lost at decides which record can mention
+  it (`DR-CON-configuration-stages`, stage 2).
+`check: python -c "
+import ast, pathlib
+src = pathlib.Path('src/deepreason/ops.py').read_text()
+fn = [n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef) and n.name == 'make_embedder'][0]
+body = ast.get_source_segment(src, fn)
+assert 'embedder-unconfigured' in body, 'the unset branch must record WHY the run is on hashing'
+first = fn.body[1] if isinstance(fn.body[0], ast.Expr) else fn.body[0]
+assert isinstance(first, ast.If), 'the unset branch must stay the first thing make_embedder decides'
+assert 'embedder-unconfigured' in ast.get_source_segment(src, first), 'the record must ride the unset branch, not a later one'
+" && python -c "from deepreason.signals import SIGNAL_DECLARATIONS as s; d = s['embedder-unconfigured']; assert d.unit != 'unspecified' and d.staleness != 'unspecified'" && python -m pytest tests/test_embedder.py::test_a_run_that_configured_no_embedder_says_so_on_its_own_log tests/test_embedder.py::test_the_managed_path_configuration_records_its_dropped_embedder tests/test_embedder.py::test_results_says_why_a_run_measured_on_the_lexical_scale -q`
 - **A leased field the controller is licensed to tune was also frozen for
   equality, and the two rules sat six lines apart in the same function.**
   `EndpointLease.verify`'s comment said `max_tokens` was "intentionally absent"
