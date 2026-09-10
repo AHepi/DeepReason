@@ -359,3 +359,34 @@ the fix verifies valid" is §9's criterion 1a — the TERMINALIZED stub, whose
 stored summary must read `security_valid: true`; it is not a claim about the
 five already-committed roots, which keep their own stored testimony (§9
 consequence 1). The before/after census over those five goes in `proof/`.
+
+## 11. Amendment after implementation — the measured diff, against my own estimate
+
+`tools/diff_budget.py HEAD --ceiling 40 --paths src/deepreason/verification/report.py`:
+
+    {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "HEAD",
+     "areas": {"src/deepreason/verification/report.py": 63},
+     "total_insertions": 63, "ceiling": 40, "verdict": "EXCEEDED"}
+
+**63 insertions and 1 deletion, against the "~40 insertions, zero deletions"
+§5 estimated and the grant quoted back.** Recorded rather than absorbed, and
+recorded as EXCEEDED rather than as a footnote — the by-eye version of this
+check let a 193-line diff land under a 150-line ceiling once
+(`DR-INV-frozen-surfaces`, the diff budget gate).
+
+What the 63 are: **45 code and import lines, 17 comment lines, 1 blank.** The
+single deletion is `from deepreason.run_manifest import MANIFEST_NAME,
+load_run_manifest` reformatted into a four-name multi-line import — a line
+changed, not a behaviour removed. Nothing else was deleted, and the arm itself
+is insertions only.
+
+Why it was not trimmed to the number: the 17 comment lines each state a
+constraint the code cannot show — why `criticism_policy.authority` is the
+authority read rather than route presence, why the contract is re-derived
+rather than named, why the derivation is guarded on the declared role matching
+the lease, and why a placeholder alias table is safe. CLAUDE.md's own comment
+rule asks for exactly those and forbids narration; deleting them to reach a
+plan-time estimate would trade a real property for a number. The estimate was
+mine and it was low; the semantics are the ones granted, and 63 sits well
+inside the tranche's 150-line stop condition. Flagged in the delivery report,
+not settled quietly.
