@@ -1,0 +1,12 @@
+compile_notices: 0
+scratch_policy: backend='deterministic_hashing' model=None
+value                carried   disclosed  operator asked for
+engine_profile       False     False      'mini'
+model_profile        False     False      'frontier'
+scratchpad           False     False      'enabled=True max_blocks_per_pack=24 max_guides'
+bridge               False     False      "mode='grounded_two_stage' allow_partial=True a"
+EMBEDDER_MODEL       False     False      'nomic-ai/nomic-embed-text-v1.5'
+CHANNELS_DISABLED    False     False      "('simulation',)"
+roles                False     False      "{'conjecturer': {'provider': 'openai', 'model'"
+
+silently replaced: 7 of 7 -> ['engine_profile', 'model_profile', 'scratchpad', 'bridge', 'EMBEDDER_MODEL', 'CHANNELS_DISABLED', 'roles']

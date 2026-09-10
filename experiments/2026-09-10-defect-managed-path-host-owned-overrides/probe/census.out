@@ -1,0 +1,10 @@
+MANAGED roots (run-preparation.json present): 63
+  embedder_backend='deterministic_hashing' compile_notices=0 -> 62
+  embedder_backend='deterministic_hashing' compile_notices=5 -> 1
+OTHER roots (compiled --run-manifest, fixtures, soaks): 38
+  embedder_backend='disabled' compile_notices=0 -> 27
+  embedder_backend='disabled' compile_notices=7 -> 1
+  embedder_backend='neural' compile_notices=0 -> 2
+  embedder_backend='neural' compile_notices=6 -> 1
+  embedder_backend='neural' compile_notices=7 -> 3
+  embedder_backend=None compile_notices=0 -> 4
