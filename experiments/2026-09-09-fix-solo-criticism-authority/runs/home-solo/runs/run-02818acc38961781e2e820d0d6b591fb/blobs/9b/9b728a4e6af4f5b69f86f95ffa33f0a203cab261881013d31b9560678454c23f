@@ -1,0 +1,50 @@
+{
+  "candidate": {
+    "claim": "A small research team should adopt an existing experiment tracker only if their workflow is strictly observational; however, if the research involves active learning loops where the tracker must function as a real-time controller modifying experimental parameters, they must build a custom minimal tracker to avoid the 'integration tax' and causal fragility inherent in wrapping mismatched tools.",
+    "mechanism": "The decision hinges on the 'Control Theory Boundary': existing tools are optimized for passive data logging (observation), creating high friction when forced into active control roles. Custom builds are justified solely by the need for a tight feedback loop where the state machine of the tracker is identical to the causal model of the experiment, eliminating the latency and schema-mismatch risks of adapter layers.",
+    "counterconditions": [
+      "The team lacks the engineering bandwidth to maintain even a minimal custom state machine.",
+      "The active learning component is low-frequency or batch-based rather than real-time.",
+      "An existing tool offers a native plugin architecture that exposes full control without significant integration tax."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The causal mechanism is explicitly defined as the 'Control Theory Boundary' in the mechanism field: active learning requires the tracker to be the controller, not just a logger. Existing tools abstract away this control layer, necessitating a custom build to close the loop without latency or schema loss."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly name the 'integration tax' as the primary cost driver for wrapping mismatched tools. The proposal now argues that for active loops, this tax exceeds the cost of a minimal custom build because the 'wrap' inevitably becomes the critical path."
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "rebutted",
+        "note": "While event-driven architectures exist, they introduce asynchronous latency and complex error handling states that break the deterministic guarantees required for tight active learning loops. The criticism conflates 'triggering' with 'controlling'; webhooks are insufficient for stateful, synchronous parameter modification."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "revised",
+        "note": "Added counterconditions requiring a 'minimal' custom tracker with a defined schema from day one. This directly addresses the migration cliff by ensuring the custom tool is not a disposable script but a structured state machine, making future migration to formal tools trivial if the team scales."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The custom tracker reduces fragility by aligning the tool's state machine exactly with the team's causal model. In contrast, adapting an existing tool introduces a 'semantic gap' where the tool's internal state diverges from the experiment's actual state, creating a hidden single point of failure in the adapter logic."
+      }
+    ],
+    "optional_refs": [
+      "SRC_002",
+      "SRC_004"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_002",
+        "SRC_004"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

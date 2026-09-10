@@ -1,0 +1,71 @@
+{
+  "candidate": {
+    "claim": "A small team should adopt an existing experiment tracker only if their workflow is strictly observational; however, if the research involves active learning loops where the tracker must function as a real-time controller to modify experimental parameters, they must build a custom minimal state machine to avoid the 'integration tax' of hacking rigid external APIs, while mitigating the 'single point of failure' risk by designing the custom tracker as a stateless orchestrator that delegates persistence to a robust, off-the-shelf database.",
+    "mechanism": "Causal Control Boundary: The decision hinges on whether the tracker acts as a passive log (observational) or an active actuator (control). In active loops, latency and schema rigidity in external tools break the causal chain of the experiment. A custom state machine restores this causality by embedding the control logic directly, but to prevent the 'migration cliff' and 'single point of failure,' the custom component handles only transient state transitions, writing immutable event logs to a standard SQL/NoSQL backend immediately, thus separating the fragile control logic from durable storage.",
+    "counterconditions": [
+      "The team lacks the engineering bandwidth to maintain even a minimal state machine wrapper.",
+      "The active learning loop operates on timescales (e.g., days per iteration) where API latency of existing tools is negligible.",
+      "The existing tool offers a plugin architecture that allows native injection of control logic without 'hacking'."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The causal mechanism is explicitly defined as the 'Causal Control Boundary': active learning requires the tracker to be an actuator, not just a logger. Existing tools abstract away the control layer, introducing latency and schema mismatches that break the feedback loop. The custom build is necessitated specifically to close this control loop, not merely for logging."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised the proposal to acknowledge the 'integration tax' explicitly. The mechanism now mandates a 'stateless orchestrator' pattern where the custom code handles only the control logic, delegating all persistence to an existing robust backend. This reduces the integration surface area compared to a full-stack custom build, directly addressing the cost of hacking mismatched workflows."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "rebutted",
+        "note": "The 'migration cliff' is avoided by design. By using a standard database backend for immutable event logs from Day 1, the data schema is defined and structured regardless of the custom control layer's lifespan. If the custom controller is discarded later, the historical data remains queryable and structured in the standard backend, preventing the accumulation of unstructured noise."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "revised",
+        "note": "Revised the architecture to address the 'single point of failure' fragility. The custom tracker is no longer a monolithic state machine holding both logic and data. It is redefined as a transient, stateless service that computes the next step and writes to a durable, external database. If the custom service fails, the causal history is preserved in the database, and the service can be restarted or replaced without losing the experiment's state."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "b1642d037422b51c0be00c872d50beb7dbcd5a47b2733f33a65b653bf158ecb0",
+        "f0a7fdb1573a11c5f3064989fd549eaaaafda316476c85270e892ed4058bef0b"
+      ],
+      "shared_structure": [
+        "Distinction between passive observation and active control.",
+        "Necessity of custom infrastructure when external abstractions leak into the control loop.",
+        "Separation of transient logic from durable storage to manage risk."
+      ],
+      "disanalogies": [
+        "Unlike pure custom builds which often monopolize storage, this proposal hybrids with existing DBs to reduce maintenance.",
+        "Active learning loops have stricter latency constraints than general mechanist modeling."
+      ],
+      "transfer_claims": [
+        "The 'Control Theory Boundary' applies: if the tool must close the loop, it must own the loop's timing and schema.",
+        "Hybrid architectures (custom logic + standard storage) mitigate the 'departure' costs usually associated with building from scratch."
+      ],
+      "overturn_conditions": [
+        "If an existing tool provides a native, low-latency hook for parameter modification that matches the research schema exactly.",
+        "If the team's definition of 'active learning' does not require real-time intervention."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_002",
+      "SRC_004"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_002",
+        "SRC_004"
+      ],
+      "search_signal": "productive"
+    },
+    "checker_specs": []
+  }
+}

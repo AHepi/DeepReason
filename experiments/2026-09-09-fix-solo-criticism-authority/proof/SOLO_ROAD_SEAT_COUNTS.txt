@@ -1,0 +1,46 @@
+===== judge seats=0  argv4=no =====
+judge seats: 0  single-seat permitted: False
+criticism authority: defended_trial
+compile notices: ['CALIBRATION_RECEIPT_REQUIRED', 'ENGINE_CONFIG_FIELD_NOT_CARRIED', 'ENGINE_CONFIG_FIELD_NOT_CARRIED', 'V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED']
+is_single_model: True judge seats: 0
+warrants total: 0 argumentative: 0
+attack edges: 0
+trial/crit measures: {'trial-declined:no-judge-role': 1, 'foreign-criticism-coverage.v1': 1}
+gate disclosures: []
+
+===== judge seats=1  argv4=no =====
+judge seats: 1  single-seat permitted: False
+criticism authority: defended_trial
+compile notices: ['CALIBRATION_RECEIPT_REQUIRED', 'ENGINE_CONFIG_FIELD_NOT_CARRIED', 'ENGINE_CONFIG_FIELD_NOT_CARRIED', 'V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED']
+is_single_model: True judge seats: 1
+warrants total: 0 argumentative: 0
+attack edges: 0
+trial/crit measures: {'trial-declined:single-judge-seat': 1, 'foreign-criticism-coverage.v1': 1}
+gate disclosures: []
+
+===== judge seats=1  argv4=permit =====
+judge seats: 1  single-seat permitted: True
+criticism authority: defended_trial
+compile notices: ['CALIBRATION_RECEIPT_REQUIRED', 'ENGINE_CONFIG_FIELD_NOT_CARRIED', 'ENGINE_CONFIG_FIELD_NOT_CARRIED', 'ENGINE_CONFIG_FIELD_NOT_CARRIED', 'V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED']
+is_single_model: True judge seats: 1
+warrants total: 1 argumentative: 1
+attack edges: 1
+  ARGUMENTATIVE warrant -> cbe3f6a6a96f43028d06540e7ee0734b68c9470abc22a6aca105ba1644d3e9e4
+trial/crit measures: {'foreign-criticism-coverage.v1': 1}
+gate disclosures: [('single-judge-seat', 'cbe3f6a6a96f'), ('solo-road', 'cbe3f6a6a96f')]
+
+===== judge seats=2  argv4=no =====
+judge seats: 2  single-seat permitted: False
+criticism authority: defended_trial
+compile notices: ['CALIBRATION_RECEIPT_REQUIRED', 'ENGINE_CONFIG_FIELD_NOT_CARRIED', 'ENGINE_CONFIG_FIELD_NOT_CARRIED']
+is_single_model: True judge seats: 2
+warrants total: 1 argumentative: 1
+attack edges: 1
+  ARGUMENTATIVE warrant -> cbe3f6a6a96f43028d06540e7ee0734b68c9470abc22a6aca105ba1644d3e9e4
+trial/crit measures: {'foreign-criticism-coverage.v1': 1}
+gate disclosures: [('solo-road', 'cbe3f6a6a96f')]
+
+rF-0-no violations= 0 warrants= 0 refuted= 0
+rF-1-no violations= 0 warrants= 0 refuted= 0
+rF-1-permit violations= 0 warrants= 1 refuted= 1
+rF-2-no violations= 0 warrants= 1 refuted= 1

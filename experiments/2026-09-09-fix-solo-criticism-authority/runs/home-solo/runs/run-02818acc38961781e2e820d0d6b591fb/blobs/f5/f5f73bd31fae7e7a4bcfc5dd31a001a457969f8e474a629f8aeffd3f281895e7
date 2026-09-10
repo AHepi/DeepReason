@@ -1,0 +1,4 @@
+{
+  "decisive_point": "if the script begins without a defined schema, the resulting data becomes unstructured noise impossible to migrate without manual re-input",
+  "verdict": "fail"
+}

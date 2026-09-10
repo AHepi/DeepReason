@@ -1,0 +1,139 @@
+{
+  "candidates": [
+    {
+      "claim": "Adopt an existing tracker but enforce a 'Schema-First' contract where no data is logged until a formal schema is defined, treating the schema definition as the primary engineering deliverable rather than the tracker software itself.",
+      "mechanism": "Procedural Friction: By mandating a schema before any tool interaction, the team incurs the cognitive cost of structure without the maintenance cost of custom software, leveraging existing tools as dumb storage for smart contracts.",
+      "counterconditions": [
+        "The research workflow is so novel that no existing schema language can express the required state transitions.",
+        "The team lacks the expertise to define a robust schema upfront, leading to analysis paralysis."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "The mechanism does not rely on 'active learning loops' necessitating a custom build; instead, it argues that active control is achieved via the schema contract enforced by the existing tool, rendering the custom build unnecessary for causal mechanism."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "revised",
+          "note": "Revised to acknowledge 'integration tax': The schema-first approach explicitly accepts high initial friction (tax) to eliminate long-term hacking costs, shifting the effort from code wrapping to semantic definition."
+        },
+        {
+          "handle": "[SRC_018] against SRC_017",
+          "kind": "rebutted",
+          "note": "This approach utilizes event-driven architectures (webhooks) of existing tools to trigger schema validation, thus embracing active control without abandoning the platform for a custom state machine."
+        },
+        {
+          "handle": "[SRC_004] against SRC_003",
+          "kind": "rebutted",
+          "note": "The 'migration cliff' is eliminated because the schema exists before data generation; there is no unstructured noise to migrate, only validated instances from day one."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "The custom state machine is replaced by the schema validator (often a standard library or tool feature), removing the single point of failure associated with bespoke team code."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_015"
+      ]
+    },
+    {
+      "claim": "Implement a 'Shadow Mode' strategy: run a disposable local script for active experimentation while simultaneously logging structured events to an existing tracker in read-only mode, using the shadow period to mine the final schema.",
+      "mechanism": "Dual-Track Validation: Decouples the velocity of experimental iteration (script) from the rigidity of archival compliance (tracker), allowing the schema to emerge empirically before being enforced.",
+      "counterconditions": [
+        "The overhead of maintaining two parallel logging systems doubles the cognitive load and introduces synchronization errors.",
+        "The 'shadow' data diverges significantly from the 'formal' data, making the mined schema invalid for the actual tool constraints."
+      ],
+      "typicality": 0.6,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "departure_declared",
+          "note": "Departing from the premise that one must choose strictly between 'custom' or 'adopt'; this proposes a hybrid temporal state where both coexist until convergence."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "The 'integration tax' is minimized because the script requires zero integration initially; integration is only attempted once the schema is stable, reducing wasted engineering effort."
+        },
+        {
+          "handle": "[SRC_018] against SRC_017",
+          "kind": "revised",
+          "note": "Revised to clarify that the existing tracker's event-driven architecture is used passively during shadow mode, avoiding the need for custom triggers until the handover phase."
+        },
+        {
+          "handle": "[SRC_004] against SRC_003",
+          "kind": "rebutted",
+          "note": "The migration cliff is bridged by the shadow phase itself; the script acts as the bridge, ensuring data is never 'unstructured noise' but rather 'pre-schema candidates'."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Causal fragility is reduced because the script is disposable; if it fails, the team loses only the current iteration, not the entire historical causal model stored in the robust existing tracker."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008",
+        "SRC_016"
+      ]
+    },
+    {
+      "claim": "Build a minimal custom 'State Machine Wrapper' that sits between the researchers and an existing tracker, translating high-level experimental intents into the tracker's rigid API, effectively creating a domain-specific language (DSL) for the team.",
+      "mechanism": "Abstraction Layering: Isolates the volatility of research logic in a thin custom layer while relying on the battle-tested storage and visualization of the existing tool, balancing control with stability.",
+      "counterconditions": [
+        "The wrapper becomes as complex as a full tracker, negating the benefit of adopting an existing tool.",
+        "Debugging issues becomes difficult as errors may originate in the wrapper, the translation layer, or the underlying tool."
+      ],
+      "typicality": 0.4,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Provides the specific causal mechanism: the wrapper translates 'active learning' decisions into tracker actions, solving the control problem without rebuilding the entire stack."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "revised",
+          "note": "Acknowledges the 'integration tax' is now the cost of maintaining the wrapper; however, this tax is bounded and scoped strictly to the DSL, preventing scope creep."
+        },
+        {
+          "handle": "[SRC_018] against SRC_017",
+          "kind": "rebutted",
+          "note": "Explicitly leverages event-driven architectures by having the wrapper subscribe to tracker webhooks, proving the dichotomy between passive/active is false when a mediator exists."
+        },
+        {
+          "handle": "[SRC_004] against SRC_003",
+          "kind": "rebutted",
+          "note": "The wrapper enforces a schema at the input level, preventing unstructured noise from ever entering the system, thus eliminating the migration cliff."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "While the wrapper is a potential single point of failure, its small size and lack of state persistence make it significantly less fragile than a full custom tracker."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_011"
+      ]
+    },
+    {
+      "claim": "Adopt an existing tool strictly as a 'Read-Only Archive' where all active work happens in version-controlled local scripts that generate static reports, treating the tracker as a museum rather than a laboratory bench.",
+      "mechanism": "Separation of Concerns via Temporal Segregation: Active discovery happens in flexible scripts; only finalized, curated results are committed to the rigid tracker, optimizing for speed of inquiry and permanence of record separately.",
+      "counterconditions": [
+        "Researchers fail to manually curate and upload results, leading to an incomplete archive.",
+        "The lack of real-time feedback from the tracker prevents the team from spotting trends across concurrent experiments."
+      ],
+      "typicality": 0.3,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Argues that 'active learning loops' do not require tool integration; they require human-in-the-loop script modification, which is better supported by local IDEs than tracker UIs."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "

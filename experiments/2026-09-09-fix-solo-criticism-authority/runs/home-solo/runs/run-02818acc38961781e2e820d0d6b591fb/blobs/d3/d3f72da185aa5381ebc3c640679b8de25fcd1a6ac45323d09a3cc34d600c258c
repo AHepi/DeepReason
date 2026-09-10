@@ -1,0 +1,189 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "Build a custom tracker only if the research workflow requires the tracker to act as a low-latency controller in an active learning loop, where the system must modify experiment parameters in real-time based on incoming data; otherwise, adopt an existing tool.",
+      "mechanism": "Control Theory Boundary: Existing tools are architected as passive data sinks (write-only logs), lacking the event-driven architecture and sub-second feedback loops required for closed-loop control. Custom builds allow the tracker to function as the 'brain' of the experiment, directly invoking model retraining or parameter adjustment functions upon data ingestion, bypassing the polling latency and API rate limits of general-purpose platforms.",
+      "counterconditions": [
+        "The team's experiments are purely observational or batch-oriented with no real-time parameter adjustment.",
+        "Existing tools offer webhook triggers with latency low enough (<100ms) to satisfy the control loop requirements.",
+        "The team lacks the engineering bandwidth to maintain a custom state machine with high availability guarantees."
+      ],
+      "typicality": 0.95,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "The causal mechanism is the architectural mismatch between 'passive logging' (existing tools) and 'active control' (custom). Existing tools rely on asynchronous APIs and polling, introducing latency that breaks the stability of tight control loops. A custom build embeds the controller logic directly into the data ingestion path, enabling synchronous execution which is physically impossible to guarantee via external configuration of a SaaS platform."
+        },
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate explicitly limits custom builds to the 'active control' case. In all other cases (the majority), it mandates adoption, thereby avoiding the 'integration tax' for standard workflows. The cost of building is justified only because the 'tax' of hacking a passive tool into an active controller exceeds the cost of building the specific control feature."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "revised",
+          "note": "Added a countercondition regarding engineering bandwidth. If the team cannot maintain the custom tracker's schema and availability, the 'migration cliff' risk outweighs the control benefits, forcing adoption even for active loops (perhaps accepting sub-optimal latency)."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The custom tracker is not a single point of failure for the 'causal model' but rather the implementation of it. If the custom tracker fails, the experiment halts safely (fail-stop), whereas a mismatched existing tool might continue logging garbage data (fail-continue), corrupting the causal model silently. The fragility is managed by scoping the custom tool strictly to the control loop, keeping data storage delegated to robust existing solutions."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Adopt an existing tracker but enforce a 'skeptic' validation layer that treats all tracked results as provisional until independently reproducible, effectively decoupling data collection from truth claims.",
+      "mechanism": "Epistemic Firewall: By inserting a validation layer between the experiment runner and the tracker, the team prevents 'publication bias' and 'hacker momentum' from polluting the dataset. The existing tool handles the heavy lifting of storage and visualization, while the custom (or scripted) validator ensures only results meeting strict reproducibility criteria are promoted to 'verified' status within the tool's metadata.",
+      "counterconditions": [
+        "The existing tool does not support mutable metadata or status flags required for the 'provisional' state.",
+        "The overhead of running independent reproduction checks slows down the iteration cycle beyond acceptable limits.",
+        "The team culture prioritizes speed of exploration over rigorous immediate verification."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "departure_declared",
+          "note": "This candidate departs from the premise that 'active learning loops' are the primary decision driver. It argues that for most research teams, the epistemic integrity of the data (avoiding false positives) is a more critical bottleneck than control latency, rendering the control theory argument secondary."
+        },
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "rebutted",
+          "note": "The 'integration tax' is minimized because the validation layer is a thin wrapper (script) that interacts with the existing tool's API. It does not require replacing the core infrastructure, only augmenting the write-path with a verification step."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "Since the underlying tool is an established platform, the 'migration cliff' is non-existent. Data remains in a standard format from day one. The 'provisional' flag is a logical state, not a schema change, ensuring smooth exportability later."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The 'Separation of Concerns' is preserved: the existing tool manages state/storage, the validator manages truth. There is no new single point of failure; if the validator fails, data is still logged (as unverified), preserving the record rather than losing it."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Start with a disposable script-based tracker that enforces a rigid schema from hour one, with a pre-committed 'sunset clause' to migrate to a formal tool once the workflow stabilizes.",
+      "mechanism": "Schema-First Prototyping: The risk of 'unstructured noise' (SRC_009) is mitigated not by using a big tool, but by enforcing a strict JSON schema in the lightweight script. This captures the 'mechanist' causal model (SRC_004) without the overhead of a full platform. The 'sunset clause' forces a migration before technical debt becomes unmanageable, balancing flexibility with discipline.",
+      "counterconditions": [
+        "The team fails to adhere to the strict schema, drifting into ad-hoc logging.",
+        "The 'sunset clause' is indefinitely postponed due to feature creep in the script.",
+        "The volume of data generated exceeds the capacity of local/file-based storage before migration occurs."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "departure_declared",
+          "note": "Departs from the binary choice of 'build full system' vs 'adopt full system'. Proposes a temporal hybrid: a custom script that acts as a placeholder, rejecting the need for a complex causal mechanism explanation by deferring the architectural decision until the workflow is proven."
+        },
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "rebutted",
+          "note": "The 'integration tax' is zero initially because no integration exists. The future tax of migration is accepted as a calculated risk, capped by the 'sunset clause' and mitigated by the rigid schema."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "revised",
+          "note": "Explicitly addresses the 'migration cliff' criticism by making 'rigid schema enforcement' the primary mechanism of the script. Without the schema, this candidate is invalid; with it, the data remains structured and migratable."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The script is not a 'single point of failure' for the causal model because its simplicity makes the causal links transparent and auditable by humans, unlike the hidden logic of a complex custom state machine or a black-box SaaS."
+        }
+      ],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_009"
+      ]
+    },
+    {
+      "claim": "Adopt an existing tool but configure it to operate in 'negative-result-first' mode, where failed hypotheses and null results are logged with higher priority and visibility than successes.",
+      "mechanism": "Bias Inversion: Standard trackers optimize for success metrics, leading to survivorship bias. By inverting the default view and alerting mechanisms to prioritize failures, the tool actively supports the scientific method's requirement to falsify. This leverages existing infrastructure to solve a cultural/process problem without custom code.",
+      "counterconditions": [
+        "The existing tool's UI cannot be customized to highlight negative results prominently.",
+        "The team's incentive structure rewards positive results so strongly that they ignore the tool's configuration.",
+        "The definition of a 'negative result' is too ambiguous to be reliably tagged automatically."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "departure_declared",
+          "note": "Rejects the framing that 'active learning' is the sole differentiator. Argues that for many small teams, the primary value add is combating cognitive bias, which is a configuration challenge, not a control theory problem."
+        },
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "rebutted",
+          "note": "No 'integration tax' is incurred as this relies entirely on native features (tags, filters, dashboards) of modern existing tools. No hacking or wrapping is required."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "Using a mature platform eliminates the 'migration cliff'. Data is structured by the platform's inherent design, ensuring long-term viability regardless of the tagging strategy."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "There is no new 'causal fragility' introduced. The causal model remains in the researchers' minds; the tool merely reflects it differently. Failure of the tool does not break the model, it just hides the bias-correction view."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Build a custom 'glue' service that sits between the experiment code and an existing tracker, translating domain-specific causal events into the generic log format of the adopted tool.",
+      "mechanism": "Semantic Adapter Pattern: This approach captures the 'mechanist' need for specific causal modeling (custom) while leveraging the storage/UX of existing tools. The glue service enforces the team's unique ontology (e.g., 'hypothesis_ref', 'confounder_list') before data hits the generic tracker, solving the 'integration tax' by isolating complexity in a thin, testable layer.",
+      "counterconditions": [
+        "The latency introduced by the adapter service violates real-time constraints.",
+        "The adapter becomes a bottleneck that requires as much maintenance as a full custom tracker.",
+        "The existing tool's API is too restrictive to accept the enriched metadata the adapter produces."
+      ],
+      "typicality": 0.70,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "revised",
+          "note": "Refines the 'active learning' argument: if the 'glue' can inject control signals back into the experiment (via callbacks), it satisfies the control requirement without rebuilding the whole tracker. If not, it admits this approach is only for passive logging with rich semantics."
+        },
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "rebutted",
+          "note": "Directly addresses 'integration tax' by acknowledging it but containing it. The tax is paid only once to build the adapter, which is far cheaper than maintaining a full UI/database stack. It avoids the 'hackiness' of modifying experiment code to fit the tool."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "The adapter enforces a canonical schema before data enters the existing tool, preventing 'unstructured noise'. The migration path is clear: remove the adapter if the tool eventually supports the native schema, or keep it as a permanent translation layer."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The 'single point of failure' risk is mitigated because the adapter is stateless and idempotent. If it fails, experiments can bypass it (logging raw data) rather than halting, preserving the 'causal model' data even if the semantic enrichment is lost temporarily."
+        }
+      ],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_010"
+      ]
+    },
+    {
+      "claim": "Do nothing new; utilize the version control system (Git) and issue tracker as the experiment tracker, treating commits as experimental states and issues as hypotheses.",
+      "mechanism": "Meta-Tool Leveraging: Small teams often underestimate the power of their existing devops stack. By strictly mapping experimental parameters to commit messages and results to issue comments, the team achieves
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

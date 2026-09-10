@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The counterconditions explicitly require the external tool to expose an append-only API that accepts arbitrary JSON payloads without enforcing its own internal schema restrictions.",
+  "verdict": "pass"
+}

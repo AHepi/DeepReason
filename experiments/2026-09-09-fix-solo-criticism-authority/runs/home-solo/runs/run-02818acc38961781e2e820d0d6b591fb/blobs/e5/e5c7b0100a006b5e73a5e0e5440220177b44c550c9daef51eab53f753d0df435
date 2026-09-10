@@ -1,0 +1,39 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "essential_premise_aliases": {"items": {"enum": ["SRC_001", "SRC_002"], "type": "string"}, "maxItems": 8, "title": "Essential Premise Aliases", "type": "array"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-f8d503b930a65e1a2cf5ff81777d4786) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Should a small team building a research tool write its own experiment tracker, or adopt an existing one?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@6d37c87a85695c3c2dc72f1d: program:reasoning_observation_pending
+- reason-counter@b05de5236aafb248afaeb70c: program:reasoning_observation_pending
+- reason-counter@fd0daacee9e0520dbed9a3e8: program:reasoning_observation_pending
+- reason-counter@257cd2afc352e1a32028a92e: program:reasoning_observation_pending
+- reason-counter@e1ec82e2a16ef980d8a890bd: program:reasoning_observation_pending
+- reason-counter@e1d54c268d11b16b8b25b899: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Experiment data schemas are more fluid and hypothesis-driven than standard cloud infrastructure or CMS content models.","The 'controller' role in active learning introduces a real-time physical constraint absent in typical web publishing or static hosting."],"overturn_conditions":["If an existing tracker releases a native plugin architecture that supports sub-50ms local execution hooks.","If the research domain shifts entirely to passive observation, eliminating the need for active control loops."],"shared_structure":["Core utility vs. differentiating logic separation","Upfront integration cost vs. long-term maintenance debt","Latency requirements dictating architectural coupling"],"source_memory_refs":["buy-vs-build-cloud-infrastructure","custom-cms-vs-headless-wrapper"],"transfer_claims":["Just as teams wrap headless CMSs to enforce editorial workflows without rebuilding the database, research teams should wrap trackers to enforce causal models.","The threshold for building custom cloud infrastructure (extreme scale/latency needs) parallels the threshold for building custom experiment trackers (active control loops)."]},"claim":"A small research team should adopt an existing experiment tracker and wrap it with a lightweight 'integration shim' rather than building a custom tool, unless their workflow requires real-time, sub-second causal intervention (active control loops) that existing APIs cannot support; for standard iterative research, the 'integration tax' of wrapping is strictly lower than the long-term maintenance debt and single-point-of-failure risk of a bespoke state machine.","counterconditions":[{"case":"The team's active learning loop requires parameter updates faster than the round-trip latency of the adopted tool's API.","checker_spec":null,"eval":"observation"},{"case":"The adopted tool's data model is so rigid that mapping the team's novel causal variables results in irreversible information loss.","checker_spec":null,"eval":"observation"},{"case":"The team possesses unique, sustained engineering capacity dedicated solely to maintaining the custom tracker's lifecycle.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The decision hinges on the 'Latency-Coupling Threshold': if the experiment's feedback loop requires the tracker to act as the controller with latency constraints tighter 
+commitments: reasoning-envelope-wf, reason-counter@6d37c87a85695c3c2dc72f1d, reason-counter@b05de5236aafb248afaeb70c, reason-counter@fd0daacee9e0520dbed9a3e8
+
+TARGET SRC_002
+{"analogy":null,"claim":"A small team building a research tool with active learning loops should build a custom, minimal experiment tracker where the tracker acts as the causal controller, rather than adopting an existing tool which treats experimentation as passive observation.","counterconditions":[{"case":"The team's research does not involve real-time parameter mutation based on intermediate results (i.e., it is purely observational).","checker_spec":null,"eval":"observation"},{"case":"An existing platform offers a native, low-latency webhook or streaming API that al

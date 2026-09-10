@@ -1,0 +1,2 @@
+rA violations= 0 warrants= 4 refuted= 2 accepted= 14
+rB violations= 0 warrants= 1 refuted= 1 accepted= 5

@@ -1,0 +1,8 @@
+TARGET CONTENT:
+The 'Schema-First' contract in SRC_004 DEPENDS ON the 'Shadow Mode' parallelism mechanism; it is REFUTED IF the disposable script fails to validate the schema against active learning requirements before migration, rendering the formal contract unverifiable.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

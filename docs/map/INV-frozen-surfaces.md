@@ -513,6 +513,55 @@ manifest = _manifest(_profile(), config_updates={'CRITICISM_BUDGET_DENIAL_POLICY
 assert config_from_run_manifest(manifest).CRITICISM_BUDGET_DENIAL_POLICY == 'drop-the-batch.v1'
 " && test "$(grep -c 'data.pop(\"CRITICISM_BUDGET_DENIAL_POLICY\"' src/deepreason/run_manifest.py)" -eq 1`
 
+**Granted contact, 2026-09-09 — the optional judge's Config echo line.**
+The grant is the operator's instruction in the window that took it, verbatim
+(`experiments/2026-09-09-fix-solo-criticism-authority/FIX.md`, Amendment 1):
+"The judge must remain optional. One seat, two seats, no seats. The default is
+observe only. My mistake. Frozen surface modification approved". The first two
+sentences are the authority for a new `Config` field, and the documented recipe
+("Where authority is allowed to live instead") is not finished without its
+`data.pop(...)` line in `_versioned_source_config_data` — the CONTACT with this
+surface. The last sentence is the grant itself.
+
+What moved: ONE `data.pop("SINGLE_JUDGE_SEAT_PERMITTED", None)` statement at
+four spaces, unconditional, joining the judge-knob block that already holds
+`JUDGE_SEATS_ENABLED`, `JUDGE_SUMMONS_PER_CYCLE` and `JUDGE_SUMMONS_COOLDOWN`.
+**Insertions only, and no schema, validator, Pydantic model, notice code or
+record format was touched.** The field is one flat boolean, default `False`,
+read once at the argumentative trial's judge-seat gate and never written to the
+manifest; its effect is recorded by a `trial-gate-switched` Measure on the run's
+own record. Its effect on digests is to PRESERVE them, provably rather than by
+assertion: at the tranche base the shipped fixture's qualification subject
+digest was
+`02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713` and
+`source_config_hash(Config())` was `6c2d01f6…` at v1/v2 and `2624603035bc…` at
+v3-v6, and all three are byte-identical after the contact
+(`tests/test_solo_criticism_authority.py::test_the_granted_contact_moves_no_digest`,
+which fails if the pop line is removed).
+
+The grant covers this surface only. `llm/firewall.py` was NOT edited and
+`route_fingerprint` did not move, asserted directly rather than read off the
+diff (`::test_route_fingerprint_did_not_move`).
+
+`check: python -c "
+from deepreason.config import Config
+from deepreason.run_manifest import _versioned_source_config_data, config_from_run_manifest
+for version in (1, 2, 3, 4, 5, 6):
+    echoed = _versioned_source_config_data(Config(), version)
+    assert 'SINGLE_JUDGE_SEAT_PERMITTED' not in echoed, version
+assert Config().SINGLE_JUDGE_SEAT_PERMITTED is False
+import sys; sys.path.insert(0, '.')
+from tests.test_reusable_qualification import _manifest, _profile
+manifest = _manifest(_profile(), config_updates={'SINGLE_JUDGE_SEAT_PERMITTED': True})
+assert config_from_run_manifest(manifest).SINGLE_JUDGE_SEAT_PERMITTED is True
+" && test "$(grep -c 'data.pop(\"SINGLE_JUDGE_SEAT_PERMITTED\"' src/deepreason/run_manifest.py)" -eq 1`
+
+The road this grant exists to keep open, checked so that it fails if the road
+stops reaching a run: a one-model configuration whose Config asks for the solo
+road compiles to the manifest's own `defended_trial`, and the trial mints an
+ARGUMENTATIVE warrant that becomes an attack edge.
+`check: python -m pytest tests/test_solo_criticism_authority.py -q`
+
 **Granted contact, 2026-08-27 — the sandbox attribute boundary (the escape fix).**
 The operator granted this contact IN CHAT, conditionally, after being shown the
 verdict it unblocks: "can you fix please. Frozen surface changes are permitted

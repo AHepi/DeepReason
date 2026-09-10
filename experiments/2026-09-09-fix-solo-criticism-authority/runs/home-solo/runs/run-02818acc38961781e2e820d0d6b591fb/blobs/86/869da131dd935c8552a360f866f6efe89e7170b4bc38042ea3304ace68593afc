@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+Configuring an existing tool to highlight negative results often clashes with the tool's underlying data model which is optimized for 'runs' and 'metrics' as positive signals; forcing equal prominence can render the dashboard unreadable due to signal dilution, making it impossible for stakeholders to identify actual progress or pivot points quickly.
+
+TARGET:
+{"analogy":null,"claim":"Adopt an existing tracker but configure it to log 'negative results' and 'failed hypotheses' with equal prominence to successful ones, countering publication bias inherent in most default configurations.","counterconditions":[{"case":"The existing tool's UI hardcodes 'success' metrics as primary visual elements.","checker_spec":null,"eval":"observation"},{"case":"Stakeholders explicitly demand a dashboard showing only progress/success.","checker_spec":null,"eval":"observation"},{"case":"The volume of negative results overwhelms the signal, making the tracker unusable.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Anti-Bias Configuration: Leverages the structural completeness of existing tools but alters the social/visual incentive structure by surfacing null results, thereby creating a more accurate posterior distribution of the research landscape.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}

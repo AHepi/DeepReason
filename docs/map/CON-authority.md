@@ -1,5 +1,5 @@
 <!-- DR-CON-authority -->
-Verified-at: a82872b38
+Verified-at: dfc5ea88b
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/authority.py, src/deepreason/config.py, src/deepreason/rules/crit.py, src/deepreason/informal/trial.py, src/deepreason/run_manifest.py, src/deepreason/jolts.py, src/deepreason/ops.py, src/deepreason/scheduler/scheduler.py, src/deepreason/v6_policy.py, src/deepreason/preparation.py
 Seams: DR-SEAM-adjudication-x-authority
@@ -121,6 +121,28 @@ adjudication.
 manifest-only.
 `check: python -c "import typing; from deepreason.authority import _ARGUMENTATIVE_VALUES as v; from deepreason.config import Config; assert v == set(typing.get_args(Config.model_fields['ARGUMENTATIVE_AUTHORITY'].annotation)) == {'observe_only', 'trial_required', 'single_family_trial'}, v"`
 `check: python -c "import typing; from deepreason.rules.crit import _POLICY_AUTHORITIES as p; from deepreason.run_manifest import CriticismPolicyV1 as C; assert set(typing.get_args(C.model_fields['authority'].annotation)) == p == {'observe_only', 'defended_trial'}"`
+
+**The one Config-only word that names a manifest road is TRANSLATED, never
+admitted.** `single_family_trial` asks for a trial whose independence is
+carried by school rather than by model family, and only the manifest-bound
+caller can supply a critic school — so the value cannot travel as itself. Since
+2026-09-09 `v6_policy::compiled_criticism_authority` spells it into the
+manifest's own `defended_trial` at compile, under the master gate. The two
+vocabularies are unchanged: nothing new enters `CriticismPolicyV1.authority`,
+and `_resolve_authority` still refuses the Config word as a manifest-bound
+value with the same message. Two knobs can now ask for a trial and the manifest
+field holds one value, so the resolution is stated rather than discovered
+(the all-configurations law, 2026-08-12): the trial-bearing value wins.
+`check: python -c "import typing; from deepreason.config import Config; from deepreason.run_manifest import CriticismPolicyV1 as C; from deepreason.v6_policy import compiled_criticism_authority as a; assert set(typing.get_args(C.model_fields['authority'].annotation)) == {'observe_only', 'defended_trial'}; g = dict(ADJUDICATION_STATUS_AUTHORITY_ENABLED=True); assert a(Config()) == 'observe_only'; assert a(Config(ARGUMENTATIVE_AUTHORITY='single_family_trial')) == 'observe_only'; assert a(Config(ARGUMENTATIVE_AUTHORITY='single_family_trial', **g)) == 'defended_trial'; assert a(Config(ENGAGED_CRITICISM_AUTHORITY='defended_trial', **g)) == 'defended_trial'; assert a(Config(ENGAGED_CRITICISM_AUTHORITY='observe_only', ARGUMENTATIVE_AUTHORITY='single_family_trial', **g)) == 'defended_trial'; assert a(Config(ARGUMENTATIVE_AUTHORITY='trial_required', **g)) == 'observe_only'"`
+
+**The judge's SEAT COUNT is topology; whether one seat may rule is
+configuration.** Operator, 2026-09-09: "The judge must remain optional. One
+seat, two seats, no seats. The default is observe only." None and two always
+ran; one was structurally refused until that ruling. `SINGLE_JUDGE_SEAT_
+PERMITTED` (default `False`) decides only the count-of-one case, and switching
+it records a typed `trial-gate-switched` Measure on the run's own record — the
+2026-08-28 law's warning, which is not optional even though the gate is.
+`check: python -c "from deepreason.config import Config; assert Config().SINGLE_JUDGE_SEAT_PERMITTED is False" && python -m pytest tests/test_solo_criticism_authority.py -q -k "judge_seat or observe_only"`
 
 **`ENGAGED_CRITICISM_AUTHORITY` mirrors the manifest directly — no second
 vocabulary.** Unlike `ARGUMENTATIVE_AUTHORITY`, this knob's value-space is

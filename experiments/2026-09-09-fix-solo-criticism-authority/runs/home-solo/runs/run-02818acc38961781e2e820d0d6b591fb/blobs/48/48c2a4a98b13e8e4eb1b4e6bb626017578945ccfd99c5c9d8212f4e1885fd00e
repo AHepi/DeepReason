@@ -1,0 +1,8 @@
+TARGET CONTENT:
+The 'adapter' concept in SRC_002 SHARES MECHANISM with 'pre-fabricated components' in civil engineering; it is REFUTED IF the software domain novelty is so high that no existing schema language can express required state transitions without becoming Turing-complete, breaking the analogy to standard building codes.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

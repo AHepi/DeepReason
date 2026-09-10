@@ -1,0 +1,60 @@
+{
+  "candidate": {
+    "claim": "The team should adopt an existing experiment tracker but enforce a 'Schema-First' contract where no data is logged until a formal schema (JSON Schema or Protobuf) is defined and versioned, treating the schema as the primary artifact rather than the tool configuration.",
+    "mechanism": "By decoupling the data structure definition from the storage engine, the team captures the rigor of a custom build (preventing unstructured noise) while leveraging the infrastructure of existing tools (avoiding the integration tax of building viewers, auth, and storage). The schema acts as the causal boundary: if the existing tool cannot ingest the strict schema without modification, that specific gap justifies a minimal adapter script rather than a full custom tracker.",
+    "counterconditions": [
+      "If the research workflow requires real-time bidirectional control loops (active learning) that existing tools only support via high-latency webhooks, the schema-first approach fails to solve the latency bottleneck.",
+      "If the team's novel workflow fundamentally violates the relational or hierarchical assumptions of all major existing trackers, forcing a schema fit may distort the experimental model.",
+      "If the overhead of maintaining versioned schemas for rapid, disposable exploratory runs exceeds the cost of later data cleaning, the process becomes a bottleneck to iteration."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The criticism claims a lack of causal mechanism for why active learning needs custom builds. This candidate provides that mechanism: the constraint is not 'active learning' per se, but 'low-latency bidirectional control.' If the existing tool's API cannot meet the schema-enforced latency requirements, the mechanism triggers a targeted adapter, not a full rebuild. The 'Schema-First' contract isolates the failure point to the transport layer, not the tracking logic."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge the 'integration tax.' The mechanism now posits that the tax is paid via 'minimal adapter scripts' constrained by the schema, rather than assuming existing tools are purely additive. The schema defines the interface; if the tool doesn't match, a small wrapper is built, avoiding the 'hack/plugin' spiral by making the wrapper's scope strictly bounded by the schema diff."
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "rebutted",
+        "note": "The criticism cites event-driven architectures as negating the need for custom control. This candidate agrees that passive observation is insufficient but argues that event-driven hooks are often too generic for specific active learning loops. The 'Schema-First' approach forces the team to define the exact event payload required; if the existing tool's webhook cannot emit that specific schema in real-time, the contradiction validates the need for a custom state machine, resolving the false dichotomy."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "rebutted",
+        "note": "The 'migration cliff' is prevented by the core mechanism: 'no data is logged until a formal schema is defined.' This eliminates the possibility of accumulating unstructured noise in a disposable script because the script cannot execute logging without the schema contract. The migration cost is zero because the data is born structured."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "revised",
+        "note": "Revised to clarify that the 'single point of failure' is not the custom tracker (since we are adopting an existing one), but the schema definition itself. The risk is shifted from 'tool fragility' to 'schema rigidity.' The departure declared is that the team accepts the risk of schema bottlenecks in exchange for eliminating data entropy, rather than building a fragile custom state machine."
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "4e4e9dcbcafb2b6d828f5d05a420396c12dd2354c85f57420230caa045a0b419",
+        "quote": "Adopt an existing tracker but enforce a 'Schema-First' contract: no data is logged until a formal schema (JSON Schema or Protobuf) is defined and versioned"
+      }
+    ],
+    "optional_refs": [
+      "SRC_006",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    },
+    "analogy": null,
+    "checker_specs": []
+  }
+}

@@ -1,0 +1,9 @@
+criticism authority: defended_trial
+compile notices: ['ENGINE_CONFIG_FIELD_NOT_CARRIED', 'ENGINE_CONFIG_FIELD_NOT_CARRIED', 'ENGINE_CONFIG_FIELD_NOT_CARRIED']
+is_single_model: True judge seats: 2
+warrants total: 1 argumentative: 1
+attack edges: 1
+  ARGUMENTATIVE warrant -> cbe3f6a6a96f43028d06540e7ee0734b68c9470abc22a6aca105ba1644d3e9e4
+trial/crit measures: {'foreign-criticism-coverage.v1': 1}
+critic prompt saved; handles seen: (see file)
+B rc=0

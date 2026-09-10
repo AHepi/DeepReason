@@ -1,0 +1,56 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's central dichotomy between 'passive observation' and 'active control' ignores the prevalence of event-driven architectures in modern experiment trackers (e.g., webhooks, streaming APIs) that can trigger external controllers without requiring the tracker itself to be the controller. By asserting that active learning loops *must* require building a custom tracker to avoid 'integration tax,' the argument falsely equates 'using an existing tool' with 'using it only as a static database,' overlooking that many existing tools are designed specifically to orchestrate workflows, thereby rendering the 'build custom' mandate unnecessary even for causal control scenarios.",
+      "counterexample": [
+        "A team uses an existing tracker with native webhook support to trigger a separate Python service that modifies experimental parameters in real-time, achieving low-latency control without building a custom tracker."
+      ],
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Existing experiment trackers are architected solely as passive databases lacking bidirectional API hooks for real-time control.",
+      "premise_evidence": null,
+      "successor_question": "Does the specific definition of 'experiment tracker' in this context explicitly exclude tools with native workflow orchestration or event-triggering capabilities?"
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The target advocates for a 'hybrid architecture' (custom logic + standard storage) but fails to address the 'schema impedance mismatch' that occurs when the custom logic layer must enforce a dynamic research schema on top of a rigid existing database. If the existing DB's schema is inflexible (as implied by the need for custom logic), the custom layer essentially becomes a full re-implementation of the data access and validation logic, recreating the 'integration tax' and maintenance burden the hybrid approach claims to mitigate, thus offering no net benefit over a fully custom solution for complex active learning loops.",
+      "counterexample": [
+        "A team attempts to layer custom active learning logic over a rigid SQL-based tracker; the effort to map dynamic experimental parameters to fixed columns results in brittle glue code that requires more maintenance than a bespoke NoSQL tracker would have."
+      ],
+      "essential_premise_aliases": [
+        "SRC_003"
+      ],
+      "premise": "Hybrid architectures successfully mitigate maintenance costs by separating transient logic from durable storage without incurring significant schema mapping overhead.",
+      "premise_evidence": null,
+      "successor_question": "At what point does the complexity of the 'glue code' required to bridge custom logic and rigid storage exceed the cost of maintaining a custom storage engine?"
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": true,
+      "case": "The proposal to 'wrap' an existing tracker with a thin custom controller service introduces a new single point of failure and latency bottleneck (the wrapper) that may be more fragile than the integrated systems it replaces. For small teams, the operational overhead of deploying, monitoring, and securing this additional middleware layer ('glue-code interface') often exceeds the 'development overhead' of simply configuring an extensible existing tool or building a minimal monolithic tracker, contradicting the claim that this approach optimizes the trade-off for small teams.",
+      "counterexample": [
+        "A small team's custom wrapper service crashes due to unhandled edge cases in parameter serialization, halting the entire active learning loop, whereas a monolithic custom tracker or a natively extensible platform would have handled the flow internally."
+      ],
+      "essential_premise_aliases": [
+        "SRC_004"
+      ],
+      "premise": "Adding a thin custom controller service introduces negligible operational overhead and risk compared to building a custom tracker or using a natively extensible tool.",
+      "premise_evidence": null,
+      "successor_question": "How does the reliability and latency profile of a custom middleware wrapper compare to a natively integrated control loop in a resource-constrained small team environment?"
+    }
+  ]
+}

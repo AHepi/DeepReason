@@ -1,0 +1,50 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The argument creates a false dichotomy by asserting that active learning loops *require* building a custom tracker to avoid 'integration tax,' ignoring the existence of mature orchestration frameworks (e.g., Ray, Kubeflow) that natively bridge passive loggers with active control loops. The claim that forcing a passive ledger to act as a controller inherently introduces a 'migration cliff' and 'unstructured data noise' is an overgeneralization; many existing tools support webhooks or event-driven architectures that allow external scripts to modify parameters without hacking the core tool or creating a single point of failure. The 'custom minimal tracker' proposal often incurs higher long-term maintenance costs and fragility than integrating established tools via their extension points.",
+      "premise": "Existing experiment trackers can be integrated into active learning loops via standard orchestration layers without requiring a custom build, thereby avoiding the alleged 'integration tax' and 'migration cliff'.",
+      "premise_evidence": [
+        {
+          "block": "reasoning-envelope-wf",
+          "quote": "if the research involves active learning loops where the tracker must function as a real-time controller modifying experimental parameters, they must build a custom minimal tracker to avoid the 'integration tax' of hacking additive tools into a causal role."
+        },
+        {
+          "block": "reasoning-envelope-wf",
+          "quote": "Forcing a passive ledger to act as a controller introduces a 'migration cliff' and unstructured data noise because the tool lacks a native schema for state-machine transitions."
+        }
+      ],
+      "counterexample": [
+        "A team uses MLflow (an existing passive tracker) alongside Ray Tune (an orchestration framework) to run active hyperparameter optimization. Ray Tune reads/writes metrics to MLflow via a callback while controlling the experiment loop externally, achieving real-time control without building a custom tracker or introducing 'unstructured data noise'."
+      ],
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "successor_question": "What specific technical limitations of current open-source experiment trackers prevent them from being used as the logging backend for an externally managed active learning loop?"
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The analogy between 'consumer gearboxes' and existing software trackers breaks down because software interfaces are composable and non-destructive, unlike mechanical transmissions. The argument claims that adapting a consumer gearbox introduces 'lag' that invalidates the experiment, but in software, the latency introduced by an integration layer (API call) is typically negligible compared to the actual experiment runtime (e.g., model training, physical reaction time). Furthermore, the countercondition admitting that an external script could encapsulate the loop contradicts the main claim that one *must* build a custom tracker; if an external script works, the 'integration tax' is manageable, and the imperative to build custom software is unfounded.",
+      "premise": "The latency and failure risks of integrating existing tools via external scripts are negligible for most research timelines, making the 'racing transmission' analogy misleading and the mandate to build custom software unnecessary.",
+      "premise_evidence": [
+        {
+          "block": "reasoning-envelope-wf",
+          "quote": "Adapting a consumer gearbox for racing introduces lag and failure points (integration tax) that obscure the driver's control."
+        },
+        {
+          "block": "reasoning-envelope-wf",
+          "quote": "The 'lag' in a mismatched gearbox corresponds to the latency in a hacked software feedback loop, invalidating the experiment."
+        }
+      ],
+      "counterexample": [
+        "A biology lab uses a standard LIMS (existing tool) to log results while a Python script parses the logs and adjusts pipette volumes for the next iteration. The API latency is <100ms, while the biological assay takes 24 hours, rendering the 'lag' argument irrelevant to the experiment's validity."
+      ],
+      "essential_premise_aliases": [
+        "SRC_002"
+      ],
+      "successor_question": "At what specific millisecond threshold does the latency of an existing tool's API actually invalidate an active learning experiment, and how many common research scenarios exceed this threshold?"
+    }
+  ]
+}

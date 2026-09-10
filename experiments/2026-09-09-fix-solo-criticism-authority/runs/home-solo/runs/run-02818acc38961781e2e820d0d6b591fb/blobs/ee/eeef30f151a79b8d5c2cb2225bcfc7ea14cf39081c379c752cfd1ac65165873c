@@ -1,0 +1,12 @@
+TARGET CONTENT:
+{"analogy":null,"claim":"Build a custom tracker only if the experiment involves active learning loops where the tracker must act as the controller, modifying parameters in real-time based on intermediate results.","counterconditions":[{"case":"The feedback loop can tolerate high latency (minutes/hours).","checker_spec":null,"eval":"observation"},{"case":"Existing tools offer plugin architectures sufficient for control logic.","checker_spec":null,"eval":"observation"},{"case":"The experiments are open-loop (parameter set -> run -> log).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Closed-Loop Control Necessity: Standard trackers are passive recorders; if the research methodology requires the tracking system to be the active agent in an optimization loop (e.g., Bayesian optimization with tight latency constraints), custom build is mandated by control theory requirements.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+BATTERY THE EDITS WILL FACE:
+- program:reasoning_observation_pending
+- program:reasoning_observation_pending
+- program:reasoning_observation_pending
+- program:reasoning-envelope-wf
+
+KERNEL mu_struct (§10.7): the target is a skeleton — substitute at role level. Swap the mechanism, the causal link, the scope. Each edit must be a complete valid skeleton JSON. Do NOT merely reword.
+
+DIRECTIVE: produce exactly 8 bounded edits.

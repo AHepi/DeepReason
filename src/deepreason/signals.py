@@ -445,6 +445,30 @@ DEAD_SEAT_STREAK_SIGNAL = "provider.dead-seat-streak.v1"
 
 
 _DECLARED: tuple[SignalDeclaration, ...] = (
+    # A defended trial ran under a switched gate (2026-09-09).
+    SignalDeclaration(
+        name="trial-gate-switched",
+        unit="event",
+        semantics="one defended trial proceeded under a gate the run switched "
+                  "away from its default (inputs: [signal, target id, gate]). "
+                  "`single-judge-seat` means ONE frozen judge seat ruled where "
+                  "two are the default; `solo-road` means a Config-side "
+                  "`single_family_trial` was compiled into the manifest's own "
+                  "`defended_trial`. It is emitted past every check that "
+                  "branch can decline on, so it says the trial RAN that way "
+                  "rather than that it was permitted to. What a consumer may "
+                  "conclude: that this trial's guarantee was weaker than the "
+                  "default one. What it is NOT: evidence about the target, "
+                  "the ruling, or the warrant -- it says nothing about "
+                  "whether the verdict was right, and it is never an input "
+                  "to any status. The amended judge law (2026-08-28) is what "
+                  "makes it a warning: the measured 0-2.5% false-conviction "
+                  "regime is the unanimous cross-independent pair, and looser "
+                  "configurations were measured at 47-60%. Permanent, because "
+                  "it records what a completed trial DID, not a condition "
+                  "that can lift",
+        staleness="permanent",
+    ),
     # Provider transport condition, disclosed per seat (2026-09-03).
     SignalDeclaration(
         name="provider.dead-seat-streak.v1",

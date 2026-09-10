@@ -1,0 +1,69 @@
+{
+  "candidate": {
+    "claim": "A small research team should adopt an existing experiment tracker and wrap it with a thin, custom 'controller' service only if the workflow requires closed-loop active learning; otherwise, the integration tax of a bespoke tool outweighs the marginal gains in causal fidelity.",
+    "mechanism": "The decision hinges on the directionality of data flow: passive logging (existing tools suffice) versus active control (custom controller needed). By decoupling the 'system of record' (adopted tool) from the 'system of control' (custom script), the team avoids the 'migration cliff' and 'single point of failure' risks while satisfying the mechanist requirement for active loops without rebuilding the entire tracking stack.",
+    "counterconditions": [
+      "The existing tool's API must support real-time parameter injection; if it is read-only, a full custom build becomes necessary regardless of team size.",
+      "The team must have the discipline to enforce schema consistency in the custom controller to prevent the 'unstructured noise' accumulation cited in prior criticisms.",
+      "If the 'integration tax' of wrapping the tool exceeds 40% of the estimated development time for a minimal custom tracker, the strategy flips to building custom."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The causal mechanism is explicitly the separation of 'control' (custom) from 'record' (adopted). Active learning necessitates a custom *controller*, not necessarily a custom *tracker*. The criticism conflates the two; our proposal provides the specific mechanism (API-driven injection) that existing tools lack natively but can support via extension."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge the 'integration tax' as a primary variable. The claim now includes a threshold condition (40% dev time) where the tax justifies abandoning the adopted tool, directly addressing the cost of hacking mismatched workflows."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "rebutted",
+        "note": "The 'migration cliff' is avoided by design because the adopted tool serves as the permanent system of record from Day 1. The custom component is merely a transient or persistent controller layer; if discarded, the data remains structured within the adopted platform, negating the risk of unstructured noise."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The proposal eliminates the 'single point of failure' for the causal model by retaining the robust, battle-tested adopted tool as the state keeper. The custom controller is stateless regarding historical data; if it fails, the causal history is preserved in the adopted tool, unlike a monolithic custom build where the tracker and model are fused."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "b1642d037422b51c0be00c872d50beb7dbcd5a47b2733f33a65b653bf158ecb0",
+        "f0a7fdb1573a11c5f3064989fd549eaaaafda316476c85270e892ed4058bef0b"
+      ],
+      "shared_structure": [
+        "Distinction between observation (logging) and intervention (control).",
+        "Requirement for strict schema enforcement in experimental data.",
+        "Trade-off between development overhead and causal precision."
+      ],
+      "disanalogies": [
+        "Prior art suggests a binary choice (build vs. buy); this proposal introduces a hybrid architecture (buy + wrap).",
+        "Previous mechanisms assumed the tracker itself must be the controller; here they are decoupled."
+      ],
+      "transfer_claims": [
+        "The 'mechanist' stance can be satisfied by a controller module without owning the database layer.",
+        "Active learning loops require custom code, but not necessarily a custom storage engine."
+      ],
+      "overturn_conditions": [
+        "If the adopted tool's latency prevents real-time control loop closure.",
+        "If the team lacks expertise to maintain the glue-code interface securely."
+      ]
+    },
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_002",
+      "SRC_004"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_002",
+        "SRC_004"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

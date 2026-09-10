@@ -1,5 +1,5 @@
 <!-- DR-SUB-rules -->
-Verified-at: b41c5cf10
+Verified-at: dfc5ea88b
 Verify: python -m pytest tests/test_relapse_domains.py tests/test_criticism_authority.py tests/test_crit_batch.py tests/test_act.py tests/test_vision.py -q
 Owns: src/deepreason/rules/
 Seams: DR-SEAM-adjudication-x-rules, DR-SEAM-calculus-x-rules, DR-SEAM-capabilities-x-rules, DR-SEAM-evaluation-x-rules, DR-SEAM-llm-x-rules, DR-SEAM-ontology-x-rules, DR-SEAM-packs-and-token-economy-x-rules, DR-SEAM-rules-x-scratch, DR-SEAM-rules-x-workflow, DR-SEAM-scheduler-x-rules
@@ -250,11 +250,19 @@ assert hits == ['src/deepreason/successor/mint.py'], hits
   spend. Sandbox aborts and oracle overruns are the same shape of hazard on the
   deterministic side: they are *pending*, never clean, which is what
   `QUARANTINE_TICK` and `harness._oracle_pending` record.
-- **`single_family_trial` is a `Config` value, not a manifest one.**
-  `_POLICY_AUTHORITIES` is deliberately not extended with it:
-  `CriticismPolicyV1.authority` is a frozen manifest `Literal`, and admitting a
-  value there would move every qualification subject digest and make existing
-  replay-valid roots read against a schema they were never written under.
+- **`single_family_trial` is a `Config` value, not a manifest one — and since
+  2026-09-09 it is TRANSLATED rather than dead.** `_POLICY_AUTHORITIES` is
+  still deliberately not extended with it: `CriticismPolicyV1.authority` is a
+  frozen manifest `Literal`, and admitting a value there would move every
+  qualification subject digest and make existing replay-valid roots read
+  against a schema they were never written under. What changed is what happens
+  to the value instead of nothing: `v6_policy::compiled_criticism_authority`
+  spells it into the manifest's own `defended_trial` at compile, under the
+  master gate, so the road the operator's 2026-08-09 solo law asked for is
+  reachable by the name that law used
+  (`experiments/2026-09-09-fix-solo-criticism-authority/`, `docs/ERRATA.md`
+  E85). Reading this entry as "the mode does nothing" was the error; the
+  refusal it describes is unchanged.
 `check: python -m pytest tests/test_prose_refutation_boundaries.py::test_the_new_mode_is_config_only_and_refused_by_the_manifest_path tests/test_prose_refutation_boundaries.py::test_the_single_family_authority_value_exists -q`
 - **The criticism side's separation from the scratchpad is enforced by an AST
   walk, not a header grep.** A function-local `import deepreason.scratch...`

@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to provide the causal mechanism demanded by the problem context for why 'active learning loops' specifically necessitate a custom build rather than configuring an existing tool. It asserts a 'Control Theory Boundary' and cites external artifacts (SRC_007, SRC_008) as proof, but offers no internal derivation explaining the physical or logical constraints that prevent existing tools from acting as low-latency controllers. Without this mechanism, the claim remains an unsupported assertion that existing tools are inherently passive, ignoring the possibility that 'active control' is a configuration property rather than an architectural one.",
+      "premise": "Existing experiment tracking tools cannot be configured to act as active, low-latency agents in a control loop; they are fundamentally passive repositories.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "successor_question": "What specific technical limitation in standard trackers prevents them from executing webhooks or API calls with the latency required for active learning, distinguishing them from a custom build?"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "candidate": {
+    "claim": "The team should adopt an existing experiment tracker but enforce a 'Schema-First' contract via a local middleware layer, rejecting the false dichotomy between building from scratch and accepting rigid tool constraints.",
+    "mechanism": "Implement a lightweight local adapter (middleware) that intercepts all logging calls. This adapter enforces a versioned JSON Schema (defined by the team) before data is passed to the external tool. If the data does not match the schema, the log is rejected locally. This decouples the team's causal model (the schema) from the storage backend (the tool), allowing the team to switch tools later without data migration issues while avoiding the engineering cost of building a full UI and database engine.",
+    "counterconditions": [
+      "The team lacks the seniority to define a stable schema upfront, leading to analysis paralysis.",
+      "The chosen existing tool has no API or ingestion method compatible with a middleware injection.",
+      "The latency introduced by local schema validation breaks real-time active learning loops."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The criticism assumes 'active learning loops' require deep integration into the tracker's core logic. The proposed middleware mechanism allows the active learning controller to operate on the strict local schema, pushing only validated results to the external tool. The 'control' remains in the custom script; the external tool acts merely as a dumb, schema-compliant sink, preserving the causal boundary without a custom build."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge the 'integration tax'. The candidate now includes a 'local middleware layer' specifically designed to absorb this tax. Instead of hacking the external tool directly, the team hacks their own thin adapter, isolating the fragility to a small, testable codebase rather than sprawling modifications of the third-party tool."
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "rebutted",
+        "note": "The criticism correctly notes that modern tools have event-driven architectures. However, webhooks are reactive (post-facto). Active learning requires synchronous validation *before* commitment. The proposed middleware provides this synchronous gate, which event-driven APIs of existing tools typically lack without custom server-side plugins (which reintroduces the build burden)."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "rebutted",
+        "note": "The 'migration cliff' is eliminated because the 'Schema-First' contract ensures all data written to the external tool is already structured and versioned from Day 1. If the team switches tools, they export standard schema-compliant data, not unstructured noise. The disposable nature applies to the middleware code, not the data structure."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "departure_declared",
+        "note": "Departing from the assumption that the 'custom state machine' must be a monolithic application. The proposed mechanism distributes the state management: the schema defines the state transitions, the local script enforces them, and the external tool records the history. This removes the single point of failure; if the external tool goes down, the local validation and experimentation can continue in a degraded mode (logging to disk)."
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "4e4e9dcbcafb2b6d828f5d05a420396c12dd2354c85f57420230caa045a0b419",
+        "quote": "Adopt an existing tracker but enforce a 'Schema-First' contract: no data is logged until a formal schema (JSON Schema or Protobuf) is defined and versioned"
+      }
+    ],
+    "optional_refs": [
+      "SRC_006",
+      "SRC_004"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_004"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

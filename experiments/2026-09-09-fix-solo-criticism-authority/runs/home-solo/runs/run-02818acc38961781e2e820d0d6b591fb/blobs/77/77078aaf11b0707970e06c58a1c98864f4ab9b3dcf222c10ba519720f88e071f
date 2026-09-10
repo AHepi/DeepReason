@@ -1,0 +1,55 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"AnalogyClaim": {"additionalProperties": false, "properties": {"adopted_commitment_refs": {"default": [], "items": {"type": "string"}, "title": "Adopted Commitment Refs", "type": "array"}, "disanalogies": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Disanalogies", "type": "array"}, "overturn_conditions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Overturn Conditions", "type": "array"}, "shared_structure": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Shared Structure", "type": "array"}, "source_memory_refs": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Source Memory Refs", "type": "array"}, "transfer_claims": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Transfer Claims", "type": "array"}}, "required": ["source_memory_refs", "shared_structure", "disanalogies", "transfer_claims", "overturn_conditions"], "title": "AnalogyClaim", "type": "object"}, "ConjectureAbstentionV1": {"additionalProperties": false, "description": "A responsible no-proposal signal using the existing search vocabulary.", "properties": {"note": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Note"}, "search_signal": {"default": "stuck", "enum": ["need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "ConjectureAbstentionV1", "type": "object"}, "DischargeWireV1": {"additionalProperties": false, "description": "One criticism, answered (REBUILD F1).\n\n`handle` is the criticism's handle exactly as the pack listed it, and it is\nleft a PLAIN STRING on purpose: its legal set has one authority --\n`deepreason.discharge.open_criticisms` -- and leaving the field open is what\nlets a menu renderer key on it by registering, without either side learning\nthe other's subsystem. A private enum here would close that seam.\n\nNOTHING here is evidence. A discharge is a precondition on SUBMISSION; no\nfield, kind or count may feed a label, a warrant, a rank or an admission\ndecision (`DR-CON-discharge-channel`, the law line).", "properties": {"handle": {"maxLength": 256, "minLength": 1, "title": "Handle", "type": "string"}, "kind": {"enum": ["revised", "rebutted", "departure_declared"], "minLength": 1, "title": "Kind", "type": "string"}, "note": {"default": "", "title": "Note", "type": "string"}, "where": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Where"}}, "required": ["handle", "kind"], "title": "DischargeWireV1", "type": "object"}, "EvidenceRefClaimV1": {"additionalProperties": false, "description": "One claimed grounding in an admitted dossier block (admission \u00a74).\n\n``block`` names a dossier block by id or by a unique hex prefix of at\nleast 12 characters. ``quote``, when present, must reproduce a\ncontiguous byte span of the block's canonical text exactly \u2014 the\ncitation checker byte-verifies it and a mismatch is a durable finding,\nnever a silent pass.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"anyOf": [{"maxLength": 2000, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Quote"}}, "required": ["block"], "title": "EvidenceRefClaimV1", "type": "object"}, "OperationalSidecar": {"additionalProperties": false, "properties": {"requested_context_aliases": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011", "SRC_012", "SRC_013", "SRC_014", "SRC_015", "SRC_016", "SRC_017", "SRC_018"], "type": "string"}, "title": "Requested Context Aliases", "type": "array"}, "search_signal": {"default": "productive", "enum": ["productive", "need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "OperationalSidecar", "type": "object"}, "ReasoningCandidateProposal": {"additionalProperties": false, "description": "Gemma-safe semantic proposal; mandatory interfaces are absent by design.", "properties": {"analogy": {"anyOf": [{"$ref": "#/$defs/AnalogyClaim"}, {"type": "null"}], "default": null}, "checker_specs": {"default": [], "items": {"anyOf": [{"additionalProperties": false, "type": "object"}, {"type": "null"}]}, "title": "Checker Specs", "type": "array"}, "claim": {"minLength": 1, "title": "Claim", "type": "string"}, "counterconditions": {"items": {"minLength": 1, "type": "string"}, "maxItems": 32, "minItems": 1, "title": "Counterconditions", "type": "array"}, "discharges": {"default": [], "items": {"$ref": "#/$defs/DischargeWireV1"}, "title": "Discharges", "type": "array"}, "evidence_refs": {"default": [], "items": {"$ref": "#/$defs/EvidenceRefClaimV1"}, "maxItems": 8, "title": "Evidence Refs", "type": "array"}, "mechanism": {"minLength": 1, "title": "Mechanism", "type": "string"}, "optional_refs": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011", "SRC_012", "SRC_013", "SRC_014", "SRC_015", "SRC_016", "SRC_017", "SRC_018"], "type": "string"}, "title": "Optional Refs", "type": "array"}, "sidecar": {"$ref": "#/$defs/OperationalSidecar"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["claim", "mechanism", "counterconditions", "typicality"], "title": "ReasoningCandidateProposal", "type": "object"}}, "additionalProperties": false, "allOf": [{"oneOf": [{"required": ["candidate"]}, {"required": ["abstention"]}]}], "description": "One bounded reasoning-envelope candidate or honest abstention.\n\nThe exactly-one rule is in the schema, not only in the validator below.", "properties": {"abstention": {"$ref": "#/$defs/ConjectureAbstentionV1"}, "candidate": {"$ref": "#/$defs/ReasoningCandidateProposal"}}, "title": "AtomicReasoningConjectureCandidateWireV1", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_004
+SRC_006
+SRC_007
+SRC_008
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 1 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-f8d503b930a65e1a2cf5ff81777d4786
+Should a small team building a research tool write its own experiment tracker, or adopt an existing one?
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## open-criticisms
+OPEN CRITICISMS ON THIS PROBLEM -- these are part of what your candidate must answer, not advice.
+Every candidate you submit must DISCHARGE each handle below, one of:
+  - revised -- say WHAT changed and WHERE in the candidate
+  - rebutted -- say why the criticism fails. Your rebuttal enters the record as an ordinary claim and can be attacked like any other
+  - departure_declared -- say what you are breaking with. Declaring costs you nothing; nothing scores a departure
+  [04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d] against feb8a3899bc948c8f22c85c9013d274247ea346dc92b88f3d5dfc783a62b3c00
+      CLAIM: The target fails to provide the causal mechanism demanded by the problem context for why 'active learning loops' specifically necessitate a custom build rather than configuring an existing tool. It asserts a 'Control Theory Boundary' and ci
+      CITED SPAN: (none quoted)
+  [1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538] against 47bf7d317219d1d2f5a85407937fc5c0e2e3be742aa482e684014d4ba1439fce
+      CLAIM: The argument assumes existing tools are purely additive to cognitive bandwidth, ignoring the 'integration tax': if no existing tool perfectly matches the novel workflow, the engineering effort required to hack, plugin, or wrap a mismatched
+      CITED SPAN: (none quoted)
+  [7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7] against 5258a7b0411f26a41fe94a2e963b05608a304fc61d15408bf9ed566dd4696df5
+      CLAIM: The target's central dichotomy between 'passive observation' and 'active control' ignores the prevalence of event-driven architectures in modern experiment trackers (e.g., webhooks, streaming APIs) that can trigger external controllers with
+      CITED SPAN: (none quoted)
+  [7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5] against 1a36c8265da994bb07de3d93ed583d987252c54734b21ee0f4f97971471095a3
+      CLAIM: The proposal creates a 'migration cliff' where the cost of exporting data from a disposable script to a formal tool is underestimated; if the script lacks a defined schema from day one, the accumulated data becomes unstructured noise that c
+      CITED SPAN: (none quoted)
+  [b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406] against 88c48351e12d4c74c72a50c8486117653d11f5929d5c13f4961565c52ca4dcfb
+      CLAIM: The 'Separation of Concerns' mechanism claims to solve integration tax by building a custom state machine, but it introduces a new causal fragility: the custom tracker becomes a single point of failure for the team's causal model. If the st
+      CITED SPAN: (none quoted)
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural) — each entry is its CLAIM, distilled; request an alias through context_request to read that artifact whole:
+- 74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+- 4e4e9dcbcafb2b6d828f5d05a420396c12dd2354c85f57420230caa045a0b419: Adopt an existing tracker but enforce a 'Schema-First' contract: no data is logged until a formal schema (JSON Schema or Protobuf) is defined and versioned, tre …[clipped; request this alias for the whole text]
+- 0a5bd84458b8d1b8a2aae76319e4adaf0cffa9c60b2e788c9e29a24631924ec8: Adopt a flexible existing platform but implement a 'Shadow Mode' period where the team runs both a disposable script and the formal tool in parallel for 2 weeks …[clipped; request this alias for the whole text]
+- 2bfc278ee88f576e1678a919e48541331b03bc62bc35b390653985c80b42b5c7: Adopt an existing tool but restrict its usage to 'Read-Only' archives; all active experimentation happens in local, version-controlled scripts that generate sta …[clipped; request this alias for the whole text]
+- 08473b86c446ffadfc073a13bcf88e174568fcaa466f2dbe6880f0788b10a4b4: Relation Kind: Reduction. The 'Shadow Mode' validation (SRC_007) reduces to the 'Schema-First' contract (SRC_006) if the disposable script's output during the s …[clipped; request this alias for the whole text]
+- 2404a57de2b0ff576cf7858d3318e87039c2bba92629c054a570d831a8d953d1: Relation Kind: Contradiction. The 'Read-Only' archive approach (SRC_008) contradicts the 'Skeptic' validation layer (SRC_004) because SRC_008 treats l

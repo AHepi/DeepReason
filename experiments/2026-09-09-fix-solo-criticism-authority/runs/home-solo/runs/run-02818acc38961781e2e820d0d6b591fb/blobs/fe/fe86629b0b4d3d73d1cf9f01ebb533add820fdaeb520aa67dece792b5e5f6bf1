@@ -1,0 +1,219 @@
+{
+  "candidates": [
+    {
+      "claim": "Build a custom tracker only if the research workflow requires the tracker to act as a low-latency control loop controller (active learning), where the causal mechanism is the elimination of serialization latency inherent in passive logging architectures.",
+      "mechanism": "Control Theory Boundary: Existing tools operate on an 'observe-then-log' paradigm with asynchronous I/O, introducing non-deterministic latency. Active learning requires 'observe-decide-act' within a strict time budget, necessitating a synchronous, in-process state machine that existing tools cannot provide without architectural violation.",
+      "counterconditions": [
+        "The team's experiments are purely observational or batch-oriented.",
+        "Existing tools offer a verified real-time plugin architecture with deterministic latency guarantees.",
+        "The cost of building the controller exceeds the value of the active learning speedup."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "The causal mechanism is the physical constraint of serialization latency. Passive tools decouple observation from action via queues/DBs; active loops require coupling. This is not a configuration property but an architectural inversion (push vs pull)."
+        },
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "revised",
+          "note": "Revised to acknowledge 'integration tax' explicitly: The custom build is only justified if the 'control latency tax' of wrapping an existing tool exceeds the 'engineering tax' of building from scratch."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "A custom controller for active loops does not imply a disposable script. The schema is defined by the control policy itself, preventing unstructured noise."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The custom tracker is not a single point of failure for the causal model; it is the embodiment of the causal model. Failure modes are explicit in the control logic, unlike hidden failures in opaque external integrations."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_015"
+      ]
+    },
+    {
+      "claim": "Adopt an existing tracker but enforce a 'Skeptic Wrapper' pattern that treats all incoming data as untrusted until validated against a local, formal schema, effectively simulating a custom tool's rigor on top of commodity infrastructure.",
+      "mechanism": "Validation Interception: Instead of building storage, build a validation layer. The mechanism is 'fail-fast ingestion' where data violating the causal model (e.g., missing counterfactuals) is rejected before entering the external system, forcing compliance without owning the database.",
+      "counterconditions": [
+        "The existing tool does not allow programmatic ingestion rejection.",
+        "The team lacks resources to maintain the validation wrapper codebase.",
+        "The research domain requires storing 'failed' data that standard schemas reject."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from the requirement for active control; this candidate assumes a passive observational stance where latency is not the primary causal driver."
+        },
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "rebutted",
+          "note": "The 'integration tax' is the feature here. The wrapper *is* the tax paid to avoid building the whole system, converting engineering effort into safety guarantees."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to specify that the 'Skeptic Wrapper' enforces the schema at the boundary, preventing the 'migration cliff' by ensuring data is structured before it ever touches the external tool."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The causal fragility is distributed: if the wrapper fails, data is lost locally (safe); if the external tool fails, data is safe locally. No single point of failure for the model."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "Start with a 'Disposable Script' prototype that evolves into a custom tracker only if the schema stabilizes around a unique causal structure that no existing tool can represent without semantic loss.",
+      "mechanism": "Evolutionary Schema Crystallization: Begin with zero-overhead scripting. Monitor the 'schema drift'. If the drift converges on a novel, stable structure unique to the team's causal model, freeze the script into a formal custom tool. If it remains chaotic or matches existing templates, migrate to an off-the-shelf solution.",
+      "counterconditions": [
+        "The team cannot afford the technical debt of refactoring scripts later.",
+        "The initial experiments require immediate collaboration features scripts lack.",
+        "The 'unique causal structure' is actually just a common pattern misidentified as novel."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from the immediate need for a mechanism; this defers the mechanism decision until empirical evidence of uniqueness is gathered."
+        },
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "rebutted",
+          "note": "The 'integration tax' is minimized by starting with zero integration. The tax is only paid if the custom path is proven necessary."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to include a 'Schema Freeze' milestone. Before this milestone, data is acknowledged as ephemeral. After, the script is refactored with a rigid schema, mitigating the migration cliff."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "During the script phase, there is no 'single point of failure' because there is no formal system. The risk is data loss, which is accepted for the sake of discovery speed."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_009"
+      ]
+    },
+    {
+      "claim": "Build a custom 'State Machine' tracker specifically to isolate the team's causal assumptions from the biases of existing tools, treating the tracker code itself as the primary research artifact.",
+      "mechanism": "Code-as-Hypothesis: The tracker's logic encodes the team's specific theory of how experiments cause results. Using an existing tool imports the vendor's implicit theory (e.g., that hyperparameters are independent). A custom tool ensures the causal graph is explicit and executable.",
+      "counterconditions": [
+        "The team's causal theory is standard and well-supported by existing ontologies.",
+        "The overhead of maintaining the 'artifact' distracts from the actual research.",
+        "The custom implementation introduces bugs that invalidate the causal claims."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "The mechanism is ontological fidelity, not just latency. Existing tools force data into their ontology; a custom tool allows the ontology to drive the data structure."
+        },
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "revised",
+          "note": "Revised to frame 'integration tax' as 'ontology translation cost'. If the translation distorts the causal model, the tax is infinite, justifying the custom build."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "Since the code *is* the schema, there is no 'unstructured noise'. The rigidity of the state machine prevents invalid states from being recorded."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "revised",
+          "note": "Revised to acknowledge the fragility: The custom tracker is a single point of failure, but this is a feature, not a bug—it forces the team to confront and harden their causal assumptions directly."
+        }
+      ],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_001"
+      ]
+    },
+    {
+      "claim": "Adopt an existing tool but configure it to aggressively log 'negative results' and 'path not taken' metadata, countering the publication bias inherent in most default tracker configurations.",
+      "mechanism": "Bias Counter-Measure Logging: Most tools optimize for tracking 'success'. This approach repurposes the tool to track 'failure density' and 'decision entropy', requiring custom metadata fields but leveraging existing storage and visualization.",
+      "counterconditions": [
+        "The existing tool's UI cannot visualize high-dimensional failure data.",
+        "The team culture ignores negative logs regardless of tool capability.",
+        "The storage costs of exhaustive logging exceed the budget."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from the 'active control' requirement; focusing instead on the 'passive recording' of causal disproofs."
+        },
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "rebutted",
+          "note": "The 'integration tax' is low because it involves only adding metadata fields, not changing the core workflow engine."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "Structured metadata fields prevent the 'migration cliff'; the data is structured by design to capture the negative space."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The causal model resides in the interpretation of the logs, not the tool itself. The tool is merely a bucket; its failure does not break the model."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Hybrid Approach: Use a custom lightweight 'Director' script to manage active loops, which pushes summary metrics to an existing heavy-weight tracker for storage and collaboration.",
+      "mechanism": "Separation of Control and Record: The 'Director' handles the low-latency causal loop (solving the control problem), while the existing tool handles the high-latency archival and sharing (solving the collaboration problem). They communicate via a strict, narrow JSON API.",
+      "counterconditions": [
+        "The synchronization between Director and Tracker fails, leading to divergent states.",
+        "The API overhead negates the latency benefits of the custom Director.",
+        "The team splits focus between maintaining two systems."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "The mechanism is explicitly hybrid: The custom part provides the causal control; the existing part provides the passive storage. This satisfies the latency constraint without reinventing the wheel."
+        },
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "revised",
+          "note": "Revised to define the 'integration tax' as the cost of maintaining the JSON bridge. This is bounded and predictable, unlike hacking a monolithic tool."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "The Director enforces the schema for the loop; the Tracker accepts a pre-validated blob. No unstructured noise is generated."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "revised",
+          "note": "Revised to admit the 'Director' is a single point of failure for the *loop*, but not for the *record*. If the Director dies, the loop stops, but the historical data remains safe in the existing tool."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_013"
+      ]
+    }
+  ]
+}

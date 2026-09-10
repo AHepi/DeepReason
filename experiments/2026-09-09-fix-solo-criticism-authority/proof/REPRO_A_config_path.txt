@@ -1,0 +1,6 @@
+is_single_model: True
+judge seats: 2
+warrants total: 4 argumentative: 0
+attack edges: 4
+trial/crit measures: Counter({'trial-declined:no-critic-school': 10})
+A rc=0

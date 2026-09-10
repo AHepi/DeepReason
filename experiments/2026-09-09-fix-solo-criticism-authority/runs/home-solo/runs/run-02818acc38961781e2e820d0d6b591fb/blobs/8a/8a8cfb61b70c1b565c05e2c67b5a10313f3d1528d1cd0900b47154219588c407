@@ -1,0 +1,60 @@
+{
+  "candidate": {
+    "claim": "A small research team should adopt an existing experiment tracker only if their workflow is purely observational; however, if the research involves active learning loops where experimental parameters are dynamically adjusted by algorithmic feedback, they must build a custom minimal tracker to serve as the causal controller, thereby avoiding the 'integration tax' of forcing a passive logging tool to act as an active state machine.",
+    "mechanism": "Causal Control Boundary: Existing tools function as passive observers (logging state), whereas active learning requires the tracker to be the causal agent (modifying state). Bridging this gap with wrappers introduces latency and schema mismatches ('integration tax') that destabilize the control loop. A custom builder enforces a strict mechanist model where the tracker's architecture mirrors the causal graph of the experiment itself.",
+    "counterconditions": [
+      "The team lacks the engineering bandwidth to maintain even a minimal custom state machine.",
+      "The active learning loop operates on timescales slow enough that external API latency from a wrapped tool is negligible.",
+      "An existing tool already exposes native hooks for bidirectional parameter modification without schema translation."
+    ],
+    "typicality": 0.35,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly defines the mechanism as 'Causal Control Boundary,' detailing that active learning loops require the tracker to transition from a passive observer to a causal agent. This necessitates a custom build because existing tools lack the architectural primitive to act as the controller without fragile wrapping."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly name the 'integration tax' as the cost of forcing a passive logging tool to act as an active state machine, clarifying that the engineering effort is not just about plugins but about resolving fundamental schema mismatches in the control loop."
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "rebutted",
+        "note": "While event-driven architectures exist, they typically trigger external controllers rather than embodying the control logic themselves. The candidate argues that when the tracker *is* the controller (active learning), internal state consistency is required, which external webhooks cannot guarantee without introducing race conditions."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "revised",
+        "note": "Added the constraint that the custom tracker must be 'minimal' and enforce a strict mechanist model from day one, directly addressing the risk of unstructured noise by making schema definition a prerequisite of the causal model."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The candidate posits that the custom tracker reduces fragility by aligning the software architecture directly with the causal model of the experiment. The 'single point of failure' is actually the correct architectural feature for a control system, whereas a mismatched generic tool introduces hidden failure modes in the integration layer."
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "f0a7fdb1573a11c5f3064989fd549eaaaafda316476c85270e892ed4058bef0b",
+        "quote": "Build a custom tracker only if the experiment involves active learning loops where the tracker must act as the controller"
+      },
+      {
+        "block": "b1642d037422b51c0be00c872d50beb7dbcd5a47b2733f33a65b653bf158ecb0",
+        "quote": "enforcing a 'mechanist' causal model of experimentation that existing tools abstract away"
+      }
+    ],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_004",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

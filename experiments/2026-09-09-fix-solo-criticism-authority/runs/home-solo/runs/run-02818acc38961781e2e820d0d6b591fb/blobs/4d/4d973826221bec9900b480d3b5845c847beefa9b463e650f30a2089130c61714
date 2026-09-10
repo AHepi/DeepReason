@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to provide the required causal mechanism explaining HOW the 'Shadow Mode' operationally generates or extracts structural definitions. It asserts that a 'disposable script acts as a schema miner' but omits the specific process, heuristic, or logical transformation by which raw shadow data is converted into a formal schema. Without this mechanism, the claim of 'Integration' is merely a chronological sequence (shadow then enforce) rather than a substantive functional dependence, leaving the relation vulnerable to the refutation condition where shadow mode is used for volume testing without actual schema extraction.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": "What specific algorithmic step or logical rule within the 'disposable script' transforms observed shadow traffic into a versioned schema definition?",
+      "target_alias": "SRC_001"
+    }
+  ]
+}

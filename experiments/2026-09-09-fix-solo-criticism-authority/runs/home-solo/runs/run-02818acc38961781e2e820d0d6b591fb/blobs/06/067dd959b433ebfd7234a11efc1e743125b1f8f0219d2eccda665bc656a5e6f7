@@ -1,0 +1,50 @@
+{
+  "candidate": {
+    "claim": "A small research team should adopt an existing experiment tracker only if their workflow is strictly observational; however, if the research involves active learning loops where the tracker must function as a real-time controller modifying experimental parameters, they must build a custom minimal tracker to avoid the 'integration tax' and causal fragility inherent in wrapping mismatched tools.",
+    "mechanism": "Control Theory Boundary: The mechanism distinguishes between passive data logging (observational) and active state modification (control). Existing tools optimize for schema flexibility and collaboration in observational modes but introduce latency and abstraction leaks when forced into a control loop. A custom build enforces a direct causal map between the agent's decision logic and the experimental apparatus, eliminating the 'integration tax' of hacking event-driven architectures to simulate control.",
+    "counterconditions": [
+      "The team lacks the engineering bandwidth to maintain even a minimal custom state machine.",
+      "The active learning loop operates on a timescale (e.g., days per iteration) where API latency from existing tools is negligible.",
+      "The existing tool offers a native plugin architecture that exposes full control-plane access without abstraction leakage."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly defines the 'Control Theory Boundary' mechanism: active learning loops require the tracker to act as a controller, not just a logger. Existing tools abstract away this control layer, necessitating a custom build to maintain causal fidelity."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly name the 'integration tax' as the cost of wrapping mismatched tools for control tasks, acknowledging that this tax outweighs the build cost only when active control is required."
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "rebutted",
+        "note": "While event-driven architectures exist, they are designed for notification, not deterministic control. Relying on webhooks for active learning introduces race conditions and latency that violate the strict causal requirements of a control loop, validating the need for a custom synchronous mechanism."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "revised",
+        "note": "Added counterconditions regarding engineering bandwidth and timescale to address the 'migration cliff.' If the team cannot sustain a custom schema from day one, the proposal defaults to adoption unless the control requirement is immediate and critical."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The custom tracker proposed is a 'minimal state machine' specifically to reduce single points of failure. By coupling the causal model directly to the codebase, the team avoids the fragility of maintaining complex glue code between a black-box external tool and their specific control logic."
+      }
+    ],
+    "optional_refs": [
+      "SRC_002",
+      "SRC_004"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_002",
+        "SRC_004"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

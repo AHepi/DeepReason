@@ -1,0 +1,28 @@
+{
+  "edits": [
+    {
+      "content": "Relation Kind: Reduction. The 'Shadow Mode' validation (SRC_007) reduces to the 'Schema-First' contract (SRC_006) if the disposable script's output during the shadow period is strictly constrained by a pre-defined schema, making the parallel run merely a stress test of the schema's completeness rather than a discovery of new fields. REFUTED IF the shadow mode explicitly allows the script to evolve unstructured fields that the schema cannot capture, thereby proving the schema was insufficient and the reduction invalid."
+    },
+    {
+      "content": "Relation Kind: Reduction. The 'Shadow Mode' validation (SRC_007) reduces to the 'Schema-First' contract (SRC_006) if the disposable script's output during the shadow period is strictly constrained by a pre-defined schema, making the parallel run merely a stress test of the schema's completeness rather than a discovery of new fields. REFUTED IF the shadow mode explicitly depends on the script evolving unstructured fields that the schema cannot capture, thereby proving the schema was insufficient and the reduction invalid."
+    },
+    {
+      "content": "Relation Kind: Reduction. The 'Shadow Mode' validation (SRC_007) reduces to the 'Schema-First' contract (SRC_006) if the disposable script's output during the shadow period is strictly constrained by a pre-defined schema, making the parallel run merely a stress test of the schema's completeness rather than a discovery of new fields. REFUTED IF the shadow mode explicitly shares mechanism with the script evolving unstructured fields that the schema cannot capture, thereby proving the schema was insufficient and the reduction invalid."
+    },
+    {
+      "content": "Relation Kind: Reduction. The 'Shadow Mode' validation (SRC_007) reduces to the 'Schema-First' contract (SRC_006) if the disposable script's output during the shadow period is strictly constrained by a pre-defined schema, making the parallel run merely a stress test of the schema's completeness rather than a discovery of new fields. REFUTED IF the shadow mode explicitly inherits the capability for the script to evolve unstructured fields that the schema cannot capture, thereby proving the schema was insufficient and the reduction invalid."
+    },
+    {
+      "content": "Relation Kind: Reduction. The 'Shadow Mode' validation (SRC_007) reduces to the 'Schema-First' contract (SRC_006) if the disposable script's output during the shadow period is strictly constrained by a pre-defined schema, making the parallel run merely a stress test of the schema's completeness rather than a discovery of new fields. REFUTED IF the shadow mode explicitly integrates the script evolving unstructured fields that the schema cannot capture, thereby proving the schema was insufficient and the reduction invalid."
+    },
+    {
+      "content": "Relation Kind: Reduction. The 'Shadow Mode' validation (SRC_007) reduces to the 'Schema-First' contract (SRC_006) if the disposable script's output during the shadow period is strictly constrained by a pre-defined schema, making the parallel run merely a stress test of the schema's completeness rather than a discovery of new fields. REFUTED IF the shadow mode explicitly contradicts the constraint preventing the script from evolving unstructured fields that the schema cannot capture, thereby proving the schema was insufficient and the reduction invalid."
+    },
+    {
+      "content": "Relation Kind: Reduction. The 'Shadow Mode' validation (SRC_007) reduces to the 'Schema-First' contract (SRC_006) if the disposable script's output during the shadow period is strictly constrained by a pre-defined schema, making the parallel run merely a stress test of the schema's completeness rather than a discovery of new fields. REFUTED IF the shadow mode explicitly abstracts the script evolving unstructured fields that the schema cannot capture, thereby proving the schema was insufficient and the reduction invalid."
+    },
+    {
+      "content": "Relation Kind: Reduction. The 'Shadow Mode' validation (SRC_007) reduces to the 'Schema-First' contract (SRC_006) if the disposable script's output during the shadow period is strictly constrained by a pre-defined schema, making the parallel run merely a stress test of the schema's completeness rather than a discovery of new fields. REFUTED IF the shadow mode explicitly is compatible with the script evolving unstructured fields that the schema cannot capture, thereby proving the schema was insufficient and the reduction invalid."
+    }
+  ]
+}

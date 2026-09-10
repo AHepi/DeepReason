@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "The team should adopt an existing experiment tracker but enforce a 'Write-Once, Read-Many' gateway pattern: all data enters via a minimal, custom stateless adapter that validates against a strict schema before ingestion, decoupling the team's causal model from the tool's internal logic.",
+    "mechanism": "Insertion of a thin, stateless validation layer (the gateway) between the research scripts and the adopted tool. This layer enforces the 'Schema-First' contract (SRC_006) and handles the 'integration tax' by localizing the adaptation code to a single, replaceable module rather than hacking the core tool or building a full tracker.",
+    "counterconditions": [
+      "The existing tool lacks an API capable of accepting pre-validated external submissions.",
+      "The latency introduced by the synchronous validation gateway exceeds the real-time requirements of the active learning loop.",
+      "The team's definition of 'schema' is too volatile to stabilize even for the duration of a single experiment batch."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The 'Control Theory Boundary' does not necessitate a full custom build; it necessitates control over the *input interface*. The proposed stateless gateway provides the required active control loop fidelity without rebuilding storage, visualization, or collaboration features."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly localize the 'integration tax'. Instead of assuming additive bandwidth, the proposal confines the engineering effort to the 'gateway' module, preventing the 'hack/plugin' sprawl criticized."
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "rebutted",
+        "note": "Event-driven architectures in existing tools are often reactive to *stored* data. The criticism ignores that active learning requires *pre-ingestion* intervention. The gateway operates before the event is fired, preserving the causal chain that post-hoc webhooks cannot fix."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "revised",
+        "note": "The 'migration cliff' is eliminated by making the schema enforcement the gatekeeper. No unstructured noise can enter the system because the gateway rejects non-compliant data at the source, ensuring the adopted tool only ever sees clean, structured data."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The gateway is stateless and purely functional; it does not hold state or become a 'single point of failure' for the causal model. If the gateway fails, the experiment halts safely (fail-stop) rather than corrupting the model, which is preferable to the fragility of a custom stateful tracker."
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "4e4e9dcbcafb2b6d828f5d05a420396c12dd2354c85f57420230caa045a0b419",
+        "quote": "Adopt an existing tracker but enforce a 'Schema-First' contract"
+      }
+    ],
+    "optional_refs": [
+      "SRC_006",
+      "SRC_004"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_004"
+      ],
+      "search_signal": "productive"
+    },
+    "analogy": null,
+    "checker_specs": []
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "candidates": [
+    {
+      "claim": "Adopt an existing tracker to preserve the team's limited cognitive bandwidth for the core research innovation, as building a tracker diverts critical engineering cycles into a solved, non-differentiating domain.",
+      "mechanism": "Opportunity Cost of Engineering Cycles: Every hour spent on tracker infrastructure is an hour subtracted from the unique value proposition of the research tool, delaying time-to-insight and increasing burn rate without adding competitive advantage.",
+      "counterconditions": [
+        "No existing tool supports the specific data modality or workflow required by the research.",
+        "The team possesses excess engineering capacity with no other high-value targets.",
+        "Data sovereignty requirements legally prohibit third-party or open-source tracker usage."
+      ],
+      "typicality": 0.92,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Build a custom minimal tracker to enforce a 'mechanist' causal model of experimentation that existing tools abstract away, ensuring every logged metric maps directly to a hypothesized causal variable.",
+      "mechanism": "Causal Alignment Enforcement: Existing tools often encourage correlational logging (dashboards); a custom tool can architecturally force the definition of intervention and counterfactuals before execution, embedding the school-stance (SRC_001) into the workflow itself.",
+      "counterconditions": [
+        "The research questions are purely exploratory and do not yet have defined causal structures.",
+        "The team lacks the seniority to design a rigorous causal schema without introducing bias.",
+        "Time-to-first-experiment must be under 48 hours."
+      ],
+      "typicality": 0.45,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Adopt a flexible existing platform but wrap it with a strict 'skeptic' validation layer that treats all tracked results as provisional until independently reproduced, leveraging community standards while maintaining epistemic rigor.",
+      "mechanism": "Layered Epistemic Defense: Uses the reliability of established tools (reducing maintenance risk) while overlaying a procedural mechanism that demands replication before acceptance, satisfying the skeptic stance (SRC_002) without reinventing storage infrastructure.",
+      "counterconditions": [
+        "The existing platform does not allow external validation hooks or raw data export.",
+        "The overhead of the validation layer slows down iteration beyond the team's survival threshold.",
+        "The research domain is so novel that no community standards for replication exist yet."
+      ],
+      "typicality": 0.78,
+      "optional_refs": [
+        "SRC_002"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Write a disposable, script-based tracker specifically for the current project phase, intending to discard it and migrate to an off-the-shelf solution once the experimental protocol stabilizes.",
+      "mechanism": "Phase-Gated Infrastructure: Acknowledges that early-stage research requires fluidity that rigid tools prevent, while avoiding the long-term trap of maintaining bespoke software by enforcing a hard migration trigger upon protocol stabilization.",
+      "counterconditions": [
+        "The team has no resources allocated for the future migration effort.",
+        "Data accumulated in the script-based tracker cannot be easily exported or transformed.",
+        "The 'stabilization' point is never reached due to perpetual pivoting."
+      ],
+      "typicality": 0.60,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Build a custom tracker only if the experiment involves active learning loops where the tracker must act as the controller, modifying parameters in real-time based on intermediate results.",
+      "mechanism": "Closed-Loop Control Necessity: Standard trackers are passive recorders; if the research methodology requires the tracking system to be the active agent in an optimization loop (e.g., Bayesian optimization with tight latency constraints), custom build is mandated by control theory requirements.",
+      "counterconditions": [
+        "The feedback loop can tolerate high latency (minutes/hours).",
+        "Existing tools offer plugin architectures sufficient for control logic.",
+        "The experiments are open-loop (parameter set -> run -> log)."
+      ],
+      "typicality": 0.30,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Adopt an existing tracker but configure it to log 'negative results' and 'failed hypotheses' with equal prominence to successful ones, countering publication bias inherent in most default configurations.",
+      "mechanism": "Anti-Bias Configuration: Leverages the structural completeness of existing tools but alters the social/visual incentive structure by surfacing null results, thereby creating a more accurate posterior distribution of the research landscape.",
+      "counterconditions": [
+        "The existing tool's UI hardcodes 'success' metrics as primary visual elements.",
+        "Stakeholders explicitly demand a dashboard showing only progress/success.",
+        "The volume of negative results overwhelms the signal, making the tracker unusable."
+      ],
+      "typicality": 0.55,
+      "optional_refs": [
+        "SRC_002"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "candidates": [
+    {
+      "claim": "Adopt an existing tracker but enforce a 'Schema-First' contract: no data is logged until a formal schema (JSON Schema or Protobuf) is defined and versioned, treating the schema as the primary artifact and the tool as a dumb store.",
+      "mechanism": "Contract-Driven Development: By making the schema the gatekeeper for logging, the team avoids the 'migration cliff' (unstructured noise) because the structure is imposed at creation time, not migration time. This leverages existing tools' storage capabilities while neutralizing their flexibility risks.",
+      "counterconditions": [
+        "The research workflow is highly exploratory and cannot define a stable schema even for short intervals.",
+        "The chosen existing tool does not support metadata attachment or strict validation hooks.",
+        "The overhead of maintaining schemas slows down iteration velocity below a critical threshold."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "rebutted",
+          "note": "The 'integration tax' is acknowledged but reframed: the cost of wrapping a tool to enforce a schema is lower than building a tracker from scratch, provided the tool supports basic metadata. The proposal does not assume tools are purely additive; it assumes they are passive stores that require active governance."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to explicitly mandate 'Schema-First' development. The original risk of unstructured noise is eliminated by refusing to log data without a pre-defined schema, thus removing the migration cliff entirely."
+        }
+      ],
+      "optional_refs": ["SRC_005", "SRC_009"]
+    },
+    {
+      "claim": "Build a custom 'micro-tracker' specifically designed as a state machine for the team's unique workflow, ignoring general-purpose features like dashboards or user management, and exporting raw logs to existing tools for visualization only.",
+      "mechanism": "Separation of Concerns via Workflow Encoding: Existing tools encode generic workflows. A custom micro-tracker encodes the specific causal model of the research (as per SRC_004) without the bloat. It solves the 'integration tax' by being the native environment, not a wrapper.",
+      "counterconditions": [
+        "The team lacks the engineering bandwidth to maintain even a minimal custom codebase.",
+        "The workflow changes so frequently that the state machine requires constant refactoring.",
+        "Visualization needs are complex and require deep integration with the logging logic, not just raw export."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "departure_declared",
+          "note": "Departing from the premise that one must choose between 'full existing tool' and 'full custom build'. This proposes a hybrid where the custom build is strictly limited to the workflow engine, accepting the integration tax for the engine to avoid the cognitive mismatch of forcing a novel workflow into a generic tool."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "The 'migration cliff' is irrelevant here because the custom tracker outputs structured logs (e.g., JSONL) from day one by design. The export to existing tools is a transformation of structured data to structured data, not noise to structure."
+        }
+      ],
+      "optional_refs": ["SRC_004", "SRC_007"]
+    },
+    {
+      "claim": "Adopt a flexible existing platform but implement a 'Shadow Mode' period where the team runs both a disposable script and the formal tool in parallel for 2 weeks, using the script's output to validate the tool's schema before full migration.",
+      "mechanism": "Empirical Validation of Integration Tax: Instead of guessing the fit, the team measures the 'integration tax' directly. If the effort to map script outputs to the tool exceeds a threshold, they abort adoption. This mitigates the risk of underestimating the migration cliff.",
+      "counterconditions": [
+        "The team cannot afford the time duplication of running two tracking systems.",
+        "The disposable script evolves too rapidly during the shadow period to serve as a stable baseline.",
+        "The existing tool's API limits the frequency of writes required for parallel logging."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "revised",
+          "note": "Revised to include a measurement phase. The argument no longer ignores the integration tax; it makes the quantification of that tax the decision criterion. If the tax is too high, the candidate implicitly recommends building custom."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to address the migration cliff by introducing a 'Shadow Mode'. The script's lack of schema is tolerated temporarily, but the parallel run forces the definition of a schema for the formal tool before any permanent data commitment, ensuring the exit ramp exists."
+        }
+      ],
+      "optional_refs": ["SRC_006", "SRC_010"]
+    },
+    {
+      "claim": "Write a custom tracker only if the experiment involves active learning loops where the tracker must act as the controller; otherwise, adopt an existing tool configured to treat all results as provisional.",
+      "mechanism": "Control Theory Boundary: As argued in SRC_007, standard trackers are passive. If the research requires the tracker to be an active agent (low-latency feedback), custom builds are mandated. For all other cases, the 'provisional' configuration (SRC_008) suffices.",
+      "counterconditions": [
+        "The active learning loop can tolerate high latency (minutes/hours), allowing existing tools with webhooks to suffice.",
+        "The team's definition of 'active control' is actually just batch processing, which existing tools handle.",
+        "The complexity of the custom controller introduces more bugs than the latency it saves."
+      ],
+      "typicality": 0.90,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "rebutted",
+          "note": "This claim explicitly recognizes the 'integration tax' by limiting custom builds to cases where the tax of wrapping a passive tool into an active controller is prohibitive (i.e., impossible due to latency). In non-control cases, the tax is accepted as the cost of avoiding reinvention."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "The 'migration cliff' is avoided by the binary nature of the decision. If it's not a control loop, you adopt early. If it is, you build early. There is no middle ground where a team starts with a messy script and tries to migrate later; the architectural decision is made at T=0 based on the control requirement."
+        }
+      ],
+      "optional_refs": ["SRC_007", "SRC_008"]
+    },
+    {
+      "claim": "Adopt an existing tool but restrict its usage to 'Read-Only' archives; all active experimentation happens in local, version-controlled scripts that generate standardized reports, which are then ingested by the tool.",
+      "mechanism": "Push-Based Architecture: Reverses the typical 'app-centric' flow. The source of truth remains the code/scripts (avoiding the migration cliff of moving away from them), and the existing tool serves only as a queryable index. This minimizes integration tax by not trying to make the tool the driver.",
+      "counterconditions": [
+        "The team needs real-time collaboration features that only a central app provides.",
+        "The volume of local scripts becomes unmanageable without a central orchestrator.",
+        "The existing tool does not support bulk ingestion or API-based archiving."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "revised",
+          "note": "Revised to minimize integration tax. By treating the tool as a dumb archive, the need to 'hack' or 'plugin' complex logic is removed. The integration is reduced to a simple data push, which is less taxing than bidirectional sync."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "The 'migration cliff' is dissolved because there is no migration. The scripts remain the primary interface. The 'unstructured noise' risk is mitigated by requiring the scripts to generate standardized reports (the schema) before ingestion."
+        }
+      ],
+      "optional_refs": ["SRC_002", "SRC_009"]
+    }
+  ]
+}

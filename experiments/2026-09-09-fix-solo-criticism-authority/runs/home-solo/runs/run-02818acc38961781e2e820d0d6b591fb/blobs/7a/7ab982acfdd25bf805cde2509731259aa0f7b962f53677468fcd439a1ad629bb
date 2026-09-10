@@ -1,0 +1,67 @@
+{
+  "candidate": {
+    "claim": "For a small team building a novel research tool with active learning loops, the optimal path is to build a minimal, disposable 'causal skeleton' tracker specifically for the control loop logic, while adopting an existing tool solely for passive metadata archiving. This hybrid approach isolates the high-volatility 'active control' mechanism from the stable 'observation' record, preventing the integration tax of hacking rigid tools while avoiding the migration cliff of unstructured scripts.",
+    "mechanism": "Architectural Segregation via Causal Volatility: The system is split into two distinct planes. Plane A (Custom) is a lightweight state machine handling only the decision-to-intervention loop (the 'active' part), designed to be thrown away or radically refactored as the research hypothesis evolves. Plane B (Adopted) is a commercial/open-source tracker receiving immutable, schema-validated logs from Plane A for long-term storage and visualization. This treats the 'experiment' not as a single entity but as a stream of interventions (custom) feeding a ledger (adopted).",
+    "counterconditions": [
+      "If the active learning loop stabilizes into a standard algorithm within 4 weeks, the custom plane must be deprecated in favor of configuring the adopted tool's native automation features.",
+      "If the team size exceeds 5 engineers, the custom plane must implement formal API versioning immediately, or the project must pivot to full adoption of an extensible platform.",
+      "If the data schema for the passive archive changes more than twice, the 'Schema-First' contract (SRC_006) is considered violated, requiring a halt in logging until stabilization."
+    ],
+    "typicality": 0.35,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The criticism demands a causal mechanism for why active loops necessitate custom builds. The proposed mechanism ('Architectural Segregation via Causal Volatility') provides this: active loops require rapid, breaking changes to the state machine logic that would invalidate the data integrity guarantees of existing tools. By isolating the volatile control logic in a disposable custom layer, we satisfy the need for agility without corrupting the historical record, a nuance pure configuration cannot achieve.",
+        "where": "mechanism and claim fields"
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Acknowledged the 'integration tax' risk. The candidate was revised to explicitly limit the custom build's scope to a 'minimal causal skeleton' rather than a full tracker, and mandates a strict one-way data push to the adopted tool. This reduces the surface area for integration hacks, turning the 'tax' into a manageable, bounded engineering cost limited to a simple logger interface.",
+        "where": "claim and mechanism fields"
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "rebutted",
+        "note": "While event-driven architectures exist, they are typically designed for notification, not for holding the authoritative state of a rapidly evolving control loop. Relying on webhooks to trigger external controllers introduces latency and race conditions unacceptable for tight active learning loops. The custom 'Plane A' holds the authoritative state locally, ensuring deterministic control, which event-driven wrappers around existing tools cannot guarantee without significant complexity.",
+        "where": "mechanism field"
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "revised",
+        "note": "The 'migration cliff' concern is addressed by enforcing that the custom 'Plane A' never stores historical data itself; it only pushes structured events to 'Plane B' (the adopted tool) which enforces the 'Schema-First' contract (referencing SRC_006). If the custom script is discarded, the data remains safe and structured in the adopted tool, eliminating the risk of unstructured noise accumulation.",
+        "where": "claim and counterconditions fields"
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The criticism argues the custom tracker becomes a single point of failure for the causal model. However, in this proposal, the custom component is explicitly 'disposable' and handles only the current intervention logic, not the historical record. Its failure stops new experiments but does not corrupt the causal model stored in the adopted 'Plane B'. The fragility is contained to the current iteration, not the entire project history.",
+        "where": "claim and mechanism fields"
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "4e4e9dcbcafb2b6d828f5d05a420396c12dd2354c85f57420230caa045a0b419",
+        "quote": "enforce a 'Schema-First' contract: no data is logged until a formal schema"
+      },
+      {
+        "block": "0a5bd84458b8d1b8a2aae76319e4adaf0cffa9c60b2e788c9e29a24631924ec8",
+        "quote": "runs both a disposable script and the formal tool in parallel"
+      }
+    ],
+    "optional_refs": [
+      "SRC_006",
+      "SRC_007"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007"
+      ],
+      "search_signal": "productive"
+    },
+    "analogy": null,
+    "checker_specs": []
+  }
+}

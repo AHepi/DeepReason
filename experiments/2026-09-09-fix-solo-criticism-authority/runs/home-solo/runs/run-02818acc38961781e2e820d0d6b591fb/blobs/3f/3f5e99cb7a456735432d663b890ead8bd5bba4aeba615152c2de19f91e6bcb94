@@ -1,0 +1,48 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "essential_premise_aliases": {"items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}, "maxItems": 8, "title": "Essential Premise Aliases", "type": "array"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-f8d503b930a65e1a2cf5ff81777d4786) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Should a small team building a research tool write its own experiment tracker, or adopt an existing one?
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@4ce577782eb4afc981028634: program:reasoning_observation_pending
+- reason-counter@639a9f2b8908748e65254a22: program:reasoning_observation_pending
+- reason-counter@ea1eeb0a1071e4b2b288a87e: program:reasoning_observation_pending
+- reason-counter@c8a25e6693a3f37b5bb45d84: program:reasoning_observation_pending
+- reason-counter@fb69c60f7ee4e8d3c5242290: program:reasoning_observation_pending
+- reason-counter@c8545986f72bb800cb3ae9f1: program:reasoning_observation_pending
+- reason-counter@400b442f61eb67305a201148: program:reasoning_observation_pending
+- reason-counter@b5f6f8f4b052c5e4366a5741: program:reasoning_observation_pending
+- reason-counter@2b8ac52d2edd683edce91e1e: program:reasoning_observation_pending
+- reason-counter@2be8ab2ec4184c4e4180ebb7: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A small research team should adopt an existing experiment tracker only if their workflow is strictly observational; however, if the research involves active learning loops where the tracker must function as a real-time controller modifying experimental parameters, they must build a custom minimal tracker to avoid the 'integration tax' and causal fragility inherent in wrapping mismatched tools.","counterconditions":[{"case":"The team lacks the engineering bandwidth to maintain even a minimal custom state machine.","checker_spec":null,"eval":"observation"},{"case":"The active learning component is low-frequency or batch-based rather than real-time.","checker_spec":null,"eval":"observation"},{"case":"An existing tool offers a native plugin architecture that exposes full control without significant integration tax.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The decision hinges on the 'Control Theory Boundary': existing tools are optimized for passive data logging (observation), creating high friction when forced into active control roles. Custom builds are justified solely by the need for a tight feedback loop where the st
+commitments: reasoning-envelope-wf, reason-counter@4ce577782eb4afc981028634, reason-counter@639a9f2b8908748e65254a22, reason-counter@ea1eeb0a1071e4b2b288a87e
+
+TARGET SRC_002
+{"analogy":null,"claim":"A small research team should adopt an existing experiment tracker only if their workflow is purely observational; however, if the research involves active learning loops where experimental parameters are dynamically adjusted by algorithmic feedback, they must build a custom minimal tracker to serve as the causal controller, thereby avoiding the 'integration tax' of forcing a passive logging tool to act as an active state machine.","counterconditions":[{"case":"The team lacks the engineering bandwidth to maintain even a minimal custom state machine.","checker_spec":null,"eval":"observation"},{"case":"The active learning loop operates on timescales slow enough that external API latency from a wrapped tool is negligible.","checker_spec":null,"eval":"observation"},{"case":"An existing tool already exposes native hooks for bidirectional parameter modification without schema translation.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Causal Control Boundary: Existing tools function as passive observers (logging state), whereas active learning requires the tracker to be the causal agent (modifying state). Bridging this gap with w
+commitments: reasoning-envelope-wf, reason-counter@4ce577782eb4afc981028634, reason-counter@c8a25e6693a3f37b5bb45d84, reason-counter@fb69c60f7ee4e8d3c5242290
+
+TARGET SRC_003
+{"analogy":null,"claim":"A small research team should adopt an existing experim

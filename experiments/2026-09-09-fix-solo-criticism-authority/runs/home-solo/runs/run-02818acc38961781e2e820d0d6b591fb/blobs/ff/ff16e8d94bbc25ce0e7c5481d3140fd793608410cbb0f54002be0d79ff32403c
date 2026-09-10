@@ -1,0 +1,8 @@
+TARGET CONTENT:
+The 'Shadow Mode' strategy in SRC_005 INTEGRATES with the 'Schema-First' contract by acting as a causal bridge; it is REFUTED IF the team lacks the engineering bandwidth to maintain two parallel tracking systems even for a short validation period, causing the integration tax to outweigh the benefits.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.
