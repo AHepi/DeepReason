@@ -390,3 +390,46 @@ plan-time estimate would trade a real property for a number. The estimate was
 mine and it was low; the semantics are the ones granted, and 63 sits well
 inside the tranche's 150-line stop condition. Flagged in the delivery report,
 not settled quietly.
+
+## 12. Amendment — a change site §5 missed: `DR-SEAM-llm-x-verification`
+
+Found by `python tools/docs_verify.py`, not by me, which is the point of that
+instrument. Recorded before the fix is applied to the document, per
+`dr-implement-fix`'s rule 1: a needed site FIX.md missed is a STOP and an
+amendment, never silent scope growth.
+
+**What I got wrong.** GOAL.md's map preflight listed
+`DR-SEAM-llm-x-verification` among the documents to read in order, and
+`INDEX.md`'s one ordering rule is to read the SEAM before the subsystems. I
+read `INV-frozen-surfaces` and `SUB-verification` and did not read that seam
+before designing. Had I read it, §5's change-site list would have carried it
+from the start: the document pins the crossings from the verification side into
+`deepreason.llm` **exactly**, and says so in as many words — "A legitimate
+eighth crossing therefore turns this check red. That is the design (`SCHEMA.md`:
+counts are claims): widen the set in the same commit that adds the import, and
+add a row above saying what the new crossing re-derives. Do not delete the check
+to make it quiet."
+
+**What the arm adds.** Five new symbol crossings, all function-local inside
+`_transaction_findings`, across two new import statements in
+`verification/report.py`: `DefenderOutput`, `JudgeRuling`, `VariatorOutput`
+from `llm/contracts.py`, and `AliasTable`, `wire_contract_for` from
+`llm/wire.py`. So the pinned set goes from SEVEN crossings across six import
+statements to TWELVE across eight. The module-level count is UNCHANGED at one
+— `INDEX.md`'s matrix score of 1 for this pair still holds, and that number is
+separately pinned by the same check.
+
+The sixth import the arm adds, `resolve_route_seat_base_profile` from
+`run_manifest.py`, is not an `llm` crossing and does not enter this check.
+
+**Added change site:** `docs/map/SEAM-llm-x-verification.md` — the two counts
+in the opening paragraph, one new row in the crossings table saying what the
+new crossing re-derives, and the `expected` set inside the check. ~12 lines. It
+is a map document, not a frozen surface: no further grant.
+
+**Direction of travel is unchanged and worth stating,** because the seam's
+whole point is the asymmetry: this adds traffic only from the verification side
+INTO `llm`, and the reverse direction stays empty. A reader re-deriving a value
+with the writer's own function is the pattern this table already documents
+three times; a writer that could see its validator would be marking its own
+paper.
