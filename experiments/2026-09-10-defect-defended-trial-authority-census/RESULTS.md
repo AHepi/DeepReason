@@ -64,6 +64,17 @@ is not evidence. What moved on them is the noise: `transaction-authority`
 findings go from 26/10/75/116/494 to **zero**, leaving exactly one security
 finding apiece.
 
+## Instruments
+
+Full gate `python -m pytest tests/ -q -n 4`: **5200 passed, 6 skipped, 0
+failed** (24:28). `python tools/docs_verify.py`: 10 failed, ONE of them this
+tranche's — the `llm × verification` seam's crossing set, widened in the same
+commit as the import exactly as that document instructs, and passing; the other
+nine were measured failing at the tranche base in a worktree at `9c99965f6`
+(`proof/DOCS_VERIFY.txt`). The measured diff, 63 insertions against my own ~40
+estimate, is recorded as `EXCEEDED` at `FIX.md` §11 rather than trimmed by
+deleting comments that state constraints the code cannot show.
+
 ## Residue — what remains unproven
 
 - **The continuation gate and the report still disagree**, now by one finding
@@ -81,6 +92,14 @@ finding apiece.
 - **No live run.** The defect is in a reader; a live run would add cost and no
   evidence. So no defended trial has yet been driven end to end against a real
   provider on the fixed tree.
+- **I did not read the seam before designing.** `GOAL.md`'s own map preflight
+  listed `DR-SEAM-llm-x-verification`, and `INDEX.md`'s one ordering rule is to
+  read the seam before the subsystems. I read the frozen-surfaces document and
+  the subsystem document and skipped the seam, so a change site went missing
+  from `FIX.md` §5 and `docs_verify` found it instead of me. The seam's own
+  design caught it — that is what pinning a count is for — but the ordering rule
+  exists so the map is read before the code, not after. Recorded at `FIX.md`
+  §12 and in the seam document itself.
 - **The `hv-variation-step.v1` payload rides the trial's task kind** (48 of the
   721 steps). The arm accepts it because the manifest grants the variator seat
   under the same condition; whether the demarcation sampler deserves its own

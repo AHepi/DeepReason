@@ -186,7 +186,20 @@ checks had to be measured rather than reasoned about, at
 tranche's finding: `docs/AUDIT_BASELINES.md` expects 5 or 6 on a shallow clone
 and nine were measured, which an audit should explain.
 
-GATE_PLACEHOLDER
+Full gate: `python -m pytest tests/ -q -n 4` -> **5200 passed, 6 skipped, 0
+failed** in 24:28 (`proof/FULL_GATE.txt`). Nine of the nine tests in
+`tests/test_defended_trial_transaction_authority.py` are inside that total. No
+assertion was weakened and no fixture was updated: FIX.md §7 predicted that
+nothing depended on the defective behaviour, and nothing did.
+
+Affected ring, run first: `tests/test_v6_verification_transactions.py`,
+`test_v6_defended_trial_transaction_wiring.py`, `test_hv_v6_reachability.py`,
+`test_judge_canary_dispatch.py`, `test_defended_trial_transaction_authority.py`,
+`test_solo_criticism_authority.py` -> 61 passed. Wider ring
+(`-k "verification or report or transaction"`) -> 407 passed, 1 skipped.
+
+No wheel smoke: the change touches no console entry point, MCP tool, schema or
+wheel layout.
 
 Diff budget: `EXCEEDED` against my own plan-time ceiling — 63 insertions
 against 40, of which 17 are comment lines and 1 deletion is an import line
