@@ -1,0 +1,27 @@
+## 1. THE SEVEN
+compile notices on the manifest: 0
+value                carried   disclosed  the operator stated
+engine_profile       False     False      'mini'
+model_profile        False     False      'frontier'
+scratchpad           False     False      'enabled=True max_blocks_per_pack=24 max_guid'
+bridge               False     False      "mode='grounded_two_stage' allow_partial=True"
+EMBEDDER_MODEL       False     False      'nomic-ai/nomic-embed-text-v1.5'
+CHANNELS_DISABLED    False     False      "('simulation',)"
+roles                False     False      "{'conjecturer': {'provider': 'openai', 'mode"
+neither carried nor disclosed: 7 of 7 -> ['engine_profile', 'model_profile', 'scratchpad', 'bridge', 'EMBEDDER_MODEL', 'CHANNELS_DISABLED', 'roles']
+
+## 2. THE GEOMETRY
+compiled scratch policy: backend='deterministic_hashing' model=None
+engine_config EMBEDDER_MODEL (what the run rebuilds): None
+Measure kinds on the log: ['embedder-unconfigured', 'embedder']
+deepreason results would print: embedder: hashing (hashing-128) — no embedder model in the compiled run configuration, though a default one names this model: it was dropped before the manifest (run-manifest.json engine_config.EMBEDDER_MODEL)
+
+## 3. THE CONTROL (the same rebuild, EMBEDDER_MODEL put back)
+deepreason results would print: embedder: neural (nomic-ai/nomic-embed-text-v1.5)
+
+## VERDICT
+the operator asked for 'nomic-ai/nomic-embed-text-v1.5'
+the run measured with 'hashing-128' (backend 'hashing')
+the run asked the neural backend for it at all: False
+the same rebuild with the field restored measured with 'nomic-ai/nomic-embed-text-v1.5' (backend 'neural')
+DEFECT PRESENT: 7 of 7 values silently replaced; the configured embedder was never requested

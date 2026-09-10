@@ -53,6 +53,8 @@ from deepreason.qualification import (
 from deepreason.run_manifest import (
     MANIFEST_NAME,
     V3_CANONICAL_ROLES,
+    CompileNoticeV1,
+    RunManifest,
     RunManifestError,
     bind_run_manifest,
     compile_run_manifest,
@@ -340,6 +342,68 @@ def _school_seat_route_ensemble(
     return routes, seat_map
 
 
+# The values the HOST owns on the managed path, and the manifest field that
+# shows what the run actually got. The engine-config echo is not that field for
+# most of them: it holds `roles: {}` and drops the two typed policies, because
+# the manifest's own are canonical. `EMBEDDER_MODEL` is absent because the
+# operator's stated model is CARRIED, so there is nothing to disclose.
+_HOST_OWNED_CARRIERS: dict[str, str] = {
+    "engine_profile": "/engine_profile",
+    "model_profile": "/model_profile",
+    "scratchpad": "/scratch_policy",
+    "bridge": "/bridge_policy",
+    "CHANNELS_DISABLED": "/inquiry_capability_policy",
+    "roles": "/roles",
+}
+
+
+def _host_override_notices(
+    base: Config | None, resolved: Config
+) -> tuple[CompileNoticeV1, ...]:
+    """One typed notice per value the operator STATED and the host took.
+
+    The code is the compiler's own ``ENGINE_CONFIG_FIELD_NOT_CARRIED`` and the
+    fact it names is true here: the operator's value is not carried by this
+    manifest's engine config, whether the echo holds the host's value instead
+    (``engine_profile``, ``model_profile``, ``roles``) or drops the field
+    outright (``scratchpad``, ``bridge``, ``CHANNELS_DISABLED``).
+
+    ``value`` stays None, which is what makes this a disclosure and not a road
+    back: ``run_manifest._carried_config_values`` restores a notice's value at
+    run time, and restoring ``roles`` or ``model_profile`` would let a
+    configuration file redirect a managed run to another endpoint -- the hole
+    the override exists to close. The same code keeps the notice out of the
+    qualification subject, so saying a value was taken costs no home a battery.
+    """
+
+    if base is None:
+        return ()
+    notices: list[CompileNoticeV1] = []
+    for field, carrier in _HOST_OWNED_CARRIERS.items():
+        if field not in base.model_fields_set:
+            continue
+        stated = getattr(base, field)
+        # Compare against what the run RESOLVED, not against the host's own
+        # input: the two are not the same shape (the scratch and bridge presets
+        # are partial mappings that validate into full models).
+        host = getattr(resolved, field)
+        if stated == host:
+            continue
+        notices.append(
+            CompileNoticeV1(
+                code="ENGINE_CONFIG_FIELD_NOT_CARRIED",
+                message=(
+                    f"{field}={stated!r} is not carried by this manifest: the "
+                    f"host owns this value on the managed path and compiled "
+                    f"{host!r}. It is NOT restored at run time"
+                ),
+                pointer=f"/engine_config/{field}",
+                resolution=carrier,
+            )
+        )
+    return tuple(notices)
+
+
 def _config_for_profile(
     profile: ProviderProfileV1,
     *,
@@ -383,8 +447,8 @@ def _config_for_profile(
         # frozen summarizer and thesis routes below satisfy its validator.
         bridge=engaged_bridge_source(),
         # The public preset keeps the semantic scratch channel on the
-        # deterministic hashing embedder: no optional neural dependency may
-        # decide public manifest identity.
+        # deterministic hashing embedder; an operator who STATES a model gets
+        # it instead, below.
         EMBEDDER_MODEL=None,
         # Evidence channels this preparation turns off, by declared id. Empty
         # is the default and means all three protected channels are live: the
@@ -392,6 +456,14 @@ def _config_for_profile(
         CHANNELS_DISABLED=tuple(channels_disabled),
         roles=roles,
     )
+    # `model_fields_set`, never a comparison against `Config`'s own default:
+    # the shipped default IS the neural model, so a stated model and an
+    # unstated one are indistinguishable by value, and carrying the default
+    # would move every existing home's qualification subject for a
+    # configuration that asked for nothing. `config.load` preserves the set;
+    # `config.apply_overrides` does not, and has no caller on this path.
+    if base is not None and "EMBEDDER_MODEL" in base.model_fields_set:
+        del owned["EMBEDDER_MODEL"]
     if base is None:
         return Config(**owned)
     data = base.model_dump(mode="python")
@@ -511,6 +583,7 @@ def build_preparation_manifest(
     if run_input_digest is None:
         _dossier, run_input, _workload = _records_for_question(question)
         run_input_digest = run_input.run_input_digest
+    operator_config = config
     config = _config_for_profile(
         profile,
         base=config,
@@ -519,6 +592,7 @@ def build_preparation_manifest(
         criticism_seats=criticism_seats,
         channels_disabled=channels_disabled,
     )
+    host_notices = _host_override_notices(operator_config, config)
     if (school_seats or criticism_seats) and not config.SCHOOL_SEATS_ENABLED:
         raise RunManifestError(
             "SCHOOL_SEATS_DISABLED",
@@ -546,7 +620,7 @@ def build_preparation_manifest(
         _routes, criticism_seat_map = _school_seat_route_ensemble(
             profile, criticism_seats
         )
-    return compile_run_manifest(
+    manifest = compile_run_manifest(
         config,
         schema_version=6,
         workload_profile="text",
@@ -572,6 +646,22 @@ def build_preparation_manifest(
         # (local declarative by default, container when the operator opts
         # into the contained runner).
         toolchains=(engaged_simulation_toolchain(),),
+    )
+    if not host_notices:
+        # No operator configuration, or none of it named a host-owned value:
+        # byte-identical to what this path compiled before the disclosure
+        # existed, and so is its qualification subject.
+        return manifest
+    # model_validate over the dump, never model_copy: the model's own "after"
+    # validators still have to run on a manifest this function returns.
+    return RunManifest.model_validate(
+        {
+            **manifest.model_dump(mode="json"),
+            "compile_notices": [
+                *(n.model_dump(mode="json") for n in manifest.compile_notices or ()),
+                *(n.model_dump(mode="json") for n in host_notices),
+            ],
+        }
     )
 
 

@@ -88,6 +88,39 @@ The stop report marks each of these `restored at run time from notice`
 and carries its pointer, value and resolution.
 `check: grep -q "restored at run time from notice" src/deepreason/application/stop_report.py`
 
+**The second arm: a notice with no `value` discloses and does NOT restore.**
+`CompileNoticeV1.value` is optional, and `_carried_config_values` skips a
+notice that carries nothing before it checks anything else. Preparation uses
+that arm for the values the HOST owns on the managed path — the six in
+`_config_for_profile`'s `owned` that a configuration may state and never get
+(`DR-CON-seats`). So under one code there are two facts: with a value, the
+setting took effect and the manifest alone does not show it; without one, the
+setting did NOT take effect and the host's own value did. A reader that treats
+the code alone as "restored" tells an operator their configuration ran when it
+did not, which is why the report branches on `value` rather than on the code.
+
+The disclosure rides that code deliberately rather than a new one:
+`qualification_subject_payload` strips exactly this code from the subject, so
+saying a value was taken costs no home a qualification battery
+(`DR-INV-frozen-surfaces` §5, the 2026-08-28 grant, whose rule this follows
+rather than routes around).
+`check: python -c "
+from datetime import datetime, timezone
+from deepreason.config import Config
+from deepreason.preparation import build_preparation_manifest
+from deepreason.provider_profile import ProviderProfileV1
+from deepreason.qualification import qualification_subject_digest
+p = ProviderProfileV1.create(provider='openai', endpoint='https://api.example.com/v1', model_id='model-a', model_revision='rev-a', family='family-a', context_window_tokens=262144, maximum_completion_tokens=4096, credential_env='DEEPREASON_TEST_KEY')
+stamp = datetime(2026, 7, 23, tzinfo=timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+base = build_preparation_manifest(p, question='Why is the sky blue?', compiled_at=stamp)
+taken = build_preparation_manifest(p, question='Why is the sky blue?', compiled_at=stamp, config=Config.model_validate({'engine_profile': 'mini'}))
+named = [n for n in (taken.compile_notices or ()) if n.pointer == '/engine_config/engine_profile']
+assert len(named) == 1, named
+assert named[0].code == 'ENGINE_CONFIG_FIELD_NOT_CARRIED'
+assert named[0].value is None, 'a host-owned disclosure must not be a road back'
+assert qualification_subject_digest(taken, p) == qualification_subject_digest(base, p)
+"`
+
 ## Stage 4 — what the seat actually receives
 
 The wire request one seat actually got: the rendered pack, the wire

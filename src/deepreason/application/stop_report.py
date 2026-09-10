@@ -205,13 +205,23 @@ def _what_actually_ran(manifest: dict | None, events: list[dict]) -> dict[str, A
         if notice.get("code") != "ENGINE_CONFIG_FIELD_NOT_CARRIED":
             continue
         pointer = notice.get("pointer") or ""
+        # A notice with no `value` is a disclosure the run cannot act on:
+        # `run_manifest._carried_config_values` skips it, so the setting did
+        # NOT take effect. Saying otherwise tells an operator their
+        # configuration ran when the host replaced it.
+        restored = notice.get("value") is not None
         gates.append({
             "field": pointer.rsplit("/", 1)[-1],
             "pointer": pointer,
             "value": notice.get("value"),
             "resolution": notice.get("resolution"),
             "carried": False,
-            "note": "restored at run time from notice",
+            "restored": restored,
+            "note": (
+                "restored at run time from notice"
+                if restored
+                else "NOT restored: the host owns this value on the managed path"
+            ),
         })
 
     engine_config = {}
@@ -557,7 +567,7 @@ def _classify(status, manifest, events, health, pre_run, config_diff) -> dict[st
                     "gates_restored_from_notice") or [])])
     for gate in restored:
         line = (f"{gate['field']} = {gate['value']} was NOT carried by the "
-                f"compiled manifest; restored at run time from notice "
+                f"compiled manifest; {gate['note']} "
                 f"({gate['pointer']})")
         if gate["field"].lower() in lowered:
             config["supporting"].append(line + " — and the stop names it")
@@ -587,11 +597,14 @@ def _classify(status, manifest, events, health, pre_run, config_diff) -> dict[st
         config["verdict"] = SUPPORTED
     else:
         config["verdict"] = RULED_OUT
+        # Count only what was actually restored: a host-owned value is
+        # disclosed by the same notice code and never takes effect.
+        actually_restored = [g for g in restored if g.get("restored")]
         carried_note = (
-            f"{len(restored)} field(s) were restored at run time from "
+            f"{len(actually_restored)} field(s) were restored at run time from "
             f"notices (listed below), but the stop names none of them"
-            if restored else
-            "no ENGINE_CONFIG_FIELD_NOT_CARRIED notice was recorded")
+            if actually_restored else
+            "no ENGINE_CONFIG_FIELD_NOT_CARRIED notice restored a value")
         config["ruling_out"].append(
             carried_note + "; "
             + ("no run-config was supplied to diff against the manifest, so "
@@ -732,7 +745,10 @@ def _config_diff(config_path: Path | None, manifest: dict | None) -> list[str] |
                              f"compiled {engine[key]!r}")
         elif key in notices:
             lines.append(f"{key}: you wrote {wrote!r}; NOT carried by the "
-                         f"manifest, restored at run time from a notice")
+                         + ("manifest, restored at run time from a notice"
+                            if notices[key] is not None else
+                            "manifest and NOT restored -- the host owns this "
+                            "value on the managed path"))
         else:
             lines.append(f"{key}: you wrote {wrote!r}; the compiled manifest "
                          f"does not carry this field at all")
@@ -892,12 +908,12 @@ def render_stop_report(report: dict[str, Any]) -> str:
         out.append(f"- embedder as compiled: **{ran['embedder']}**")
         out.append("")
         if ran["gates_restored_from_notice"]:
-            out.append("Gates NOT carried by the compiled manifest "
-                       "(restored at run time from notice):")
+            out.append("Settings NOT carried by the compiled manifest:")
             out.append("")
             for gate in ran["gates_restored_from_notice"]:
-                out.append(f"- `{gate['pointer']}` = {gate['value']} — "
-                           f"restored at run time from notice"
+                out.append(f"- `{gate['pointer']}`"
+                           + (f" = {gate['value']}" if gate["restored"] else "")
+                           + f" — {gate['note']}"
                            + (f"; resolution `{gate['resolution']}`"
                               if gate["resolution"] else ""))
             out.append("")

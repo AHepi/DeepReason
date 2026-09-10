@@ -233,6 +233,39 @@ else:
 
 ## Traps
 
+- **The managed door could not reach the neural embedder at all, and said
+  nothing about it.** The 2026-08-16 entry below armed the neural default by
+  install and surfaced the fallback in `deepreason results`; the 2026-09-09
+  entry made a run say why its geometry was hashing. Neither reached the
+  managed path, because `preparation._config_for_profile` forced
+  `EMBEDDER_MODEL=None` one stage earlier than either instrument watched --
+  so `deepreason embedder-warmup`, which CLAUDE.md tells every session to run,
+  bought a managed run nothing. Measured over the committed record: 63 of 63
+  managed roots compiled `deterministic_hashing`, six non-managed manifests
+  compiled `neural`. The five brief-variation arms
+  (`experiments/2026-09-04-experiment-brief-variation-step1/roots/{A0,A1,A1P,A2,A3}-run-fe00609058e10605590206d51ab2b7a0`)
+  are the roots that paid for it: their M2 and novelty readings are on the
+  hashing scale, and they cannot be re-derived -- a committed root's contents
+  are never edited. FIXED 2026-09-10,
+  `experiments/2026-09-10-defect-managed-path-host-owned-overrides/`: an
+  operator configuration that STATES a model now reaches the compiled scratch
+  policy, and one that states nothing keeps the host's hashing default so no
+  existing home owes a qualification battery. What to check when this smells
+  familiar: `run-manifest.json`'s `engine_config.EMBEDDER_MODEL`, never
+  `scratch_policy.embedder_model` -- the 2026-09-09 errata entry says why.
+  `check: python -c "
+from datetime import datetime, timezone
+from deepreason.config import Config
+from deepreason.preparation import build_preparation_manifest
+from deepreason.provider_profile import ProviderProfileV1
+from deepreason.run_manifest import config_from_run_manifest
+p = ProviderProfileV1.create(provider='openai', endpoint='https://api.example.com/v1', model_id='model-a', model_revision='rev-a', family='family-a', context_window_tokens=262144, maximum_completion_tokens=4096, credential_env='DEEPREASON_TEST_KEY')
+stamp = datetime(2026, 7, 23, tzinfo=timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+stated = build_preparation_manifest(p, question='Why is the sky blue?', compiled_at=stamp, config=Config.model_validate({'EMBEDDER_MODEL': 'nomic-ai/nomic-embed-text-v1.5'}))
+assert config_from_run_manifest(stated).EMBEDDER_MODEL == 'nomic-ai/nomic-embed-text-v1.5'
+silent = build_preparation_manifest(p, question='Why is the sky blue?', compiled_at=stamp, config=Config.model_validate({}))
+assert config_from_run_manifest(silent).EMBEDDER_MODEL is None
+"`
 - **`EndpointError` must never expose its status as `.code`.**
   `cli/doctor.py::_failure_code` reads `.code` FIRST and returns it as the
   case's `failure_code`, which is constrained to `^[A-Z][A-Z0-9_]*$`. A

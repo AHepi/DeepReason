@@ -2884,3 +2884,41 @@ the two-root evidence. DIAGNOSIS.md's own wording is NOT edited: it is a record
 of what that phase concluded on the evidence it had, and this entry is how the
 record says it was later found imprecise. Recorded 2026-09-09,
 `experiments/2026-09-09-neural-embedder-fallback/VERIFY.md`.
+
+## 2026-09-10 (the managed path's host-owned overrides)
+
+**`docs/map/CON-seats.md` said disclosing a host-owned override needed two
+frozen surfaces. It needs neither.**
+
+The claim, verbatim from the paragraph on the operator's `roles` (2026-08-29,
+parked as P22): "emitting one needs both frozen surface 4 and surface 5,
+because an undisclosed-from-the-subject notice would otherwise move the
+qualification subject digest of every committed configuration."
+
+What is true, and what the claim missed: the second clause is right and the
+first does not follow from it. A NEW notice code would indeed enter the
+qualification subject — `qualification_subject_payload` strips exactly one
+code — and excluding it would mean editing `qualification.py`, surface 5.
+But the EXISTING code needs no exclusion, because it is already the stripped
+one, and it needs no `run_manifest.py` change either, because
+`CompileNoticeV1.value` is optional and `_carried_config_values` skips a
+value-less notice before it checks anything else. That second arm of the
+reader's contract was written in 2026-08-28 and had no producer until
+2026-09-10, which is why three tranches in a row read the surface-4-and-5
+price as the only price there was.
+
+Measured rather than argued: six value-less notices now ride that code on a
+configuration stating all six host-owned values, and
+`qualification_subject_digest` is byte-identical to the default's
+(`tests/test_managed_path_host_owned_values.py::test_a_disclosed_value_moves_no_qualification_subject_digest`,
+one case per value).
+
+**Where corrected.** `docs/map/CON-seats.md`'s `roles` paragraph now states
+the disclosure that ships and says which half of P22's reason held.
+`docs/map/CON-configuration-stages.md` stage 3 states both arms of the code,
+with a check. The parked entries that priced the two-surface road
+(`experiments/2026-09-09-neural-embedder-fallback/PARKED.md` P1 and P3, and
+that tranche's `FIX.md`) are NOT edited: they record what those phases
+concluded on the evidence they had, and this entry is how the record says the
+price was later found lower. Recorded 2026-09-10,
+`experiments/2026-09-10-defect-managed-path-host-owned-overrides/VERIFY.md`.

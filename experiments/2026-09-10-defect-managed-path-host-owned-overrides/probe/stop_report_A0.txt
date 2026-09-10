@@ -1,0 +1,104 @@
+# Stop report
+
+- source: `experiments/2026-09-04-experiment-brief-variation-step1/roots/A0-run-fe00609058e10605590206d51ab2b7a0` (root)
+- run id: 7fcfbcd94054157b21d7152d6680ff74e7536ec95a331788b1d0bb3dded003ae
+
+This report is derived from the record alone. It ranks four boxes by evidence and never asserts a defect.
+
+## 1. WHAT ACTUALLY RAN
+
+| seat | model | profile | reasoning | max_tokens | timeout_s | split |
+|---|---|---|---|---|---|---|
+| argumentative_critic#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| conjecturer#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| defender#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| grounding_reviewer#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| judge#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| property_designer#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| summarizer#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| synthesizer#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| thesis#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| variator#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+| vision_critic#0 | qwen3.5:397b (provider-profile-2d98e2449d89c77c7993b59f) | standard | none | 8192 | 120 | not observed in this run |
+
+- embedder as compiled: **hashing**
+
+## 2. PRE-RUN CHECK
+
+| seat | form | first-pass | eventual | repairs | qualified |
+|---|---|---|---|---|---|
+| argumentative_critic#0 | batch-critic.v2 | 20/20 | 20 | 0 | True |
+| argumentative_critic#0 | critic.atomic-target.v1 | 20/20 | 20 | 0 | True |
+| conjecturer#0 | conjecturer.atomic-candidate.v1 | 20/20 | 20 | 0 | True |
+| conjecturer#0 | conjecturer.turn.v6 | 20/20 | 20 | 0 | True |
+| conjecturer#0 | scratch.block.compact.v1 | 20/20 | 20 | 0 | True |
+| conjecturer#0 | scratch.block.minimal.v1 | 20/20 | 20 | 0 | True |
+| judge#0 | groundingverdictwirev1.direct.v1 | 20/20 | 20 | 0 | True |
+| summarizer#0 | bridge.ledger-batch.v1 | 20/20 | 20 | 0 | True |
+| summarizer#0 | bridge.ledger.v3 | 20/20 | 20 | 0 | True |
+| summarizer#0 | scratch.cluster-guide.compact.v1 | 20/20 | 20 | 0 | True |
+| summarizer#0 | scratch.cluster-guide.minimal.v1 | 20/20 | 20 | 0 | True |
+| synthesizer#0 | scratch.link.compact.v1 | 20/20 | 20 | 0 | True |
+| synthesizer#0 | scratch.link.minimal.v1 | 20/20 | 20 | 0 | True |
+| thesis#0 | bridge.composition-batch.v1 | 20/20 | 20 | 0 | True |
+| thesis#0 | bridge.composition.v2 | 20/20 | 20 | 0 | True |
+
+
+## 3. PROVIDER HEALTH
+
+| seat | endpoint | attempts | invalid | zero-token | faults |
+|---|---|---|---|---|---|
+| argumentative_critic#0 | provider-profile-2d98e2449d89c77c7993b59f | 70 | 2 | 0 | none |
+| conjecturer#0 | provider-profile-2d98e2449d89c77c7993b59f | 40 | 8 | 0 | none |
+
+
+## 4. THE STOP, CLASSIFIED
+
+Stop message: `(none recorded)`
+
+Boxes ranked by evidence:
+
+### 1. CONFIGURATION — RULED OUT
+
+- evidence RULING IT OUT: the run reached a clean terminal (state='completed', stop_reason='budget_exhausted'); there is no failure to attribute. Section 5 reports whether it can be continued.
+
+### 2. ENVIRONMENT — RULED OUT
+
+- evidence RULING IT OUT: the run reached a clean terminal (state='completed', stop_reason='budget_exhausted'); there is no failure to attribute. Section 5 reports whether it can be continued.
+
+### 3. MODEL — RULED OUT
+
+- evidence RULING IT OUT: the run reached a clean terminal (state='completed', stop_reason='budget_exhausted'); there is no failure to attribute. Section 5 reports whether it can be continued.
+
+### 4. HARNESS — RULED OUT
+
+- evidence RULING IT OUT: the run reached a clean terminal (state='completed', stop_reason='budget_exhausted'); there is no failure to attribute. Section 5 reports whether it can be continued.
+
+## 5. CONTINUABILITY
+
+- state: completed
+- stop_reason: budget_exhausted
+- terminal_lifecycle_refusal: (none)
+- verify_root: {"checks": [], "source": "stored", "violations": 0}
+- continue: **ACCEPTED** — the run is at a terminal and carries no lifecycle refusal
+- amend: **ACCEPTED** — the run is at a terminal and carries no lifecycle refusal
+
+## 6. EVIDENCE STATES
+
+| what happened to it | artifacts |
+|---|---|
+| nothing has been brought against it yet | 58 |
+| it came through an attack, or a trial that ruled and did not sustain | 50 |
+| it fell | 2 |
+| the evidence points both ways | 0 |
+
+- rounds of criticism that ran to the end: **9** of 9, covering 50 artifacts
+- every round's outcome: {"complete": 9}
+
+| episode | untested | came through | fell | both ways |
+|---|---|---|---|---|
+| pre-cycle | 4 | 0 | 0 | 0 |
+| 0 | 22 | 22 | 0 | 0 |
+| 1 | 1 | 0 | 0 | 0 |
+| 2 | 9 | 4 | 2 | 0 |
+| 3 | 22 | 24 | 0 | 0 |
