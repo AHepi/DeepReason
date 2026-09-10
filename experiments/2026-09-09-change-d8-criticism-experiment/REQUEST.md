@@ -295,3 +295,20 @@ R42 (process): "raise." The ceiling is corrected a second time, to a single
     was the mechanism change; the operator chose the number, and the number is
     what binds. R38's tranche-1 boundary and C9 are untouched: the raise buys
     lines, not live calls.
+
+
+### Amendment 4 (2026-09-10) — the operator's word after the tranche-1 status
+
+Received after a status message that ended "Nothing needs a decision from you
+right now. I'll finish validation and delivery and report." Verbatim:
+
+> approved
+
+R43 (process): "approved". Read as: PROCEED WITH VALIDATION AND DELIVERY of
+    tranche 1 — the only thing that was in front of the operator when they
+    said it. It is NOT read as authorising tranche 2's live launches, and the
+    reading needs no operator question to settle: R40 already binds tranche 2
+    to begin only "after the monitor has read tranche 1", and tranche 1 is not
+    yet delivered, so no word given now could licence a launch yet. Recorded
+    here so the narrow reading is on the record rather than in this window's
+    memory.

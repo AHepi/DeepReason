@@ -1,6 +1,6 @@
 # Checklist for: does criticism, once connected and allowed to bite, make the harness's output materially better than the plain model? — TRANCHE 1 (instruments, offline proofs, sealed pre-registration; NO LIVE CALL)
 
-State: next=DONE — all 43 steps checked; routing to dr-validate-change. blockers=none  (all three soaks green; PREREG sealed at step 40)  (PLAN CORRECTION at step 30: steps 30-31 read a stub root, and the soaks at 33-36 are what produce one, so 33-36 run FIRST and 30-32 follow. Order changed, nothing dropped; recorded rather than improvised, per dr-execute-step's rule for a step the tree contradicts.)  (second budget stop RESOLVED by the operator: "raise." -- ceiling 8300, SPEC Amendment 5, itemized from a measured 6798 base with a larger margin because three of the last four misses were items no itemization contained)  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
+State: next=DONE — 44 steps checked; re-routing to dr-validate-change. blockers=none  (RE-PLAN: validation found a stray artifact from step 19's harvest smoke test committed into blind/. Validation may not fix what it validates, so it is appended as step 44 and executed, then validation re-runs.)  (all three soaks green; PREREG sealed at step 40)  (PLAN CORRECTION at step 30: steps 30-31 read a stub root, and the soaks at 33-36 are what produce one, so 33-36 run FIRST and 30-32 follow. Order changed, nothing dropped; recorded rather than improvised, per dr-execute-step's rule for a step the tree contradicts.)  (second budget stop RESOLVED by the operator: "raise." -- ceiling 8300, SPEC Amendment 5, itemized from a measured 6798 base with a larger margin because three of the last four misses were items no itemization contained)  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
 Re-read REQUEST.md (with Amendment 1) + SPEC.md (with Amendment 1) before every
 step. Execute strictly in order. One step per dr-execute-step invocation.
 
@@ -697,3 +697,33 @@ nor `mini/`, so R36 is not touched.
 Then: `dr-validate-change` (VALIDATION.md), then `dr-deliver-change`
 (DELIVERY.md with the R-by-R table), then STOP — tranche 2 is a separate
 tranche and does not begin unprompted (R39, R40).
+
+
+---
+
+## Appended after validation began (dr-plan-steps re-plan, 2026-09-10)
+
+- [x] 44. (S8 §6, R17) Remove `blind/` — a stray artifact of step 19's harvest
+       smoke test, not evidence of anything.
+       WHAT IT IS: `blind/pairwise_keymap.json` (619 bytes) naming only the
+       three already-committed ARM 0 essays, and `blind/pairwise_pairs.jsonl`
+       (1 byte, zero pairs). It was written when step 19 ran `harvest` to prove
+       the instrument refuses cleanly with no harness arms present. The refusal
+       was the point; the files were a side effect and were committed with that
+       step.
+       WHY IT MUST GO, and it is not tidiness: the whole blinding discipline is
+       that `pairwise_keymap.json` is not opened until `pairwise_choices.json`
+       exists. A keymap already sitting in `blind/` before tranche 2 harvests
+       anything is a file that LOOKS like the sealed key and is not one. Nothing
+       is lost by deleting it — it maps three essays whose digests are already
+       public in the mini programme's committed record, and it contains zero
+       pairs.
+       done-when: `ls blind/` reports the directory absent or empty, `git log
+       --diff-filter=D` records the deletion, and `judge_pairwise.py harvest`
+       still refuses cleanly (it recreates the directory when it runs, which is
+       its job).
+       PROOF: `blind/` absent; `harvest` re-run reports `readings to make: 0`
+       and re-creates the directory, which is exactly its job — so the deletion
+       removes a stale artifact without removing a capability. The recreated
+       copy was removed again; tranche 2 commits the real one deliberately,
+       after it has units to blind.
