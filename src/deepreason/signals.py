@@ -468,6 +468,7 @@ _DECLARED: tuple[SignalDeclaration, ...] = (
                   "it records what a completed trial DID, not a condition "
                   "that can lift",
         staleness="permanent",
+    ),
     # The third answer to "why is this run's geometry hashing?" (2026-09-09).
     # The other two are already typed: the `embedder` stamp names a neural
     # backend that built, `embedder-fallback` names one that was asked for and
