@@ -184,3 +184,62 @@ test fixture and show it is still reported, then plant the same word in a
 comment and show it is not. A change that only silences the false positives,
 without a test proving the true positives survive, is worse than the defect.
 ```
+
+---
+
+## P5 — eight map checks fail on `main`, and one of them is only expensive
+
+**What.** `python tools/docs_verify.py` reports 8 failures on `origin/main`,
+independent of any branch. Proved pre-existing by re-running each at
+`origin/main` in a worktree (`VALIDATION.md` § Map): `SEAM-llm-x-rules.md:54`
+(a `check:` opener that never closes, so the tool cannot parse it),
+`CON-run-identity.md:211/213/215` (git-history queries about a 2026-07 root's
+retirement chain), `INV-frozen-surfaces.md:206` (expects zero committed
+`transport_failure` provider-attempt records; four tranches carry them),
+`INV-frozen-surfaces.md:1000` (the judge-canary compile-gap price script),
+`INV-frozen-surfaces.md:1365` (a `record_claims` assertion over the organiser
+tranche's root), and `CON-run-identity.md:313`, which TIMES OUT after 300 s and
+whose own diagnostic says "this check is too expensive; narrow it to the claim
+it actually tests".
+
+Two different kinds are mixed here and should not be fixed as one batch: a
+check that cannot PARSE and a check that TIMES OUT are faults in the
+instrument's inputs, while the six that exit non-zero are claims about the tree
+that may have genuinely stopped being true — which is exactly what the map is
+for, and means the map is currently telling the truth about being out of date.
+
+**Ready-to-send prompt.**
+
+```
+Route through dr-audit-orchestrator (docs-drift dimension), NOT the change
+family: this is a census of what has rotted, and the fixes are separate
+tranches afterwards.
+
+One goal: docs_verify reports 0 failed on main, or every remaining failure is a
+recorded, dated decision.
+
+Evidence: experiments/2026-09-09-change-d8-criticism-experiment/VALIDATION.md
+§ Map carries all eight with their line numbers and the origin/main re-run that
+proves each pre-dates that branch.
+
+Triage into three kinds before fixing anything, because they need different
+remedies and lumping them produces one commit nobody can review:
+(a) SEAM-llm-x-rules.md:54 — an unterminated check opener. The tool cannot
+    parse it, so the claim it was written to guard is CURRENTLY UNGUARDED and
+    has been for as long as it has been malformed. Fix the syntax, then run the
+    check and find out whether the claim is even still true.
+(b) CON-run-identity.md:313 — a 300s timeout. Its own diagnostic names the
+    remedy: narrow it to the claim it actually tests. Do not raise the timeout;
+    an expensive check that nobody can afford to run is a check that does not
+    run.
+(c) the six that exit non-zero — for each, decide whether the DOCUMENT is now
+    wrong or the TREE is. INV-frozen-surfaces.md:206 is the interesting one: it
+    asserts no committed root carries a transport_failure provider-attempt
+    record, and four tranches now do. Either that invariant was abandoned
+    deliberately and the document should say so, or those roots are evidence of
+    something. Read the tranches before rewriting the check.
+
+Do NOT weaken a check to make it pass. A check rewritten until it is green is
+the failure mode docs_verify exists to prevent, and docs_verify --audit is the
+instrument that catches it.
+```
