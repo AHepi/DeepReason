@@ -39,8 +39,46 @@ an embedder compiles a different scratch policy, so it is a different subject
 and that home owes one battery. That is the configuration taking effect, not a
 code change altering what enters the digest.
 
-**(4) Full gate.** `pytest tests/ -q -n 4` — see the commit message for the
+**(4) Full gate.** `pytest tests/ -q -n 4` — see the follow-up commit for the
 count. 0 failed is the only result this tranche accepts.
+
+**The map's own runner: `python tools/docs_verify.py` — 9 failed, and none of
+them is this tranche's.** Full output at `probe/docs_verify.out`. The
+disposition, against `docs/AUDIT_BASELINES.md`'s failure LIST, which is what a
+delta is measured against rather than the total:
+
+- SIX match the recorded baseline exactly: `SEAM-llm-x-rules.md`'s unparseable
+  check (a lost closing backtick, parked P3); `INV-frozen-surfaces.md`'s
+  `transport_failure` census (rotted claim, parked P-D3 — recorded at `:181`,
+  now at `:206`, same check text); the judge-canary row, which does
+  `git show origin/claude/deepreason-p-s1-commitments-wowcib:…` and dies with
+  exit 128 on a container cloned for another branch; and the three
+  `CON-run-identity.md` git-history rows, which need `git fetch --unshallow`
+  (`git cat-file -t 1637e808` returns "Not a valid object name" here). The
+  baseline's expected total on this container is 5 or 6.
+- THREE are a DELTA from that list, and the tranche base carries all three.
+  Measured in a worktree at the base commit `de4d7abd4`, not argued:
+  `CON-successor-questions.md:305` and `SEAM-scratch-x-workflow.md:51` both
+  assert a file census `-eq 50` and both read **51 at the base and 51 at
+  HEAD** — identical. Neither of this tranche's two changed files is in that
+  set (`preparation.py` contains "scratch" but not "workflow";
+  `stop_report.py` contains neither), and the commit adds no file under
+  `src/deepreason`, so it cannot have contributed a row.
+  `INV-frozen-surfaces.md:1414` runs `record_claims.py` against
+  `experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-36d9a22c…`,
+  which does not exist in this checkout — the same environment class as the
+  judge-canary row, reported as a JSON decode error because the tool got no
+  output to parse.
+
+Reported, not fixed: a pre-existing failure this tranche did not cause is not
+this tranche's to repair (`dr-implement-fix`'s own rule). The three delta rows
+are worth someone's attention — the two `-eq 50` census checks have rotted by
+one file since the 2026-08-30 re-baselining — and they are parked with a
+ready-to-send prompt at `PARKED.md` P7.
+
+None of the three documents this tranche edited — `CON-configuration-stages.md`,
+`CON-seats.md`, `SUB-llm.md` — appears anywhere in the failure list, and both
+new checks pass when run directly.
 
 ## Frozen surfaces: measured CLEAR, not asserted
 

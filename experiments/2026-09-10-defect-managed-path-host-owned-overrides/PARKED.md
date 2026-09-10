@@ -86,3 +86,43 @@ limit.
 End state: either a decision that the sealed readings stand, or a new live
 tranche.
 ```
+
+## P7 — three docs_verify rows fail that the recorded baseline does not expect
+
+**What.** `python tools/docs_verify.py` returns 9 failed on this container.
+Six match `docs/AUDIT_BASELINES.md`'s expected list exactly. Three do not, and
+the tranche base carries all three, so they belong to some commit between the
+2026-08-30 re-baselining and now:
+
+- `CON-successor-questions.md:305` and `SEAM-scratch-x-workflow.md:51` both
+  assert the same file census `-eq 50`. It reads **51** — measured at HEAD and
+  again in a worktree at base `de4d7abd4`, identical. One source file under
+  `src/deepreason` gained a mention that puts it in the set, or the set's
+  intended membership changed and the two checks were not updated with it.
+- `INV-frozen-surfaces.md:1414` runs `tools/record_claims.py` against
+  `experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-36d9a22c3e2045ae1b8c7bfb9d95d092`,
+  which is absent from this checkout. Same environment class as the
+  judge-canary row the baseline already lists separately, and it should be
+  rowed there rather than left looking like a claim that rotted.
+
+```
+Route: dr-audit-orchestrator, dimension docs-drift (the operator asks what is
+out of date), or dr-orchestrator (defect) if the census turns out to be
+protecting a real boundary that a commit crossed.
+Goal: for each of the three rows, say whether the CLAIM moved or the
+ENVIRONMENT is missing, and either re-pin the count with the reason it moved
+or row the check as container-conditional in docs/AUDIT_BASELINES.md. Name the
+51st file and the commit that added it.
+Evidence: experiments/2026-09-10-defect-managed-path-host-owned-overrides/
+probe/docs_verify.out (the full run); docs/AUDIT_BASELINES.md lines 40-110
+(the failure LIST a delta is measured against, and the rule that a delta from
+it IS a finding); the census command itself, which is in both failing checks
+verbatim. Re-derive with:
+  for f in $(grep -rl scratch src/deepreason --include=*.py); do \
+    grep -ql workflow "$f" && echo "$f"; done | sort
+and diff that against the same list at the 2026-08-30 baseline commit.
+End state: either two re-pinned checks with the reason recorded, or a defect
+tranche if a consumer crossed a boundary the census exists to hold. Plus one
+new container-conditional row in docs/AUDIT_BASELINES.md for the missing run
+root, so the next reader is not misled the way this one nearly was.
+```
