@@ -39,8 +39,12 @@ an embedder compiles a different scratch policy, so it is a different subject
 and that home owes one battery. That is the configuration taking effect, not a
 code change altering what enters the digest.
 
-**(4) Full gate.** `pytest tests/ -q -n 4` — see the follow-up commit for the
-count. 0 failed is the only result this tranche accepts.
+**(4) Full gate.** `pytest tests/ -q -n 4` — **5215 passed, 0 failed, 6
+skipped** in 1333 s, exit 0 (`probe/full_gate.out`). Run on an idle box, alone:
+an earlier attempt was killed at 71% when the watcher holding it timed out, and
+two before that were starved by running `docs_verify` concurrently on a 4-CPU
+container — which `docs/AUDIT_BASELINES.md` and `dr-drive-harness` §5b both
+warn against and which this window did anyway before correcting it.
 
 **The map's own runner: `python tools/docs_verify.py` — 9 failed, and none of
 them is this tranche's.** Full output at `probe/docs_verify.out`. The
