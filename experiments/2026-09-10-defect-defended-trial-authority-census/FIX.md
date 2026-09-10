@@ -290,3 +290,50 @@ reported unknown — as the brief instructs.
     `verification/`. Fixing an instrument mid-defect is the cross-routing the
     orchestrator forbids. PARKED (P2).
   - **The open-work-order policy question**, parked elsewhere and left there.
+
+## 9. Found after §1-§8 were written, and it changes what "proof" means
+
+The defect does not stop at the derived finding. At the terminal,
+`application/text_runs.py::terminalize_text_run` asks the SAME reader for a
+verification summary and freezes the answer into `run-result.json`. The live
+root's stored summary says so in its own bytes:
+
+    "security_valid": false,
+    "finding_counts": { "integrity": 0, "security": 75, ... },
+    "valid": false
+
+The report then re-reports that stored answer as a SECOND, separate security
+finding — `run-result-verification :: RunResult v2 records a security-invalid
+verification summary` (report.py:298-305, guarded by
+`include_stored_verification`). That is the 76th finding on the live root, and
+the +1 on every committed root in `proof/COMMITTED_ROOT_CENSUS_before.txt`.
+
+**Three consequences, all of which I would rather state now than discover in
+the closing report.**
+
+1. **An already-committed completed run will NOT flip to `valid: true`, and it
+   must not.** Its stored summary was written by the defective reader, and the
+   record is law — editing it is forbidden and would be the worse defect. After
+   the fix, each committed root's derived `transaction-authority` findings go
+   to zero and exactly ONE security finding remains: its own stored, honest
+   record of what the reader said at the time. So the five roots go
+   27/11/76/117/495 -> 1/1/1/1/1, and `valid` stays `false` on all five.
+2. **A run COMPLETED on the fixed code stores `security_valid: true` and
+   reports `valid: true`.** That is the goal's headline, and it needs a stub
+   that reaches a terminal rather than one that stops after a cycle. Built:
+   `proof/stub_terminalized_root.py`, which drives the same one-trial stub
+   through `terminalize_text_run`. Its pre-fix output
+   (`proof/REPRO_stub_terminalized_before.txt`) is the whole chain in one
+   artifact — 3 trial steps, 3 derived findings, a stored `security_valid:
+   false`, a 4th finding echoing it, `valid: false`, and `verify_root`
+   violations 0.
+3. **GOAL.md's success criterion is sharpened accordingly** (amendment
+   recorded there, same date): criterion 1 becomes the TERMINALIZED stub
+   reporting `valid: true` with a stored `security_valid: true`; the
+   cycle-only stub keeps its own row; and the committed roots are proved by
+   "one finding left, and it is the stored one", not by flipping.
+
+None of this changes the code in §1, the grant asked for in §6, or the roads in
+§4. It changes only what the tranche must PROVE, and it makes the ask more
+honest rather than less: the fix repairs the instrument going forward and
+leaves every past run's own testimony exactly as that run recorded it.

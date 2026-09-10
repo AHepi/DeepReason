@@ -79,3 +79,31 @@ Read in this order, per `docs/map/INDEX.md`'s one ordering rule:
   defect breaks is exactly that unwritten one: `verification/report.py`
   censuses task kinds that `workflow/models.py` declares. Per `INDEX.md`, an
   absent pair is not a pair that does not interact.
+
+## Amendment, 2026-09-10 (same day, before any code) — criterion 1 sharpened
+
+Found during dr-propose-fix and recorded rather than absorbed. The defect also
+reaches the run's TERMINAL: `terminalize_text_run` asks the same reader for a
+verification summary and freezes it into `run-result.json`, so a completed
+defended-trial run stores `security_valid: false` about itself, which the
+report then re-reports as a second security finding. Editing that stored
+summary is forbidden — the record is law — so an already-committed completed
+run cannot and must not flip to `valid: true`.
+
+Criterion 1 therefore becomes:
+
+    # 1a. a run COMPLETED on the fixed code -- the goal's headline
+    python .../proof/stub_terminalized_root.py <tmpdir>
+      -> before: valid false, security 4 (3 trial + 1 stored echo),
+                 stored security_valid false, verify_root violations 0
+      -> after:  valid true,  security 0, stored security_valid true,
+                 verify_root violations 0
+
+    # 1b. the cycle-only stub, unchanged as its own row
+    python .../proof/stub_defended_trial_root.py <tmpdir>
+      -> after: valid true, security 0
+
+Criterion 3 (the committed roots) becomes: each root's
+`transaction-authority` findings go to zero and exactly ONE security finding
+remains — its own stored record of what the reader said at the time — so
+`valid` stays `false` on all five, honestly. No root is edited.

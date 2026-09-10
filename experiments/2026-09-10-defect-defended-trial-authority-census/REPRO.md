@@ -75,3 +75,26 @@ security finding. Both are mutation obligations on the fix, not on this phase.
 ## Production code untouched
 
     git diff --stat -- src/    ->  (empty)
+
+## Added after the first pass: the terminal carries the defect too
+
+`proof/stub_terminalized_root.py` drives the same one-trial stub through
+`terminalize_text_run`. Pre-fix output
+(`proof/REPRO_stub_terminalized_before.txt`), trimmed:
+
+    "state": "completed",
+    "verify_root_violations": 0,
+    "integrity": 0,
+    "security": 4,
+    "security_checks": { "run-result-verification": 1, "transaction-authority": 3 },
+    "stored_run_result_verification": {
+        "integrity_valid": true, "security_valid": false, "valid": false,
+        "finding_counts": { "integrity": 0, "security": 3, ... } },
+    "valid": false
+
+The whole chain in one artifact: three trial steps, three derived findings, a
+stored `security_valid: false` frozen into the run's own terminal, and a fourth
+finding that is the report reading that stored answer back. This is why a
+committed completed run cannot flip after the fix, and why the goal's headline
+needs a run completed ON the fixed code to prove it. See FIX.md §9 and GOAL.md's
+same-day amendment.
