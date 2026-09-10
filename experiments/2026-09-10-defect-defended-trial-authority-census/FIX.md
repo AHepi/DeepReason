@@ -337,3 +337,25 @@ None of this changes the code in §1, the grant asked for in §6, or the roads i
 §4. It changes only what the tranche must PROVE, and it makes the ask more
 honest rather than less: the fix repairs the instrument going forward and
 leaves every past run's own testimony exactly as that run recorded it.
+
+## 10. THE GRANT — the operator's words, verbatim (2026-09-10)
+
+> Granted: Road A on frozen surface 3 (verification/report.py), the
+> defended-trial authority arm, ~40 insertions, zero deletions, as priced in
+> experiments/2026-09-10-defect-defended-trial-authority-census/FIX.md §6.
+> Record these words verbatim in FIX.md and as a dated "Granted contact,
+> 2026-09-10" entry in docs/map/INV-frozen-surfaces.md, in the same commit as
+> the code, with a check: that goes red if a trial step is again reported as
+> work of an unknown kind. Continue with dr-implement-fix and
+> dr-verify-outcome. Proof means a trial-bearing run completed after the fix
+> verifies valid; the before/after census over the five committed roots goes in
+> proof/. Full gate at the boundary. Commit and push to your branch; do not
+> merge to main.
+
+Operational reading, so the grant's boundary is written down rather than
+remembered: it covers Road A's arm in `verification/report.py` and nothing
+else on any frozen surface. "Proof means a trial-bearing run completed after
+the fix verifies valid" is §9's criterion 1a — the TERMINALIZED stub, whose
+stored summary must read `security_valid: true`; it is not a claim about the
+five already-committed roots, which keep their own stored testimony (§9
+consequence 1). The before/after census over those five goes in `proof/`.
