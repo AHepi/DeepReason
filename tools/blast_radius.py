@@ -51,6 +51,14 @@ again for the operator, per this repo's own "counts are claims" rule
     maintained, the same way docs/map/INV-frozen-surfaces.md's own
     Owns: lists are hand-maintained but check-verified. A newly-added
     entry point not yet listed here can cause a false UNREACHABLE.
+  - The frozen-surface registry (FROZEN_SURFACES below) is hand-
+    maintained the same way, and fails in the same direction: a path
+    the owning document freezes but this list omits reads CLEAR, which
+    is the one wrong answer this gate must never give quietly. It gave
+    it for every module under src/deepreason/verification/ until
+    2026-09-10 (docs/ERRATA.md E88). Two checks in that document's own
+    G6 subsection now go red on a recurrence; they are not a
+    substitute for reading the document when adding a surface.
 
 Emits one BLAST_RADIUS_RESULT_V1 JSON object to stdout on success:
 
@@ -107,33 +115,44 @@ from pathlib import Path
 
 RESULT_TYPE = "BLAST_RADIUS_RESULT_V1"
 
-# The five frozen surfaces, verbatim from docs/map/INV-frozen-surfaces.md.
+# The five frozen surfaces of docs/map/INV-frozen-surfaces.md, one entry per
+# surface, each carrying EVERY path that surface's own section names. A surface
+# is not a file: surface 3 spans two paths, which is why CLAUDE.md states five surfaces
+# over seven paths. A path ending in "/" is a DIRECTORY scope matching any file
+# beneath it; every other path matches that file and nothing else.
+#
+# Hand-maintained, as the docstring's honesty limits say: copy the paths from
+# the owning section's heading, do not infer them.
 FROZEN_SURFACES = [
     {
         "surface": "capabilities/state.py digests and event application",
-        "path": "src/deepreason/capabilities/state.py",
+        "paths": ["src/deepreason/capabilities/state.py"],
     },
     {
         "surface": "harness.py event application and well-formedness",
-        "path": "src/deepreason/harness.py",
+        "paths": ["src/deepreason/harness.py"],
     },
     {
-        "surface": "replay-validation record formats (invariants.py)",
-        "path": "src/deepreason/invariants.py",
+        "surface": "replay-validation record formats (invariants.py, verification/)",
+        "paths": ["src/deepreason/invariants.py", "src/deepreason/verification/"],
     },
     {
         "surface": "manifest schemas and validators (run_manifest.py)",
-        "path": "src/deepreason/run_manifest.py",
+        "paths": ["src/deepreason/run_manifest.py"],
     },
     {
         "surface": "qualification subject digests (qualification.py)",
-        "path": "src/deepreason/qualification.py",
+        "paths": ["src/deepreason/qualification.py"],
     },
 ]
+# The owning document freezes route_fingerprint's OUTPUT FORMAT, not the whole
+# module. The file is registered anyway: a file entry reports DIRECT, a symbol
+# would report only SYMBOL_INDIRECT, which this tool's own honesty limits call
+# plausible rather than confirmed -- a weaker disclosure for the same edit.
 FROZEN_ADJACENT = [
     {
         "surface": "route_fingerprint serialization (llm/firewall.py)",
-        "path": "src/deepreason/llm/firewall.py",
+        "paths": ["src/deepreason/llm/firewall.py"],
     },
 ]
 
@@ -192,33 +211,62 @@ def _symbol_referenced(path: Path, symbol: str) -> bool:
     return re.search(rf"\b{re.escape(symbol)}\b", text) is not None
 
 
+def _surface_match(surface_path: str, target: str) -> bool:
+    """A directory scope is marked by its trailing "/", so prefix matching is
+    boundary-safe without a separate segment test: ".../verification/" cannot
+    match ".../verification_notes.py"."""
+    if surface_path.endswith("/"):
+        return target.startswith(surface_path)
+    return target == surface_path
+
+
+def _surface_files(surface_path: str, root: Path) -> list[Path]:
+    """Sorted, so a symbol found in several files of one directory scope always
+    reports its detail string in the same order."""
+    path = root / surface_path
+    if surface_path.endswith("/"):
+        return sorted(path.rglob("*.py")) if path.is_dir() else []
+    return [path] if path.exists() else []
+
+
 def _frozen_contacts(files: list[str], symbols: list[str], root: Path, registry: list[dict]) -> list[dict]:
     contacts = []
-    normed_files = {_norm(f) for f in files}
+    normed_files = [_norm(f) for f in files]
     for entry in registry:
-        if entry["path"] in normed_files:
-            contacts.append(
-                {
-                    "surface": entry["surface"],
-                    "tier": "DIRECT",
-                    "target": entry["path"],
-                    "detail": f"target file is surface path {entry['path']}",
-                }
-            )
-    for entry in registry:
-        path = root / entry["path"]
-        if not path.exists():
-            continue
-        for symbol in symbols:
-            if _symbol_referenced(path, symbol):
+        for surface_path in entry["paths"]:
+            for target in normed_files:
+                if not _surface_match(surface_path, target):
+                    continue
+                where = (
+                    f"inside surface path {surface_path}"
+                    if surface_path.endswith("/")
+                    else f"surface path {surface_path}"
+                )
                 contacts.append(
                     {
                         "surface": entry["surface"],
-                        "tier": "SYMBOL_INDIRECT",
-                        "target": symbol,
-                        "detail": f"'{symbol}' referenced in {entry['path']} (grep-based; not proof of semantic contact)",
+                        "tier": "DIRECT",
+                        "target": target,
+                        "detail": f"target file is {where}",
                     }
                 )
+    for entry in registry:
+        # One row per (surface, symbol), never per file: a directory scope must
+        # not inflate the row count a single-file surface reports.
+        sources = [f for p in entry["paths"] for f in _surface_files(p, root)]
+        for symbol in symbols:
+            hits = [f for f in sources if _symbol_referenced(f, symbol)]
+            if not hits:
+                continue
+            where = ", ".join(_norm(str(f.relative_to(root))) for f in hits)
+            contacts.append(
+                {
+                    "surface": entry["surface"],
+                    "tier": "SYMBOL_INDIRECT",
+                    "target": symbol,
+                    "detail": f"'{symbol}' referenced in {where} (grep-based; not proof of semantic contact)",
+                }
+            )
     return contacts
 
 
@@ -682,10 +730,16 @@ def _self_test() -> int:
         # file, one module with a live and a dead function, one test
         # file referencing the live function.
         (repo / "src" / "deepreason" / "cli").mkdir(parents=True)
-        (repo / "src" / "deepreason" / "rules").mkdir(parents=True)
+        (repo / "src" / "deepreason" / "rules" / "verification").mkdir(parents=True)
+        (repo / "src" / "deepreason" / "verification").mkdir(parents=True)
         (repo / "tests").mkdir()
         (repo / "src" / "deepreason" / "harness.py").write_text("class Harness:\n    pass\n")
         (repo / "src" / "deepreason" / "unrelated.py").write_text("VALUE = 1\n")
+        # Directory-scoped surface (surface 3's verification/ half) and the two
+        # near-misses that separate a path-boundary match from a string prefix.
+        (repo / "src" / "deepreason" / "verification" / "report.py").write_text("SCOPED = 1\n")
+        (repo / "src" / "deepreason" / "verification_notes.py").write_text("NOTE = 1\n")
+        (repo / "src" / "deepreason" / "rules" / "verification" / "report.py").write_text("OTHER = 1\n")
         (repo / "src" / "deepreason" / "cli" / "main.py").write_text(
             "from deepreason.rules.experiment import live_func\n\n\ndef main():\n    live_func()\n"
         )
@@ -710,6 +764,33 @@ def _self_test() -> int:
         data = json.loads(result.stdout)
         assert data["frozen_surface_verdict"] == "CLEAR", data
         assert data["frozen_surface_contacts"] == [], data
+
+        # Proof 1b: a DIRECTORY-scoped surface matches a file beneath it, and
+        # matches on a path boundary only. RED if surface 3 loses its
+        # verification/ half again (docs/ERRATA.md E88), and RED the other way
+        # if the match loosens to a bare string prefix or a basename compare.
+        result = run("--files", "src/deepreason/verification/report.py")
+        data = json.loads(result.stdout)
+        assert data["frozen_surface_verdict"] == "CONTACT", data
+        direct = [c for c in data["frozen_surface_contacts"] if c["tier"] == "DIRECT"]
+        assert direct and direct[0]["target"] == "src/deepreason/verification/report.py", data
+        for near_miss in (
+            "src/deepreason/verification_notes.py",
+            "src/deepreason/rules/verification/report.py",
+        ):
+            data = json.loads(run("--files", near_miss).stdout)
+            assert data["frozen_surface_verdict"] == "CLEAR", (near_miss, data)
+
+        # Proof 1c: every registry path exists in the REAL tree. A list-shaped
+        # entry can be silently emptied by a rename; a missing path reads CLEAR.
+        tree = Path(__file__).resolve().parents[1]
+        missing = [
+            p
+            for entry in (*FROZEN_SURFACES, *FROZEN_ADJACENT)
+            for p in entry["paths"]
+            if not (tree / p).exists()
+        ]
+        assert not missing, missing
 
         # Proof 2: reachability flips UNREACHABLE -> REACHABLE when a
         # call site is added from a registered entry-point file.

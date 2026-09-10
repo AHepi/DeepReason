@@ -2961,3 +2961,33 @@ read before granting (that tranche's `FIX.md` §3) and in the "Granted contact,
 this is fixed the document outranks the tool for any path under
 `src/deepreason/verification/`. Recorded 2026-09-10,
 `experiments/2026-09-10-defect-defended-trial-authority-census/VERIFY.md`.
+
+**E89 — E88 is corrected; `tools/blast_radius.py` now spells frozen surface 3
+with both of its paths.** E88 records that the tool's `FROZEN_SURFACES` comment
+claimed the list was "verbatim from `docs/map/INV-frozen-surfaces.md`" while
+spelling §3 as `src/deepreason/invariants.py` alone, and states "Where
+corrected: NOWHERE YET, deliberately". That entry is not rewritten (this
+ledger's own rule, above); this is where the correction is recorded.
+
+What moved, 2026-09-10, `experiments/2026-09-10-defect-blast-radius-surface-3-registry/`:
+each registry entry now carries a LIST of paths rather than one, a path ending
+in `/` is a directory scope, and §3 carries `src/deepreason/invariants.py` and
+`src/deepreason/verification/`. The false comment is replaced by what the list
+actually is. What the record shows: all twelve modules under
+`src/deepreason/verification/` returned `frozen_surface_verdict: CLEAR` before
+and `CONTACT` after (that tranche's `proof/CENSUS_BEFORE.txt` and
+`proof/CENSUS_AFTER.txt`), while `scheduler/scheduler.py`, `rules/conj.py` and
+`config.py` stay `CLEAR`, so the widening is the surface and not the tree. Both
+directions are mutation-proved against the tool's own `--self-test`
+(`proof/MUTATION_PROOF.txt`): dropping `verification/` from §3 and loosening the
+directory match to a bare string prefix each drive it red.
+
+**Where corrected.** `tools/blast_radius.py` (registry, comparison, comment,
+docstring honesty limits, `--self-test`), and `docs/map/INV-frozen-surfaces.md`
+in the same commit — its G6 subsection gains the multi-path rule and two checks
+that exercise the tool's ANSWER rather than its list, its "A STOP already
+written in prose" Traps entry is rewritten to say the gate it credits was blind
+to half of surface 3, and the 2026-09-10 grant entry's "until it is fixed, this
+document outranks that tool" paragraph gains a dated line saying it no longer
+holds. The grant paragraph itself is left standing: it records what that window
+was told at grant time.

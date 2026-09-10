@@ -651,6 +651,15 @@ control run naming the five registry paths, which returns all five as `DIRECT`
 `PARKED.md` P2. Until it is fixed, this document outranks that tool for any
 path under `src/deepreason/verification/`.
 
+**That last sentence was true for one day.** Fixed 2026-09-10 by
+`experiments/2026-09-10-defect-blast-radius-surface-3-registry/`: the registry
+now carries both of §3's paths and `--files src/deepreason/verification/report.py`
+returns `CONTACT` with a `DIRECT` row (that tranche's `proof/CENSUS_AFTER.txt`,
+against `proof/CENSUS_BEFORE.txt` where all twelve modules read `CLEAR`). The
+paragraph above is left standing rather than edited: it records what the gate
+told THIS window at grant time, which is what a reader auditing this grant needs
+to know.
+
 `check: grep -q 'elif task == "defended_trial_step":' src/deepreason/verification/report.py && python -m pytest tests/test_defended_trial_transaction_authority.py -q`
 `check: python -c "
 from pathlib import Path
@@ -1484,8 +1493,37 @@ docstring, statically derivable from the tree at grant time.
 
     python tools/blast_radius.py --files PATH [PATH ...] [--symbols NAME [NAME ...]] [--against REF]
 
+A surface is not a file. Its `FROZEN_SURFACES` entry carries EVERY path the
+surface's own section above names — §3 names two, `invariants.py` and
+`verification/`, which is the arithmetic CLAUDE.md states as five surfaces over
+seven paths. A registry path ending in `/` is a directory scope and matches any
+file beneath it. The registry is hand-maintained, and it failed in the
+direction that costs most: from the gate's construction until 2026-09-10 it
+spelled §3 as `invariants.py` alone, so every module under
+`src/deepreason/verification/` returned `CLEAR` — the gate telling a window
+there was no frozen surface to edit while it edited one
+(`docs/ERRATA.md` E88 and E89, fixed by
+`experiments/2026-09-10-defect-blast-radius-surface-3-registry/`). The first
+check below goes red if §3 loses a path again; the second is the live verdict
+for a file inside the directory half, which no registry spelling can fake.
+
 `check: python -c "import ast; ast.parse(open('tools/blast_radius.py').read())"`
 `check: grep -q "BLAST_RADIUS_RESULT_V1" tools/blast_radius.py`
+`check: python -c "
+import json, subprocess, sys
+out = subprocess.run([sys.executable, 'tools/blast_radius.py', '--files',
+                      'src/deepreason/verification/report.py'],
+                     capture_output=True, text=True, check=True).stdout
+data = json.loads(out)
+assert data['frozen_surface_verdict'] == 'CONTACT', data
+assert any(c['tier'] == 'DIRECT' for c in data['frozen_surface_contacts']), data
+out = subprocess.run([sys.executable, 'tools/blast_radius.py', '--files',
+                      'src/deepreason/scheduler/scheduler.py'],
+                     capture_output=True, text=True, check=True).stdout
+# The other half: widening the registry must not make every path CONTACT.
+assert json.loads(out)['frozen_surface_verdict'] == 'CLEAR', out
+"`
+`check: python tools/blast_radius.py --self-test`
 
 ### Record claims — an instrument, and deliberately not a gate
 
@@ -1594,7 +1632,32 @@ assert rows['ARMH-STOP-01'][0] == 'NOT_TESTED', rows['ARMH-STOP-01']
   gate above: `dr-execute-step`'s own `[COMMIT]` checkpoint now diffs
   actual-touch against SPEC.md's own specced radius mechanically, so a
   prose finding three steps back cannot be silently outrun by memory.
+  AMENDED 2026-09-10: "fixed going forward by the gate" was too strong
+  as written. The gate only ever knew the surfaces its own registry
+  spelled, and it spelled §3 as `invariants.py` alone — so for
+  `verification/`, half of that same surface 3, the mechanical check
+  returned CLEAR and would not have caught this trap's own case. The
+  registry is fixed (E88/E89); the entry is rewritten rather than
+  deleted because the lesson generalises past its fix: a mechanical
+  check inherits every gap in the list it reads.
 `check: grep -q "frozen_surface_verdict" tools/blast_radius.py`
+- **A gate's registry is a claim, and it is the half nobody re-derives.**
+  `tools/blast_radius.py` carried the comment "The five frozen surfaces,
+  verbatim from docs/map/INV-frozen-surfaces.md" above a list that was
+  not verbatim: §3 spans `invariants.py` AND `verification/`, and only
+  the first was there. Every computation downstream was sound — a
+  control run naming the registry's own paths returned all of them
+  `DIRECT` — which is exactly why the defect survived: the tool never
+  errored, it answered CLEAR, cleanly, in typed fields and in words,
+  for twelve modules inside a frozen surface. Found by hand during the
+  2026-09-10 defended-trial census, whose own grant request had to
+  disclose the gap the gate could not
+  (`experiments/2026-09-10-defect-defended-trial-authority-census/`
+  PARKED.md P2). Rule: when an instrument's answer rests on a
+  hand-maintained list, the list needs a check of its own, and the
+  check must exercise the ANSWER for a path inside each entry — not
+  merely assert that the entry is present.
+`check: grep -q 'src/deepreason/verification/' tools/blast_radius.py`
 - **A pin nobody can run is a claim, not a check.** The discharge-wire
   qualification subject digest moved on 2026-08-28 under a granted contact
   (`e9457f8ff`, the execution-safety tranche). The two committed TEST pins were

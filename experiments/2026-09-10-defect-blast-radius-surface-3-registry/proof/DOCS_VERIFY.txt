@@ -1,0 +1,27 @@
+docs_verify [full]: 82 documents, 1452 checks, 4 workers
+  FAIL SEAM-llm-x-rules.md:54: unparseable check: a column-0 `check: opener must close with a trailing backtick, on its own line or at the end of a later line, before the next opener or the end of the file. Opener reads: '`check: test "$(python -c "import ast,pathlib; T=[ast.parse(p.read_text()) for p in pathlib.Path(\'sr'
+  FAIL CON-run-identity.md:211: git log -M --diff-filter=R --name-status --format= -- experiments/live_research_2026-07-29/selfstudy/runs/ | grep -o 'runs/[a-z0-9-]*run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json' | sort -u | tr '\n' ' ' | grep -qx 'runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json runs/run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json '
+      -> 
+  FAIL CON-run-identity.md:213: git log -1 --format=%s 1637e808 | grep -qi retire
+      -> fatal: ambiguous argument '1637e808': unknown revision or path not in the working tree. | Use '--' to separate paths from revisions, like this: | 'git <command> [<revision>...] -- [<file>...]'
+  FAIL CON-run-identity.md:215: test -z "$(git show -M --diff-filter=R --name-status --format= f304fec1)" && git log -1 --format=%s f304fec1 | grep -qi "retire.*epoch3" && git show --name-status --format= 6a8758a5 -- experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json | grep -q "^A"
+      -> fatal: ambiguous argument 'f304fec1': unknown revision or path not in the working tree. | Use '--' to separate paths from revisions, like this: | 'git <command> [<revision>...] -- [<file>...]'
+  FAIL CON-successor-questions.md:305: test "$(for f in $(grep -rl harness --include=*.py src/deepreason); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 62 && test "$(for f in $(grep -rl scratch src/deepreason --include=*.py); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 50 && ! grep -q "_workflow_manifest" src/deepreason/successor/route.py && grep -q "getattr(config, \"scratchpad\", None)" src/deepreason/successor/route.py
+      -> 
+  FAIL INV-frozen-surfaces.md:206: test "$(find experiments runs -path '*workflow-provider-attempt-v1/*.json' -exec grep -l 'transport_failure' {} + 2>/dev/null | wc -l)" -eq 0
+      -> 
+  FAIL INV-frozen-surfaces.md:1175: python experiments/2026-09-01-defect-judge-canary-compile-gap/price_compile_gap.py --expect fixed >/dev/null && python -m pytest tests/test_judge_canary_compile_gap.py -q
+      ->   File "/usr/lib/python3.11/subprocess.py", line 571, in run |     raise CalledProcessError(retcode, process.args, | subprocess.CalledProcessError: Command '['git', 'show', 'origin/claude/deepreason-p-s1-commitments-wowcib:experiments/2026-08-31-p-s1-commitments/run-config.yaml']' returned non-zero exit status 128.
+  FAIL INV-frozen-surfaces.md:1569: python tools/record_claims.py --claims experiments/2026-09-06-change-writers-room-organiser-testing/claims.json --root experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-36d9a22c3e2045ae1b8c7bfb9d95d092 --json | python -c "
+        import json, sys
+        rows = {c['claim_id']: (c['status'], c['standing']) for c in json.load(sys.stdin)['claims']}
+        assert rows['RUN-STOP-01'] == ('REFUTED', 'SHOWN_ABLE_TO_FAIL'), rows['RUN-STOP-01']
+        assert rows['CRIT-CAP-01'] == ('UNREFUTED_FOR_DECLARED_SCOPE', 'NOT_SHOWN_ABLE_TO_FAIL'), rows['CRIT-CAP-01']
+        assert rows['ARMH-STOP-01'][0] == 'NOT_TESTED', rows['ARMH-STOP-01']
+        "
+      ->   File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode |     raise JSONDecodeError("Expecting value", s, err.value) from None | json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+  FAIL CON-run-identity.md:313: python -c "import pathlib; c=pathlib.Path('src/deepreason/runtime/continuation.py').read_text(); a=pathlib.Path('src/deepreason/amendment/apply.py').read_text(); assert 'CONTINUE_RECORD_NOT_VERIFIED' in c and 'record_verification_refusal' in c and 'AMEND_RECORD_NOT_VERIFIED' in a, 'the integrity gate was removed from a verb: it is the 2026-08-29 security clause, not a convenience'" && python -m pytest tests/test_jailbreak_gate.py -q
+      -> TIMEOUT after 300s - this check is too expensive; narrow it to the claim it actually tests
+  FAIL SEAM-scratch-x-workflow.md:51: test "$(for f in $(grep -rl scratch src/deepreason --include=*.py); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 50 && python -c "import ast,pathlib;B=lambda pkg,l:('deepreason.'+pkg) if l==1 else ('deepreason' if l==2 else 'deepreason.UNRESOLVED');T=lambda n,pkg:[a.name for a in n.names] if isinstance(n,ast.Import) else ([(B(pkg,n.level)+'.'+(n.module or '')).rstrip('.')] if n.level else [n.module or '']);D=lambda pkg,other:sorted(p.stem for p in pathlib.Path('src/deepreason/'+pkg).glob('*.py') if any(m==other or m.startswith(other+'.') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,(ast.Import,ast.ImportFrom)) for m in T(n,pkg)) or other in p.read_text());assert D('scratch','deepreason.workflow')==['authoring'],D('scratch','deepreason.workflow');assert D('workflow','deepreason.scratch')==['conjecture_recovery','models','nonconjecture_recovery','profiles'],D('workflow','deepreason.scratch')"
+      -> 
+docs_verify: 10 failed
